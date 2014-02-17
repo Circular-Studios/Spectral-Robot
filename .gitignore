@@ -210,3 +210,5 @@ test-results/
 # Dub
 # =========================
 .dub/
+.sln
+.*dproj
