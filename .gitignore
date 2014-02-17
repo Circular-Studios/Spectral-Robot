@@ -32,7 +32,6 @@ TestResult.xml
 *_i.h
 *.ilk
 *.meta
-*.obj
 *.pch
 *.pdb
 *.pgc
@@ -212,3 +211,7 @@ test-results/
 .dub/
 .sln
 .*dproj
+*.sln
+*.visualdproj
+*.exe
+*.exe_cv
