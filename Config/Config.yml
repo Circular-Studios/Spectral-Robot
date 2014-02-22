@@ -5,8 +5,11 @@ Display:
     Fullscreen: false
     Height: 720
     Width: 1280
+    FieldOfView: 90
+    NearPlane: 0.01
+    FarPlane: 1000
 Graphics:
-    BackfaceCulling: true
+    BackfaceCulling: false
     VSync: false
 Physics:
     Gravity: !Vector3 0.0 -10.0 0.0

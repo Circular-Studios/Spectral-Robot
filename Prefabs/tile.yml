@@ -1,0 +1,7 @@
+Name: Grid
+Transform: 
+        Position: !Vector3 0 0 -5
+Script:
+    ClassName: grid.Tile
+Mesh: cube
+Material: poopmat
