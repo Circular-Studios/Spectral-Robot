@@ -1,8 +1,8 @@
 Up:
-    Keyboard: W
+    - !Keyboard W
 Down:
-    Keyboard: S
+    - !Keyboard S
 Left:
-    Keyboard: A
+    - !Keyboard A
 Right:
-    Keyboard: D
+    - !Keyboard D

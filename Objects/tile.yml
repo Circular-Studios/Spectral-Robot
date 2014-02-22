@@ -2,10 +2,7 @@
     Name: Tile0-0
     Transform: 
         Position: !Vector3 -2 -2 -5
-    Script:
-        ClassName: grid.Tile
-    Mesh: cube
-    Material: poopmat
+    InstanceOf: Grid
     Light: !Light-Directional
         Color: !Vector3 1 1 1
         Direction: !Vector3 0 0 -1
@@ -13,65 +10,48 @@
     Name: Tile1-0
     Transform: 
         Position: !Vector3 0 -2 -5
-    Script:
-        ClassName: grid.Tile
-    Mesh: cube
-    Material: poopmat
+    InstanceOf: Grid
     Light: !Light-Ambient
         Color: !Vector3 1 1 1
 -
     Name: Tile2-0
     Transform: 
         Position: !Vector3 2 -2 -5
-    Script:
-        ClassName: grid.Tile
-    Mesh: cube
-    Material: poopmat
+    InstanceOf: Grid
+    
 -
     Name: Tile0-1
     Transform: 
         Position: !Vector3 -2 0 -5
-    Script:
-        ClassName: grid.Tile
-    Mesh: cube
-    Material: poopmat
+    InstanceOf: Grid
+    
 -
     Name: Tile1-1
     Transform: 
         Position: !Vector3 0 0 -5
-    Script:
-        ClassName: grid.Tile
-    Mesh: cube
-    Material: poopmat
+    InstanceOf: Grid
+    
 -
     Name: Tile2-1
     Transform: 
         Position: !Vector3 2 0 -5
-    Script:
-        ClassName: grid.Tile
-    Mesh: cube
-    Material: poopmat
+    InstanceOf: Grid
+    
 -
     Name: Tile0-2
     Transform: 
         Position: !Vector3 -2 2 -5
-    Script:
-        ClassName: grid.Tile
-    Mesh: cube
-    Material: poopmat
+    InstanceOf: Grid
+    
 -
     Name: Tile1-2
     Transform: 
         Position: !Vector3 0 2 -5
-    Script:
-        ClassName: grid.Tile
-    Mesh: cube
-    Material: poopmat
+    InstanceOf: Grid
+    
 -
     Name: Tile2-2
     Transform: 
         Position: !Vector3 2 2 -5
-    Script:
-        ClassName: grid.Tile
-    Mesh: cube
-    Material: poopmat
+    InstanceOf: Grid
+    
