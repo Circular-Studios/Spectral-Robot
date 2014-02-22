@@ -10,8 +10,8 @@ import utility.output, utility.input;
 	{
 		Output.printMessage( OutputType.Info, "Initializing..." );
 
-		Input.addKeyDownEvent( Keys.Escape, ( uint kc ) { currentState = GameState.Quit; } );
-		Input.addKeyDownEvent( Keys.F5, ( uint kc ) { currentState = GameState.Reset; } );
+		Input.addKeyDownEvent( Keyboard.Escape, ( uint kc ) { currentState = GameState.Quit; } );
+		Input.addKeyDownEvent( Keyboard.F5, ( uint kc ) { currentState = GameState.Reset; } );
 
 		goc = new GameObjectCollection;
 		goc.loadObjects( "" );
