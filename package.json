@@ -1,12 +1,31 @@
 {
-	"name": "sample-dash-game",
-	"description": "A D game built with Dash.",
-	"copyright": "Copyright © 2014, Colden Cullen",
-	"authors": [ "Colden Cullen" ],
+	"name": "robot-ghosts",
+	"description": "An asynchronous multiplayer turn-based strategy built in the D language.",
+	"copyright": "Copyright © 2014, Robot Ghosts Team",
+	"authors": [ 
+		"Daniel Jost",
+		"Jayson Fitch",
+		"Shivam Rawal",
+		"Derrick Hunt",
+		"Brenna Coleman",
+		"Mclean Oshiokpekhai",
+		"Nicholas Cote",
+		"Tristan Meere",
+		"Tyler Wozniak",
+		"Sean Brennan",
+		"Colden Cullen"
+	],
 	"dependencies": {
 		"dash": "~master"
 	},
-	"sourcePaths": [ "Scripts/" ],
+	"sourcePaths": [ 
+		"Scripts/",
+		"Config/",
+		"Materials/",
+		"Objects/",
+		"Prefabs/",
+		"UI" 
+	],
 	"importPaths": [ "Scripts/" ],
 	"targetType": "executable",
 	"targetPath": "Binaries/",
