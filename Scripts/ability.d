@@ -1,4 +1,5 @@
-﻿module Scripts.actions;
+﻿module Scripts.ability;
+import core.properties;
 
 enum TargetType
 {
@@ -18,11 +19,18 @@ enum TargetArea
 class Ability
 {
 private:
-	TargetType targetType;
-	TargetArea targetArea;
-	int range;
-	int radius; // Different uses for different Areas
+	TargetType _targetType;
+	TargetArea _targetArea;
+	int _range;
+	int _radius; // Different uses for different Areas
+	int _cooldown;
 public:
+	mixin( Property!_targetType );
+	mixin( Property!_targetArea );
+	mixin( Property!_range );
+	mixin( Property!_radius );
+	mixin( Property!_cooldown );
+
 	this ()
 	{
 		// Constructor
