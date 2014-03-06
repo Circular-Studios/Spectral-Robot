@@ -1,8 +1,6 @@
 module grid;
-import core.gameobject, core.dgame, core.gameobjectcollection;
-import utility.output, utility.input;
+import core.gameobject, core.gameobjectcollection, utility, components;
 import game;
-import components;
 import std.conv;
 
 class Tile : GameObject

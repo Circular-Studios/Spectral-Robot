@@ -6,15 +6,20 @@ import core.properties;
 class Unit
 {
 private:
+	static uint nextID;
 	int _hp;
 	int _speed;
 	int _attack;
 	int _defense;
 
+	Ability _meleeAttack;
+	Ability _rangedAttack;
 	Ability[] _abilities;
 	int[] _abilityCooldowns;
 
 public:
+	immutable uint ID;
+
 	mixin( Property!_hp );
 	mixin( Property!_speed );
 	mixin( Property!_attack );
@@ -26,6 +31,8 @@ public:
 	this()
 	{
 		// Constructor code
+		ID = nextID;
+		nextID++;
 	}
 }
 
