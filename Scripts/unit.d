@@ -1,9 +1,9 @@
 ﻿module Scripts.unit;
 import Scripts.ability;
 
-import core.properties;
+import core;
 
-class Unit
+class Unit : GameObject
 {
 private:
 	static uint nextID;

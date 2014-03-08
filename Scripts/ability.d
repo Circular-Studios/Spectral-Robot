@@ -1,4 +1,6 @@
 ﻿module Scripts.ability;
+import core;
+
 
 enum TargetType
 {

@@ -4,9 +4,14 @@ import core.gameobject, core.gameobjectcollection;
 class Controller
 {
 private:
-	Action[] lastTurn; //Gets cleared after a turn
-	Action[] currentTurn; //Gets populated as the user makes actions
+	MoveAction[] lastTurn; //Gets cleared after a turn
+	MoveAction[] currentTurn; //Gets populated as the user makes actions
 	GameObjectCollection gameObjects; //Abstract this to a GameState class or something? Idk yet
+
+	this()
+	{
+		
+	}
 }
 
 enum ActionType
@@ -39,6 +44,6 @@ struct Action(ActionType at)
 	}
 }
 
-alias Action!ActionType.Move MoveAction;
-alias Action!ActionType.Attack AttackAction;
-alias Action!ActionType.Ability AbilityAction;
+alias Action!(ActionType.Move) MoveAction;
+alias Action!(ActionType.Attack) AttackAction;
+alias Action!(ActionType.Ability) AbilityAction;

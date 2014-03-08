@@ -1,42 +1,36 @@
 module game;
-import core.dgame, core.gameobjectcollection;
-import components;
-import utility.output, utility.input;
+import core, components, utility;
 
-@Game!RobotGhosts class RobotGhosts : DGame
+class RobotGhosts : DGame
 {
-	public GameObjectCollection goc;
 	
 	override void onInitialize()
 	{
-		Output.printMessage( OutputType.Info, "Initializing..." );
+		logInfo( "Initializing..." );
 		
 		Input.addKeyDownEvent( Keyboard.Escape, ( uint kc ) { currentState = GameState.Quit; } );
 		Input.addKeyDownEvent( Keyboard.F5, ( uint kc ) { currentState = GameState.Reset; } );
-		
-		goc = new GameObjectCollection;
-		goc.loadObjects( "" );
 	}
 	
 	override void onUpdate()
 	{
-		goc.apply( go => go.update() );
+		//goc.apply( go => go.update() );
 	}
 	
 	override void onDraw()
 	{
-		goc.apply( go => go.draw() );
+		//goc.apply( go => go.draw() );
 	}
 	
 	override void onShutdown()
 	{
-		Output.printMessage( OutputType.Info, "Shutting down..." );
-		goc.apply( go => go.shutdown() );
-		goc.clearObjects();
+		logInfo( "Shutting down..." );
+		//goc.apply( go => go.shutdown() );
+		//goc.clearObjects();
 	}
 	
 	override void onSaveState()
 	{
-		Output.printMessage( OutputType.Info, "Resetting..." );
+		logInfo( "Resetting..." );
 	}
 }
