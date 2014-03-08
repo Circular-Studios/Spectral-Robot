@@ -1,32 +1,37 @@
 module game;
+import Scripts.controller;
+
 import core, components, utility;
 
 class RobotGhosts : DGame
 {
-	
+	Controller gc;
+
 	override void onInitialize()
 	{
 		logInfo( "Initializing..." );
 		
 		Input.addKeyDownEvent( Keyboard.Escape, ( uint kc ) { currentState = GameState.Quit; } );
 		Input.addKeyDownEvent( Keyboard.F5, ( uint kc ) { currentState = GameState.Reset; } );
+
+		gc = new Controller();
 	}
 	
 	override void onUpdate()
 	{
-		//goc.apply( go => go.update() );
+		gc.gameObjects.apply( go => go.update() );
 	}
 	
 	override void onDraw()
 	{
-		//goc.apply( go => go.draw() );
+		gc.gameObjects.apply( go => go.draw() );
 	}
 	
 	override void onShutdown()
 	{
 		logInfo( "Shutting down..." );
-		//goc.apply( go => go.shutdown() );
-		//goc.clearObjects();
+		gc.gameObjects.apply( go => go.shutdown() );
+		gc.gameObjects.clearObjects();
 	}
 	
 	override void onSaveState()

@@ -1,49 +1,79 @@
 ﻿module Scripts.controller;
-import core.gameobject, core.gameobjectcollection;
+import core, utility;
+import yaml;
 
-class Controller
+import Scripts.unit, Scripts.ability;
+
+final class Controller
 {
 private:
-	MoveAction[] lastTurn; //Gets cleared after a turn
-	MoveAction[] currentTurn; //Gets populated as the user makes actions
+	Action[] lastTurn; //Gets cleared after a turn
+	Action[] currentTurn; //Gets populated as the user makes actions
 	GameObjectCollection gameObjects; //Abstract this to a GameState class or something? Idk yet
+	Ability[] abilities; //The instantiated units for this instance of the game
 
 	this()
 	{
+		gameObjects = new GameObjectCollection();
+		// So we'll first load all the objects
+		gameObjects.loadObjects("Base");
+
+		loadUnits();
+		loadLevel();
+	}
+
+	void loadUnits()
+	{
+		// So we are going to parse the Units folder for the unit files
+		// For those, we'll get the Name of the node, which will be how we call into the gameObjects
+
+		Config.processYamlDirectory( 
+			buildNormalizedPath( FilePath.Resources.Objects, "Units" ),
+			( Node unitNode ) //Callback function.  See gameobjectcollection lines 34 for example
+			{
+				Unit unit = cast(Unit)gameObjects[ unitNode["Name"].as!string ];
+
+				//Then for each variable, accessed by unitNode["varname"] or better off, a tryGet
+				//Set the values
+			} );
 		
 	}
+	
+	/// I'm thinking we'll just load one ability at a time as we find them in gameobjects
+	/// Returns the ability ID
+	uint loadAbility( string name )
+	{
+		//Add the ability to the Ability array by loading it from yaml, and then return it's ID
+		return 0;
+	}
+
+	void loadLevel()
+	{
+
+	}
 }
 
-enum ActionType
+abstract class Action
 {
-	Move,
-	Attack,
-	Ability
-}
-
-struct Action(ActionType at)
-{
+public:
 	uint originUnitId;
-	static const ActionType type = at;
-	static if( type == ActionType.Move )
-	{
-		/// Location to move, using quickest path algorithm
-		int[2] target;
-	}
-	else static if( type == ActionType.Attack )
-	{
-		/// ID of the unit 
-		uint target;
-		uint abilityID;
-	}
-	else static if( type == ActionType.Ability )
-	{
-		/// ID of the unit being targetted
-		uint target;
-		uint abilityID;
-	}
 }
 
-alias Action!(ActionType.Move) MoveAction;
-alias Action!(ActionType.Attack) AttackAction;
-alias Action!(ActionType.Ability) AbilityAction;
+class Move : Action
+{
+public:
+	int x, y;
+}
+
+class Attack : Action
+{
+public:
+	uint targetUnitID;
+}
+
+class Ability : Action
+{
+public:
+	uint targetUnitId;
+	uint abilityID;
+}

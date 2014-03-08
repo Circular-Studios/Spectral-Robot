@@ -1,5 +1,5 @@
 module grid;
-import core.gameobject, core.gameobjectcollection, utility, components;
+import core, utility, components;
 import game;
 import std.conv;
 
