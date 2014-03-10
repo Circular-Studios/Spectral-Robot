@@ -1,16 +1,16 @@
-﻿module Scripts.controller;
+﻿module controller;
+import unit, ability;
 import core, utility;
 import yaml;
-
-import Scripts.unit, Scripts.ability;
+import std.path;
 
 final class Controller
 {
-private:
+public:
 	Action[] lastTurn; //Gets cleared after a turn
 	Action[] currentTurn; //Gets populated as the user makes actions
 	GameObjectCollection gameObjects; //Abstract this to a GameState class or something? Idk yet
-	Ability[] abilities; //The instantiated units for this instance of the game
+	Ability[string] abilities; //The instantiated units for this instance of the game
 
 	this()
 	{
@@ -18,8 +18,22 @@ private:
 		// So we'll first load all the objects
 		gameObjects.loadObjects("Base");
 
+		loadAbilities();
 		loadUnits();
 		loadLevel();
+	}
+
+
+	void loadAbilities()
+	{
+		//Add the ability to the Ability array by loading it from yaml, just like in loadUnits
+		Config.processYamlDirectory(
+			buildNormalizedPath( FilePath.Resources.Objects, "Abilities" ),
+			( Node abilityNode )
+		{
+			string name = abilityNode["Name"].as!string;
+			abilities[name] = new Ability();
+		} );
 	}
 
 	void loadUnits()
@@ -30,21 +44,26 @@ private:
 		Config.processYamlDirectory( 
 			buildNormalizedPath( FilePath.Resources.Objects, "Units" ),
 			( Node unitNode ) //Callback function.  See gameobjectcollection lines 34 for example
-			{
-				Unit unit = cast(Unit)gameObjects[ unitNode["Name"].as!string ];
+		{
+			Unit unit = cast(Unit)gameObjects[ unitNode["Name"].as!string ];
 
-				//Then for each variable, accessed by unitNode["varname"] or better off, a tryGet
-				//Set the values
-			} );
+			//Then for each variable, accessed by unitNode["varname"] or better off, a tryGet
+			//Set the values
+			int hp, sp, at, df = 0;
+			string ability;
+			Ability melee, ranged;
+			Config.tryGet( "HP", hp, unitNode );
+			Config.tryGet( "Speed", sp, unitNode );
+			Config.tryGet( "Attack", at, unitNode );
+			Config.tryGet( "Defense", df, unitNode );
+			if( Config.tryGet( "MeleeAttack", ability, unitNode ) )
+				melee = abilities[ ability ];
+			if( Config.tryGet( "RangedAttack", ability, unitNode ) )
+				ranged = abilities[ ability ];
+
+			unit.init( hp, sp, at, df, melee, ranged, [ melee, ranged ] );
+		} );
 		
-	}
-	
-	/// I'm thinking we'll just load one ability at a time as we find them in gameobjects
-	/// Returns the ability ID
-	uint loadAbility( string name )
-	{
-		//Add the ability to the Ability array by loading it from yaml, and then return it's ID
-		return 0;
 	}
 
 	void loadLevel()
@@ -59,19 +78,19 @@ public:
 	uint originUnitId;
 }
 
-class Move : Action
+class MoveAction : Action
 {
 public:
 	int x, y;
 }
 
-class Attack : Action
+class AttackAction : Action
 {
 public:
 	uint targetUnitID;
 }
 
-class Ability : Action
+class AbilityAction : Action
 {
 public:
 	uint targetUnitId;

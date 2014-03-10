@@ -1,4 +1,4 @@
-﻿module Scripts.ability;
+﻿module ability;
 import core;
 
 

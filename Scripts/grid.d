@@ -20,7 +20,7 @@ class Tile : GameObject
 
 enum TileType
 {
-	Open, /// Can walk & see through
-	HalfBlocked, /// Cannot walk, but can see/attack past
-	FullyBlocked /// Can neither walk nor see/attack past
+	Open, /// Does not block
+	HalfBlocked, /// Blocks movement, but not vision/attacks
+	FullyBlocked /// Blocks movement, vision, and attacks
 }

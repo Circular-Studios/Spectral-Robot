@@ -1,5 +1,5 @@
 module game;
-import Scripts.controller;
+import controller;
 
 import core, components, utility;
 
@@ -24,7 +24,7 @@ class RobotGhosts : DGame
 	
 	override void onDraw()
 	{
-		gc.gameObjects.apply( go => go.draw() );
+		//gc.gameObjects.draw();
 	}
 	
 	override void onShutdown()

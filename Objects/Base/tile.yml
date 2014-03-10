@@ -6,7 +6,6 @@
     Light: !Light-Directional
         Color: !Vector3 1 1 1
         Direction: !Vector3 0 0 -1
-    Random: 5
 -
     Name: Tile1-0
     Transform: 
