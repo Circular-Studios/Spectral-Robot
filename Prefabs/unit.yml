@@ -1,0 +1,7 @@
+Name: Unit
+Transform:
+    Position: !Vector3 0 0 -10
+Script:
+    ClassName: unit.Unit
+Mesh: cube
+Material: poopmat
