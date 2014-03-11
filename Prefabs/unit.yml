@@ -1,7 +1,8 @@
 Name: Unit
 Transform:
-    Position: !Vector3 0 0 -10
+    Position: !Vector3 0 0 -40
+    Scale: !Vector3 4 4 4
 Script:
     ClassName: unit.Unit
 Mesh: cube
-Material: poopmat
+Material: TileDefault

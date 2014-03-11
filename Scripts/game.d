@@ -1,7 +1,7 @@
 module game;
 import controller;
 
-import core, components, utility;
+import core, graphics, components, utility;
 
 class RobotGhosts : DGame
 {
@@ -15,6 +15,9 @@ class RobotGhosts : DGame
 		Input.addKeyDownEvent( Keyboard.F5, ( uint kc ) { currentState = GameState.Reset; } );
 
 		gc = new Controller();
+
+		auto cam = gc.gameObjects["Camera"];
+		Graphics.setCamera( cam.camera );
 	}
 	
 	override void onUpdate()
@@ -24,7 +27,7 @@ class RobotGhosts : DGame
 	
 	override void onDraw()
 	{
-		//gc.gameObjects.draw();
+		gc.gameObjects.draw();
 	}
 	
 	override void onShutdown()

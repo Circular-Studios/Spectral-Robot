@@ -1,7 +1,24 @@
-Name: Grid
-Transform: 
-    Position: !Vector3 0 0 -5
-Script:
-    ClassName: grid.Tile
-Mesh: cube
-Material: poopmat
+-
+    Name: Tile-Default
+    Script:
+        ClassName: grid.Tile
+    Transform:
+        Rotation: !Vector3 -90 0 0
+    Mesh: unitsquare
+    Material: TileDefault
+-
+    Name: Tile-Select1
+    Script:
+        ClassName: grid.Tile
+    Transform:
+        Rotation: !Vector3 -90 0 0
+    Mesh: unitsquare
+    Material: TileSelect1
+-
+    Name: Tile-Select2
+    Script:
+        ClassName: grid.Tile
+    Transform:
+        Rotation: !Vector3 -90 0 0
+    Mesh: unitsquare
+    Material: TileSelect2

@@ -1,0 +1,15 @@
+-
+    Name: Camera
+    Transform:
+        Position: !Vector3 0 15 -10
+        Rotation: !Vector3 -15 0 0
+    Camera: please
+-
+    Name: DirLight
+    Light: !Light-Directional
+        Color: !Vector3 1 1 1
+        Direction: !Vector3 0 -1 -1
+-
+    Name: AmbLight
+    Light: !Light-Ambient
+        Color: !Vector3 .1 .1 .1

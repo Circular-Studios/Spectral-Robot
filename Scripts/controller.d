@@ -45,7 +45,8 @@ public:
 			buildNormalizedPath( FilePath.Resources.Objects, "Units" ),
 			( Node unitNode ) //Callback function.  See gameobjectcollection lines 34 for example
 		{
-			Unit unit = cast(Unit)gameObjects[ unitNode["Name"].as!string ];
+			Unit unit = cast(Unit)Prefabs[ unitNode["InstanceOf"].as!string ].createInstance();
+			unit.name = unitNode["Name"].as!string;
 
 			//Then for each variable, accessed by unitNode["varname"] or better off, a tryGet
 			//Set the values
@@ -62,6 +63,8 @@ public:
 				ranged = abilities[ ability ];
 
 			unit.init( hp, sp, at, df, melee, ranged, [ melee, ranged ] );
+
+			gameObjects[unit.name] = unit;
 		} );
 		
 	}

@@ -1,5 +1,6 @@
 -
     Name: TestUnit
+    InstanceOf: Unit
     HP: 40
     Speed: 4
     Attack: 10

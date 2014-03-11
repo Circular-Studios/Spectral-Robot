@@ -1,0 +1,25 @@
+-
+    Name: poopmat
+    Diffuse: Poop
+    Normal: blank_normal
+    Specular: flat_s
+-
+    Name: poopmat_gray
+    Diffuse: Poop
+    Normal: gray_normal
+    Specular: flat_s
+-
+    Name: TileDefault
+    Diffuse: tiledefault_d
+    Normal: flat_n
+    Specular: flat_s
+-
+    Name: TileSelect1
+    Diffuse: tileselect1_d
+    Normal: flat_n
+    Specular: flat_s
+-
+    Name: TileSelect2
+    Diffuse: tileselect2_d
+    Normal: flat_n
+    Specular: flat_s
