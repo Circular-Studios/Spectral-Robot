@@ -74,6 +74,8 @@ class Grid : GameObject
 			auto tile = cast(Tile)Prefabs["Tile"].createInstance();
 			tile.x = x;
 			tile.z = z;
+
+			this.addChild(tile);
 			tiles[x][z] = tile;
 		}
 	}

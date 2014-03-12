@@ -19,6 +19,8 @@ public:
 		gameObjects.loadObjects("Base");
 		
 		auto grid = new Grid();
+		grid.transform.position.z = -50;
+		grid.transform.updateMatrix();
 		gameObjects["Grid"] = grid;
 		
 		loadAbilities();
