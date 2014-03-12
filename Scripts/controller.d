@@ -1,5 +1,5 @@
 ﻿module controller;
-import unit, ability;
+import unit, ability, grid;
 import core, utility;
 import yaml;
 import std.path;
@@ -17,6 +17,9 @@ public:
 		gameObjects = new GameObjectCollection();
 		// So we'll first load all the objects
 		gameObjects.loadObjects("Base");
+
+		auto grid = new Grid();
+		gameObjects["Grid"] = grid;
 
 		loadAbilities();
 		loadUnits();
@@ -98,4 +101,38 @@ class AbilityAction : Action
 public:
 	uint targetUnitId;
 	uint abilityID;
+}
+
+/// Temporary class to move the camera around
+class Cam : GameObject
+{
+	this()
+	{
+	}
+
+	override void onUpdate()
+	{
+		if( Input.getState( "LookUp" ) )
+		{
+			this.transform.position.z -= 1;
+			this.camera._viewMatrixIsDirty = true;
+		}
+		else if( Input.getState( "LookDown" ) )
+		{
+			this.transform.position.z += 1;
+			this.camera._viewMatrixIsDirty = true;
+		}
+
+		if( Input.getState( "LookLeft" ) )
+		{
+			this.transform.position.x -= 1;
+			this.camera._viewMatrixIsDirty = true;
+		}
+		else if( Input.getState( "LookRight" ) )
+		{
+			this.transform.position.x += 1;
+			this.camera._viewMatrixIsDirty = true;
+		}
+
+	}
 }

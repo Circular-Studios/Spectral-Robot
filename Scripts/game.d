@@ -18,6 +18,7 @@ class RobotGhosts : DGame
 
 		auto cam = gc.gameObjects["Camera"];
 		Graphics.setCamera( cam.camera );
+		logInfo( cam.transform.position.z );
 	}
 	
 	override void onUpdate()

@@ -1,8 +1,10 @@
 -
     Name: Camera
+    Script:
+        ClassName: controller.Cam
     Transform:
-        Position: !Vector3 0 15 -10
-        Rotation: !Vector3 -15 0 0
+        Position: !Vector3 0 30 -10
+        Rotation: !Vector3 -45 0 0
     Camera: please
 -
     Name: DirLight

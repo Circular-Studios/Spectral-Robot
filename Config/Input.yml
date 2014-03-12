@@ -6,3 +6,11 @@ Left:
     - !Keyboard A
 Right:
     - !Keyboard D
+LookUp:
+    - !Keyboard I
+LookDown:
+    - !Keyboard K
+LookLeft:
+    - !Keyboard J
+LookRight:
+    - !Keyboard L
