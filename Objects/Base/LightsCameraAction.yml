@@ -1,7 +1,7 @@
 -
     Name: Camera
     Script:
-        ClassName: controller.Cam
+        ClassName: camera.Camera
     Transform:
         Position: !Vector3 0 30 -10
         Rotation: !Vector3 -45 0 0

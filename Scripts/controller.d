@@ -11,46 +11,46 @@ public:
 	Action[] currentTurn; //Gets populated as the user makes actions
 	GameObjectCollection gameObjects; //Abstract this to a GameState class or something? Idk yet
 	Ability[string] abilities; //The instantiated units for this instance of the game
-
+	
 	this()
 	{
 		gameObjects = new GameObjectCollection();
 		// So we'll first load all the objects
 		gameObjects.loadObjects("Base");
-
+		
 		auto grid = new Grid();
 		gameObjects["Grid"] = grid;
-
+		
 		loadAbilities();
 		loadUnits();
 		loadLevel();
 	}
-
-
+	
+	
 	void loadAbilities()
 	{
 		//Add the ability to the Ability array by loading it from yaml, just like in loadUnits
 		Config.processYamlDirectory(
 			buildNormalizedPath( FilePath.Resources.Objects, "Abilities" ),
 			( Node abilityNode )
-		{
+			{
 			string name = abilityNode["Name"].as!string;
 			abilities[name] = new Ability();
 		} );
 	}
-
+	
 	void loadUnits()
 	{
 		// So we are going to parse the Units folder for the unit files
 		// For those, we'll get the Name of the node, which will be how we call into the gameObjects
-
+		
 		Config.processYamlDirectory( 
-			buildNormalizedPath( FilePath.Resources.Objects, "Units" ),
-			( Node unitNode ) //Callback function.  See gameobjectcollection lines 34 for example
-		{
+		                            buildNormalizedPath( FilePath.Resources.Objects, "Units" ),
+		                            ( Node unitNode ) //Callback function.  See gameobjectcollection lines 34 for example
+		                            {
 			Unit unit = cast(Unit)Prefabs[ unitNode["InstanceOf"].as!string ].createInstance();
 			unit.name = unitNode["Name"].as!string;
-
+			
 			//Then for each variable, accessed by unitNode["varname"] or better off, a tryGet
 			//Set the values
 			int hp, sp, at, df = 0;
@@ -64,17 +64,17 @@ public:
 				melee = abilities[ ability ];
 			if( Config.tryGet( "RangedAttack", ability, unitNode ) )
 				ranged = abilities[ ability ];
-
+			
 			unit.init( hp, sp, at, df, melee, ranged, [ melee, ranged ] );
-
+			
 			gameObjects[unit.name] = unit;
 		} );
 		
 	}
-
+	
 	void loadLevel()
 	{
-
+		
 	}
 }
 
@@ -101,38 +101,4 @@ class AbilityAction : Action
 public:
 	uint targetUnitId;
 	uint abilityID;
-}
-
-/// Temporary class to move the camera around
-class Cam : GameObject
-{
-	this()
-	{
-	}
-
-	override void onUpdate()
-	{
-		if( Input.getState( "LookUp" ) )
-		{
-			this.transform.position.z -= 1;
-			this.camera._viewMatrixIsDirty = true;
-		}
-		else if( Input.getState( "LookDown" ) )
-		{
-			this.transform.position.z += 1;
-			this.camera._viewMatrixIsDirty = true;
-		}
-
-		if( Input.getState( "LookLeft" ) )
-		{
-			this.transform.position.x -= 1;
-			this.camera._viewMatrixIsDirty = true;
-		}
-		else if( Input.getState( "LookRight" ) )
-		{
-			this.transform.position.x += 1;
-			this.camera._viewMatrixIsDirty = true;
-		}
-
-	}
 }
