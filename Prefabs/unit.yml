@@ -1,8 +1,8 @@
-Name: Unit
+Name: Werewolf1
 Transform:
-    Position: !Vector3 0 0 -40
-    Scale: !Vector3 4 4 4
+    Position: !Vector3 0 15 -40
+    Scale: !Vector3 1 1 1
 Script:
     ClassName: unit.Unit
-Mesh: cube
-Material: TileDefault
+Mesh: werewolf
+Material: Werewolf

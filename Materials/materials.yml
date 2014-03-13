@@ -23,3 +23,8 @@
     Diffuse: tileselect2_d
     Normal: flat_n
     Specular: flat_s
+-
+    Name: Werewolf
+    Diffuse: blank_normal
+    Normal: werewolf_n
+    Specular: flat_s
