@@ -3,9 +3,20 @@ import controller;
 
 import core, graphics, components, utility;
 
+@property RobotGhosts Game()
+{
+	return cast(RobotGhosts)DGame.instance;
+}
+
 class RobotGhosts : DGame
 {
-	Controller gc;
+	public Controller gc;
+
+	// Name that game
+	@property override string title()
+	{
+		return "Spectral Robot Task Force";
+	}
 
 	override void onInitialize()
 	{

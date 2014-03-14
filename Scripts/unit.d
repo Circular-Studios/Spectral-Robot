@@ -11,6 +11,8 @@ private:
 	int _speed;
 	int _attack;
 	int _defense;
+	int _posX;
+	int _posY;
 
 	Ability _meleeAttack;
 	Ability _rangedAttack;
@@ -24,6 +26,8 @@ public:
 	mixin( Property!_speed );
 	mixin( Property!_attack );
 	mixin( Property!_defense );
+	mixin( Property!(_posX, AccessModifier.Public) );
+	mixin( Property!(_posY, AccessModifier.Public) );
 
 	mixin( Property!_abilities );
 	mixin( Property!_abilityCooldowns );
@@ -35,8 +39,10 @@ public:
 		nextID++;
 	}
 
-	void init(int hp, int sp, int at, int df, Ability melee, Ability ranged, Ability[] abilities )
+	void init(int posX, int posY, int hp, int sp, int at, int df, Ability melee, Ability ranged, Ability[] abilities )
 	{
+		_posX = posX;
+		_posY = posY;
 		_hp = hp;
 		_speed = sp;
 		_attack = at;
@@ -44,6 +50,14 @@ public:
 		_meleeAttack = melee;
 		_rangedAttack = ranged;
 		_abilities = abilities;
+	}
+
+	bool updatePosition()
+	{
+		this.transform.position.x = _posX * 10;
+		this.transform.position.z = _posY * 10 - 50;
+		this.transform.updateMatrix();
+		return true;
 	}
 }
 

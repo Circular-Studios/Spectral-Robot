@@ -55,9 +55,11 @@ public:
 			
 			//Then for each variable, accessed by unitNode["varname"] or better off, a tryGet
 			//Set the values
-			int hp, sp, at, df = 0;
+			int posX, posY, hp, sp, at, df = 0;
 			string ability;
 			Ability melee, ranged;
+			Config.tryGet( "PosX", posX, unitNode );
+			Config.tryGet( "PosY", posY, unitNode );
 			Config.tryGet( "HP", hp, unitNode );
 			Config.tryGet( "Speed", sp, unitNode );
 			Config.tryGet( "Attack", at, unitNode );
@@ -67,7 +69,7 @@ public:
 			if( Config.tryGet( "RangedAttack", ability, unitNode ) )
 				ranged = abilities[ ability ];
 			
-			unit.init( hp, sp, at, df, melee, ranged, [ melee, ranged ] );
+			unit.init(posX, posY, hp, sp, at, df, melee, ranged, [ melee, ranged ] );
 			
 			gameObjects[unit.name] = unit;
 		} );

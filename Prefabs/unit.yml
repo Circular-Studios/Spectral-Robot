@@ -1,6 +1,6 @@
 Name: Werewolf1
 Transform:
-    Position: !Vector3 0 15 -40
+    Position: !Vector3 0 12 -50
     Scale: !Vector3 1 1 1
 Script:
     ClassName: unit.Unit

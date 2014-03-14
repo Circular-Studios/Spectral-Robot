@@ -14,3 +14,9 @@ LookLeft:
     - !Keyboard J
 LookRight:
     - !Keyboard L
+Enter:
+    - !Keyboard Return
+Enter2:
+    - !Keyboard Space
+Back:
+    - !Keyboard Backspace
