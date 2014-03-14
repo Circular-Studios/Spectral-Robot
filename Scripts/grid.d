@@ -14,15 +14,13 @@ class Grid : GameObject
 	Tile[GRID_SIZE][GRID_SIZE] tiles;
 	GameObject[(TileType.max + 1) * (TileSelection.max + 1)] tileObjects;
 	bool isUnitSelected = false;
-	bool thisIsATempFix = false;
-	Unit werewolf;
+	Unit selectedUnit;
 
 	vec2i sel;
 
 	this()
 	{
 		initTiles();
-		thisIsATempFix = true;
 	}
 
 	override void onDraw()
@@ -37,10 +35,6 @@ class Grid : GameObject
 
 	override void onUpdate()
 	{
-		if (thisIsATempFix)
-		{
-			werewolf = cast(Unit)Game.gc.gameObjects["Werewolf1"];
-		}
 		if( Input.getState( "Down", true ) )
 		{
 			tiles[sel.x][sel.y].selection = TileSelection.None;
@@ -72,25 +66,32 @@ class Grid : GameObject
 		}
 
 		// Select a unit
-		if( Input.getState( "Enter", true ) && !isUnitSelected && werewolf.posX == sel.x && werewolf.posY == sel.y )
+		if( Input.getState( "Enter", true ) && !isUnitSelected )
 		{
-			logInfo("nigga");
-			isUnitSelected = true;
+			foreach( obj; Game.gc.gameObjects )
+			{
+				auto unit = cast(Unit)obj;
+				if ( unit !is null && unit.posX == sel.x && unit.posY == sel.y )
+				{
+					selectedUnit = unit;
+					isUnitSelected = true;
+				}
+			}
 		}
 
 		// Place a selected unit
 		else if( Input.getState( "Enter2", true ) && isUnitSelected ) // && there's not a unit on this space )
 		{
-			logInfo("bitch");
-			werewolf.posX = sel.x;
-			werewolf.posY = sel.y;
-			werewolf.updatePosition();
+			selectedUnit.posX = sel.x;
+			selectedUnit.posY = sel.y;
+			selectedUnit.updatePosition();
 			isUnitSelected = false;
 		}
 
 		// Deselect a unit
 		if( Input.getState( "Back", true ) && isUnitSelected )
 		{
+			selectedUnit = null;
 			isUnitSelected = false;
 		}
 	}
