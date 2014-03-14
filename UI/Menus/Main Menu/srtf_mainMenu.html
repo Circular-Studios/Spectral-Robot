@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+		<meta charset="UTF-8" />
+        <title>SRTF - Main Menu</title>
+		<meta name="author" content="Derrick Hunt" />
+		<link rel="stylesheet" type="text/css" href="srtf_mainMenu_style.css" />
+		
+		<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+		
+        <script>
+		//Button functions
+		$(document).ready(function(){
+			$('#b1').click(function(){ //multiplayer button
+				$('b1').effect("highlight", {color:"#669966"}, 3000);
+				console.log("multiplayer button clicked");
+			});
+			$('#b2').click(function(){ //tutorial/campaign button
+				console.log("tutorial/campaign button clicked");
+			});
+			$('#b3').click(function(){ //options button
+				console.log("options button clicked");
+			});
+			$('#b4').click(function(){ //credits button
+				console.log("credits button clicked");
+			});
+			$('#b5').click(function(){ //exit button
+				console.log("exit button clicked");
+			});
+		});
+		</script>
+    </head>
+    <body>
+		<h1>SPECTRAL ROBOT TASK FORCE</h1>
+		
+		<button id="b1">MULTIPLAYER</button>
+		
+		<button id="b2">TUTORIAL</button>
+		
+		<button id="b3">OPTIONS</button>
+		
+		<button id="b4">CREDITS</button>
+		
+		<button id="b5">EXIT</button>
+    </body>
+</html>
