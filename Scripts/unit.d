@@ -3,7 +3,7 @@ import ability;
 
 import core, utility, components;
 
-class Unit : GameObject
+shared class Unit : GameObject
 {
 private:
 	static uint nextID = 0;
@@ -39,7 +39,7 @@ public:
 		nextID++;
 	}
 
-	void init(int posX, int posY, int hp, int sp, int at, int df, Ability melee, Ability ranged, Ability[] abilities )
+	void init(int posX, int posY, int hp, int sp, int at, int df, shared Ability melee, shared Ability ranged, shared Ability[] abilities )
 	{
 		_posX = posX;
 		_posY = posY;

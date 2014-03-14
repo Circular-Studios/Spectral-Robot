@@ -4,7 +4,7 @@ import core, utility;
 import yaml;
 import std.path;
 
-final class Controller
+final shared class Controller
 {
 public:
 	Action[] lastTurn; //Gets cleared after a turn
@@ -14,11 +14,11 @@ public:
 	
 	this()
 	{
-		gameObjects = new GameObjectCollection();
+		gameObjects = new shared GameObjectCollection();
 		// So we'll first load all the objects
 		gameObjects.loadObjects("Base");
 		
-		auto grid = new Grid();
+		auto grid = new shared Grid();
 		grid.transform.position.z = -50;
 		grid.transform.updateMatrix();
 		gameObjects["Grid"] = grid;
@@ -37,7 +37,7 @@ public:
 			( Node abilityNode )
 			{
 			string name = abilityNode["Name"].as!string;
-			abilities[name] = new Ability();
+			abilities[name] = new shared Ability();
 		} );
 	}
 	
@@ -47,32 +47,35 @@ public:
 		// For those, we'll get the Name of the node, which will be how we call into the gameObjects
 		
 		Config.processYamlDirectory( 
-		                            buildNormalizedPath( FilePath.Resources.Objects, "Units" ),
-		                            ( Node unitNode ) //Callback function.  See gameobjectcollection lines 34 for example
-		                            {
-			Unit unit = cast(Unit)Prefabs[ unitNode["InstanceOf"].as!string ].createInstance();
-			unit.name = unitNode["Name"].as!string;
-			
-			//Then for each variable, accessed by unitNode["varname"] or better off, a tryGet
-			//Set the values
-			int posX, posY, hp, sp, at, df = 0;
-			string ability;
-			Ability melee, ranged;
-			Config.tryGet( "PosX", posX, unitNode );
-			Config.tryGet( "PosY", posY, unitNode );
-			Config.tryGet( "HP", hp, unitNode );
-			Config.tryGet( "Speed", sp, unitNode );
-			Config.tryGet( "Attack", at, unitNode );
-			Config.tryGet( "Defense", df, unitNode );
-			if( Config.tryGet( "MeleeAttack", ability, unitNode ) )
-				melee = abilities[ ability ];
-			if( Config.tryGet( "RangedAttack", ability, unitNode ) )
-				ranged = abilities[ ability ];
-			
-			unit.init(posX, posY, hp, sp, at, df, melee, ranged, [ melee, ranged ] );
-			
-			gameObjects[unit.name] = unit;
-		} );
+			buildNormalizedPath( FilePath.Resources.Objects, "Units" ),
+			( Node unitNode ) //Callback function.  See gameobjectcollection lines 34 for example
+			{
+				string[shared GameObject] parents;
+				string[][shared GameObject] children;
+
+				auto unit = cast(shared Unit)Prefabs[ unitNode["InstanceOf"].as!string ].createInstance( parents, children );
+				unit.name = unitNode["Name"].as!string;
+				
+				//Then for each variable, accessed by unitNode["varname"] or better off, a tryGet
+				//Set the values
+				int posX, posY, hp, sp, at, df = 0;
+				string ability;
+				shared Ability melee, ranged;
+				Config.tryGet( "PosX", posX, unitNode );
+				Config.tryGet( "PosY", posY, unitNode );
+				Config.tryGet( "HP", hp, unitNode );
+				Config.tryGet( "Speed", sp, unitNode );
+				Config.tryGet( "Attack", at, unitNode );
+				Config.tryGet( "Defense", df, unitNode );
+				if( Config.tryGet( "MeleeAttack", ability, unitNode ) )
+					melee = abilities[ ability ];
+				if( Config.tryGet( "RangedAttack", ability, unitNode ) )
+					ranged = abilities[ ability ];
+				
+				unit.init(posX, posY, hp, sp, at, df, melee, ranged, [ melee, ranged ] );
+				
+				gameObjects[unit.name] = unit;
+			} );
 		
 	}
 	

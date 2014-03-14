@@ -17,7 +17,7 @@ enum TargetArea
 	Circle,
 }
 
-class Ability
+shared class Ability
 {
 private:
 	static uint nextID;

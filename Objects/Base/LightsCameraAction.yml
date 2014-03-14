@@ -5,7 +5,10 @@
     Transform:
         Position: !Vector3 0 30 -10
         Rotation: !Vector3 -45 0 0
-    Camera: please
+    Camera: 
+        FOV: 90
+        Near: .01
+        Far: 1000
 -
     Name: DirLight
     Light: !Light-Directional

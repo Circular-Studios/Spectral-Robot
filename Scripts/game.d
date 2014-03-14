@@ -8,7 +8,7 @@ import core, graphics, components, utility;
 	return cast(RobotGhosts)DGame.instance;
 }
 
-class RobotGhosts : DGame
+shared class RobotGhosts : DGame
 {
 	public Controller gc;
 
@@ -25,7 +25,7 @@ class RobotGhosts : DGame
 		Input.addKeyDownEvent( Keyboard.Escape, ( uint kc ) { currentState = GameState.Quit; } );
 		Input.addKeyDownEvent( Keyboard.F5, ( uint kc ) { currentState = GameState.Reset; } );
 
-		gc = new Controller();
+		gc = new shared Controller();
 
 		auto cam = gc.gameObjects["Camera"];
 		Graphics.setCamera( cam.camera );

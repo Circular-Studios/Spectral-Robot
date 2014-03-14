@@ -9,7 +9,7 @@ const int GRID_SIZE = 10;
 
 /** Inherits from GameObject to simplify drawing/positioning
   */
-class Grid : GameObject
+shared class Grid : GameObject
 {
 	Tile[GRID_SIZE][GRID_SIZE] tiles;
 	GameObject[(TileType.max + 1) * (TileSelection.max + 1)] tileObjects;
@@ -70,7 +70,7 @@ class Grid : GameObject
 		{
 			foreach( obj; Game.gc.gameObjects )
 			{
-				auto unit = cast(Unit)obj;
+				auto unit = cast(shared Unit)obj;
 				if ( unit !is null && unit.posX == sel.x && unit.posY == sel.y )
 				{
 					selectedUnit = unit;
@@ -103,7 +103,11 @@ class Grid : GameObject
 		{
 			int x = i % GRID_SIZE;
 			int z = i / GRID_SIZE;
-			auto tile = cast(Tile)Prefabs["Tile"].createInstance();
+
+			string[shared GameObject] parents;
+			string[][shared GameObject] children;
+			auto tile = cast(shared Tile)Prefabs["Tile"].createInstance(parents, children);
+
 			tile.x = x;
 			tile.z = z;
 
@@ -113,7 +117,7 @@ class Grid : GameObject
 	}
 }
 
-class Tile : GameObject
+shared class Tile : GameObject
 {
 private:
 	TileType _type;
