@@ -1,12 +1,12 @@
 -
     Name: poopmat
     Diffuse: Poop
-    Normal: blank_normal
+    Normal: blank_n
     Specular: flat_s
 -
     Name: poopmat_gray
     Diffuse: Poop
-    Normal: gray_normal
+    Normal: gray_n
     Specular: flat_s
 -
     Name: TileDefault
@@ -14,13 +14,13 @@
     Normal: flat_n
     Specular: flat_s
 -
-    Name: TileSelect1
-    Diffuse: tileselect1_d
+    Name: HighlightBlue
+    Diffuse: highlight_blue_d
     Normal: flat_n
     Specular: flat_s
 -
-    Name: TileSelect2
-    Diffuse: tileselect2_d
+    Name: HighlightRed
+    Diffuse: highlight_red_d
     Normal: flat_n
     Specular: flat_s
 -
@@ -31,5 +31,5 @@
 -
     Name: Robot
     Diffuse: robot_d
-    Normal: blank_normal
+    Normal: blank_n
     Specular: robot_s

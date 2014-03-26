@@ -19,8 +19,6 @@ ZoomUp:
 ZoomDown:
     - !Keyboard M
 Enter:
-    - !Keyboard Return
-Enter2:
     - !Keyboard Space
 Back:
     - !Keyboard Backspace

@@ -52,6 +52,7 @@ public:
 		_abilities = abilities;
 	}
 
+	/// Convert grid coordinates to 3D space
 	bool updatePosition()
 	{
 		this.transform.position.x = _posX * 10;

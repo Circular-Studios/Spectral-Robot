@@ -12,7 +12,7 @@ const int GRID_SIZE = 10;
 shared class Grid : GameObject
 {
 	Tile[GRID_SIZE][GRID_SIZE] tiles;
-	GameObject[(TileType.max + 1) * (TileSelection.max + 1)] tileObjects;
+	GameObject[ ( TileType.max + 1 ) * ( TileSelection.max + 1 ) ] tileObjects;
 	bool isUnitSelected = false;
 	Unit selectedUnit;
 
@@ -29,40 +29,42 @@ shared class Grid : GameObject
 		{
 			int x = i % GRID_SIZE;
 			int z = i / GRID_SIZE;
+
 			tiles[x][z].draw();
 		}
 	}
 
 	override void onUpdate()
 	{
+		// move the selector around the grid
 		if( Input.getState( "Down", true ) )
 		{
-			tiles[sel.x][sel.y].selection = TileSelection.None;
+			tiles[sel.x][sel.y].resetSelection();
 			sel.y += 1;
 			if( sel.y >= GRID_SIZE ) sel.y = GRID_SIZE - 1;
-			tiles[sel.x][sel.y].selection = TileSelection.Select1;
+			tiles[sel.x][sel.y].selection = TileSelection.HighlightBlue;
 		}
 		else if( Input.getState( "Up", true ) )
 		{
-			tiles[sel.x][sel.y].selection = TileSelection.None;
+			tiles[sel.x][sel.y].resetSelection();
 			sel.y -= 1;
 			if( sel.y < 0 ) sel.y = 0;
-			tiles[sel.x][sel.y].selection = TileSelection.Select1;
+			tiles[sel.x][sel.y].selection = TileSelection.HighlightBlue;
 		}
 
 		if( Input.getState( "Right", true ) )
 		{
-			tiles[sel.x][sel.y].selection = TileSelection.None;
+			tiles[sel.x][sel.y].resetSelection();
 			sel.x += 1;
 			if( sel.x >= GRID_SIZE ) sel.x = GRID_SIZE - 1;
-			tiles[sel.x][sel.y].selection = TileSelection.Select1;
+			tiles[sel.x][sel.y].selection = TileSelection.HighlightBlue;
 		}
 		else if( Input.getState( "Left", true ) )
 		{
-			tiles[sel.x][sel.y].selection = TileSelection.None;
+			tiles[sel.x][sel.y].resetSelection();
 			sel.x -= 1;
 			if( sel.x < 0 ) sel.x = 0;
-			tiles[sel.x][sel.y].selection = TileSelection.Select1;
+			tiles[sel.x][sel.y].selection = TileSelection.HighlightBlue;
 		}
 
 		// Select a unit
@@ -80,8 +82,13 @@ shared class Grid : GameObject
 		}
 
 		// Place a selected unit
-		else if( Input.getState( "Enter2", true ) && isUnitSelected ) // && there's not a unit on this space )
+		else if( Input.getState( "Enter", true ) && isUnitSelected  && tiles[sel.x][sel.y].type == TileType.Open )
 		{
+			// change the tile types
+			tiles[selectedUnit.posX][selectedUnit.posY].type = TileType.Open;
+			tiles[sel.x][sel.y].type = TileType.HalfBlocked;
+
+			// move the unit to the new location
 			selectedUnit.posX = sel.x;
 			selectedUnit.posY = sel.y;
 			selectedUnit.updatePosition();
@@ -132,11 +139,11 @@ public:
 			case TileSelection.None:
 				this.material = Assets.get!Material("TileDefault");
 				break;
-			case TileSelection.Select1:
-				this.material = Assets.get!Material("TileSelect1");
+			case TileSelection.HighlightBlue:
+				this.material = Assets.get!Material("HighlightBlue");
 				break;
-			case TileSelection.Select2:
-				this.material = Assets.get!Material("TileSelect2");
+			case TileSelection.HighlightRed:
+				this.material = Assets.get!Material("HighlightRed");
 		}
 		_selection = s;
 	}
@@ -146,9 +153,31 @@ public:
 		return _selection;
 	}
 
+	@property void type( TileType t )
+	{
+		final switch( t )
+		{
+			case TileType.Open:
+				this.selection = TileSelection.None;
+				break;
+			case TileType.HalfBlocked:
+				this.selection = TileSelection.HighlightRed;
+				break;
+			case TileType.FullyBlocked:
+				this.selection = TileSelection.HighlightRed;
+		}
+		_type = t;
+	}
+
 	@property TileType type()
 	{
 		return _type;
+	}
+
+	/// Revert the selection material of the tile to its TileType
+	void resetSelection()
+	{
+		type( this.type );
 	}
 
 	@property void x( int X )
@@ -166,21 +195,22 @@ public:
 	{
 		this._type = TileType.Open;
 		this._selection = TileSelection.None;
-		this.transform.scale = vec3( TILE_SIZE/2 );
+		this.transform.scale = vec3( TILE_SIZE / 2 );
 	}
 
 }
 
 enum TileType
 {
-	Open, /// Does not block
-	HalfBlocked, /// Blocks movement, but not vision/attacks
-	FullyBlocked /// Blocks movement, vision, and attacks
+	Open, // Does not block
+	HalfBlocked, // Blocks movement, but not vision/attacks
+	FullyBlocked // Blocks movement, vision, and attacks
 }
 
 enum TileSelection
 {
-	None, // Unselected tile
-	Select1, // First kind of highlight
-	Select2 // Second kind of highlight
+	None,
+	HighlightBlue,
+	HighlightRed
+	//HighlightGreen
 }
