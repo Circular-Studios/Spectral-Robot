@@ -14,6 +14,10 @@ LookLeft:
     - !Keyboard J
 LookRight:
     - !Keyboard L
+ZoomUp:
+    - !Keyboard N
+ZoomDown:
+    - !Keyboard M
 Enter:
     - !Keyboard Return
 Enter2:
