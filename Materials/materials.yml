@@ -25,6 +25,11 @@
     Specular: flat_s
 -
     Name: Werewolf
-    Diffuse: blank_normal
+    Diffuse: werewolf_d
     Normal: werewolf_n
-    Specular: flat_s
+    Specular: werewolf_s
+-
+    Name: Robot
+    Diffuse: robot_d
+    Normal: blank_normal
+    Specular: robot_s
