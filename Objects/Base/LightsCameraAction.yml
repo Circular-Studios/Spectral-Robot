@@ -1,20 +1,20 @@
--
-    Name: Camera
-    Script:
-        ClassName: camera.Camera
-    Transform:
-        Position: !Vector3 0 30 -10
-        Rotation: !Vector3 -45 0 0
-    Camera: 
-        FOV: 90
-        Near: .01
-        Far: 1000
--
-    Name: DirLight
-    Light: !Light-Directional
-        Color: !Vector3 1 1 1
-        Direction: !Vector3 0 -1 -1
--
-    Name: AmbLight
-    Light: !Light-Ambient
-        Color: !Vector3 .1 .1 .1
+---
+Name: Camera
+Script:
+    ClassName: camera.Camera
+Transform:
+    Position: !Vector3 0 30 -10
+    Rotation: !Vector3 -45 0 0
+Camera: 
+    FOV: 70
+    Near: .01
+    Far: 1000
+---
+Name: DirLight
+Light: !Light-Directional
+    Color: !Vector3 1 1 1
+    Direction: !Vector3 0 -1 -1
+---
+Name: AmbLight
+Light: !Light-Ambient
+    Color: !Vector3 .1 .1 .1

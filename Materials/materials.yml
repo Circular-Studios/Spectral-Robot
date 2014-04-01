@@ -1,35 +1,35 @@
--
-    Name: poopmat
-    Diffuse: Poop
-    Normal: blank_n
-    Specular: flat_s
--
-    Name: poopmat_gray
-    Diffuse: Poop
-    Normal: gray_n
-    Specular: flat_s
--
-    Name: TileDefault
-    Diffuse: tiledefault_d
-    Normal: flat_n
-    Specular: flat_s
--
-    Name: HighlightBlue
-    Diffuse: highlight_blue_d
-    Normal: flat_n
-    Specular: flat_s
--
-    Name: HighlightRed
-    Diffuse: highlight_red_d
-    Normal: flat_n
-    Specular: flat_s
--
-    Name: Werewolf
-    Diffuse: werewolf_d
-    Normal: werewolf_n
-    Specular: werewolf_s
--
-    Name: Robot
-    Diffuse: robot_d
-    Normal: blank_n
-    Specular: robot_s
+---
+Name: poopmat
+Diffuse: Poop
+Normal: blank_n
+Specular: flat_s
+---
+Name: poopmat_gray
+Diffuse: Poop
+Normal: gray_n
+Specular: flat_s
+---
+Name: TileDefault
+Diffuse: tiledefault_d
+Normal: flat_n
+Specular: flat_s
+---
+Name: HighlightBlue
+Diffuse: highlight_blue_d
+Normal: flat_n
+Specular: flat_s
+---
+Name: HighlightRed
+Diffuse: highlight_red_d
+Normal: flat_n
+Specular: flat_s
+---
+Name: Werewolf
+Diffuse: werewolf_d
+Normal: werewolf_n
+Specular: werewolf_s
+---
+Name: Robot
+Diffuse: robot_d
+Normal: blank_n
+Specular: robot_s

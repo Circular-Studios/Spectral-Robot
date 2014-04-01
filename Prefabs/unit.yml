@@ -1,18 +1,18 @@
--
-    Name: Werewolf1
-    Transform:
-        Position: !Vector3 0 0 -50
-        Scale: !Vector3 1 1 1
-    Script:
-        ClassName: unit.Unit
-    Mesh: werewolf
-    Material: Werewolf
--
-    Name: Robot1
-    Transform:
-        Position: !Vector3 20 0 -30
-        Scale: !Vector3 1 1 1
-    Script:
-        ClassName: unit.Unit
-    Mesh: robot
-    Material: Robot
+---
+Name: Werewolf1
+Transform:
+    Position: !Vector3 0 0 -50
+    Scale: !Vector3 1 1 1
+Script:
+    ClassName: unit.Unit
+Mesh: werewolf
+Material: Werewolf
+---
+Name: Robot1
+Transform:
+    Position: !Vector3 20 0 -30
+    Scale: !Vector3 1 1 1
+Script:
+    ClassName: unit.Unit
+Mesh: robot
+Material: Robot

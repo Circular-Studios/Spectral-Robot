@@ -27,18 +27,16 @@ public:
 		loadUnits();
 		loadLevel();
 	}
-	
+
 	
 	void loadAbilities()
 	{
 		//Add the ability to the Ability array by loading it from yaml, just like in loadUnits
-		Config.processYamlDirectory(
-			buildNormalizedPath( FilePath.Resources.Objects, "Abilities" ),
-			( Node abilityNode )
-			{
+		foreach( abilityNode; loadYamlDocuments( buildNormalizedPath( FilePath.Resources.Objects, "Abilities" ) ) )
+		{
 			string name = abilityNode["Name"].as!string;
 			abilities[name] = new shared Ability();
-		} );
+		}
 	}
 	
 	void loadUnits()
@@ -46,37 +44,34 @@ public:
 		// So we are going to parse the Units folder for the unit files
 		// For those, we'll get the Name of the node, which will be how we call into the gameObjects
 		
-		Config.processYamlDirectory( 
-			buildNormalizedPath( FilePath.Resources.Objects, "Units" ),
-			( Node unitNode ) //Callback function.  See gameobjectcollection lines 34 for example
-			{
-				string[shared GameObject] parents;
-				string[][shared GameObject] children;
+		foreach( unitNode; loadYamlDocuments( buildNormalizedPath( FilePath.Resources.Objects, "Units" ) ) )
+		{
+			string[shared GameObject] parents;
+			string[][shared GameObject] children;
 
-				auto unit = cast(shared Unit)Prefabs[ unitNode["InstanceOf"].as!string ].createInstance( parents, children );
-				unit.name = unitNode["Name"].as!string;
-				
-				//Then for each variable, accessed by unitNode["varname"] or better off, a tryGet
-				//Set the values
-				int posX, posY, hp, sp, at, df = 0;
-				string ability;
-				shared Ability melee, ranged;
-				Config.tryGet( "PosX", posX, unitNode );
-				Config.tryGet( "PosY", posY, unitNode );
-				Config.tryGet( "HP", hp, unitNode );
-				Config.tryGet( "Speed", sp, unitNode );
-				Config.tryGet( "Attack", at, unitNode );
-				Config.tryGet( "Defense", df, unitNode );
-				if( Config.tryGet( "MeleeAttack", ability, unitNode ) )
-					melee = abilities[ ability ];
-				if( Config.tryGet( "RangedAttack", ability, unitNode ) )
-					ranged = abilities[ ability ];
-				
-				unit.init(posX, posY, hp, sp, at, df, melee, ranged, [ melee, ranged ] );
-				
-				gameObjects[unit.name] = unit;
-			} );
-		
+			auto unit = cast(shared Unit)Prefabs[ unitNode["InstanceOf"].as!string ].createInstance( parents, children );
+			unit.name = unitNode["Name"].as!string;
+			
+			//Then for each variable, accessed by unitNode["varname"] or better off, a tryGet
+			//Set the values
+			int posX, posY, hp, sp, at, df = 0;
+			string ability;
+			shared Ability melee, ranged;
+			Config.tryGet( "PosX", posX, unitNode );
+			Config.tryGet( "PosY", posY, unitNode );
+			Config.tryGet( "HP", hp, unitNode );
+			Config.tryGet( "Speed", sp, unitNode );
+			Config.tryGet( "Attack", at, unitNode );
+			Config.tryGet( "Defense", df, unitNode );
+			if( Config.tryGet( "MeleeAttack", ability, unitNode ) )
+				melee = abilities[ ability ];
+			if( Config.tryGet( "RangedAttack", ability, unitNode ) )
+				ranged = abilities[ ability ];
+			
+			unit.init(posX, posY, hp, sp, at, df, melee, ranged, [ melee, ranged ] );
+			
+			gameObjects[unit.name] = unit;
+		}
 	}
 	
 	void loadLevel()
