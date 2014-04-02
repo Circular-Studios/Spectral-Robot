@@ -13,33 +13,25 @@ private:
 	int _defense;
 	int _posX;
 	int _posY;
-
-	Ability _meleeAttack;
-	Ability _rangedAttack;
 	Ability[] _abilities;
-	int[] _abilityCooldowns;
-
+	
 public:
 	immutable uint ID;
-
+	mixin( Property!(_posX, AccessModifier.Public) );
+	mixin( Property!(_posY, AccessModifier.Public) );
 	mixin( Property!_hp );
 	mixin( Property!_speed );
 	mixin( Property!_attack );
 	mixin( Property!_defense );
-	mixin( Property!(_posX, AccessModifier.Public) );
-	mixin( Property!(_posY, AccessModifier.Public) );
-
 	mixin( Property!_abilities );
-	mixin( Property!_abilityCooldowns );
-
+	
 	this()
 	{
-		// Constructor code
 		ID = nextID;
 		nextID++;
 	}
-
-	void init(int posX, int posY, int hp, int sp, int at, int df, shared Ability melee, shared Ability ranged, shared Ability[] abilities )
+	
+	void init(int posX, int posY, int hp, int sp, int at, int df, shared Ability[] abilities )
 	{
 		_posX = posX;
 		_posY = posY;
@@ -47,11 +39,9 @@ public:
 		_speed = sp;
 		_attack = at;
 		_defense = df;
-		_meleeAttack = melee;
-		_rangedAttack = ranged;
 		_abilities = abilities;
 	}
-
+	
 	/// Convert grid coordinates to 3D space
 	bool updatePosition()
 	{
@@ -61,4 +51,3 @@ public:
 		return true;
 	}
 }
-

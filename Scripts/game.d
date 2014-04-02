@@ -11,22 +11,24 @@ import core, graphics, components, utility;
 shared class RobotGhosts : DGame
 {
 	public Controller gc;
-
+	
 	// Name that game
 	@property override string title()
 	{
 		return "Spectral Robot Task Force";
 	}
-
+	
 	override void onInitialize()
 	{
 		logInfo( "Initializing..." );
 		
+		// setup a couple helper keys
 		Input.addKeyDownEvent( Keyboard.Escape, ( uint kc ) { currentState = GameState.Quit; } );
 		Input.addKeyDownEvent( Keyboard.F5, ( uint kc ) { currentState = GameState.Reset; } );
-
+		
 		gc = new shared Controller();
-
+		
+		// create a camera
 		auto cam = gc.gameObjects["Camera"];
 		Graphics.setCamera( cam.camera );
 	}
