@@ -13,7 +13,7 @@ private:
 	int _defense;
 	int _posX;
 	int _posY;
-	Ability[] _abilities;
+	int[] _abilities;
 	
 public:
 	immutable uint ID;
@@ -31,7 +31,7 @@ public:
 		nextID++;
 	}
 	
-	void init(int posX, int posY, int hp, int sp, int at, int df, shared Ability[] abilities )
+	void init(int posX, int posY, int hp, int sp, int at, int df, shared int[] abilities )
 	{
 		_posX = posX;
 		_posY = posY;

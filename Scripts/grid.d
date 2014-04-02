@@ -8,32 +8,32 @@ const int TILE_SIZE = 10;
 const int GRID_SIZE = 10;
 
 /** Inherits from GameObject to simplify drawing/positioning
-  */
+ */
 shared class Grid : GameObject
 {
-	Tile[GRID_SIZE][GRID_SIZE] tiles;
+	static shared Tile[GRID_SIZE][GRID_SIZE] tiles;
 	GameObject[ ( TileType.max + 1 ) * ( TileSelection.max + 1 ) ] tileObjects;
 	bool isUnitSelected = false;
 	Unit selectedUnit;
-
+	
 	vec2i sel;
-
+	
 	this()
 	{
 		initTiles();
 	}
-
+	
 	override void onDraw()
 	{
 		for( int i = 0; i < GRID_SIZE * GRID_SIZE; i++ )
 		{
 			int x = i % GRID_SIZE;
 			int z = i / GRID_SIZE;
-
+			
 			tiles[x][z].draw();
 		}
 	}
-
+	
 	override void onUpdate()
 	{
 		// move the selector around the grid
@@ -51,7 +51,7 @@ shared class Grid : GameObject
 			if( sel.y < 0 ) sel.y = 0;
 			tiles[sel.x][sel.y].selection = TileSelection.HighlightBlue;
 		}
-
+		
 		if( Input.getState( "Right", true ) )
 		{
 			tiles[sel.x][sel.y].resetSelection();
@@ -66,7 +66,7 @@ shared class Grid : GameObject
 			if( sel.x < 0 ) sel.x = 0;
 			tiles[sel.x][sel.y].selection = TileSelection.HighlightBlue;
 		}
-
+		
 		// Select a unit
 		if( Input.getState( "Enter", true ) && !isUnitSelected )
 		{
@@ -80,21 +80,21 @@ shared class Grid : GameObject
 				}
 			}
 		}
-
+		
 		// Place a selected unit
 		else if( Input.getState( "Enter", true ) && isUnitSelected  && tiles[sel.x][sel.y].type == TileType.Open )
 		{
 			// change the tile types
 			tiles[selectedUnit.posX][selectedUnit.posY].type = TileType.Open;
 			tiles[sel.x][sel.y].type = TileType.HalfBlocked;
-
+			
 			// move the unit to the new location
 			selectedUnit.posX = sel.x;
 			selectedUnit.posY = sel.y;
 			selectedUnit.updatePosition();
 			isUnitSelected = false;
 		}
-
+		
 		// Deselect a unit
 		if( Input.getState( "Back", true ) && isUnitSelected )
 		{
@@ -102,7 +102,7 @@ shared class Grid : GameObject
 			isUnitSelected = false;
 		}
 	}
-
+	
 	/// Temporary method for ease of this sprint
 	void initTiles()
 	{
@@ -110,14 +110,14 @@ shared class Grid : GameObject
 		{
 			int x = i % GRID_SIZE;
 			int z = i / GRID_SIZE;
-
+			
 			string[shared GameObject] parents;
 			string[][shared GameObject] children;
 			auto tile = cast(shared Tile)Prefabs["Tile"].createInstance(parents, children);
-
+			
 			tile.x = x;
 			tile.z = z;
-
+			
 			this.addChild(tile);
 			tiles[x][z] = tile;
 		}
@@ -129,9 +129,8 @@ shared class Tile : GameObject
 private:
 	TileType _type;
 	TileSelection _selection;
-
+	
 public:
-
 	@property void selection( TileSelection s )
 	{
 		final switch( s )
@@ -147,12 +146,7 @@ public:
 		}
 		_selection = s;
 	}
-
-	@property TileSelection selection()
-	{
-		return _selection;
-	}
-
+	
 	@property void type( TileType t )
 	{
 		final switch( t )
@@ -168,36 +162,41 @@ public:
 		}
 		_type = t;
 	}
-
+	
 	@property TileType type()
 	{
 		return _type;
 	}
-
+	
+	@property TileSelection selection()
+	{
+		return _selection;
+	}
+	
 	/// Revert the selection material of the tile to its TileType
 	void resetSelection()
 	{
 		type( this.type );
 	}
-
+	
 	@property void x( int X )
 	{
 		this.transform.position.x = X * TILE_SIZE;
 		this.transform.updateMatrix();
 	}
+	
 	@property void z( int Z )
 	{
 		this.transform.position.z = Z * TILE_SIZE;
 		this.transform.updateMatrix();
 	}
-
+	
 	this()
 	{
 		this._type = TileType.Open;
 		this._selection = TileSelection.None;
 		this.transform.scale = vec3( TILE_SIZE / 2 );
 	}
-
 }
 
 enum TileType

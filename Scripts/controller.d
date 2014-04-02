@@ -40,7 +40,7 @@ public:
 			string ttype, tarea;
 			TargetType targetType;
 			TargetArea targetArea;
-			int damage, range, cooldown;
+			int damage, range, cooldown = 0;
 			
 			// get the variables from the yaml node
 			string name = abilityNode["Name"].as!string;
@@ -76,7 +76,8 @@ public:
 			
 			// get the variables from the yaml node
 			int posX, posY, hp, sp, at, df = 0;
-			string ability;
+			string abilityStrings;
+			shared int[] abilityIDs;
 			unit.name = unitNode["Name"].as!string;
 			Config.tryGet( "PosX", posX, unitNode );
 			Config.tryGet( "PosY", posY, unitNode );
@@ -84,9 +85,14 @@ public:
 			Config.tryGet( "Speed", sp, unitNode );
 			Config.tryGet( "Attack", at, unitNode );
 			Config.tryGet( "Defense", df, unitNode );
+			Config.tryGet( "Abilities", abilityStrings, unitNode );
+			//foreach( name; abilityStrings )
+			//{
+			abilityIDs ~= abilities[ abilityStrings ].ID.to!(shared int);
+			//}
 			
 			// initialize the unit and add it to the GameObjectCollection
-			unit.init( posX, posY, hp, sp, at, df, [] );
+			unit.init( posX, posY, hp, sp, at, df, abilityIDs );
 			gameObjects[ unit.name ] = unit;
 		}
 	}
