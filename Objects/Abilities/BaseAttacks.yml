@@ -1,2 +1,7 @@
 ---
-Name: TestAbility
+Name: Basic
+TargetType: EnemyUnit
+TargetArea: Radial
+Range: 1
+Damage: 1
+Cooldown: 0
