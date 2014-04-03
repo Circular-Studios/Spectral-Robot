@@ -18,11 +18,6 @@ shared class Grid : GameObject
 	
 	vec2i sel;
 	
-	this()
-	{
-		initTiles();
-	}
-	
 	override void onDraw()
 	{
 		for( int i = 0; i < GRID_SIZE * GRID_SIZE; i++ )
@@ -70,7 +65,7 @@ shared class Grid : GameObject
 		// Select a unit
 		if( Input.getState( "Enter", true ) && !isUnitSelected )
 		{
-			foreach( obj; Game.gc.gameObjects )
+			foreach( obj; Game.gc.level )
 			{
 				auto unit = cast(shared Unit)obj;
 				if ( unit !is null && unit.posX == sel.x && unit.posY == sel.y )
@@ -119,6 +114,7 @@ shared class Grid : GameObject
 			tile.z = z;
 			
 			this.addChild(tile);
+			Game.activeScene[ "Tile" ~ x.to!string ~ z.to!string ] = tile;
 			tiles[x][z] = tile;
 		}
 	}

@@ -1,5 +1,5 @@
 ﻿module controller;
-import unit, ability, grid;
+import unit, ability, grid, game;
 import core, utility;
 import yaml;
 import std.path, std.conv;
@@ -9,21 +9,23 @@ final shared class Controller
 public:
 	Action[] lastTurn; // Gets cleared after a turn
 	Action[] currentTurn; // Gets populated as the user makes actions
-	GameObjectCollection gameObjects; // Abstract this to a GameState class or something? Idk yet
+	Scene level;
 	Ability[string] abilities; // The instantiated units for this instance of the game
 	
 	this()
 	{
-		gameObjects = new shared GameObjectCollection();
+		level = new shared Scene();
+		Game.activeScene = level;
 		
 		// first load all the objects
-		gameObjects.loadObjects("Base");
+		level.loadObjects("Base");
 		
 		// create the grid
 		auto grid = new shared Grid();
 		grid.transform.position.z = -50;
 		grid.transform.updateMatrix();
-		gameObjects["Grid"] = grid;
+		grid.initTiles();
+		level["Grid"] = grid;
 		
 		// load the game
 		loadAbilities();
@@ -93,7 +95,7 @@ public:
 			
 			// initialize the unit and add it to the GameObjectCollection
 			unit.init( posX, posY, hp, sp, at, df, abilityIDs );
-			gameObjects[ unit.name ] = unit;
+			level[ unit.name ] = unit;
 		}
 	}
 	

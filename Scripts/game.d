@@ -29,25 +29,22 @@ shared class RobotGhosts : DGame
 		gc = new shared Controller();
 		
 		// create a camera
-		auto cam = gc.gameObjects["Camera"];
-		Graphics.setCamera( cam.camera );
+		gc.level.camera = gc.level["Camera"].camera;
 	}
 	
 	override void onUpdate()
 	{
-		gc.gameObjects.apply( go => go.update() );
+
 	}
 	
 	override void onDraw()
 	{
-		gc.gameObjects.draw();
+
 	}
 	
 	override void onShutdown()
 	{
 		logInfo( "Shutting down..." );
-		gc.gameObjects.apply( go => go.shutdown() );
-		gc.gameObjects.clearObjects();
 	}
 	
 	override void onSaveState()
