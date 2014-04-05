@@ -11,7 +11,6 @@ shared class Camera : GameObject
 	
 	override void onUpdate()
 	{	
-		logInfo( max( Time.deltaTime.total!"msecs"(), 1 ) );
 		// 4-directional movement
 		if( Input.getState( "LookUp" ) )
 		{
