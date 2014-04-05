@@ -32,17 +32,14 @@ private:
 	/// Highlight the tiles that the ability can effect
 	void highlight( int x, int y, bool preview )
 	{
-		switch(_targetArea)
+		switch( _targetArea )
 		{
 			default:
 				break;
 			case TargetArea.Single:
 				break;
 			case TargetArea.Radial:
-				Grid.tiles[ x + 1 ][ y ].selection = preview ? TileSelection.HighlightRed : TileSelection.None;
-				Grid.tiles[ x - 1 ][ y ].selection = preview ? TileSelection.HighlightRed : TileSelection.None;
-				Grid.tiles[ x ][ y + 1 ].selection = preview ? TileSelection.HighlightRed : TileSelection.None;
-				Grid.tiles[ x ][ y - 1 ].selection = preview ? TileSelection.HighlightRed : TileSelection.None;
+				//highlight( 1, 1, 3, 3, true );
 				break;
 		}
 	}
@@ -67,7 +64,7 @@ public:
 			Input.addKeyDownEvent( Keyboard.F9, ( uint kc ) { preview( 2, 2 ); } );
 		}
 	}
-	
+
 	void init( string name, TargetType ttype, TargetArea tarea, int damage, int range, int cooldown )
 	{
 		_currentCooldown = 0;

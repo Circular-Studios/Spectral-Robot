@@ -9,7 +9,7 @@ final shared class Controller
 public:
 	Action[] lastTurn; // Gets cleared after a turn
 	Action[] currentTurn; // Gets populated as the user makes actions
-	Scene level;
+	Scene level; // The active scene in the engine
 	Ability[string] abilities; // The instantiated units for this instance of the game
 	
 	this()
@@ -19,18 +19,11 @@ public:
 		
 		// first load all the objects
 		level.loadObjects("Base");
-		
-		// create the grid
-		auto grid = new shared Grid();
-		grid.transform.position.z = -50;
-		grid.transform.updateMatrix();
-		grid.initTiles();
-		level["Grid"] = grid;
-		
+
 		// load the game
 		loadAbilities();
 		loadUnits();
-		loadLevel();
+		loadLevel( "level" ); //TODO: Remove hardcoded value
 	}
 	
 	/// Load and create abilities from yaml
@@ -90,7 +83,7 @@ public:
 			Config.tryGet( "Abilities", abilityStrings, unitNode );
 			foreach( name; abilityStrings )
 			{
-				abilityIDs ~= abilities[ name ].ID.to!(shared int);
+				abilityIDs ~= abilities[ name ].ID.to!( shared int );
 			}
 			
 			// initialize the unit and add it to the active scene
@@ -98,11 +91,40 @@ public:
 			level[ unit.name ] = unit;
 		}
 	}
-	
-	/// Load and create levels from yaml
-	void loadLevel()
+
+	string scanLevelDirectory( string levelName )
 	{
+		foreach( file; FilePath.scanDirectory( buildNormalizedPath( FilePath.Resources.Objects, "Levels" ), "*.yml" ) )
+		{
+			if( file.baseFileName() == levelName )
+			{
+				return file.fullPath();
+			}
+
+			//TODO: Handle level yaml not existing
+		}
+
+		return null;
+	}
+
+	/// Load and create a level from yaml
+	void loadLevel( string levelName )
+	{
+		Node levelNode = loadYamlFile( scanLevelDirectory ( levelName ) );
+
+		// setup variables
+		int[] gridSize;
 		
+		// get the variables from the yaml node
+		string name = levelNode["Name"].as!string;
+		Config.tryGet( "Grid", gridSize, levelNode );
+
+		// create the grid
+		auto grid = new shared Grid();
+		grid.transform.position.z = -50;
+		grid.transform.updateMatrix();
+		grid.initTiles( gridSize[ 0 ], gridSize[ 1 ] );
+		level["Grid"] = grid;
 	}
 }
 

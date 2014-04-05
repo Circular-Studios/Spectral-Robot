@@ -5,27 +5,28 @@ import gl3n.linalg;
 import std.conv;
 
 const int TILE_SIZE = 10;
-const int GRID_SIZE = 10;
 
 /** Inherits from GameObject to simplify drawing/positioning
  */
 shared class Grid : GameObject
 {
-	static shared Tile[GRID_SIZE][GRID_SIZE] tiles;
+	Tile[][] _tiles;
+	mixin( Property!(_tiles, AccessModifier.Public) );
 	GameObject[ ( TileType.max + 1 ) * ( TileSelection.max + 1 ) ] tileObjects;
 	bool isUnitSelected = false;
 	Unit selectedUnit;
+	int gridSizeX, gridSizeY;
 	
 	vec2i sel;
 	
 	override void onDraw()
 	{
-		for( int i = 0; i < GRID_SIZE * GRID_SIZE; i++ )
+		for( int i = 0; i < gridSizeX * gridSizeY; i++ )
 		{
-			int x = i % GRID_SIZE;
-			int z = i / GRID_SIZE;
+			int x = i % gridSizeX;
+			int z = i / gridSizeY;
 			
-			tiles[x][z].draw();
+			tiles[ x ][ z ].draw();
 		}
 	}
 	
@@ -36,7 +37,7 @@ shared class Grid : GameObject
 		{
 			tiles[sel.x][sel.y].resetSelection();
 			sel.y += 1;
-			if( sel.y >= GRID_SIZE ) sel.y = GRID_SIZE - 1;
+			if( sel.y >= gridSizeY ) sel.y = gridSizeY - 1;
 			tiles[sel.x][sel.y].selection = TileSelection.HighlightBlue;
 		}
 		else if( Input.getState( "Up", true ) )
@@ -51,7 +52,7 @@ shared class Grid : GameObject
 		{
 			tiles[sel.x][sel.y].resetSelection();
 			sel.x += 1;
-			if( sel.x >= GRID_SIZE ) sel.x = GRID_SIZE - 1;
+			if( sel.x >= gridSizeX ) sel.x = gridSizeX - 1;
 			tiles[sel.x][sel.y].selection = TileSelection.HighlightBlue;
 		}
 		else if( Input.getState( "Left", true ) )
@@ -77,7 +78,7 @@ shared class Grid : GameObject
 		}
 		
 		// Place a selected unit
-		else if( Input.getState( "Enter", true ) && isUnitSelected  && tiles[sel.x][sel.y].type == TileType.Open )
+		else if( Input.getState( "Enter", true ) && isUnitSelected  && tiles[ sel.x ][ sel.y ].type == TileType.Open )
 		{
 			// change the tile types
 			tiles[selectedUnit.posX][selectedUnit.posY].type = TileType.Open;
@@ -97,25 +98,42 @@ shared class Grid : GameObject
 			isUnitSelected = false;
 		}
 	}
-	
-	/// Temporary method for ease of this sprint
-	void initTiles()
+
+	/// Highlight tiles
+	void highlight( int topleftX, int topleftY, int bottomrightX, int bottomrightY, bool preview )
 	{
-		for( int i = 0; i < GRID_SIZE * GRID_SIZE; i++ )
+		for( int i = topleftX; i < bottomrightX; i++ )
 		{
-			int x = i % GRID_SIZE;
-			int z = i / GRID_SIZE;
+			for( int j = topleftY; j < bottomrightY; j++ )
+			{
+				tiles[ i ][ j ].selection = preview ? TileSelection.HighlightRed : TileSelection.None;
+			}
+		}
+	}
+	
+	/// Create an ( n x m ) grid of tiles
+	void initTiles( int n, int m )
+	{
+		//initialize tiles
+		_tiles = new Tile[ n ][ m ];
+		gridSizeX = n;
+		gridSizeY = m;
+
+		for( int i = 0; i < n * m; i++ )
+		{
+			int x = i % n;
+			int z = i / m;
 			
-			string[shared GameObject] parents;
-			string[][shared GameObject] children;
-			auto tile = cast(shared Tile)Prefabs["Tile"].createInstance(parents, children);
+			string[ shared GameObject ] parents;
+			string[][ shared GameObject ] children;
+			auto tile = cast( shared Tile )Prefabs[ "Tile" ].createInstance( parents, children );
 			
 			tile.x = x;
 			tile.z = z;
 			
-			this.addChild(tile);
+			this.addChild( tile );
 			Game.activeScene[ "Tile" ~ x.to!string ~ z.to!string ] = tile;
-			tiles[x][z] = tile;
+			tiles[ x ][ z ] = tile;
 		}
 	}
 }
@@ -132,13 +150,13 @@ public:
 		final switch( s )
 		{
 			case TileSelection.None:
-				this.material = Assets.get!Material("TileDefault");
+				this.material = Assets.get!Material( "TileDefault" );
 				break;
 			case TileSelection.HighlightBlue:
-				this.material = Assets.get!Material("HighlightBlue");
+				this.material = Assets.get!Material( "HighlightBlue" );
 				break;
 			case TileSelection.HighlightRed:
-				this.material = Assets.get!Material("HighlightRed");
+				this.material = Assets.get!Material( "HighlightRed" );
 		}
 		_selection = s;
 	}
