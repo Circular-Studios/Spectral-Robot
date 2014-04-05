@@ -78,7 +78,7 @@ public:
 			
 			// get the variables from the yaml node
 			int posX, posY, hp, sp, at, df = 0;
-			string abilityStrings;
+			string[] abilityStrings;
 			shared int[] abilityIDs;
 			unit.name = unitNode["Name"].as!string;
 			Config.tryGet( "PosX", posX, unitNode );
@@ -88,12 +88,12 @@ public:
 			Config.tryGet( "Attack", at, unitNode );
 			Config.tryGet( "Defense", df, unitNode );
 			Config.tryGet( "Abilities", abilityStrings, unitNode );
-			//foreach( name; abilityStrings )
-			//{
-			abilityIDs ~= abilities[ abilityStrings ].ID.to!(shared int);
-			//}
+			foreach( name; abilityStrings )
+			{
+				abilityIDs ~= abilities[ name ].ID.to!(shared int);
+			}
 			
-			// initialize the unit and add it to the GameObjectCollection
+			// initialize the unit and add it to the active scene
 			unit.init( posX, posY, hp, sp, at, df, abilityIDs );
 			level[ unit.name ] = unit;
 		}
