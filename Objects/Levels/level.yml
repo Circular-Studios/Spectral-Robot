@@ -1,0 +1,14 @@
+---
+Name: "The Only Level"
+Grid: [5, 10]
+FogOfWar: No
+Units:
+    - Name: Werewolf1
+      Spawn: [0, 0]
+    - Name: Robot1
+      Spawn: [2, 2]
+Objects:
+    - Name: Table1
+      Prefab: Table
+      Location: [3, 3, 5, 5]
+      TileType: HalfBlocked

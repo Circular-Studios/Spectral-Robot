@@ -1,0 +1,9 @@
+---
+Name: Table
+Transform:
+    Rotation: !Vector3 0 0 0
+    Scale: !Vector3 1 1 1
+Mesh: unitsquare
+Material: TileDefault
+Fields:
+    TileSize: [2, 2]
