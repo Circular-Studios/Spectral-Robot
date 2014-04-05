@@ -115,7 +115,7 @@ shared class Grid : GameObject
 	void initTiles( int n, int m )
 	{
 		//initialize tiles
-		_tiles = new Tile[ n ][ m ];
+		_tiles = new shared Tile[][]( n, m );
 		gridSizeX = n;
 		gridSizeY = m;
 
