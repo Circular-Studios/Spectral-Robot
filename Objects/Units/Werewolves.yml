@@ -1,8 +1,6 @@
 ---
 Name: Werewolf1
 InstanceOf: Werewolf1
-PosX: 0
-PosY: 0
 HP: 40
 Speed: 4
 Attack: 10

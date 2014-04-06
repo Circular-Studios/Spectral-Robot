@@ -4,9 +4,9 @@ Grid: [5, 10]
 FogOfWar: No
 Units:
     - Name: Werewolf1
-      Spawn: [0, 0]
+      Spawn: [1, 1]
     - Name: Robot1
-      Spawn: [2, 2]
+      Spawn: [4, 0]
 Objects:
     - Name: Table1
       Prefab: Table

@@ -11,16 +11,16 @@ const int TILE_SIZE = 10;
 shared class Grid : GameObject
 {
 	Tile[][] _tiles;
-	mixin( Property!(_tiles, AccessModifier.Public) );
+	mixin( Property!( _tiles, AccessModifier.Public ) );
 	GameObject[ ( TileType.max + 1 ) * ( TileSelection.max + 1 ) ] tileObjects;
 	bool isUnitSelected = false;
 	Unit selectedUnit;
 	int gridSizeX, gridSizeY;
-	
 	vec2i sel;
 	
 	override void onDraw()
 	{
+		// Draw the tiles
 		for( int i = 0; i < gridSizeX * gridSizeY; i++ )
 		{
 			int x = i % gridSizeX;
@@ -98,7 +98,7 @@ shared class Grid : GameObject
 			isUnitSelected = false;
 		}
 	}
-
+	
 	/// Highlight tiles
 	void highlight( int topleftX, int topleftY, int bottomrightX, int bottomrightY, bool preview )
 	{
@@ -118,22 +118,23 @@ shared class Grid : GameObject
 		_tiles = new shared Tile[][]( n, m );
 		gridSizeX = n;
 		gridSizeY = m;
-
+		
+		// Create tiles from a prefab and add them to the scene
 		for( int i = 0; i < n * m; i++ )
 		{
 			int x = i % n;
-			int z = i / m;
+			int y = i / n;
 			
 			string[ shared GameObject ] parents;
 			string[][ shared GameObject ] children;
 			auto tile = cast( shared Tile )Prefabs[ "Tile" ].createInstance( parents, children );
 			
 			tile.x = x;
-			tile.z = z;
+			tile.y = y;
 			
 			this.addChild( tile );
-			Game.activeScene[ "Tile" ~ x.to!string ~ z.to!string ] = tile;
-			tiles[ x ][ z ] = tile;
+			Game.activeScene[ "Tile" ~ x.to!string ~ y.to!string ] = tile;
+			tiles[ x ][ y ] = tile;
 		}
 	}
 }
@@ -199,9 +200,9 @@ public:
 		this.transform.updateMatrix();
 	}
 	
-	@property void z( int Z )
+	@property void y( int Y )
 	{
-		this.transform.position.z = Z * TILE_SIZE;
+		this.transform.position.z = Y * TILE_SIZE;
 		this.transform.updateMatrix();
 	}
 	
@@ -217,13 +218,13 @@ enum TileType
 {
 	Open, // Does not block
 	HalfBlocked, // Blocks movement, but not vision/attacks
-	FullyBlocked // Blocks movement, vision, and attacks
+	FullyBlocked, // Blocks movement, vision, and attacks
 }
 
 enum TileSelection
 {
 	None,
 	HighlightBlue,
-	HighlightRed
+	HighlightRed,
 	//HighlightGreen
 }

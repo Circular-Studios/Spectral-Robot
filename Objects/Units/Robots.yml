@@ -1,8 +1,6 @@
 ﻿---
 Name: Robot1
 InstanceOf: Robot1
-PosX: 2
-PosY: 2
 HP: 40
 Speed: 4
 Attack: 10

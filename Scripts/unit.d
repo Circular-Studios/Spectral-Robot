@@ -40,6 +40,7 @@ public:
 		_attack = at;
 		_defense = df;
 		_abilities = abilities;
+		updatePosition();
 	}
 	
 	/// Convert grid coordinates to 3D space
