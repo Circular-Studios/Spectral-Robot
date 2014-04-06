@@ -64,7 +64,7 @@ public:
 		foreach( unitNode; loadYamlDocuments( buildNormalizedPath( FilePath.Resources.Objects, "Units" ) ) )
 		{
 			// setup variables
-			int posX, posY, hp, sp, at, df = 0;
+			int team, hp, sp, at, df = 0;
 			string[] abilityStrings;
 			shared int[] abilityIDs;
 			int[] spawn;
@@ -77,6 +77,7 @@ public:
 				{
 					nameCheck = true;
 					Config.tryGet( "Spawn", spawn, unitCheck );
+					Config.tryGet( "Team", team, unitCheck );
 					break;
 				}
 			}
@@ -100,7 +101,7 @@ public:
 			}
 			
 			// initialize the unit and add it to the active scene
-			unit.init( spawn[ 0 ], spawn[ 1 ], hp, sp, at, df, abilityIDs );
+			unit.init( spawn[ 0 ], spawn[ 1 ], team, hp, sp, at, df, abilityIDs );
 			level[ unit.name ] = unit;
 			( cast(shared Grid)level[ "Grid" ] ).tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].type = TileType.HalfBlocked;
 		}

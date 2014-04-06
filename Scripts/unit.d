@@ -13,17 +13,19 @@ private:
 	int _defense;
 	int _posX;
 	int _posY;
+	int _team;
 	int[] _abilities;
 	
 public:
 	immutable uint ID;
-	mixin( Property!(_posX, AccessModifier.Public) );
-	mixin( Property!(_posY, AccessModifier.Public) );
-	mixin( Property!_hp );
-	mixin( Property!_speed );
-	mixin( Property!_attack );
-	mixin( Property!_defense );
-	mixin( Property!_abilities );
+	mixin( Property!( _posX, AccessModifier.Public) );
+	mixin( Property!( _posY, AccessModifier.Public) );
+	mixin( Property!( _team, AccessModifier.Public) );
+	mixin( Property!( _hp, AccessModifier.Public) );
+	mixin( Property!( _speed, AccessModifier.Public) );
+	mixin( Property!( _attack, AccessModifier.Public) );
+	mixin( Property!( _defense, AccessModifier.Public) );
+	mixin( Property!( _abilities, AccessModifier.Public) );
 	
 	this()
 	{
@@ -31,10 +33,11 @@ public:
 		nextID++;
 	}
 	
-	void init(int posX, int posY, int hp, int sp, int at, int df, shared int[] abilities )
+	void init( int posX, int posY, int team, int hp, int sp, int at, int df, shared int[] abilities )
 	{
 		_posX = posX;
 		_posY = posY;
+		_team = team;
 		_hp = hp;
 		_speed = sp;
 		_attack = at;
