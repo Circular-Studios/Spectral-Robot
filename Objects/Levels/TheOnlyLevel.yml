@@ -10,5 +10,5 @@ Units:
 Objects:
     - Name: Table1
       Prefab: Table
-      Location: [3, 3, 5, 5]
+      Location: [3, 3]
       TileType: HalfBlocked

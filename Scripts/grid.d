@@ -197,13 +197,11 @@ public:
 	@property void x( int X )
 	{
 		this.transform.position.x = X * TILE_SIZE;
-		this.transform.updateMatrix();
 	}
 	
 	@property void y( int Y )
 	{
 		this.transform.position.z = Y * TILE_SIZE;
-		this.transform.updateMatrix();
 	}
 	
 	this()

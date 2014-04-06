@@ -99,11 +99,10 @@ public:
 				abilityIDs ~= abilities[ name ].ID.to!( shared int );
 			}
 			
-			logInfo(unit.name, spawn[0], spawn[1]);
-			
 			// initialize the unit and add it to the active scene
 			unit.init( spawn[ 0 ], spawn[ 1 ], hp, sp, at, df, abilityIDs );
 			level[ unit.name ] = unit;
+			( cast(shared Grid)level[ "Grid" ] ).tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].type = TileType.HalfBlocked;
 		}
 	}
 	
@@ -130,11 +129,13 @@ public:
 		// setup variables
 		int[] gridSize;
 		Node unitsNode;
+		Node propsNode;
 		
 		// get the variables from the yaml node
 		string name = levelNode[ "Name" ].as!string;
 		Config.tryGet( "Grid", gridSize, levelNode );
 		Config.tryGet( "Units", unitsNode, levelNode );
+		Config.tryGet( "Objects", propsNode, levelNode );
 		
 		// create the grid
 		auto grid = new shared Grid();
@@ -145,6 +146,40 @@ public:
 		
 		// create the units
 		loadUnits( unitsNode );
+		
+		// add props to the scene
+		foreach( Node propNode; propsNode )
+		{
+			// setup variables
+			int[] location;
+			string name, prefab, ttype;
+			TileType tileType;
+			
+			// get the variables from the node
+			Config.tryGet( "Name", name, propNode );
+			Config.tryGet( "Prefab", prefab, propNode );
+			Config.tryGet( "Location", location, propNode );
+			if( Config.tryGet( "TileType", ttype, propNode ) )
+			{
+				tileType = to!TileType( ttype );
+			}
+			
+			// instantiate the prefab of a prop
+			string[shared GameObject] parents;
+			string[][shared GameObject] children;
+			auto prop = Prefabs[ prefab ].createInstance( parents, children );
+			prop.name = name;
+			
+			// place the prop
+			prop.transform.position.x = location[ 0 ] * TILE_SIZE;
+			prop.transform.position.z = location[ 1 ] * TILE_SIZE - 50;
+			
+			// add the prop to the scene
+			level[ prop.name ] = prop;
+			
+			// change the TileType of occupying tiles
+			grid.tiles[ location[ 0 ] ][ location[ 1 ] ].type = tileType;
+		}
 	}
 }
 

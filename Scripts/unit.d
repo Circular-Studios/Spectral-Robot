@@ -44,11 +44,9 @@ public:
 	}
 	
 	/// Convert grid coordinates to 3D space
-	bool updatePosition()
+	void updatePosition()
 	{
 		this.transform.position.x = _posX * 10;
 		this.transform.position.z = _posY * 10 - 50;
-		this.transform.updateMatrix();
-		return true;
 	}
 }
