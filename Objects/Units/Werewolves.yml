@@ -1,6 +1,6 @@
 ---
 Name: Werewolf1
-InstanceOf: Werewolf1
+Prefab: Werewolf1
 HP: 40
 Speed: 4
 Attack: 10

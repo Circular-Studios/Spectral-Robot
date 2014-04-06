@@ -86,7 +86,7 @@ public:
 			// instantiate the prefab of a unit
 			string[shared GameObject] parents;
 			string[][shared GameObject] children;
-			auto unit = cast(shared Unit)Prefabs[ unitNode[ "InstanceOf" ].as!string ].createInstance( parents, children );
+			auto unit = cast(shared Unit)Prefabs[ unitNode[ "Prefab" ].as!string ].createInstance( parents, children );
 			
 			// get the variables from the node
 			unit.name = unitNode[ "Name" ].as!string;
