@@ -8,12 +8,16 @@ Right:
     - !Keyboard D
 LookUp:
     - !Keyboard I
+    - !Keyboard Up
 LookDown:
     - !Keyboard K
+    - !Keyboard Down
 LookLeft:
     - !Keyboard J
+    - !Keyboard Left
 LookRight:
     - !Keyboard L
+    - !Keyboard Right
 ZoomUp:
     - !Keyboard N
 ZoomDown:
