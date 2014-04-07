@@ -16,7 +16,7 @@
 		"Colden Cullen"
 	],
 	"dependencies": {
-		"dash": "==0.5.2"
+		"dash": "==0.5.3"
 	},
 	"sourcePaths": [ 
 		"Config/",

@@ -1,14 +1,14 @@
 ---
-Name: Basic1
-TargetType: EnemyUnit
-TargetArea: Radial
-Range: 1
-Damage: 1
-Cooldown: 0
+name: Basic1
+targetType: EnemyUnit
+targetArea: Radial
+range: 1
+damage: 1
+cooldown: 0
 ---
-Name: Basic2
-TargetType: EnemyUnit
-TargetArea: Radial
-Range: 1
-Damage: 2
-Cooldown: 0
+name: Basic2
+targetType: EnemyUnit
+targetArea: Radial
+range: 1
+damage: 2
+cooldown: 0

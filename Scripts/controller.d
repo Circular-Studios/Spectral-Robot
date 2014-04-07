@@ -30,29 +30,10 @@ public:
 	{
 		foreach( abilityNode; loadYamlDocuments( buildNormalizedPath( FilePath.Resources.Objects, "Abilities" ) ) )
 		{
-			// setup variables
-			string ttype, tarea;
-			TargetType targetType;
-			TargetArea targetArea;
-			int damage, range, cooldown = 0;
-			
-			// get the variables from the yaml node
-			string name = abilityNode[ "Name" ].as!string;
-			if( Config.tryGet( "TargetType", ttype, abilityNode ) )
-			{
-				targetType = to!TargetType( ttype );
-			}
-			if( Config.tryGet( "TargetArea", tarea, abilityNode ) )
-			{
-				targetArea = to!TargetArea( tarea );
-			}
-			Config.tryGet( "Damage", damage, abilityNode );
-			Config.tryGet( "Range", range, abilityNode );
-			Config.tryGet( "Cooldown", cooldown, abilityNode );
-			
-			// initialize the ability
-			abilities[ name ] = new shared Ability();
-			abilities[ name ].init( name, targetType, targetArea, damage, range, cooldown );
+			auto ability = Config.getObject!(shared Ability)( abilityNode );
+			abilities[ ability.name ] = ability;
+
+			logInfo( ability.name, ": ", ability.damage );
 		}
 	}
 	

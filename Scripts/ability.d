@@ -46,17 +46,16 @@ private:
 	
 public:
 	immutable uint ID;
-	mixin( Property!_name );
-	mixin( Property!_targetType );
-	mixin( Property!_targetArea );
-	mixin( Property!_damage );
-	mixin( Property!_range );
-	mixin( Property!_cooldown );
+	mixin( Property!( _name, AccessModifier.Public ) );
+	mixin( Property!( _targetType, AccessModifier.Public ) );
+	mixin( Property!( _targetArea, AccessModifier.Public ) );
+	mixin( Property!( _damage, AccessModifier.Public ) );
+	mixin( Property!( _range, AccessModifier.Public ) );
+	mixin( Property!( _cooldown, AccessModifier.Public ) );
 	
 	this ()
 	{
-		ID = nextID;
-		nextID++;
+		ID = nextID++;
 		
 		// REMOVE: this is a highlighting test
 		if( ID == 0 )
