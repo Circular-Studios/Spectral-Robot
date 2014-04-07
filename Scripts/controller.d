@@ -107,6 +107,7 @@ public:
 		}
 	}
 	
+	/// Return the file path for a level to load
 	string scanLevelDirectory( string levelName )
 	{
 		foreach( file; FilePath.scanDirectory( buildNormalizedPath( FilePath.Resources.Objects, "Levels" ), "*.yml" ) )
@@ -125,6 +126,7 @@ public:
 	/// Load and create a level from yaml
 	void loadLevel( string levelName )
 	{
+		// load the level from yaml
 		Node levelNode = loadYamlFile( scanLevelDirectory ( levelName ) );
 		
 		// setup variables
@@ -152,34 +154,49 @@ public:
 		foreach( Node propNode; propsNode )
 		{
 			// setup variables
-			int[] location;
+			int[] loc;
 			string name, prefab, ttype;
 			TileType tileType;
 			
 			// get the variables from the node
-			Config.tryGet( "Name", name, propNode );
+			Config.tryGet( "Location", loc, propNode );
 			Config.tryGet( "Prefab", prefab, propNode );
-			Config.tryGet( "Location", location, propNode );
 			if( Config.tryGet( "TileType", ttype, propNode ) )
 			{
 				tileType = to!TileType( ttype );
 			}
 			
-			// instantiate the prefab of a prop
-			string[shared GameObject] parents;
-			string[][shared GameObject] children;
-			auto prop = Prefabs[ prefab ].createInstance( parents, children );
-			prop.name = name;
+			// fix up single-tile props for the double for-loop
+			if ( loc.length == 2 )
+			{
+				loc ~= loc[ 0 ];
+				loc ~= loc[ 1 ];
+			}
 			
-			// place the prop
-			prop.transform.position.x = location[ 0 ] * TILE_SIZE;
-			prop.transform.position.z = location[ 1 ] * TILE_SIZE - 50;
-			
-			// add the prop to the scene
-			level[ prop.name ] = prop;
-			
-			// change the TileType of occupying tiles
-			grid.tiles[ location[ 0 ] ][ location[ 1 ] ].type = tileType;
+			// create a prop on each tile it occupies
+			for( int x = loc[ 0 ]; x <= loc[ 2 ]; x++ )
+			{
+				for( int y = loc[ 1 ]; y <= loc[ 3 ]; y++ )
+				{
+					// instantiate the prefab of a prop
+					string[shared GameObject] parents;
+					string[][shared GameObject] children;
+					auto prop = Prefabs[ prefab ].createInstance( parents, children );
+					
+					// make the name unique
+					prop.name = prefab ~ x.to!string ~ "-" ~ y.to!string;
+					
+					// place the prop
+					prop.transform.position.x = x * TILE_SIZE;
+					prop.transform.position.z = y * TILE_SIZE - 50;
+					
+					// add the prop to the scene
+					level[ prop.name ] = prop;
+					
+					// change the TileType of occupying tiles
+					grid.tiles[ x ][ y ].type = tileType;
+				}
+			}
 		}
 	}
 }
