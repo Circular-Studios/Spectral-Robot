@@ -3,6 +3,7 @@ import unit, ability, grid, game;
 import core, utility;
 import yaml;
 import std.path, std.conv;
+import gl3n.linalg, gl3n.math;
 
 final shared class Controller
 {
@@ -138,14 +139,16 @@ public:
 			int[] loc;
 			string name, prefab, ttype;
 			TileType tileType;
+			shared vec3 rotationVec;
+			shared quat rotation;
 			
 			// get the variables from the node
 			Config.tryGet( "Location", loc, propNode );
 			Config.tryGet( "Prefab", prefab, propNode );
 			if( Config.tryGet( "TileType", ttype, propNode ) )
-			{
 				tileType = to!TileType( ttype );
-			}
+			if( Config.tryGet( "Rotation", rotationVec, propNode ) )
+				rotation = quat.euler_rotation( radians( rotationVec.y ), radians( rotationVec.z ), radians( rotationVec.x ) );
 			
 			// fix up single-tile props for the double for-loop
 			if ( loc.length == 2 )
@@ -170,6 +173,8 @@ public:
 					// place the prop
 					prop.transform.position.x = x * TILE_SIZE;
 					prop.transform.position.z = y * TILE_SIZE - 50;
+					if( rotation )
+						prop.transform.rotation = rotation;
 					
 					// add the prop to the scene
 					level[ prop.name ] = prop;

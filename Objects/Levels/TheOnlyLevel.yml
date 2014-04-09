@@ -15,5 +15,6 @@ Objects:
       TileType: HalfBlocked
 
     - Prefab: Table
+      Rotation: !Vector3 90 0 0
       Location: [2, 5, 3, 6]
-      TileType: HalfBlocked
+      TileType: FullyBlocked
