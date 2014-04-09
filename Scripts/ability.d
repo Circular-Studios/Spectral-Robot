@@ -20,7 +20,7 @@ enum TargetArea
 shared class Ability
 {
 private:
-	static uint nextID = 0;
+	static uint nextID = 1;
 	string _name;
 	TargetType _targetType;
 	TargetArea _targetArea;

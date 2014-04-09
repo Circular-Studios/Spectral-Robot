@@ -144,8 +144,11 @@ shared class Tile : GameObject
 private:
 	TileType _type;
 	TileSelection _selection;
+	GameObject _occupant;
 	
 public:
+	mixin( Property!( _occupant, AccessModifier.Public) );
+
 	@property void selection( TileSelection s )
 	{
 		final switch( s )

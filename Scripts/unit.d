@@ -11,15 +11,13 @@ private:
 	int _speed;
 	int _attack;
 	int _defense;
-	int _posX;
-	int _posY;
+	uint _position;
 	int _team;
 	int[] _abilities;
 	
 public:
 	immutable uint ID;
-	mixin( Property!( _posX, AccessModifier.Public) );
-	mixin( Property!( _posY, AccessModifier.Public) );
+	mixin( Property!( _position, AccessModifier.Public) );
 	mixin( Property!( _team, AccessModifier.Public) );
 	mixin( Property!( _hp, AccessModifier.Public) );
 	mixin( Property!( _speed, AccessModifier.Public) );
@@ -33,10 +31,9 @@ public:
 		nextID++;
 	}
 	
-	void init( int posX, int posY, int team, int hp, int sp, int at, int df, shared int[] abilities )
+	void init( uint position, int team, int hp, int sp, int at, int df, shared int[] abilities )
 	{
-		_posX = posX;
-		_posY = posY;
+		_position = position;
 		_team = team;
 		_hp = hp;
 		_speed = sp;
@@ -44,6 +41,11 @@ public:
 		_defense = df;
 		_abilities = abilities;
 		updatePosition();
+	}
+
+	void move(uint tileID )
+	{
+
 	}
 	
 	/// Convert grid coordinates to 3D space

@@ -5,6 +5,14 @@ import yaml;
 import std.path, std.conv;
 import gl3n.linalg, gl3n.math;
 
+struct Action
+{
+public:
+	uint actionID;
+	uint originID;
+	uint targetID;
+}
+
 final shared class Controller
 {
 public:
@@ -17,6 +25,7 @@ public:
 	{
 		level = new shared Scene();
 		Game.activeScene = level;
+		logInfo(toTileID(1, 1));
 		
 		// first load all the objects
 		level.loadObjects( "Base" );
@@ -24,6 +33,20 @@ public:
 		// load the game
 		loadAbilities();
 		loadLevel( "TheOnlyLevel" ); //TODO: Remove hardcoded value
+	}
+
+	/// Process an action into an ability or movement
+	void doAction( uint actionID, uint originID, uint targetID )
+	{
+		// Move a unit
+		if( actionID == 0 )
+		{
+
+		}
+		else
+		{
+
+		}
 	}
 	
 	/// Load and create abilities from yaml
@@ -33,8 +56,6 @@ public:
 		{
 			auto ability = Config.getObject!(shared Ability)( abilityNode );
 			abilities[ ability.name ] = ability;
-
-			logInfo( ability.name, ": ", ability.damage );
 		}
 	}
 	
@@ -49,7 +70,7 @@ public:
 			int team, hp, sp, at, df = 0;
 			string[] abilityStrings;
 			shared int[] abilityIDs;
-			int[] spawn;
+			uint[] spawn;
 			
 			// check if we want to load this unit
 			bool nameCheck = false;
@@ -66,8 +87,8 @@ public:
 			if( !nameCheck ) continue;
 			
 			// instantiate the prefab of a unit
-			string[shared GameObject] parents;
-			string[][shared GameObject] children;
+			string[ shared GameObject ] parents;
+			string[][ shared GameObject ] children;
 			auto unit = cast(shared Unit)Prefabs[ unitNode[ "Prefab" ].as!string ].createInstance( parents, children );
 			
 			// get the variables from the node
@@ -83,10 +104,15 @@ public:
 			}
 			
 			// initialize the unit and add it to the active scene
-			unit.init( spawn[ 0 ], spawn[ 1 ], team, hp, sp, at, df, abilityIDs );
+			unit.init( /*convertTileID( spawn [ 0 ], spawn[ 1 ] )*/0, team, hp, sp, at, df, abilityIDs );
 			level[ unit.name ] = unit;
 			( cast(shared Grid)level[ "Grid" ] ).tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].type = TileType.HalfBlocked;
 		}
+	}
+
+	uint toTileID( uint x, uint y )
+	{
+		return x + ( y * level[ "Grid" ].gridSizeX );
 	}
 	
 	/// Return the file path for a level to load
@@ -163,8 +189,8 @@ public:
 				for( int y = loc[ 1 ]; y <= loc[ 3 ]; y++ )
 				{
 					// instantiate the prefab of a prop
-					string[shared GameObject] parents;
-					string[][shared GameObject] children;
+					string[ shared GameObject ] parents;
+					string[][ shared GameObject ] children;
 					auto prop = Prefabs[ prefab ].createInstance( parents, children );
 					
 					// make the name unique
@@ -185,29 +211,4 @@ public:
 			}
 		}
 	}
-}
-
-abstract class Action
-{
-public:
-	uint originUnitId;
-}
-
-class MoveAction : Action
-{
-public:
-	int x, y;
-}
-
-class AttackAction : Action
-{
-public:
-	uint targetUnitID;
-}
-
-class AbilityAction : Action
-{
-public:
-	uint targetUnitId;
-	uint abilityID;
 }
