@@ -1,0 +1,51 @@
+---
+name: Basic1
+targetType: EnemyUnit
+targetArea: Radial
+range: 1
+damage: 1
+damageType: direct
+cooldown: 0
+---
+name: BMHealingBarage
+targetType: AlliedUnit
+targetArea: Single
+range: 4
+damage: 6
+damageType: healing
+cooldown: 2
+---
+name: BMFlank
+targetType: EnemyUnit
+targetArea: Single
+range: 8
+damage: 1
+damageType: direct
+cooldown: 2
+---
+name: BMCannonShot
+targetType: EnemyUnit
+targetArea: Radial
+range: 5
+damage: 9
+damageType: AOE
+cooldown: 5
+---
+name: BMRapidFire
+targetType: EnemyUnit
+targetArea: Single
+range: 3
+damage: 3
+damageType: DOT
+cooldown: 4
+duration: 3
+---
+name: BMSuppress
+targetType: EnemyUnit
+targetArea: Single
+range: 5
+damage: 5
+damageType: debuff
+statEffected Accuracy
+cooldown: 5
+---
