@@ -46,6 +46,5 @@ targetArea: Single
 range: 5
 damage: 5
 damageType: debuff
-statEffected Accuracy
+statEffected: Accuracy
 cooldown: 5
----

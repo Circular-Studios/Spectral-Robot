@@ -36,7 +36,7 @@ cooldown: 5
 ---
 name: FSShield
 targetType: Self
-targetArea: Target
+targetArea: Single
 range: 0
 damage:  10
 damageType: reduce
@@ -45,7 +45,7 @@ cooldown: 3
 ---
 name: FSMarkofFlame
 targetType: EnemyUnit
-targetArea: Target
+targetArea: Single
 range: 4
 damage:  2
 damageType: modifier
@@ -54,7 +54,7 @@ cooldown: 3
 ---
 name: FSHeatDeath
 targetType: EnemyUnit
-targetArea: Target
+targetArea: Single
 range: 3
 damage:  4
 damageType: lifeSteal
