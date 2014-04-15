@@ -1,0 +1,288 @@
+---
+Name: "The Only Level"
+Grid: [24, 24]
+FogOfWar: No
+Units:
+    - Name: Werewolf1
+      Spawn: [1, 1]
+      Team: 1
+    - Name: Robot1
+      Spawn: [4, 0]
+      Team: 2
+Objects:
+    - Prefab: Wall
+      Location: [0, 1]
+      TileType: FullyBlocked
+
+    - Prefab: Wall
+      Location: [0, 2]
+      TileType: FullyBlocked
+	  
+    - Prefab: Wall
+      Location: [0, 3]
+      TileType: FullyBlocked
+	  
+    - Prefab: Wall
+      Location: [0, 4]
+      TileType: FullyBlocked
+	  
+    - Prefab: Wall
+      Location: [0, 5]
+      TileType: FullyBlocked
+	  
+    - Prefab: Wall
+      Location: [0, 6]
+      TileType: FullyBlocked
+	  
+    - Prefab: Wall
+      Location: [0, 7]
+      TileType: FullyBlocked
+
+    - Prefab: Wall
+      Location: [0, 8]
+      TileType: FullyBlocked
+
+    - Prefab: Wall
+      Location: [0, 9]
+      TileType: FullyBlocked
+
+    - Prefab: Wall
+      Location: [0, 10]
+      TileType: FullyBlocked
+
+    - Prefab: Wall
+      Location: [0, 11]
+      TileType: FullyBlocked	  
+
+    - Prefab: Wall
+      Location: [0, 12]
+      TileType: FullyBlocked
+
+    - Prefab: Wall
+      Location: [0, 13]
+      TileType: FullyBlocked
+	  
+    - Prefab: Wall
+      Location: [0, 14]
+      TileType: FullyBlocked
+	  
+    - Prefab: Wall
+      Location: [0, 15]
+      TileType: FullyBlocked
+	  
+    - Prefab: Wall
+      Location: [0, 16]
+      TileType: FullyBlocked
+	  
+    - Prefab: Wall
+      Location: [0, 17]
+      TileType: FullyBlocked
+	  
+    - Prefab: Wall
+      Location: [0, 18]
+      TileType: FullyBlocked
+
+    - Prefab: Wall
+      Location: [0, 19]
+      TileType: FullyBlocked
+
+    - Prefab: Wall
+      Location: [0, 20]
+      TileType: FullyBlocked
+
+    - Prefab: Wall
+      Location: [0, 21]
+      TileType: FullyBlocked
+
+    - Prefab: Wall
+      Location: [0, 22]
+      TileType: FullyBlocked	  
+	
+    - Prefab: Wall
+      Location: [23, 1]
+      TileType: FullyBlocked
+
+    - Prefab: Wall
+      Location: [23, 2]
+      TileType: FullyBlocked
+	  
+    - Prefab: Wall
+      Location: [23, 3]
+      TileType: FullyBlocked
+	  
+    - Prefab: Wall
+      Location: [23, 4]
+      TileType: FullyBlocked
+	  
+    - Prefab: Wall
+      Location: [23, 5]
+      TileType: FullyBlocked
+	  
+    - Prefab: Wall
+      Location: [23, 6]
+      TileType: FullyBlocked
+	  
+    - Prefab: Wall
+      Location: [23, 7]
+      TileType: FullyBlocked
+
+    - Prefab: Wall
+      Location: [23, 8]
+      TileType: FullyBlocked
+
+    - Prefab: Wall
+      Location: [23, 9]
+      TileType: FullyBlocked
+
+    - Prefab: Wall
+      Location: [23, 23]
+      TileType: FullyBlocked
+
+    - Prefab: Wall
+      Location: [23, 11]
+      TileType: FullyBlocked	  
+
+    - Prefab: Wall
+      Location: [23, 12]
+      TileType: FullyBlocked
+
+    - Prefab: Wall
+      Location: [23, 13]
+      TileType: FullyBlocked
+	  
+    - Prefab: Wall
+      Location: [23, 14]
+      TileType: FullyBlocked
+	  
+    - Prefab: Wall
+      Location: [23, 15]
+      TileType: FullyBlocked
+	  
+    - Prefab: Wall
+      Location: [23, 16]
+      TileType: FullyBlocked
+	  
+    - Prefab: Wall
+      Location: [23, 17]
+      TileType: FullyBlocked
+	  
+    - Prefab: Wall
+      Location: [23, 18]
+      TileType: FullyBlocked
+
+    - Prefab: Wall
+      Location: [23, 19]
+      TileType: FullyBlocked
+
+    - Prefab: Wall
+      Location: [23, 223]
+      TileType: FullyBlocked
+
+    - Prefab: Wall
+      Location: [23, 21]
+      TileType: FullyBlocked
+
+    - Prefab: Wall
+      Location: [23, 22]
+      TileType: FullyBlocked
+
+    - Prefab: Pillar
+      Location: [8, 11]
+      TileType: FullyBlocked
+
+    - Prefab: Pillar
+      Location: [9, 11]
+      TileType: FullyBlocked	  
+
+    - Prefab: Pillar
+      Location: [3, 3]
+      TileType: FullyBlocked	  
+	  
+    - Prefab: Pillar
+      Location: [4, 3]
+      TileType: FullyBlocked
+
+    - Prefab: Pillar
+      Location: [20, 3]
+      TileType: FullyBlocked
+
+    - Prefab: Pillar
+      Location: [19, 3]
+      TileType: FullyBlocked
+
+    - Prefab: Pillar
+      Location: [3, 20]
+      TileType: FullyBlocked
+
+    - Prefab: Pillar
+      Location: [4, 20]
+      TileType: FullyBlocked
+
+    - Prefab: Pillar
+      Location: [19, 20]
+      TileType: FullyBlocked
+
+    - Prefab: Pillar
+      Location: [20, 20]
+      TileType: FullyBlocked
+
+    - Prefab: Bookshelf
+      Location: [6, 6]
+      TileType: HalfBlocked
+
+    - Prefab: Desk
+      Location: [11, 6]
+      TileType: HalfBlocked
+
+    - Prefab: Desk
+      Location: [12, 6]
+      TileType: HalfBlocked	  
+
+    - Prefab: Desk
+      Location: [11, 16]
+      TileType: HalfBlocked
+
+    - Prefab: Desk
+      Location: [12, 16]
+      TileType: HalfBlocked	 
+
+    - Prefab: Bookshelf
+	  Rotation: 90
+      Location: [7, 16]
+      TileType: HalfBlocked	
+
+    - Prefab: Desk
+      Location: [16, 15]
+      TileType: HalfBlocked	 
+
+    - Prefab: Desk
+      Location: [16, 7]
+      TileType: HalfBlocked	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	  

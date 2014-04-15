@@ -1,0 +1,20 @@
+---
+Name: Table
+Mesh: 3D logo (solid)
+Material: Werewolf
+---
+Name: Wall
+Mesh: wall1
+Material: Werewolf
+---
+Name: Pillar
+Mesh: pillar1
+Material: Werewolf
+---
+Name: Bookshelf
+Mesh: bookshelf
+Material: Werewolf
+---
+Name: Desk
+Mesh: desk1
+Material: Werewolf
