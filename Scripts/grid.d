@@ -73,6 +73,10 @@ shared class Grid : GameObject
 				{
 					selectedUnit = unit;
 					isUnitSelected = true;
+					foreach( tile; getInRange( _tiles[ unit.posX ][ unit.posY ], unit.speed ) )
+					{
+						tile.selection = TileSelection.HighlightRed;
+					}
 				}
 			}
 		}
@@ -94,21 +98,52 @@ shared class Grid : GameObject
 		// Deselect a unit
 		if( Input.getState( "Back", true ) && isUnitSelected )
 		{
+			foreach( tile; getInRange( _tiles[ selectedUnit.posX ][ selectedUnit.posY ], selectedUnit.speed ) )
+			{
+				tile.selection = TileSelection.None;
+			}
+
 			selectedUnit = null;
 			isUnitSelected = false;
 		}
 	}
 	
 	/// Highlight tiles
-	void highlight( int topleftX, int topleftY, int bottomrightX, int bottomrightY, bool preview )
+	shared(Tile[]) getInRange( shared Tile startingTile, uint range )
 	{
-		for( int i = topleftX; i < bottomrightX; i++ )
+		// Create temp tuples to store stuff in.
+		import std.typecons;
+		alias Tuple!( shared Tile, "tile", uint, "depth" ) searchState;
+		alias Tuple!( int, "x", int, "y" ) point;
+
+		// Keeps track of what tiles have been added already.
+		auto visited = new bool[][]( gridSizeX, gridSizeY );
+		// Queue of states to sort through.
+		searchState[] states;
+		// Tiles inside the range.
+		shared Tile[] foundTiles;
+
+		// Start with initial tile.
+		states ~= searchState( startingTile, 0 );
+
+		while( states.length )
 		{
-			for( int j = topleftY; j < bottomrightY; j++ )
-			{
-				tiles[ i ][ j ].selection = preview ? TileSelection.HighlightRed : TileSelection.None;
-			}
+			auto state = states[ 0 ];
+			states = states[ 1..$ ];
+
+			if( visited[ state.tile.x ][ state.tile.y ] )
+				continue;
+
+			foundTiles ~= state.tile;
+			visited[ state.tile.x ][ state.tile.y ] = true;
+
+			if( state.depth < range && ( cast()state.tile == cast()startingTile || state.tile.type == TileType.Open ) )
+				foreach( coord; [ point( state.tile.x, state.tile.y - 1 ), point( state.tile.x, state.tile.y + 1 ), point( state.tile.x - 1, state.tile.y ), point( state.tile.x + 1, state.tile.y ) ] )
+					if( coord.x < gridSizeX && coord.x >= 0 && coord.y < gridSizeY && coord.y >= 0 && !visited[ coord.x ][ coord.y ] )
+						states ~= searchState( tiles[ coord.x ][ coord.y ], state.depth + 1 );
 		}
+
+		return foundTiles;
 	}
 	
 	/// Create an ( n x m ) grid of tiles
@@ -193,10 +228,20 @@ public:
 	{
 		type( this.type );
 	}
-	
+
+	@property int x()
+	{
+		return cast(int)this.transform.position.x / TILE_SIZE;
+	}
+
 	@property void x( int X )
 	{
 		this.transform.position.x = X * TILE_SIZE;
+	}
+
+	@property int y()
+	{
+		return cast(int)this.transform.position.z / TILE_SIZE;
 	}
 	
 	@property void y( int Y )
