@@ -1,9 +1,11 @@
 ﻿---
 Name: Robot1
 Prefab: Robot1
-HP: 40
-Speed: 4
+HP: 65
+Strength: 8
+Agility: 7
+Intelligence: 1
+Critical: 15
 Attack: 10
 Defense: 10
-Abilities: 
-    - Basic2
+Abilities: FireStarter
