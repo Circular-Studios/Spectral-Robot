@@ -69,7 +69,7 @@ shared class Grid : GameObject
 			foreach( obj; Game.gc.level )
 			{
 				auto unit = cast(shared Unit)obj;
-				if ( unit !is null && unit.posX == sel.x && unit.posY == sel.y )
+				if ( unit !is null && unit.x == sel.x && unit.y == sel.y )
 				{
 					selectedUnit = unit;
 					isUnitSelected = true;
@@ -81,12 +81,13 @@ shared class Grid : GameObject
 		else if( Input.getState( "Enter", true ) && isUnitSelected  && tiles[ sel.x ][ sel.y ].type == TileType.Open )
 		{
 			// change the tile types
-			tiles[selectedUnit.posX][selectedUnit.posY].type = TileType.Open;
+			tiles[selectedUnit.x][selectedUnit.y].type = TileType.Open;
 			tiles[sel.x][sel.y].type = TileType.HalfBlocked;
 			
 			// move the unit to the new location
-			selectedUnit.posX = sel.x;
-			selectedUnit.posY = sel.y;
+			//selectedUnit.x = sel.x;
+			//selectedUnit.y = sel.y;
+			selectedUnit.position = sel.x + sel.y * gridSizeX;
 			selectedUnit.updatePosition();
 			isUnitSelected = false;
 		}
@@ -145,6 +146,7 @@ private:
 	TileType _type;
 	TileSelection _selection;
 	GameObject _occupant;
+	int gridX;
 	
 public:
 	mixin( Property!( _occupant, AccessModifier.Public) );
@@ -207,11 +209,17 @@ public:
 		this.transform.position.z = Y * TILE_SIZE;
 	}
 	
-	this()
+	this( int gridX )
 	{
 		this._type = TileType.Open;
 		this._selection = TileSelection.None;
 		this.transform.scale = vec3( TILE_SIZE / 2 );
+		this.gridX = gridX;
+	}
+
+	uint toID()
+	{
+		return x + ( y * gridX );
 	}
 }
 

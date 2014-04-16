@@ -1,5 +1,5 @@
 ﻿module unit;
-import ability;
+import ability, grid;
 
 import core, utility, components;
 
@@ -24,7 +24,17 @@ public:
 	mixin( Property!( _attack, AccessModifier.Public) );
 	mixin( Property!( _defense, AccessModifier.Public) );
 	mixin( Property!( _abilities, AccessModifier.Public) );
-	
+
+	@property int x()
+	{
+		return cast(int)position % TILE_SIZE;
+	}
+
+	@property int y()
+	{
+		return cast(int)position / TILE_SIZE;
+	}
+
 	this()
 	{
 		ID = nextID;
@@ -51,7 +61,7 @@ public:
 	/// Convert grid coordinates to 3D space
 	void updatePosition()
 	{
-		this.transform.position.x = _posX * 10;
-		this.transform.position.z = _posY * 10 - 50;
+		this.transform.position.x = this.x * 10;
+		this.transform.position.z = this.y * 10 - 50;
 	}
 }

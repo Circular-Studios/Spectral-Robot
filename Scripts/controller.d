@@ -112,7 +112,7 @@ public:
 
 	uint toTileID( uint x, uint y )
 	{
-		return x + ( y * level[ "Grid" ].gridSizeX );
+		return x + ( y * ( cast(shared Grid)level[ "Grid" ] ).gridSizeX );
 	}
 	
 	/// Return the file path for a level to load
