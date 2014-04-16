@@ -25,7 +25,6 @@ public:
 	{
 		level = new shared Scene();
 		Game.activeScene = level;
-		logInfo(toTileID(1, 1));
 		
 		// first load all the objects
 		level.loadObjects( "Base" );
@@ -104,7 +103,7 @@ public:
 			}
 			
 			// initialize the unit and add it to the active scene
-			unit.init( /*convertTileID( spawn [ 0 ], spawn[ 1 ] )*/0, team, hp, sp, at, df, abilityIDs );
+			unit.init( toTileID( spawn [ 0 ], spawn[ 1 ] ), ( cast(shared Grid)level[ "Grid" ] ).gridSizeX, team, hp, sp, at, df, abilityIDs );
 			level[ unit.name ] = unit;
 			( cast(shared Grid)level[ "Grid" ] ).tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].type = TileType.HalfBlocked;
 		}

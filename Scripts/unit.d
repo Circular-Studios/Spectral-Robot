@@ -11,6 +11,7 @@ private:
 	int _speed;
 	int _attack;
 	int _defense;
+	int _gridX;
 	uint _position;
 	int _team;
 	int[] _abilities;
@@ -18,6 +19,7 @@ private:
 public:
 	immutable uint ID;
 	mixin( Property!( _position, AccessModifier.Public) );
+	mixin( Property!( _gridX, AccessModifier.Public) );
 	mixin( Property!( _team, AccessModifier.Public) );
 	mixin( Property!( _hp, AccessModifier.Public) );
 	mixin( Property!( _speed, AccessModifier.Public) );
@@ -27,12 +29,12 @@ public:
 
 	@property int x()
 	{
-		return cast(int)position % TILE_SIZE;
+		return cast(int)position % gridX;
 	}
 
 	@property int y()
 	{
-		return cast(int)position / TILE_SIZE;
+		return cast(int)position / gridX;
 	}
 
 	this()
@@ -41,9 +43,10 @@ public:
 		nextID++;
 	}
 	
-	void init( uint position, int team, int hp, int sp, int at, int df, shared int[] abilities )
+	void init( uint position, int gridX, int team, int hp, int sp, int at, int df, shared int[] abilities )
 	{
 		_position = position;
+		_gridX = gridX;
 		_team = team;
 		_hp = hp;
 		_speed = sp;
@@ -53,7 +56,7 @@ public:
 		updatePosition();
 	}
 
-	void move(uint tileID )
+	void move( uint tileID )
 	{
 
 	}

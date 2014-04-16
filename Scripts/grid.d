@@ -73,7 +73,7 @@ shared class Grid : GameObject
 				{
 					selectedUnit = unit;
 					isUnitSelected = true;
-					foreach( tile; getInRange( _tiles[ unit.posX ][ unit.posY ], unit.speed ) )
+					foreach( tile; getInRange( _tiles[ unit.x ][ unit.y ], unit.speed ) )
 					{
 						tile.selection = TileSelection.HighlightRed;
 					}
@@ -99,7 +99,7 @@ shared class Grid : GameObject
 		// Deselect a unit
 		if( Input.getState( "Back", true ) && isUnitSelected )
 		{
-			foreach( tile; getInRange( _tiles[ selectedUnit.posX ][ selectedUnit.posY ], selectedUnit.speed ) )
+			foreach( tile; getInRange( _tiles[ selectedUnit.x ][ selectedUnit.y ], selectedUnit.speed ) )
 			{
 				tile.selection = TileSelection.None;
 			}
@@ -167,7 +167,8 @@ shared class Grid : GameObject
 			
 			tile.x = x;
 			tile.y = y;
-			
+			tile.gridX = gridSizeX;
+
 			this.addChild( tile );
 			Game.activeScene[ "Tile" ~ x.to!string ~ y.to!string ] = tile;
 			tiles[ x ][ y ] = tile;
@@ -181,10 +182,11 @@ private:
 	TileType _type;
 	TileSelection _selection;
 	GameObject _occupant;
-	int gridX;
+	int _gridX;
 	
 public:
 	mixin( Property!( _occupant, AccessModifier.Public) );
+	mixin( Property!( _gridX, AccessModifier.Public) );
 
 	@property void selection( TileSelection s )
 	{
@@ -254,12 +256,11 @@ public:
 		this.transform.position.z = Y * TILE_SIZE;
 	}
 	
-	this( int gridX )
+	this()
 	{
 		this._type = TileType.Open;
 		this._selection = TileSelection.None;
 		this.transform.scale = vec3( TILE_SIZE / 2 );
-		this.gridX = gridX;
 	}
 
 	uint toID()
