@@ -3,7 +3,7 @@ Name: Camera
 Script:
     ClassName: camera.Camera
 Transform:
-    Position: !Vector3 0 30 -10
+    Position: !Vector3 0 30 30
     Rotation: !Vector3 -45 0 0
 Camera: 
     FOV: 70

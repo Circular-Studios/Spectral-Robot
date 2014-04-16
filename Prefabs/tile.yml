@@ -1,7 +1,7 @@
 ---
 Name: Tile
 Script:
-    ClassName: grid.Tile
+    ClassName: tile.Tile
 Transform:
     Rotation: !Vector3 -90 0 0
 Mesh: unitsquare

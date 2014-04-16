@@ -1,5 +1,4 @@
 Game:
-    DefaultState: !GameState Menu
     Verbosity: !Verbosity High
 Display:
     Fullscreen: false

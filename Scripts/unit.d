@@ -65,6 +65,6 @@ public:
 	void updatePosition()
 	{
 		this.transform.position.x = this.x * 10;
-		this.transform.position.z = this.y * 10 - 50;
+		this.transform.position.z = this.y * 10;
 	}
 }

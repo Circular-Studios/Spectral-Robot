@@ -1,5 +1,5 @@
 ﻿module controller;
-import unit, ability, grid, game;
+import unit, ability, grid, tile, game;
 import core, utility;
 import yaml;
 import std.path, std.conv;
@@ -31,7 +31,7 @@ public:
 		
 		// load the game
 		loadAbilities();
-		loadLevel( "TheOnlyLevel" ); //TODO: Remove hardcoded value
+		loadLevel( "TestLevel" ); //TODO: Remove hardcoded value
 	}
 
 	/// Process an action into an ability or movement
@@ -103,15 +103,16 @@ public:
 			}
 			
 			// initialize the unit and add it to the active scene
-			unit.init( toTileID( spawn [ 0 ], spawn[ 1 ] ), ( cast(shared Grid)level[ "Grid" ] ).gridSizeX, team, hp, sp, at, df, abilityIDs );
-			level[ unit.name ] = unit;
+			unit.init( toTileID( spawn [ 0 ], spawn[ 1 ] ), ( cast(shared Grid)level[ "Grid" ] ).gridX, team, hp, sp, at, df, abilityIDs );
+			level.addChild( unit );
 			( cast(shared Grid)level[ "Grid" ] ).tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].type = TileType.HalfBlocked;
 		}
 	}
 
 	uint toTileID( uint x, uint y )
 	{
-		return x + ( y * ( cast(shared Grid)level[ "Grid" ] ).gridSizeX );
+		logInfo(cast()level[ "Grid" ]);
+		return x + ( y * ( cast(shared Grid)level[ "Grid" ] ).gridX );
 	}
 	
 	/// Return the file path for a level to load
@@ -149,10 +150,9 @@ public:
 		
 		// create the grid
 		auto grid = new shared Grid();
-		grid.transform.position.z = -50;
-		grid.transform.updateMatrix();
+		grid.name = "Grid";
 		grid.initTiles( gridSize[ 0 ], gridSize[ 1 ] );
-		level[ "Grid" ] = grid;
+		level.addChild( grid );
 		
 		// create the units
 		loadUnits( unitsNode );
@@ -197,12 +197,12 @@ public:
 					
 					// place the prop
 					prop.transform.position.x = x * TILE_SIZE;
-					prop.transform.position.z = y * TILE_SIZE - 50;
+					prop.transform.position.z = y * TILE_SIZE;
 					if( rotation )
 						prop.transform.rotation = rotation;
 					
 					// add the prop to the scene
-					level[ prop.name ] = prop;
+					level.addChild( prop );
 					
 					// change the TileType of occupying tiles
 					grid.tiles[ x ][ y ].type = tileType;

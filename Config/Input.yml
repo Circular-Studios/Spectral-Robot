@@ -26,3 +26,5 @@ Enter:
     - !Keyboard Space
 Back:
     - !Keyboard Backspace
+ResetGame:
+    - !Keyboard F5
