@@ -100,7 +100,7 @@ public:
 			Config.tryGet( "Abilities", abilityStrings, unitNode );
 			foreach( name; abilityStrings )
 			{
-				abilityIDs ~= abilities[ name ].ID.to!( shared int );
+				//abilityIDs ~= abilities[ name ].ID.to!( shared int );
 			}
 			
 			// initialize the unit and add it to the active scene

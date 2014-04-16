@@ -1,0 +1,64 @@
+---
+name: Basic1
+targetType: EnemyUnit
+targetArea: Radial
+range: 1
+damage: 1
+damageType: direct
+cooldown: 0
+accuracy: 14
+---
+name: DischargeGrenade
+targetType: EnemyUnit
+targetArea: Radial
+range: 6
+damage: 4
+damageType: AOE
+cooldown: 2
+accuracy: 12
+---
+name: AAS
+targetType: Self
+targetArea: Single
+range: 0
+damage: 0
+damageType: buff
+cooldown: 2
+accuracy: 10
+---
+name: Overload
+targetType: Self
+targetArea: Single
+range: 0
+damage: 0
+damageType: buff
+cooldown: 4
+accuracy: 15
+---
+name: SummonTurret
+targetType: Space
+targetArea: Single
+range: 4
+damage: 0
+damageType: None
+cooldown: 2
+accuracy: 0
+---
+name: TurretShot
+targetType: EnemyUnit
+targetArea: Single
+range: 2
+damage: 2
+damageType: direct
+cooldown: 0
+accuracy: 0
+---
+name: Detonate
+targetType: TurretUnit
+targetArea: Radial
+range: 2
+damage: 6
+damageType: AOE
+cooldown: 0
+accuracy: 0
+---

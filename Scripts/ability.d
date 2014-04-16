@@ -7,6 +7,10 @@ enum TargetType
 	EnemyUnit,
 	AlliedUnit,
 	Ground,
+	Space,
+	UndeadUnit,
+	Self,
+	TurretUnit,
 }
 
 enum TargetArea
@@ -15,6 +19,7 @@ enum TargetArea
 	Line,
 	Square,
 	Radial,
+	MovingRadial,
 }
 
 shared class Ability
