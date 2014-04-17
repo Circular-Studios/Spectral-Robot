@@ -8,5 +8,4 @@ Intelligence: 1
 Critical: 15
 Attack: 10
 Defense: 10
-Abilities:
-    - FireStarter
+Abilities: FireStarter
