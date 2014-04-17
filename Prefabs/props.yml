@@ -1,20 +1,20 @@
 ---
 Name: Table
-Mesh: 3D logo (solid)
-Material: Werewolf
+Mesh: crate_01
+Material: poopmat
 ---
 Name: Wall
-Mesh: wall1
-Material: Werewolf
+Mesh: SR_wall_1x2
+Material: poopmat
 ---
 Name: Pillar
-Mesh: pillar1
-Material: Werewolf
+Mesh: pillar_01
+Material: poopmat
 ---
 Name: Bookshelf
-Mesh: bookshelf
-Material: Werewolf
+Mesh: bookcase_01
+Material: poopmat
 ---
 Name: Desk
-Mesh: desk1
-Material: Werewolf
+Mesh: crate_01
+Material: poopmat

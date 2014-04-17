@@ -168,7 +168,6 @@ shared class Grid : GameObject
 			tile.gridX = gridX;
 
 			this.addChild( tile );
-			Game.activeScene.addChild( tile );
 			tiles[ x ][ y ] = tile;
 		}
 	}

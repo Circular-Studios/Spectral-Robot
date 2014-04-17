@@ -31,7 +31,7 @@ public:
 		
 		// load the game
 		loadAbilities();
-		loadLevel( "TestLevel" ); //TODO: Remove hardcoded value
+		loadLevel( "levelSRTF" ); //TODO: Remove hardcoded value
 	}
 
 	/// Process an action into an ability or movement
