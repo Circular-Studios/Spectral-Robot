@@ -1,5 +1,6 @@
-module controller;
+module turn;
 import core, utility;
+import ability, unit;
 
 struct Action
 {
@@ -14,7 +15,7 @@ shared class Turn
 public:
 	Action[] lastTurn; // Gets cleared after a turn
 	Action[] currentTurn; // Gets populated as the user makes actions
-	Ability[] abilities; // The abilities
+	Ability[ uint ] abilities; // The abilities
 	Unit[] units; // The units
 
 	/// Process an action into an ability or movement
@@ -30,3 +31,4 @@ public:
 			abilities[ actionID ].use( originID, targetID );
 		}
 	}
+}

@@ -14,7 +14,7 @@ private:
 	int _gridX;
 	uint _position;
 	int _team;
-	int[] _abilities;
+	uint[] _abilities;
 	
 public:
 	immutable uint ID;
@@ -42,8 +42,8 @@ public:
 		ID = nextID;
 		nextID++;
 	}
-	
-	void init( uint position, int gridX, int team, int hp, int sp, int at, int df, shared int[] abilities )
+
+	void init( uint position, int gridX, int team, int hp, int sp, int at, int df, uint[] abilities )
 	{
 		_position = position;
 		_gridX = gridX;
@@ -52,7 +52,7 @@ public:
 		_speed = sp;
 		_attack = at;
 		_defense = df;
-		_abilities = abilities;
+		_abilities = cast(shared uint[])abilities;
 		updatePosition();
 	}
 

@@ -5,14 +5,6 @@ import yaml;
 import std.path, std.conv;
 import gl3n.linalg, gl3n.math;
 
-struct Action
-{
-public:
-	uint actionID;
-	uint originID;
-	uint targetID;
-}
-
 final shared class Controller
 {
 public:
@@ -22,24 +14,34 @@ public:
 	this()
 	{
 		level = new shared Scene();
+		turn = new shared Turn();
 		Game.activeScene = level;
 		
 		// first load all the objects
 		level.loadObjects( "Base" );
 		
 		// load the game
-		loadAbilities();
 		loadLevel( "levelSRTF" ); //TODO: Remove hardcoded value
 	}
 	
 	/// Load and create abilities from yaml
-	void loadAbilities()
+	/// 
+	/// Returns: a list of the IDs created
+	uint[] loadAbilities( string abilitiesFile )
 	{
-		foreach( abilityNode; loadYamlDocuments( buildNormalizedPath( FilePath.Resources.Objects, "Abilities" ) ) )
+		uint[] abilityIDs;
+
+		// load the yaml
+		auto yaml = Loader( findInDirectory ( "Abilities", abilitiesFile ) );
+
+		foreach( Node abilityNode; yaml )
 		{
 			auto ability = Config.getObject!(shared Ability)( abilityNode );
 			turn.abilities[ ability.ID ] = ability;
+			abilityIDs ~= ability.ID;
 		}
+
+		return abilityIDs;
 	}
 	
 	/// Load and create units from yaml
@@ -51,8 +53,7 @@ public:
 		{
 			// setup variables
 			int team, hp, sp, at, df = 0;
-			string[] abilityStrings;
-			shared int[] abilityIDs;
+			string abilities;
 			uint[] spawn;
 			
 			// check if we want to load this unit
@@ -80,37 +81,37 @@ public:
 			Config.tryGet( "Speed", sp, unitNode );
 			Config.tryGet( "Attack", at, unitNode );
 			Config.tryGet( "Defense", df, unitNode );
-			Config.tryGet( "Abilities", abilityStrings, unitNode );
-			foreach( name; abilityStrings )
-			{
-				//abilityIDs ~= abilities[ name ].ID.to!( shared int );
-			}
+			Config.tryGet( "Abilities", abilities, unitNode );
 			
 			// initialize the unit and add it to the active scene
-			unit.init( toTileID( spawn [ 0 ], spawn[ 1 ] ), ( cast(shared Grid)level[ "Grid" ] ).gridX, team, hp, sp, at, df, abilityIDs );
+			unit.init( toTileID( spawn [ 0 ], spawn[ 1 ] ), 
+			           ( cast(shared Grid)level[ "Grid" ] ).gridX, 
+			           team, hp, sp, at, df, 
+			           loadAbilities( abilities ) );
 			level.addChild( unit );
 			( cast(shared Grid)level[ "Grid" ] ).tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].type = TileType.HalfBlocked;
 		}
 	}
 
+	/// Convert ( x, y ) coordinates to an ID
 	uint toTileID( uint x, uint y )
 	{
 		return x + ( y * ( cast(shared Grid)level[ "Grid" ] ).gridX );
 	}
 	
 	/// Return the file path for a level to load
-	string scanLevelDirectory( string levelName )
+	string findInDirectory( string directory, string fileName )
 	{
-		foreach( file; FilePath.scanDirectory( buildNormalizedPath( FilePath.Resources.Objects, "Levels" ), "*.yml" ) )
+		foreach( file; FilePath.scanDirectory( buildNormalizedPath( FilePath.Resources.Objects, directory ), "*.yml" ) )
 		{
-			if( file.baseFileName() == levelName )
+			if( file.baseFileName() == fileName )
 			{
 				return file.fullPath();
 			}
 			
-			//TODO: Handle level yaml not existing
+			//TODO: Handle yaml not existing
 		}
-		
+
 		return null;
 	}
 	
@@ -118,7 +119,7 @@ public:
 	void loadLevel( string levelName )
 	{
 		// load the level from yaml
-		Node levelNode = loadYamlFile( scanLevelDirectory ( levelName ) );
+		Node levelNode = loadYamlFile( findInDirectory ( "Levels", levelName ) );
 		
 		// setup variables
 		int[] gridSize;
@@ -134,8 +135,8 @@ public:
 		// create the grid
 		auto grid = new shared Grid();
 		grid.name = "Grid";
-		grid.initTiles( gridSize[ 0 ], gridSize[ 1 ] );
 		level.addChild( grid );
+		grid.initTiles( gridSize[ 0 ], gridSize[ 1 ] );
 		
 		// create the units
 		loadUnits( unitsNode );
