@@ -1,5 +1,5 @@
 ﻿module controller;
-import unit, ability, grid, tile, game;
+import unit, ability, grid, turn, tile, game;
 import core, utility;
 import yaml;
 import std.path, std.conv;
@@ -16,10 +16,8 @@ public:
 final shared class Controller
 {
 public:
-	Action[] lastTurn; // Gets cleared after a turn
-	Action[] currentTurn; // Gets populated as the user makes actions
 	Scene level; // The active scene in the engine
-	Ability[ string ] abilities; // The instantiated units for this instance of the game
+	Turn turn; // The turn controller
 	
 	this()
 	{
@@ -33,20 +31,6 @@ public:
 		loadAbilities();
 		loadLevel( "levelSRTF" ); //TODO: Remove hardcoded value
 	}
-
-	/// Process an action into an ability or movement
-	void doAction( uint actionID, uint originID, uint targetID )
-	{
-		// Move a unit
-		if( actionID == 0 )
-		{
-
-		}
-		else
-		{
-
-		}
-	}
 	
 	/// Load and create abilities from yaml
 	void loadAbilities()
@@ -54,7 +38,7 @@ public:
 		foreach( abilityNode; loadYamlDocuments( buildNormalizedPath( FilePath.Resources.Objects, "Abilities" ) ) )
 		{
 			auto ability = Config.getObject!(shared Ability)( abilityNode );
-			abilities[ ability.name ] = ability;
+			turn.abilities[ ability.ID ] = ability;
 		}
 	}
 	
@@ -111,7 +95,6 @@ public:
 
 	uint toTileID( uint x, uint y )
 	{
-		logInfo(cast()level[ "Grid" ]);
 		return x + ( y * ( cast(shared Grid)level[ "Grid" ] ).gridX );
 	}
 	

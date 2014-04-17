@@ -91,7 +91,7 @@ public:
 	}
 	
 	/// Use the ability
-	void use()
+	void use( uint originID, uint targetID )
 	{
 		_currentCooldown = _cooldown;
 	}
