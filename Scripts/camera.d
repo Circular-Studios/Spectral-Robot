@@ -1,41 +1,59 @@
 ﻿module camera;
-import core, utility;
+import core, graphics, utility;
 import std.algorithm;
+import gl3n.linalg, gl3n.math;
 
 /// Camera movement around the scene
 shared class Camera : GameObject
 {
-	float moveSpeed = 50;
+	float moveSpeed = 150;
+	float rotateSpeed = 45.radians;
+	float edgeDistance = 50;
 	
 	override void onUpdate()
 	{	
-		// 4-directional movement
-		if( Input.getState( "LookUp" ) )
+		if( Input.getState("LookLeft"))
 		{
-			this.transform.position.z -= moveSpeed * Time.deltaTime;
+			this.transform.rotation.rotatey( rotateSpeed * Time.deltaTime );
 		}
-		else if( Input.getState( "LookDown" ) )
+		if( Input.getState("LookRight"))
 		{
-			this.transform.position.z += moveSpeed * Time.deltaTime;
+			this.transform.rotation.rotatey( -rotateSpeed * Time.deltaTime );
 		}
-		
-		if( Input.getState( "LookLeft" ) )
+
+		shared vec2 mouse = Input.mousePos;
+		if( mouse.x < edgeDistance )
 		{
-			this.transform.position.x -= moveSpeed * Time.deltaTime;
+			auto moveVec = -this.transform.right;
+			moveVec.y = 0;
+			moveVec.normalize();
+			moveVec *= moveSpeed * Time.deltaTime;
+			this.transform.position += moveVec;
 		}
-		else if( Input.getState( "LookRight" ) )
+		if( mouse.y < edgeDistance )
 		{
-			this.transform.position.x += moveSpeed * Time.deltaTime;
+			auto moveVec = this.transform.forward;
+			moveVec.y = 0;
+			moveVec.normalize();
+			moveVec *= moveSpeed * Time.deltaTime;
+			this.transform.position += moveVec;
 		}
-		
-		// change distance from floor
-		if( Input.getState( "ZoomUp" ) )
+		if( mouse.x > Graphics.width - edgeDistance )
 		{
-			this.transform.position.y -= moveSpeed * Time.deltaTime;
+			auto moveVec = this.transform.right;
+			moveVec.y = 0;
+			moveVec.normalize();
+			moveVec *= moveSpeed * Time.deltaTime;
+			this.transform.position += moveVec;
 		}
-		else if( Input.getState( "ZoomDown" ) )
+		if( mouse.y > Graphics.height - edgeDistance )
 		{
-			this.transform.position.y += moveSpeed * Time.deltaTime;
+			auto moveVec = -this.transform.forward;
+			moveVec.y = 0;
+			moveVec.normalize();
+			moveVec *= moveSpeed * Time.deltaTime;
+			this.transform.position += moveVec;
 		}
+
 	}
 }
