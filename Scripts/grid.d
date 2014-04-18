@@ -11,7 +11,6 @@ shared class Grid : GameObject
 {
 private:
 	Tile[][] _tiles;
-	GameObject[ ( TileType.max + 1 ) * ( TileSelection.max + 1 ) ] tileObjects;
 	bool _isUnitSelected = false;
 	Unit _selectedUnit;
 	int _gridX, _gridY;
@@ -23,6 +22,42 @@ public:
 	mixin( Property!( _selectedUnit, AccessModifier.Public ) );
 	mixin( Property!( _gridX, AccessModifier.Public ) );
 	mixin( Property!( _gridY, AccessModifier.Public ) );
+
+	// Setup left mouse click
+	this()
+	{
+		Input.addKeyDownEvent( Keyboard.MouseLeft, ( kc )
+		{
+			if( auto obj = Input.mouseObject )
+			{
+				logInfo( "Clicked on ", obj.name );
+
+				// If unit is selected and a tile is clicked, move if possible
+				if( auto tile = cast(shared Tile)obj )
+				{
+					if( isUnitSelected && selectedUnit.checkMove( tile.toID() ) )
+					{
+						// move the unit to the new location
+						selectedUnit.move( tile.toID() );
+					}
+				}
+				else
+				{
+					// Deselect a unit if not a tile
+					if( isUnitSelected )
+						selectedUnit.deselect();
+
+					// Select a unit
+					if( auto unit = cast(shared Unit)obj )
+					{
+						selectedUnit = unit;
+						isUnitSelected = true;
+						unit.previewMove();
+					}
+				}
+			}
+		} );
+	}
 	
 	override void onDraw()
 	{
@@ -38,70 +73,7 @@ public:
 	
 	override void onUpdate()
 	{
-		// move the selector around the grid
-		if( Input.getState( "Down", true ) )
-		{
-			tiles[sel.x][sel.y].resetSelection();
-			sel.y += 1;
-			if( sel.y >= gridY ) sel.y = gridY - 1;
-			tiles[sel.x][sel.y].selection = TileSelection.Blue;
-		}
-		else if( Input.getState( "Up", true ) )
-		{
-			tiles[sel.x][sel.y].resetSelection();
-			sel.y -= 1;
-			if( sel.y < 0 ) sel.y = 0;
-			tiles[sel.x][sel.y].selection = TileSelection.Blue;
-		}
-		
-		if( Input.getState( "Right", true ) )
-		{
-			tiles[sel.x][sel.y].resetSelection();
-			sel.x += 1;
-			if( sel.x >= gridX ) sel.x = gridX - 1;
-			tiles[sel.x][sel.y].selection = TileSelection.Blue;
-		}
-		else if( Input.getState( "Left", true ) )
-		{
-			tiles[sel.x][sel.y].resetSelection();
-			sel.x -= 1;
-			if( sel.x < 0 ) sel.x = 0;
-			tiles[sel.x][sel.y].selection = TileSelection.Blue;
-		}
-		
-		// Select a unit
-		if( Input.getState( "Enter", true ) && !isUnitSelected )
-		{
-			foreach( obj; Game.level.objects() )
-			{
-				auto unit = cast(shared Unit)obj;
-				if ( unit !is null && unit.x == sel.x && unit.y == sel.y )
-				{
-					selectedUnit = unit;
-					isUnitSelected = true;
-					unit.previewMove();
-				}
-			}
-		}
-		
-		// Place a selected unit
-		else if( Input.getState( "Enter", true ) && isUnitSelected  && tiles[ sel.x ][ sel.y ].type == TileType.Open )
-		{
-			// change the tile types
-			tiles[ selectedUnit.x ][ selectedUnit.y ].type = TileType.Open;
-			tiles[ sel.x ][ sel.y ].type = TileType.HalfBlocked;
-			
-			// move the unit to the new location
-			selectedUnit.move( tiles[ sel.x ][ sel.y ].toID() );
-		}
-		
-		// Deselect a unit
-		if( Input.getState( "Back", true ) && isUnitSelected )
-		{
-			selectedUnit.deselect();
-			selectedUnit = null;
-			isUnitSelected = false;
-		}
+
 	}
 	
 	
@@ -136,14 +108,16 @@ public:
 			
 			if( visited[ state.tile.x ][ state.tile.y ] )
 				continue;
-			
-			foundTiles ~= state.tile;
+
 			visited[ state.tile.x ][ state.tile.y ] = true;
 			
 			if( state.depth < range && ( cast()state.tile == cast()startingTile || state.tile.type == TileType.Open ) )
+			{
+				foundTiles ~= state.tile;
 				foreach( coord; [ point( state.tile.x, state.tile.y - 1 ), point( state.tile.x, state.tile.y + 1 ), point( state.tile.x - 1, state.tile.y ), point( state.tile.x + 1, state.tile.y ) ] )
 					if( coord.x < gridX && coord.x >= 0 && coord.y < gridY && coord.y >= 0 && !visited[ coord.x ][ coord.y ] )
 						states ~= searchState( tiles[ coord.x ][ coord.y ], state.depth + 1 );
+			}
 		}
 		
 		return foundTiles;

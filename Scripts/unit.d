@@ -58,6 +58,10 @@ public:
 	{
 		if ( checkMove( targetTileID ) )
 		{
+			// change the tile types
+			Game.grid.getTileByID( position ).type = TileType.Open;
+			Game.grid.getTileByID( targetTileID ).type = TileType.HalfBlocked;
+
 			// move the unit to the new location
 			position = targetTileID;
 			updatePosition();
@@ -66,11 +70,11 @@ public:
 		}
 	}
 	
-	/// Check if unit is within range of the target tile
+	/// Check if unit is within range of the target tile and if tile is Open
 	bool checkMove( uint targetTileID )
 	{
 		auto tile = Game.grid.getTileByID( targetTileID );
-		return speed >= abs( ( tile.x - x ) + ( tile.y - y ) );
+		return tile.type == TileType.Open && speed > abs( ( tile.x - x ) ) + abs ( ( tile.y - y ) );
 	}
 	
 	/// Highlight the tiles the unit can move to
@@ -93,6 +97,10 @@ public:
 		{
 			tile.resetSelection();
 		}
+
+		// Modify grid variables
+		Game.grid.selectedUnit = null;
+		Game.grid.isUnitSelected = false;
 	}
 	
 	/// Convert grid coordinates to 3D space

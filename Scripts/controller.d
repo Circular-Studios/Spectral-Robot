@@ -47,6 +47,8 @@ final shared class Controller
 			int team, hp, sp, at, df = 0;
 			string abilities;
 			uint[] spawn;
+			shared vec3 rotationVec;
+			shared quat rotation;
 			
 			// check if we want to load this unit
 			bool nameCheck = false;
@@ -57,6 +59,8 @@ final shared class Controller
 					nameCheck = true;
 					Config.tryGet( "Spawn", spawn, unitCheck );
 					Config.tryGet( "Team", team, unitCheck );
+					if( Config.tryGet( "Rotation", rotationVec, unitCheck ) )
+						rotation = quat.euler_rotation( radians( rotationVec.y ), radians( rotationVec.z ), radians( rotationVec.x ) );
 					break;
 				}
 			}
@@ -74,9 +78,12 @@ final shared class Controller
 			Config.tryGet( "Attack", at, unitNode );
 			Config.tryGet( "Defense", df, unitNode );
 			Config.tryGet( "Abilities", abilities, unitNode );
+
 			
 			// initialize the unit and add it to the active scene
 			unit.init( toTileID( spawn [ 0 ], spawn[ 1 ] ), team, hp, sp, at, df, loadAbilities( abilities ) );
+			if ( rotation )
+				unit.transform.rotation = rotation;
 			Game.level.addChild( unit );
 			Game.grid.tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].type = TileType.HalfBlocked;
 		}
