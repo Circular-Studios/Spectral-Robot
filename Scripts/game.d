@@ -49,9 +49,7 @@ public:
 		// create a camera
 		level.camera = level[ "Camera" ].camera;
 
-		serverConn = Connection.open( "129.21.82.25", false, ConnectionType.TCP );
-		serverConn.onReceiveData!string ~= msg => logInfo( "New Message: ", msg );
-		serverConn.send!string( "Testing Butts", ConnectionType.TCP );
+		Input.addKeyDownEvent( Keyboard.R, kc => connect() );
 		
 		// create the ui
 		/*ui = new shared UserInterface( Config.get!uint( "Display.Width" ),
@@ -59,13 +57,23 @@ public:
 		 Config.get!string( "UserInterface.FilePath" ) 
 		 );*/
 	}
+
+	void connect()
+	{
+		if( serverConn )
+			serverConn.close();
+		serverConn = Connection.open( "129.21.82.25", false, ConnectionType.TCP );
+		serverConn.onReceiveData!string ~= msg => logInfo( "New Message: ", msg );
+		serverConn.send!string( "Testing Butts", ConnectionType.TCP );
+	}
 	
 	override void onUpdate()
 	{
 		//ui.update();
 		try
 		{
-			serverConn.update();
+			if( serverConn )
+				serverConn.update();
 		}
 		catch
 		{
