@@ -1,6 +1,6 @@
 module turn;
 import core, utility;
-import ability, unit;
+import game, ability, unit;
 
 struct Action
 {
@@ -17,7 +17,7 @@ public:
 	Action[] currentTurn; // Gets populated as the user makes actions
 	Ability[ uint ] abilities; // The abilities
 	Unit[] units; // The units
-
+	
 	/// Process an action into an ability or movement
 	void doAction( uint actionID, uint originID, uint targetID )
 	{

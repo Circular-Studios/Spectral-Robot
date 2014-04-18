@@ -24,11 +24,9 @@ private:
 	TileType _type;
 	TileSelection _selection;
 	GameObject _occupant;
-	int _gridX;
 	
 public:
 	mixin( Property!( _occupant, AccessModifier.Public) );
-	mixin( Property!( _gridX, AccessModifier.Public) );
 	
 	@property void selection( TileSelection s )
 	{
@@ -107,6 +105,6 @@ public:
 	
 	uint toID()
 	{
-		return x + ( y * gridX );
+		return x + ( y * Game.grid.gridX );
 	}
 }

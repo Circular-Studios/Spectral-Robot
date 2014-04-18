@@ -1,5 +1,5 @@
 module game;
-import controller;
+import controller, grid, turn;
 
 import core, graphics, components, utility;
 
@@ -11,7 +11,11 @@ import core, graphics, components, utility;
 
 shared class RobotGhosts : DGame
 {
-	public Controller gc;
+public:
+	Controller gc; // the game controller
+	Scene level; // The active scene in the engine
+	Grid grid; // The grid in the level
+	Turn turn; // The turn controller
 	
 	// Name that game
 	@property override string title()
@@ -26,18 +30,28 @@ shared class RobotGhosts : DGame
 		// setup a couple helper keys
 		Input.addKeyDownEvent( Keyboard.Escape, ( uint kc ) { currentState = EngineState.Quit; } );
 		Input.addKeyDownEvent( Keyboard.F5, ( uint kc ) { currentState = EngineState.Reset; } );
-
-		// initalize the controller
+		
+		// initalize stuff
+		level = new shared Scene();
+		this.activeScene = level;
+		turn = new shared Turn();
+		grid = new shared Grid();
+		
+		// add the grid to the level
+		Game.grid.name = "Grid";
+		Game.level.addChild( grid );
+		
+		// get the game loaded
 		gc = new shared Controller();
 		
 		// create a camera
-		gc.level.camera = gc.level[ "Camera" ].camera;
-
+		level.camera = level[ "Camera" ].camera;
+		
 		// create the ui
 		/*ui = new shared UserInterface( Config.get!uint( "Display.Width" ),
-		                               Config.get!uint( "Display.Height" ), 
-		                               Config.get!string( "UserInterface.FilePath" ) 
-		                             );*/
+		 Config.get!uint( "Display.Height" ), 
+		 Config.get!string( "UserInterface.FilePath" ) 
+		 );*/
 	}
 	
 	override void onUpdate()

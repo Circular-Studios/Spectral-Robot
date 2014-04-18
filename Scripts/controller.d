@@ -1,5 +1,5 @@
 ﻿module controller;
-import unit, ability, grid, turn, tile, game;
+import unit, grid, ability, tile, game;
 import core, utility;
 import yaml;
 import std.path, std.conv;
@@ -8,17 +8,11 @@ import gl3n.linalg, gl3n.math;
 final shared class Controller
 {
 public:
-	Scene level; // The active scene in the engine
-	Turn turn; // The turn controller
 	
 	this()
 	{
-		level = new shared Scene();
-		turn = new shared Turn();
-		Game.activeScene = level;
-		
 		// first load all the objects
-		level.loadObjects( "Base" );
+		Game.level.loadObjects( "Base" );
 		
 		// load the game
 		loadLevel( "levelSRTF" ); //TODO: Remove hardcoded value
@@ -30,17 +24,17 @@ public:
 	uint[] loadAbilities( string abilitiesFile )
 	{
 		uint[] abilityIDs;
-
+		
 		// load the yaml
 		auto yaml = Loader( findInDirectory ( "Abilities", abilitiesFile ) );
-
+		
 		foreach( Node abilityNode; yaml )
 		{
 			auto ability = Config.getObject!(shared Ability)( abilityNode );
-			turn.abilities[ ability.ID ] = ability;
+			Game.turn.abilities[ ability.ID ] = ability;
 			abilityIDs ~= ability.ID;
 		}
-
+		
 		return abilityIDs;
 	}
 	
@@ -84,19 +78,16 @@ public:
 			Config.tryGet( "Abilities", abilities, unitNode );
 			
 			// initialize the unit and add it to the active scene
-			unit.init( toTileID( spawn [ 0 ], spawn[ 1 ] ), 
-			           ( cast(shared Grid)level[ "Grid" ] ).gridX, 
-			           team, hp, sp, at, df, 
-			           loadAbilities( abilities ) );
-			level.addChild( unit );
-			( cast(shared Grid)level[ "Grid" ] ).tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].type = TileType.HalfBlocked;
+			unit.init( toTileID( spawn [ 0 ], spawn[ 1 ] ), team, hp, sp, at, df, loadAbilities( abilities ) );
+			Game.level.addChild( unit );
+			Game.grid.tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].type = TileType.HalfBlocked;
 		}
 	}
-
+	
 	/// Convert ( x, y ) coordinates to an ID
 	uint toTileID( uint x, uint y )
 	{
-		return x + ( y * ( cast(shared Grid)level[ "Grid" ] ).gridX );
+		return x + ( y * Game.grid.gridX );
 	}
 	
 	/// Return the file path for a level to load
@@ -111,7 +102,7 @@ public:
 			
 			//TODO: Handle yaml not existing
 		}
-
+		
 		return null;
 	}
 	
@@ -132,11 +123,8 @@ public:
 		Config.tryGet( "Units", unitsNode, levelNode );
 		Config.tryGet( "Objects", propsNode, levelNode );
 		
-		// create the grid
-		auto grid = new shared Grid();
-		grid.name = "Grid";
-		level.addChild( grid );
-		grid.initTiles( gridSize[ 0 ], gridSize[ 1 ] );
+		// fill the grid
+		Game.grid.initTiles( gridSize[ 0 ], gridSize[ 1 ] );
 		
 		// create the units
 		loadUnits( unitsNode );
@@ -186,10 +174,10 @@ public:
 						prop.transform.rotation = rotation;
 					
 					// add the prop to the scene
-					level.addChild( prop );
+					Game.level.addChild( prop );
 					
 					// change the TileType of occupying tiles
-					grid.tiles[ x ][ y ].type = tileType;
+					Game.grid.tiles[ x ][ y ].type = tileType;
 				}
 			}
 		}
