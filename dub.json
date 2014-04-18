@@ -45,7 +45,7 @@
 			"sourcePaths": [ "Scripts/network" ],
 			"mainSourceFile": "Scripts/network/server.d",
 			"targetType": "executable",
-			"versions": [ "Server" ],
+			"versions": [ "Server", "VibeCustomMain" ],
 			"dependencies": {
 				"speed:common": "~master",
 				"speed:server": "~master"	

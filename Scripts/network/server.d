@@ -12,11 +12,10 @@ void main()
 
 	connMan.onNewConnection ~= ( shared Connection conn )
 	{
-		writeln( "New Connection, ord!string: ", conn.onReceiveData!string.length );
 		conn.onReceiveData!string ~= ( string msg )
 		{
 			writeln( "Recieved message: ", msg );
-			conn.send!string( "LOUD AND CLEAR" );
+			connMan.send!string( "ECHO: " ~ msg, ConnectionType.TCP );
 		};
 	};
 
