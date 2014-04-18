@@ -1,6 +1,7 @@
 ﻿module unit;
-import game, ability, grid;
+import game, ability, grid, tile;
 import core, utility, components;
+import std.math;
 
 shared class Unit : GameObject
 {
@@ -13,6 +14,7 @@ private:
 	uint _position;
 	int _team;
 	uint[] _abilities;
+	Tile[] selectedTiles;
 	
 public:
 	immutable uint ID;
@@ -54,13 +56,43 @@ public:
 	/// Move the unit to a tile
 	void move( uint targetTileID )
 	{
-		
+		if ( checkMove( targetTileID ) )
+		{
+			// move the unit to the new location
+			position = targetTileID;
+			updatePosition();
+			deselect();
+			Game.grid.isUnitSelected = false;
+		}
 	}
 	
-	/// Highlight the tiles a unit can move to
+	/// Check if unit is within range of the target tile
+	bool checkMove( uint targetTileID )
+	{
+		auto tile = Game.grid.getTileByID( targetTileID );
+		return speed >= abs( ( tile.x - x ) + ( tile.y - y ) );
+	}
+	
+	/// Highlight the tiles the unit can move to
 	void previewMove()
 	{
+		selectedTiles = Game.grid.getInRange( Game.grid.tiles[ x ][ y ], speed );
 		
+		// change the material of the tiles
+		foreach( tile; selectedTiles )
+		{
+			tile.selection = TileSelection.Blue;
+		}
+	}
+	
+	/// Remove focus from the unit and any highlighted tiles
+	void deselect()
+	{
+		// change the material of the tiles
+		foreach( tile; selectedTiles )
+		{
+			tile.resetSelection();
+		}
 	}
 	
 	/// Convert grid coordinates to 3D space

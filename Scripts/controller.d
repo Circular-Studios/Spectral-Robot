@@ -7,8 +7,6 @@ import gl3n.linalg, gl3n.math;
 
 final shared class Controller
 {
-public:
-	
 	this()
 	{
 		// first load all the objects

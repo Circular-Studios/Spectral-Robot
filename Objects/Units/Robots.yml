@@ -2,6 +2,7 @@
 Name: Robot1
 Prefab: Robot1
 HP: 65
+Speed: 3
 Strength: 8
 Agility: 7
 Intelligence: 1

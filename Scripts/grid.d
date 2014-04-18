@@ -79,10 +79,7 @@ public:
 				{
 					selectedUnit = unit;
 					isUnitSelected = true;
-					foreach( tile; getInRange( _tiles[ unit.x ][ unit.y ], unit.speed ) )
-					{
-						tile.selection = TileSelection.Red;
-					}
+					unit.previewMove();
 				}
 			}
 		}
@@ -95,22 +92,23 @@ public:
 			tiles[ sel.x ][ sel.y ].type = TileType.HalfBlocked;
 			
 			// move the unit to the new location
-			selectedUnit.position = sel.x + sel.y * gridX;
-			selectedUnit.updatePosition();
-			isUnitSelected = false;
+			selectedUnit.move( tiles[ sel.x ][ sel.y ].toID() );
 		}
 		
 		// Deselect a unit
 		if( Input.getState( "Back", true ) && isUnitSelected )
 		{
-			foreach( tile; getInRange( _tiles[ selectedUnit.x ][ selectedUnit.y ], selectedUnit.speed ) )
-			{
-				tile.selection = TileSelection.None;
-			}
-			
+			selectedUnit.deselect();
 			selectedUnit = null;
 			isUnitSelected = false;
 		}
+	}
+	
+	
+	/// Get a tile by ID
+	shared(Tile) getTileByID( uint tileID )
+	{
+		return tiles[ tileID % gridX ][ tileID / gridX ];
 	}
 	
 	/// Find all tiles in a range
