@@ -49,7 +49,7 @@ public:
 		// create a camera
 		level.camera = level[ "Camera" ].camera;
 
-		serverConn = Connection.open( "127.0.0.1", false, ConnectionType.TCP );
+		serverConn = Connection.open( "129.21.82.25", false, ConnectionType.TCP );
 		serverConn.onReceiveData!string ~= msg => logInfo( "New Message: ", msg );
 		serverConn.send!string( "Testing Butts", ConnectionType.TCP );
 		
@@ -63,7 +63,14 @@ public:
 	override void onUpdate()
 	{
 		//ui.update();
-		serverConn.update();
+		try
+		{
+			serverConn.update();
+		}
+		catch
+		{
+			logInfo( "Connection lost." );
+		}
 	}
 	
 	override void onDraw()
