@@ -2,6 +2,7 @@ module game;
 import controller, grid, turn;
 
 import core, graphics, components, utility;
+import speed;
 
 // An easier way to access the game instance
 @property RobotGhosts Game()
@@ -16,6 +17,7 @@ public:
 	Scene level; // The active scene in the engine
 	Grid grid; // The grid in the level
 	Turn turn; // The turn controller
+	Connection serverConn;
 	
 	// Name that game
 	@property override string title()
@@ -46,6 +48,10 @@ public:
 		
 		// create a camera
 		level.camera = level[ "Camera" ].camera;
+
+		serverConn = Connection.open( "127.0.0.1", false, ConnectionType.TCP );
+		serverConn.onReceiveData!string ~= msg => logInfo( "New Message: ", msg );
+		serverConn.send!string( "Testing Butts", ConnectionType.TCP );
 		
 		// create the ui
 		/*ui = new shared UserInterface( Config.get!uint( "Display.Width" ),
@@ -57,6 +63,7 @@ public:
 	override void onUpdate()
 	{
 		//ui.update();
+		serverConn.update();
 	}
 	
 	override void onDraw()
@@ -67,6 +74,7 @@ public:
 	override void onShutdown()
 	{
 		logInfo( "Shutting down..." );
+		serverConn.close();
 	}
 	
 	override void onSaveState()

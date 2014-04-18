@@ -16,7 +16,8 @@
 		"Colden Cullen"
 	],
 	"dependencies": {
-		"dash": "~master"
+		"dash": "~master",
+		"speed:common": "~master"
 	},
 	"sourcePaths": [ 
 		"Config/",
@@ -35,5 +36,20 @@
 		"Awesomium",
 		"gdi32", "ole32", "kernel32",
 		"user32", "comctl32", "comdlg32"
+	],
+
+	"subPackages": [
+		{
+			"name": "server",
+			"importPaths": [ "Scripts/" ],
+			"sourcePaths": [ "Scripts/network" ],
+			"mainSourceFile": "Scripts/network/server.d",
+			"targetType": "executable",
+			"versions": [ "Server" ],
+			"dependencies": {
+				"speed:common": "~master",
+				"speed:server": "~master"	
+			}
+		}
 	]
 }
