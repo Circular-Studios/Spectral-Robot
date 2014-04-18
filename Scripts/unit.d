@@ -1,5 +1,5 @@
 ﻿module unit;
-import game, ability, grid, tile;
+import game, ability, grid, tile, turn;
 import core, utility, components;
 import std.math;
 
@@ -87,6 +87,8 @@ public:
 		{
 			tile.selection = TileSelection.Blue;
 		}
+
+		Game.turn.sendAction( Action( 1, ID, this.position, false ) );
 	}
 	
 	/// Remove focus from the unit and any highlighted tiles

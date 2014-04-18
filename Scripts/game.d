@@ -17,7 +17,7 @@ public:
 	Scene level; // The active scene in the engine
 	Grid grid; // The grid in the level
 	Turn turn; // The turn controller
-	Connection serverConn;
+	Connection serverConn; // the server connection 
 	
 	// Name that game
 	@property override string title()
@@ -34,6 +34,7 @@ public:
 		Input.addKeyDownEvent( Keyboard.F5, ( uint kc ) { currentState = EngineState.Reset; } );
 		
 		// initalize stuff
+		connect();
 		level = new shared Scene();
 		this.activeScene = level;
 		turn = new shared Turn();
