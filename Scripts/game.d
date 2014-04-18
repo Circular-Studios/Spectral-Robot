@@ -89,7 +89,8 @@ public:
 	override void onShutdown()
 	{
 		logInfo( "Shutting down..." );
-		serverConn.close();
+		if( serverConn )
+			serverConn.close();
 	}
 	
 	override void onSaveState()
