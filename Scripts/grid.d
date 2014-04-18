@@ -23,6 +23,7 @@ public:
 	mixin( Property!( _gridX, AccessModifier.Public ) );
 	mixin( Property!( _gridY, AccessModifier.Public ) );
 
+	// Setup left mouse click
 	this()
 	{
 		Input.addKeyDownEvent( Keyboard.MouseLeft, ( kc )
@@ -30,13 +31,29 @@ public:
 			if( auto obj = Input.mouseObject )
 			{
 				logInfo( "Clicked on ", obj.name );
-				
-				// check if object is a unit
-				if ( auto unit = cast(shared Unit)obj )
+
+				// If unit is selected and a tile is clicked, move if possible
+				if( auto tile = cast(shared Tile)obj )
 				{
-					selectedUnit = unit;
-					isUnitSelected = true;
-					unit.previewMove();
+					if( isUnitSelected && selectedUnit.checkMove( tile.toID() ) )
+					{
+						// move the unit to the new location
+						selectedUnit.move( tile.toID() );
+					}
+				}
+				else
+				{
+					// Deselect a unit if not a tile
+					if( isUnitSelected )
+						selectedUnit.deselect();
+
+					// Select a unit
+					if( auto unit = cast(shared Unit)obj )
+					{
+						selectedUnit = unit;
+						isUnitSelected = true;
+						unit.previewMove();
+					}
 				}
 			}
 		} );
@@ -56,24 +73,7 @@ public:
 	
 	override void onUpdate()
 	{
-		// Place a selected unit
-		if( Input.getState( "Enter", true ) && isUnitSelected  && tiles[ sel.x ][ sel.y ].type == TileType.Open )
-		{
-			// change the tile types
-			tiles[ selectedUnit.x ][ selectedUnit.y ].type = TileType.Open;
-			tiles[ sel.x ][ sel.y ].type = TileType.HalfBlocked;
-			
-			// move the unit to the new location
-			selectedUnit.move( tiles[ sel.x ][ sel.y ].toID() );
-		}
-		
-		// Deselect a unit
-		if( Input.getState( "Back", true ) && isUnitSelected )
-		{
-			selectedUnit.deselect();
-			selectedUnit = null;
-			isUnitSelected = false;
-		}
+
 	}
 	
 	

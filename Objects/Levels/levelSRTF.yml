@@ -4,7 +4,7 @@ Grid: [24, 24]
 FogOfWar: No
 Units:
     - Name: Werewolf1
-      Spawn: [12, 23]
+      Spawn: [5, 21]
       Rotation: !Vector3 0 180 0
       Team: 1
     - Name: Robot1
