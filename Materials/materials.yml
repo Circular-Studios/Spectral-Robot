@@ -24,6 +24,11 @@ Diffuse: highlight_red_d
 Normal: flat_n
 Specular: flat_s
 ---
+Name: HighlightBlack
+Diffuse: highlight_black_d
+Normal: flat_n
+Specular: flat_s
+---
 Name: Werewolf
 Diffuse: werewolf_d
 Normal: werewolf_n

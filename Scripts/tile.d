@@ -16,6 +16,7 @@ enum TileSelection
 	None,
 	Blue,
 	Red,
+	Black,
 }
 
 shared class Tile : GameObject
@@ -40,6 +41,9 @@ public:
 				break;
 			case TileSelection.Red:
 				this.material = Assets.get!Material( "HighlightRed" );
+				break;
+			case TileSelection.Black:
+				this.material = Assets.get!Material( "HighlightBlack" );
 		}
 		_selection = s;
 	}
@@ -55,7 +59,7 @@ public:
 				this.selection = TileSelection.Red;
 				break;
 			case TileType.FullyBlocked:
-				this.selection = TileSelection.Red;
+				this.selection = TileSelection.Black;
 		}
 		_type = t;
 	}
