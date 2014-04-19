@@ -1,5 +1,5 @@
 module grid;
-import game, controller, tile, unit, turn;
+import game, controller, tile, unit, turn, action;
 import core, utility, components;
 import gl3n.linalg;
 import std.conv;
