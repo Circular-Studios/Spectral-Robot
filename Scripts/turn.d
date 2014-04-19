@@ -3,14 +3,7 @@ import core, utility;
 import game, ability, unit;
 import speed;
 
-struct Action
-{
-public:
-	uint actionID;
-	uint originID;
-	uint targetID;
-	bool saveToDatabase;
-}
+import action;
 
 shared class Turn
 {
