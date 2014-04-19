@@ -1,13 +1,13 @@
 ---
 name: "Attack"
-targetType: "Enemy Unit"
-targetArea: "Radial"
+targetType: EnemyUnit
+targetArea: Radial
 range: 1
 damage: 1
 ---
 name: "Incinerate"
-targetType: "Enemy Unit"
-targetArea: "Single"
+targetType: EnemyUnit
+targetArea: Single
 range: 3
 damage: 2
 damageType: DOT
@@ -15,16 +15,16 @@ duration: 3
 cooldown: 3
 ---
 name: "Fire Ball"
-targetType: "Enemy Unit"
-targetArea: "Single"
+targetType: EnemyUnit
+targetArea: Single
 range: 2
 damage: 4
 duration: 3
 cooldown: 3
 ---
 name: "Nova"
-targetType: "Self"
-targetArea: "Moving Radial"
+targetType: Self
+targetArea: MovingRadial
 range: 1
 damage:  6
 damageType: DOT
@@ -32,25 +32,25 @@ duration: 2
 cooldown: 5
 ---
 name: "Shield"
-targetType: "Self"
-targetArea: "Single"
+targetType: Self
+targetArea: Single
 damage:  10
-damageType: "Reduce"
+damageType: Reduce
 cooldown: 3
 ---
 name: "Mark of Flame"
-targetType: "Enemy Unit"
-targetArea: "Single"
+targetType: EnemyUnit
+targetArea: Single
 range: 4
 damage:  2
-damageType: "Modifier"
+damageType: Modifier
 duration: 2
 cooldown: 3
 ---
 name: "Heat Death"
-targetType: "Enemy Unit"
-targetArea: "Single"
+targetType: EnemyUnit
+targetArea: Single
 range: 3
 damage:  4
-damageType: "Life Steal"
+damageType: LifeSteal
 cooldown: 3
