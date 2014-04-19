@@ -1,46 +1,46 @@
 ---
 name: "Attack"
-targetType: "Enemy Unit"
-targetArea: "Radial"
+targetType: EnemyUnit
+targetArea: Radial
 range: 1
 damage: 1
 ---
 name: "Healing Barage"
-targetType: "Allied Unit"
-targetArea: "Single"
+targetType: AlliedUnit
+targetArea: Single
 range: 4
 damage: 6
 damageType: "Healing"
 cooldown: 2
 ---
 name: "Flank"
-targetType: "Enemy Unit"
-targetArea: "Single"
+targetType: EnemyUnit
+targetArea: Single
 range: 8
 damage: 1
 cooldown: 2
 ---
 name: "Cannon Shot"
-targetType: "Enemy Unit"
-targetArea: "Radial"
+targetType: EnemyUni"
+targetArea: Radial
 range: 5
 damage: 9
 cooldown: 5
 ---
 name: "Rapid Fire"
-targetType: "Enemy Unit"
-targetArea: "Single"
+targetType: EnemyUnit
+targetArea: Single
 range: 3
 damage: 3
-damageType: "DOT"
+damageType: DOT
 cooldown: 4
 duration: 3
 ---
 name: "Suppress"
-targetType: "Enemy Unit"
-targetArea: "Single"
+targetType: EnemyUnit
+targetArea: Single
 range: 5
 damage: 5
-damageType: "Debuff"
-statEffected: "Accuracy"
+damageType: Debuff
+statEffected: Accuracy
 cooldown: 5
