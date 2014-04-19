@@ -64,10 +64,10 @@ public:
 	{
 		if( serverConn )
 			serverConn.close();
-		serverConn = Connection.open( "129.21.82.25", false, ConnectionType.TCP );
+		serverConn = Connection.open( "127.0.0.1", false, ConnectionType.TCP );
 		serverConn.onReceiveData!string ~= msg => logInfo( "Server Message: ", msg );
 		serverConn.onReceiveData!Action ~= action => turn.doAction( action );
-		serverConn.send!string( "New connection.", ConnectionType.TCP );
+		serverConn.send!string( "ready", ConnectionType.TCP );
 	}
 	
 	override void onUpdate()
