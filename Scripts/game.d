@@ -76,9 +76,9 @@ public:
 			if( serverConn )
 				serverConn.update();
 		}
-		catch
+		catch( Exception e )
 		{
-			logInfo( "Connection lost." );
+			logInfo( "Error: ", e.msg );
 		}
 	}
 	

@@ -85,6 +85,7 @@ final shared class Controller
 			if ( rotation )
 				unit.transform.rotation = rotation;
 			Game.level.addChild( unit );
+			Game.turn.units ~= unit;
 			Game.grid.tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].type = TileType.HalfBlocked;
 		}
 	}
