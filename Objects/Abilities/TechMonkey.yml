@@ -4,7 +4,6 @@ targetType: EnemyUnit
 targetArea: Radial
 range: 1
 damage: 1
-cooldown: 0
 accuracy: 14
 ---
 name: "Discharge Grenade"
@@ -18,7 +17,6 @@ accuracy: 12
 name: "Automated Aiming System"
 targetType: Tile
 targetArea: Single
-range: 0
 damageType: Buff
 statEffected: Accuracy
 cooldown: 2
@@ -27,7 +25,6 @@ accuracy: 10
 name: "Overload"
 targetType: Tile
 targetArea: Single
-range: 0
 damageType: Buff
 cooldown: 4
 accuracy: 15
@@ -36,7 +33,6 @@ name: "Summon Turret"
 targetType: Tile
 targetArea: Single
 range: 4
-damage: 0
 cooldown: 2
 ---
 name: "Turret Shot"
@@ -45,11 +41,9 @@ targetArea: Single
 range: 2
 damage: 2
 damageType: Direct
-cooldown: 0
 ---
 name: "Detonate"
 targetType: AlliedUnit
 targetArea: Radial
 range: 2
 damage: 6
-cooldown: 0
