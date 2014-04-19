@@ -29,7 +29,7 @@ final shared class Controller
 		foreach( Node abilityNode; yaml )
 		{
 			auto ability = Config.getObject!(shared Ability)( abilityNode );
-			Game.turn.abilities[ ability.ID ] = ability;
+			Game.abilities[ ability.ID ] = ability;
 			abilityIDs ~= ability.ID;
 		}
 		
@@ -85,7 +85,7 @@ final shared class Controller
 			if ( rotation )
 				unit.transform.rotation = rotation;
 			Game.level.addChild( unit );
-			Game.turn.units ~= unit;
+			Game.units ~= unit;
 			Game.grid.tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].type = TileType.HalfBlocked;
 		}
 	}
@@ -139,7 +139,7 @@ final shared class Controller
 		foreach( Node propNode; propsNode )
 		{
 			// setup variables
-			int[] loc;
+			int[] loc, tileSize;
 			string name, prefab, ttype;
 			TileType tileType;
 			shared vec3 rotationVec;
@@ -148,6 +148,7 @@ final shared class Controller
 			// get the variables from the node
 			Config.tryGet( "Location", loc, propNode );
 			Config.tryGet( "Prefab", prefab, propNode );
+			Config.tryGet( "TileSize", tileSize, propNode );
 			if( Config.tryGet( "TileType", ttype, propNode ) )
 				tileType = to!TileType( ttype );
 			if( Config.tryGet( "Rotation", rotationVec, propNode ) )
@@ -171,7 +172,7 @@ final shared class Controller
 					auto prop = Prefabs[ prefab ].createInstance( parents, children );
 					
 					// make the name unique
-					prop.name = prefab ~ x.to!string ~ "-" ~ y.to!string;
+					prop.name = prefab ~ " ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )";
 					
 					// place the prop
 					prop.transform.position.x = x * TILE_SIZE;

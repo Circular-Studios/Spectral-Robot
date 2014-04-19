@@ -1,6 +1,5 @@
 module game;
-import controller, grid, turn, action;
-
+import controller, grid, turn, action, ability, unit;
 import core, graphics, components, utility;
 import speed;
 
@@ -10,6 +9,7 @@ import speed;
 	return cast(RobotGhosts)DGame.instance;
 }
 
+/// The base game class
 shared class RobotGhosts : DGame
 {
 public:
@@ -17,7 +17,9 @@ public:
 	Scene level; // The active scene in the engine
 	Grid grid; // The grid in the level
 	Turn turn; // The turn controller
-	Connection serverConn; // the server connection 
+	Ability[ uint ] abilities; // The abilities
+	Unit[] units; // The units
+	Connection serverConn; // the server connection
 	
 	// Name that game
 	@property override string title()

@@ -1,12 +1,20 @@
 ﻿module ability;
 import core, grid, utility;
 
+enum DamageType
+{
+	Buff,
+	Debuff,
+	Healing,
+	DOT, // damage over time
+	Modifier,
+}
 
 enum TargetType
 {
 	EnemyUnit,
 	AlliedUnit,
-	Ground,
+	Tile,
 	Space,
 	UndeadUnit,
 	Self,
@@ -22,6 +30,12 @@ enum TargetArea
 	MovingRadial,
 }
 
+enum statEffected
+{
+	Accuracy,
+	Turn, // deplete the actions left on a unit
+}
+
 shared class Ability
 {
 private:
@@ -32,6 +46,8 @@ private:
 	int _damage;
 	int _range;
 	int _cooldown;
+	int _duration;
+	int _accuracy;
 	int _currentCooldown;
 	
 	/// Highlight the tiles that the ability can effect
@@ -57,29 +73,23 @@ public:
 	mixin( Property!( _damage, AccessModifier.Public ) );
 	mixin( Property!( _range, AccessModifier.Public ) );
 	mixin( Property!( _cooldown, AccessModifier.Public ) );
+	mixin( Property!( _duration, AccessModifier.Public ) );
+	mixin( Property!( _accuracy, AccessModifier.Public ) );
 	
-	this ()
+	this()
 	{
 		ID = nextID++;
-		
-		// REMOVE: this is a highlighting test
-		if( ID == 0 )
-		{
-			Input.addKeyDownEvent( Keyboard.F9, ( uint kc ) { preview( 2, 2 ); } );
-		}
+		_currentCooldown = 0;
 	}
 
-	void init( string name, TargetType ttype, TargetArea tarea, int damage, int range, int cooldown )
+	/// Use the ability
+	bool use( uint originID, uint targetID )
 	{
-		_currentCooldown = 0;
-		_name = name;
-		_targetType = ttype;
-		_targetArea = tarea;
-		_damage = damage;
-		_range = range;
-		_cooldown = cooldown;
+		_currentCooldown = cooldown;
+		return true;
 	}
-	
+
+	/// Preview the ability
 	void preview( int x, int y )
 	{
 		highlight( x, y, true );
@@ -88,11 +98,5 @@ public:
 	void unpreview()
 	{
 		
-	}
-	
-	/// Use the ability
-	void use( uint originID, uint targetID )
-	{
-		_currentCooldown = _cooldown;
 	}
 }

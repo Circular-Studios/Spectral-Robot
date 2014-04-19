@@ -10,8 +10,6 @@ shared class Turn
 public:
 	Action[] lastTurn; // Gets cleared after a turn
 	Action[] currentTurn; // Gets populated as the user makes actions
-	Ability[ uint ] abilities; // The abilities
-	Unit[] units; // The units
 
 	/// Recieve actions from the server
 	this()
@@ -26,16 +24,16 @@ public:
 		// Move a unit
 		if( action.actionID == 0 )
 		{
-			units[ action.originID ].move( action.targetID );
+			Game.units[ action.originID ].move( action.targetID );
 		}
 		// Preview move for a unit
 		else if( action.actionID == 1 )
 		{
-			units[ action.originID ].previewMove();
+			Game.units[ action.originID ].previewMove();
 		}
 		else
 		{
-			abilities[ action.actionID ].use( action.originID, action.targetID );
+			Game.abilities[ action.actionID ].use( action.originID, action.targetID );
 		}
 	}
 

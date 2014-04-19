@@ -52,6 +52,14 @@ public:
 		_abilities = cast(shared uint[])abilities;
 		updatePosition();
 	}
+
+	bool useAbility( uint abilityID, uint targetID )
+	{
+		if ( abilities[ abilityID ] )
+			return Game.abilities[ abilityID ].use( this.ID, targetID );
+		else
+			return false;
+	}
 	
 	/// Move the unit to a tile
 	void move( uint targetTileID )

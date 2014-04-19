@@ -147,6 +147,9 @@ public:
 			
 			tile.x = x;
 			tile.y = y;
+
+			// make the name unique
+			tile.name = "Tile ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )";
 			
 			this.addChild( tile );
 			tiles[ x ][ y ] = tile;
