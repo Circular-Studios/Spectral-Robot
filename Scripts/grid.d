@@ -1,5 +1,5 @@
 module grid;
-import game, controller, tile, unit;
+import game, controller, tile, unit, turn, action;
 import core, utility, components;
 import gl3n.linalg;
 import std.conv;
@@ -38,6 +38,7 @@ public:
 					if( isUnitSelected && selectedUnit.checkMove( tile.toID() ) )
 					{
 						// move the unit to the new location
+						Game.turn.sendAction( Action( 0, selectedUnit.ID, tile.toID(), true ) );
 						selectedUnit.move( tile.toID() );
 					}
 				}
@@ -53,6 +54,7 @@ public:
 						selectedUnit = unit;
 						isUnitSelected = true;
 						unit.previewMove();
+						Game.turn.sendAction( Action( 1, unit.ID, unit.position, false ) );
 					}
 				}
 			}

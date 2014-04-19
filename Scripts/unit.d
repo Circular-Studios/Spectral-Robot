@@ -1,5 +1,5 @@
 ﻿module unit;
-import game, ability, grid, tile;
+import game, ability, grid, tile, turn;
 import core, utility, components;
 import std.math;
 
