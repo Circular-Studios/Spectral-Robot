@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+    <head>
+		<meta charset="UTF-8" />
+        <title>SRTF - Credits Menu</title>
+		<meta name="author" content="Derrick Hunt" />
+		
+		<link rel="stylesheet" type="text/css" href="normalize.css" />
+		<link rel="stylesheet" type="text/css" href="creditsMenu_style.css" />
+		
+		<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    </head>
+    <body>
+		<h1>CREDITS</h1>
+		
+		<div class="col">
+			<div class="creditBar">
+				Derrick Hunt<br>
+				<b>PROJECT MANAGER & UI DESIGNER</b>
+			</div>
+			
+			<div class="creditBar">
+				Daniel Jost<br>
+				<b>GAME PRODUCER <br>& PROGRAMMER</b>
+			</div>
+			
+			<div class="creditBar">
+				Mclean O.<br>
+				<b>CREATIVE DIRECTOR & GAME DESIGNER</b>
+			</div>
+			
+			<div class="creditBar">
+				Nicholas Cote<br>
+				<b>ASSOCIATE GAME DESIGNER</b>
+			</div>
+			
+			<div class="creditBar">
+				Shivam Rawal<br>
+				<b>LEVEL DESIGNER</b><br><br>
+			</div>
+		</div>
+		
+		<div class="col">
+			<div class="creditBar">
+				Tristan Meere<br>
+				<b>ENVIRONMENTAL ARTIST</b>
+			</div>
+			
+			<div class="creditBar">
+				Jayson Fitch<br>
+				<b>CHARACTER ARTIST</b><br><br>
+			</div>
+			
+			<div class="creditBar">
+				Brenna Coleman<br>
+				<b>CONCEPT ARTIST & ANIMATOR</b>
+			</div>
+			
+			<div class="creditBar">
+				Tyler Wozniak<br>
+				<b>ENGINE PRODUCER & GRAPHICS ENGINEER</b>
+			</div>
+			
+			<div class="creditBar">
+				Brandon Littell<br>
+				<b>UI ENGINEER</b>
+			</div>
+		</div>
+		
+		<div class="col">
+			<div class="creditBar">
+				Eric Christenson<br>
+				<b>GRAPHICS ENGINEER</b><br><br>
+			</div>
+			
+			<div class="creditBar">
+				Tim Reynolds<br>
+				<b>ANIMATION ENGINEER</b><br>
+			</div>
+			
+			<div class="creditBar">
+				Sean Brennan<br>
+				<b>NETWORKING ENGINEER</b><br>
+			</div>
+			
+			<div class="creditBar">
+				Colden Cullen<br>
+				<b>CORE SYSTEMS & NETWORKING ENGINEER</b>
+			</div>
+		</div>
+		
+		<div class="col_short">
+			<div class="creditBar">
+				Proudly powered by<br>
+				<b>DASH ENGINE</b><br><br>
+			</div>
+			
+			<div class="creditBar">
+				<b>&copy; CIRCULAR STUDIOS</b>
+			</div>
+		</div>
+		
+		<button id="b1">MAIN MENU</button>
+		
+		<audio id="cancel" src="cancel.wav" type="audio/wav"</audio>
+		
+		 <script>
+		//Button functions
+		$(document).ready(function(){
+			var menuFadeSpd = 500;
+			$('h1').fadeIn(menuFadeSpd);
+			$('h2').fadeIn(menuFadeSpd);
+			$('h3').fadeIn(menuFadeSpd);
+			$('#b1').fadeIn(menuFadeSpd);
+			
+			$('#b1').click(function(){ //main menu button
+				console.log("main menu button clicked");
+				$('#cancel').get(0).play();
+				setTimeout('window.location.href="mainMenu.html"', 400);
+			});
+		});
+		</script>
+    </body>
+</html>
