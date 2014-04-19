@@ -1,5 +1,5 @@
 module game;
-import controller, grid, turn;
+import controller, grid, turn, action;
 
 import core, graphics, components, utility;
 import speed;
@@ -34,7 +34,6 @@ public:
 		Input.addKeyDownEvent( Keyboard.F5, ( uint kc ) { currentState = EngineState.Reset; } );
 		
 		// initalize stuff
-		connect();
 		level = new shared Scene();
 		this.activeScene = level;
 		turn = new shared Turn();
@@ -50,6 +49,7 @@ public:
 		// create a camera
 		level.camera = level[ "Camera" ].camera;
 
+		// bind 'r' to server connect
 		Input.addKeyDownEvent( Keyboard.R, kc => connect() );
 		
 		// create the ui
@@ -59,13 +59,15 @@ public:
 		 );*/
 	}
 
+	/// Connect to the server
 	void connect()
 	{
 		if( serverConn )
 			serverConn.close();
 		serverConn = Connection.open( "129.21.82.25", false, ConnectionType.TCP );
-		serverConn.onReceiveData!string ~= msg => logInfo( "New Message: ", msg );
-		serverConn.send!string( "Testing Butts", ConnectionType.TCP );
+		serverConn.onReceiveData!string ~= msg => logInfo( "Server Message: ", msg );
+		serverConn.onReceiveData!Action ~= action => turn.doAction( action );
+		serverConn.send!string( "New connection.", ConnectionType.TCP );
 	}
 	
 	override void onUpdate()

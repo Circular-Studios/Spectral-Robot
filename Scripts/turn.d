@@ -16,7 +16,7 @@ public:
 	/// Recieve actions from the server
 	this()
 	{
-		Game.serverConn.onReceiveData!Action ~= action => doAction( action );
+
 	}
 
 	/// Process an action
@@ -42,7 +42,11 @@ public:
 	/// Send an action to the server
 	void sendAction( Action action )
 	{
-		logInfo( "Action being sent ", action );
-		Game.serverConn.send!Action( action, ConnectionType.TCP );
+		// only send if we are connected to the server
+		if( Game.serverConn )
+		{
+			logInfo( "Action being sent ", action );
+			Game.serverConn.send!Action( action, ConnectionType.TCP );
+		}
 	}
 }
