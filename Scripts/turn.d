@@ -29,6 +29,7 @@ public:
 	/// Process an action
 	void doAction( Action action )
 	{
+		logInfo( "Action received ", action );
 		// Move a unit
 		if( action.actionID == 0 )
 		{
@@ -48,6 +49,7 @@ public:
 	/// Send an action to the server
 	void sendAction( Action action )
 	{
+		logInfo( "Action being sent ", action );
 		Game.serverConn.send!Action( action, ConnectionType.TCP );
 	}
 }
