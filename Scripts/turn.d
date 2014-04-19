@@ -22,13 +22,14 @@ public:
 	/// Process an action
 	void doAction( Action action )
 	{
+		logInfo( "Action received ", action );
 		// Move a unit
 		if( action.actionID == 0 )
 		{
 			units[ action.originID ].move( action.targetID );
 		}
 		// Preview move for a unit
-		if( action.actionID == 1 )
+		else if( action.actionID == 1 )
 		{
 			units[ action.originID ].previewMove();
 		}
@@ -41,6 +42,7 @@ public:
 	/// Send an action to the server
 	void sendAction( Action action )
 	{
+		logInfo( "Action being sent ", action );
 		Game.serverConn.send!Action( action, ConnectionType.TCP );
 	}
 }

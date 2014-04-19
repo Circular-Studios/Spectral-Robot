@@ -87,8 +87,6 @@ public:
 		{
 			tile.selection = TileSelection.Blue;
 		}
-
-		Game.turn.sendAction( Action( 1, ID, this.position, false ) );
 	}
 	
 	/// Remove focus from the unit and any highlighted tiles
