@@ -36,7 +36,7 @@ public:
 			units[ action.originID ].move( action.targetID );
 		}
 		// Preview move for a unit
-		if( action.actionID == 1 )
+		else if( action.actionID == 1 )
 		{
 			units[ action.originID ].previewMove();
 		}

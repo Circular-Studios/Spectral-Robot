@@ -38,7 +38,7 @@ public:
 					if( isUnitSelected && selectedUnit.checkMove( tile.toID() ) )
 					{
 						// move the unit to the new location
-						Game.turn.sendAction( Action( 0, selectedUnit.ID, selectedUnit.position, true ) );
+						Game.turn.sendAction( Action( 0, selectedUnit.ID, tile.toID(), true ) );
 						selectedUnit.move( tile.toID() );
 					}
 				}
