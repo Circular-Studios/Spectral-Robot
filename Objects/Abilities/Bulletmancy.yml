@@ -10,7 +10,7 @@ targetType: AlliedUnit
 targetArea: Single
 range: 4
 damage: 6
-damageType: "Healing"
+damageType: Healing
 cooldown: 2
 ---
 name: "Flank"
@@ -21,7 +21,7 @@ damage: 1
 cooldown: 2
 ---
 name: "Cannon Shot"
-targetType: EnemyUni"
+targetType: EnemyUnit
 targetArea: Radial
 range: 5
 damage: 9

@@ -23,7 +23,7 @@ duration: 3
 cooldown: 3
 ---
 name: "Nova"
-targetType: Self
+targetType: Tile
 targetArea: MovingRadial
 range: 1
 damage:  6
@@ -32,7 +32,7 @@ duration: 2
 cooldown: 5
 ---
 name: "Shield"
-targetType: Self
+targetType: Tile
 targetArea: Single
 damage:  10
 damageType: Reduce
