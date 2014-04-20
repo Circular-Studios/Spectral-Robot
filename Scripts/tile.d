@@ -104,7 +104,6 @@ public:
 	{
 		this._type = TileType.Open;
 		this._selection = TileSelection.None;
-		this.transform.scale = vec3( TILE_SIZE / 2 );
 	}
 	
 	uint toID()

@@ -9,6 +9,11 @@ Diffuse: Poop
 Normal: gray_n
 Specular: flat_s
 ---
+Name: MarbleFloor
+Diffuse: marble_d
+Normal: marble_n
+Specular: marble_s
+---
 Name: TileDefault
 Diffuse: tiledefault_d
 Normal: flat_n
