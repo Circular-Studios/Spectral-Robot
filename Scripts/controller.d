@@ -86,7 +86,10 @@ final shared class Controller
 				unit.transform.rotation = rotation;
 			Game.level.addChild( unit );
 			Game.units ~= unit;
+
+			// block and occupy the spawn tile
 			Game.grid.tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].type = TileType.HalfBlocked;
+			Game.grid.tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].occupant = unit;
 		}
 	}
 	

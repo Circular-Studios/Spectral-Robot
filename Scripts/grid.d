@@ -92,13 +92,10 @@ public:
 		import std.typecons;
 		alias Tuple!( shared Tile, "tile", uint, "depth" ) searchState;
 		alias Tuple!( int, "x", int, "y" ) point;
-		
-		// Keeps track of what tiles have been added already.
-		auto visited = new bool[][]( gridX, gridY );
-		// Queue of states to sort through.
-		searchState[] states;
-		// Tiles inside the range.
-		shared Tile[] foundTiles;
+
+		auto visited = new bool[][]( gridX, gridY ); // Keeps track of what tiles have been added already.
+		searchState[] states; // Queue of states to sort through.
+		shared Tile[] foundTiles; // Tiles inside the range.
 		
 		// Start with initial tile.
 		states ~= searchState( startingTile, 0 );

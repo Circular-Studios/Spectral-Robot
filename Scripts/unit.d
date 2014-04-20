@@ -70,6 +70,10 @@ public:
 			Game.grid.getTileByID( position ).type = TileType.Open;
 			Game.grid.getTileByID( targetTileID ).type = TileType.HalfBlocked;
 
+			// change the tile occupants
+			Game.grid.getTileByID( position ).occupant = null;
+			Game.grid.getTileByID( targetTileID ).occupant = this;
+
 			// move the unit to the new location
 			position = targetTileID;
 			updatePosition();
