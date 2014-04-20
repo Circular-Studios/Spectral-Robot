@@ -78,7 +78,7 @@ final shared class Controller
 			Config.tryGet( "Attack", at, unitNode );
 			Config.tryGet( "Defense", df, unitNode );
 			Config.tryGet( "Abilities", abilities, unitNode );
-
+			
 			
 			// initialize the unit and add it to the active scene
 			unit.init( toTileID( spawn [ 0 ], spawn[ 1 ] ), team, hp, sp, at, df, loadAbilities( abilities ) );
@@ -139,7 +139,8 @@ final shared class Controller
 		foreach( Node propNode; propsNode )
 		{
 			// setup variables
-			int[] loc, tileSize;
+			int[] loc;
+			int[] tileSize;
 			string name, prefab, ttype;
 			TileType tileType;
 			shared vec3 rotationVec;
@@ -161,10 +162,14 @@ final shared class Controller
 				loc ~= loc[ 1 ];
 			}
 			
+			// default values for tileSize if not in the yaml
+			if ( !tileSize )
+				tileSize = [ 1, 1 ];
+			
 			// create a prop on each tile it occupies
-			for( int x = loc[ 0 ]; x <= loc[ 2 ]; x++ )
+			for( int x = loc[ 0 ]; x <= loc[ 2 ]; x += tileSize[ 0 ] )
 			{
-				for( int y = loc[ 1 ]; y <= loc[ 3 ]; y++ )
+				for( int y = loc[ 1 ]; y <= loc[ 3 ]; y += tileSize[ 1 ] )
 				{
 					// instantiate the prefab of a prop
 					string[ shared GameObject ] parents;
@@ -175,8 +180,8 @@ final shared class Controller
 					prop.name = prefab ~ " ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )";
 					
 					// place the prop
-					prop.transform.position.x = x * TILE_SIZE;
-					prop.transform.position.z = y * TILE_SIZE;
+					prop.transform.position.x = x * TILE_SIZE + ( tileSize[ 0 ] - 1 ) * 0.5;
+					prop.transform.position.z = y * TILE_SIZE + ( tileSize[ 1 ] - 1 ) * 0.5;
 					if( rotation )
 						prop.transform.rotation = rotation;
 					
@@ -184,7 +189,9 @@ final shared class Controller
 					Game.level.addChild( prop );
 					
 					// change the TileType of occupying tiles
-					Game.grid.tiles[ x ][ y ].type = tileType;
+					for ( int xx = x; xx < x + tileSize[ 0 ]; xx++ )
+						for ( int yy = y; yy < y + tileSize[ 1 ]; yy++ )
+							Game.grid.tiles[ xx ][ yy ].type = tileType;
 				}
 			}
 		}
