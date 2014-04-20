@@ -13,14 +13,14 @@ Units:
 Objects:
     - Prefab: Wall
       Location: [0, 1, 0, 22]
-	  TileSize: [1,2]
-	  Rotation: !Vector3 -90 0 0
+      TileSize: [1, 2]
+      Rotation: !Vector3 -90 0 0
       TileType: FullyBlocked
 
     - Prefab: Wall
       Location: [23, 1, 23, 22]
-	  TileSize: [1,2]
-	  Rotation: !Vector3 90 0 0
+      TileSize: [1, 2]
+      Rotation: !Vector3 90 0 0
       TileType: FullyBlocked
 
     - Prefab: Pillar
