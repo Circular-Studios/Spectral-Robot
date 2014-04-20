@@ -1,6 +1,7 @@
 ﻿module unit;
 import game, ability, grid, tile, turn;
 import core, utility, components;
+import gl3n.linalg, gl3n.interpolate;
 import std.math;
 
 shared class Unit : GameObject
@@ -70,6 +71,9 @@ public:
 			Game.grid.getTileByID( position ).type = TileType.Open;
 			Game.grid.getTileByID( targetTileID ).type = TileType.HalfBlocked;
 
+			// scale the tile back down
+			Game.grid.getTileByID( position ).transform.scale = vec3( TILE_SIZE / 3 );
+
 			// change the tile occupants
 			Game.grid.getTileByID( position ).occupant = null;
 			Game.grid.getTileByID( targetTileID ).occupant = this;
@@ -99,6 +103,16 @@ public:
 		{
 			tile.selection = TileSelection.Blue;
 		}
+
+		// scale the selected unit's tile
+		auto startTime = Time.totalTime;
+		auto dur = 100.msecs;
+		scheduleTimedTask(
+		{
+			Game.grid.getTileByID( position ).transform.scale = 
+				interp( shared vec3( TILE_SIZE / 3 ), shared vec3( TILE_SIZE / 2 ), 
+				      ( Time.totalTime - startTime ) / dur.toSeconds );
+		}, dur );
 	}
 	
 	/// Remove focus from the unit and any highlighted tiles
@@ -109,6 +123,9 @@ public:
 		{
 			tile.resetSelection();
 		}
+
+		// scale the tile back down
+		Game.grid.getTileByID( position ).transform.scale = vec3( TILE_SIZE / 3 );
 
 		// Modify grid variables
 		Game.grid.selectedUnit = null;
