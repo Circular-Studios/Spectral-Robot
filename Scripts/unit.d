@@ -7,12 +7,14 @@ shared class Unit : GameObject
 {
 private:
 	static uint nextID = 0;
+	const int ACTIONS_RESET = 3;
 	int _hp;
 	int _speed;
 	int _attack;
 	int _defense;
 	uint _position;
 	int _team;
+	int _remainingActions;
 	uint[] _abilities;
 	Tile[] selectedTiles;
 	
@@ -39,8 +41,10 @@ public:
 	this()
 	{
 		ID = nextID++;
+		_remainingActions = ACTIONS_RESET;
 	}
 	
+	/// Initialize a unit
 	void init( uint position, int team, int hp, int sp, int at, int df, uint[] abilities )
 	{
 		_position = position;
@@ -52,11 +56,18 @@ public:
 		_abilities = cast(shared uint[])abilities;
 		updatePosition();
 	}
-
+	
+	/// Use an ability
 	bool useAbility( uint abilityID, uint targetID )
 	{
-		if ( abilities[ abilityID ] )
-			return Game.abilities[ abilityID ].use( this.ID, targetID );
+		if( _remainingActions > 0 && abilities[ abilityID ] )
+		{
+			if( Game.abilities[ abilityID ].use( this.ID, targetID ) )
+			{
+				_remainingActions--;
+				return true;
+			}
+		}
 		else
 			return false;
 	}
@@ -69,7 +80,7 @@ public:
 			// change the tile types
 			Game.grid.getTileByID( position ).type = TileType.Open;
 			Game.grid.getTileByID( targetTileID ).type = TileType.HalfBlocked;
-
+			
 			// move the unit to the new location
 			position = targetTileID;
 			updatePosition();
@@ -105,7 +116,7 @@ public:
 		{
 			tile.resetSelection();
 		}
-
+		
 		// Modify grid variables
 		Game.grid.selectedUnit = null;
 		Game.grid.isUnitSelected = false;
