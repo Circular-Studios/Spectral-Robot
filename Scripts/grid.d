@@ -12,7 +12,9 @@ shared class Grid : GameObject
 private:
 	Tile[][] _tiles;
 	bool _isUnitSelected = false;
+	bool _isAbilitySelected = false;
 	Unit _selectedUnit;
+	uint _selectedAbility;
 	int _gridX, _gridY;
 	vec2i sel;
 	
@@ -20,6 +22,7 @@ public:
 	mixin( Property!( _tiles, AccessModifier.Public ) );
 	mixin( Property!( _isUnitSelected, AccessModifier.Public ) );
 	mixin( Property!( _selectedUnit, AccessModifier.Public ) );
+	mixin( Property!( _selectedAbility, AccessModifier.Public ) );
 	mixin( Property!( _gridX, AccessModifier.Public ) );
 	mixin( Property!( _gridY, AccessModifier.Public ) );
 
@@ -41,6 +44,7 @@ public:
 						Game.turn.sendAction( Action( 0, selectedUnit.ID, tile.toID(), true ) );
 						selectedUnit.move( tile.toID() );
 					}
+					// select a unit if the tile has an occupying unit
 					else if( !isUnitSelected && tile.occupant !is null )
 					{
 						selectedUnit = tile.occupant;
@@ -67,7 +71,7 @@ public:
 			}
 		} );
 
-		Input.addKeyDownEvent( Keyboard.Keyboard1, ( uint kc ) { if( _selectedUnit) _selectedUnit.useAbility( 1, 1 ); } );
+		Input.addKeyDownEvent( Keyboard.Keyboard1, ( uint kc ) { if( _selectedUnit) _selectedUnit.useAbility( _selectedUnit.abilities[0], 1 ); } );
 	}
 	
 	override void onDraw()
