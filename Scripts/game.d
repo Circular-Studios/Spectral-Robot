@@ -66,7 +66,7 @@ public:
 	{
 		if( serverConn )
 			serverConn.close();
-		serverConn = Connection.open( "129.21.82.25", false, ConnectionType.TCP );
+		serverConn = Connection.open( Config.get!string( "Game.ServerIP" ), false, ConnectionType.TCP );
 		serverConn.onReceiveData!string ~= msg => logInfo( "Server Message: ", msg );
 		serverConn.onReceiveData!Action ~= action => turn.doAction( action );
 		serverConn.send!string( "New connection.", ConnectionType.TCP );
