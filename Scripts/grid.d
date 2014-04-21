@@ -59,6 +59,8 @@ public:
 				}
 			}
 		} );
+
+		Input.addKeyDownEvent( Keyboard.Keyboard1, ( uint kc ) { if( _selectedUnit) _selectedUnit.useAbility( 1, 1 ); } );
 	}
 	
 	override void onDraw()
@@ -92,13 +94,10 @@ public:
 		import std.typecons;
 		alias Tuple!( shared Tile, "tile", uint, "depth" ) searchState;
 		alias Tuple!( int, "x", int, "y" ) point;
-		
-		// Keeps track of what tiles have been added already.
-		auto visited = new bool[][]( gridX, gridY );
-		// Queue of states to sort through.
-		searchState[] states;
-		// Tiles inside the range.
-		shared Tile[] foundTiles;
+
+		auto visited = new bool[][]( gridX, gridY ); // Keeps track of what tiles have been added already.
+		searchState[] states; // Queue of states to sort through.
+		shared Tile[] foundTiles; // Tiles inside the range.
 		
 		// Start with initial tile.
 		states ~= searchState( startingTile, 0 );
@@ -147,12 +146,35 @@ public:
 			
 			tile.x = x;
 			tile.y = y;
+			tile.transform.scale = vec3( TILE_SIZE / 3 );
 
 			// make the name unique
 			tile.name = "Tile ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )";
 			
 			this.addChild( tile );
 			tiles[ x ][ y ] = tile;
+		}
+
+		// Create the floor from a prefab and add it to the scene
+		// TODO: I'm so sorry I hardcoded, future programmer, it needed to be done at the time.
+		for( int i = 0; i < 9; i++ )
+		{
+			int x = i % 3;
+			int y = i / 3;
+			
+			string[ shared GameObject ] parents;
+			string[][ shared GameObject ] children;
+			auto floor = Prefabs[ "MarbleFloor" ].createInstance( parents, children );
+
+			floor.transform.position.x = x * TILE_SIZE * 8 + 35;
+			floor.transform.position.y = -0.3;
+			floor.transform.position.z = y * TILE_SIZE * 8 + 35;
+			floor.transform.scale = vec3( TILE_SIZE * 4 );
+			
+			// make the name unique
+			floor.name = "Floor ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )";
+			
+			this.addChild( floor );
 		}
 	}
 }

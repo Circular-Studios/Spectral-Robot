@@ -1,5 +1,6 @@
 ﻿module ability;
-import core, grid, utility;
+import core, utility;
+import game, grid, tile;
 
 enum DamageType
 {
@@ -8,6 +9,7 @@ enum DamageType
 	Healing,
 	DOT, // damage over time
 	Modifier,
+	LifeSteal,
 }
 
 enum TargetType
@@ -15,10 +17,6 @@ enum TargetType
 	EnemyUnit,
 	AlliedUnit,
 	Tile,
-	Space,
-	UndeadUnit,
-	Self,
-	TurretUnit,
 }
 
 enum TargetArea
@@ -48,20 +46,23 @@ private:
 	int _cooldown;
 	int _duration;
 	int _accuracy;
+
+	// only used in this class
 	int _currentCooldown;
+	//int _currentRange;
+	Tile[] _selectedTiles;
 	
 	/// Highlight the tiles that the ability can effect
-	void highlight( int x, int y, bool preview )
+	shared(Tile[]) highlight( uint originID, bool preview )
 	{
 		switch( _targetArea )
 		{
 			default:
-				break;
+				return null;
 			case TargetArea.Single:
-				break;
+				return Game.grid.getTileByID( originID ) ~ cast(shared Tile[])[];
 			case TargetArea.Radial:
-				//highlight( 1, 1, 3, 3, true );
-				break;
+				return Game.grid.getInRange( Game.grid.getTileByID( originID ), range );
 		}
 	}
 	
@@ -90,13 +91,18 @@ public:
 	}
 
 	/// Preview the ability
-	void preview( int x, int y )
+	void preview( uint originID )
 	{
-		highlight( x, y, true );
+		_selectedTiles = highlight( originID, true );
 	}
-	
+
+	// Unpreview the ability
 	void unpreview()
 	{
-		
+		// reset the tiles that were highlighted
+		foreach( tile; _selectedTiles )
+		{
+			tile.resetSelection();
+		}
 	}
 }

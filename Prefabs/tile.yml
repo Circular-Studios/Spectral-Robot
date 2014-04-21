@@ -6,3 +6,9 @@ Transform:
     Rotation: !Vector3 -90 0 0
 Mesh: unitsquare
 Material: TileDefault
+---
+Name: MarbleFloor
+Transform:
+    Rotation: !Vector3 -90 0 0
+Mesh: unitsquare
+Material: MarbleFloor
