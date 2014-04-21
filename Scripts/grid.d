@@ -41,6 +41,13 @@ public:
 						Game.turn.sendAction( Action( 0, selectedUnit.ID, tile.toID(), true ) );
 						selectedUnit.move( tile.toID() );
 					}
+					else if( !isUnitSelected && tile.occupant !is null )
+					{
+						selectedUnit = tile.occupant;
+						isUnitSelected = true;
+						selectedUnit.previewMove();
+						Game.turn.sendAction( Action( 1, selectedUnit.ID, selectedUnit.position, false ) );
+					}
 				}
 				else
 				{
