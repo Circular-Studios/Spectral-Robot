@@ -8,7 +8,7 @@ shared class Unit : GameObject
 {
 private:
 	static uint nextID = 0;
-	const int ACTIONS_RESET = 3;
+	enum ACTIONS_RESET = 3;
 	int _hp;
 	int _speed;
 	int _attack;
@@ -89,6 +89,9 @@ public:
 			// change the tile occupants
 			Game.grid.getTileByID( position ).occupant = null;
 			Game.grid.getTileByID( targetTileID ).occupant = this;
+
+			// decrement remaining actions
+			_remainingActions--;
 			
 			// move the unit to the new location
 			position = targetTileID;
@@ -102,7 +105,9 @@ public:
 	bool checkMove( uint targetTileID )
 	{
 		auto tile = Game.grid.getTileByID( targetTileID );
-		return tile.type == TileType.Open && speed > abs( ( tile.x - x ) ) + abs ( ( tile.y - y ) );
+		return _remainingActions > 0 &&
+				tile.type == TileType.Open &&
+				speed > abs( ( tile.x - x ) ) + abs ( ( tile.y - y ) );
 	}
 	
 	/// Highlight the tiles the unit can move to
