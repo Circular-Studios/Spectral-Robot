@@ -93,7 +93,14 @@ public:
 	/// Preview the ability
 	void preview( uint originID )
 	{
+		// get the tiles the ability can effect
 		_selectedTiles = highlight( originID, true );
+
+		// change the material of the tiles
+		foreach( tile; _selectedTiles )
+		{
+			tile.selection = TileSelection.Red;
+		}
 	}
 
 	// Unpreview the ability

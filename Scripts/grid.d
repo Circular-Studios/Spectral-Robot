@@ -70,8 +70,6 @@ public:
 				}
 			}
 		} );
-
-		Input.addKeyDownEvent( Keyboard.Keyboard1, ( uint kc ) { if( _selectedUnit) _selectedUnit.useAbility( _selectedUnit.abilities[0], 1 ); } );
 	}
 	
 	override void onDraw()
