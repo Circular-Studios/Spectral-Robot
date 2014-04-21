@@ -1,7 +1,7 @@
 ---
 Name: Camera
 Script:
-    ClassName: camera.Camera
+    ClassName: camera.AdvancedCamera
 Transform:
     Position: !Vector3 115 100 255
     Rotation: !Vector3 -45 0 0
