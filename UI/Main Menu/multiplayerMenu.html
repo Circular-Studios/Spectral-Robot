@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+		<meta charset="UTF-8" />
+        <title>SRTF - Multiplayer Menu</title>
+		<meta name="author" content="Derrick Hunt" />
+		
+		<link rel="stylesheet" type="text/css" href="normalize.css" />
+		<link rel="stylesheet" type="text/css" href="multiplayerMenu_style.css" />
+		
+		<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    </head>
+    <body>
+		<h1>MULTIPLAYER</h1>
+		
+		<button id="b1">QUICK MATCH</button>
+		
+		<button id="b2">CUSTOM MATCH</button>
+		
+		<button id="b3">FRIENDS</button>
+		
+		<button id="b4">MAIN MENU</button>
+		
+		<audio id="select" src="select.wav" type="audio/wav"</audio>
+		<audio id="cancel" src="cancel.wav" type="audio/wav"</audio>
+		
+		 <script>
+		//Button functions
+		$(document).ready(function(){
+			var menuFadeSpd = 500;
+			$('h1').fadeIn(menuFadeSpd);
+			$('#b1').fadeIn(menuFadeSpd);
+			$('#b2').fadeIn(menuFadeSpd);
+			$('#b3').fadeIn(menuFadeSpd);
+			$('#b4').fadeIn(menuFadeSpd);
+			
+			$('#b1').click(function(){ //quick match button
+				console.log("quick match button clicked");
+				$('#select').get(0).play();
+				//launch multiplayer...
+			});
+			$('#b2').click(function(){ //custom match button
+				console.log("custom match button clicked");
+			});
+			$('#b3').click(function(){ //friends button
+				console.log("friends button clicked");
+			});
+			$('#b4').click(function(){ //main menu button
+				console.log("main menu button clicked");
+				$('#cancel').get(0).play();
+				setTimeout('window.location.href="mainMenu.html"', 400);
+			});
+		});
+		</script>
+    </body>
+</html>

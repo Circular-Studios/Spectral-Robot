@@ -4,18 +4,23 @@ Grid: [24, 24]
 FogOfWar: No
 Units:
     - Name: Werewolf1
-      Spawn: [1, 1]
+      Spawn: [5, 21]
+      Rotation: !Vector3 0 180 0
       Team: 1
     - Name: Robot1
-      Spawn: [4, 0]
+      Spawn: [12, 0]
       Team: 2
 Objects:
     - Prefab: Wall
       Location: [0, 1, 0, 22]
+      TileSize: [1, 2]
+      Rotation: !Vector3 90 0 90
       TileType: FullyBlocked
 
     - Prefab: Wall
       Location: [23, 1, 23, 22]
+      TileSize: [1, 2]
+      Rotation: !Vector3 90 0 90
       TileType: FullyBlocked
 
     - Prefab: Pillar

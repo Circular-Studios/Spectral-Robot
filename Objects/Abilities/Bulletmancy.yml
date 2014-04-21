@@ -1,37 +1,33 @@
 ---
-name: Basic1
+name: "Attack"
 targetType: EnemyUnit
 targetArea: Radial
 range: 1
 damage: 1
-damageType: direct
-cooldown: 0
 ---
-name: BMHealingBarage
+name: "Healing Barage"
 targetType: AlliedUnit
 targetArea: Single
 range: 4
 damage: 6
-damageType: healing
+damageType: Healing
 cooldown: 2
 ---
-name: BMFlank
+name: "Flank"
 targetType: EnemyUnit
 targetArea: Single
 range: 8
 damage: 1
-damageType: direct
 cooldown: 2
 ---
-name: BMCannonShot
+name: "Cannon Shot"
 targetType: EnemyUnit
 targetArea: Radial
 range: 5
 damage: 9
-damageType: AOE
 cooldown: 5
 ---
-name: BMRapidFire
+name: "Rapid Fire"
 targetType: EnemyUnit
 targetArea: Single
 range: 3
@@ -40,11 +36,11 @@ damageType: DOT
 cooldown: 4
 duration: 3
 ---
-name: BMSuppress
+name: "Suppress"
 targetType: EnemyUnit
 targetArea: Single
 range: 5
 damage: 5
-damageType: debuff
+damageType: Debuff
 statEffected: Accuracy
 cooldown: 5

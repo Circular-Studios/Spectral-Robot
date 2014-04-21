@@ -1,13 +1,11 @@
 ---
-name: Basic1
+name: "Attack"
 targetType: EnemyUnit
 targetArea: Radial
 range: 1
 damage: 1
-damageType: direct
-cooldown: 0
 ---
-name: FSIncinerate
+name: "Incinerate"
 targetType: EnemyUnit
 targetArea: Single
 range: 3
@@ -16,17 +14,16 @@ damageType: DOT
 duration: 3
 cooldown: 3
 ---
-name: FSFireBall
+name: "Fire Ball"
 targetType: EnemyUnit
 targetArea: Single
 range: 2
 damage: 4
-damageType: direct
 duration: 3
 cooldown: 3
 ---
-name: FSNova
-targetType: Self
+name: "Nova"
+targetType: Tile
 targetArea: MovingRadial
 range: 1
 damage:  6
@@ -34,29 +31,26 @@ damageType: DOT
 duration: 2
 cooldown: 5
 ---
-name: FSShield
-targetType: Self
+name: "Shield"
+targetType: Tile
 targetArea: Single
-range: 0
 damage:  10
-damageType: reduce
-duration: 0
+damageType: Reduce
 cooldown: 3
 ---
-name: FSMarkofFlame
+name: "Mark of Flame"
 targetType: EnemyUnit
 targetArea: Single
 range: 4
 damage:  2
-damageType: modifier
+damageType: Modifier
 duration: 2
 cooldown: 3
 ---
-name: FSHeatDeath
+name: "Heat Death"
 targetType: EnemyUnit
 targetArea: Single
 range: 3
 damage:  4
-damageType: lifeSteal
-duration: 0
+damageType: LifeSteal
 cooldown: 3

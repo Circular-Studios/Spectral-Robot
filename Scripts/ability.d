@@ -1,16 +1,22 @@
 ﻿module ability;
-import core, grid, utility;
+import core, utility;
+import game, grid, tile;
 
+enum DamageType
+{
+	Buff,
+	Debuff,
+	Healing,
+	DOT, // damage over time
+	Modifier,
+	LifeSteal,
+}
 
 enum TargetType
 {
 	EnemyUnit,
 	AlliedUnit,
-	Ground,
-	Space,
-	UndeadUnit,
-	Self,
-	TurretUnit,
+	Tile,
 }
 
 enum TargetArea
@@ -22,30 +28,41 @@ enum TargetArea
 	MovingRadial,
 }
 
+enum statEffected
+{
+	Accuracy,
+	Turn, // deplete the actions left on a unit
+}
+
 shared class Ability
 {
 private:
-	static uint nextID = 1;
+	static uint nextID = 10;
 	string _name;
 	TargetType _targetType;
 	TargetArea _targetArea;
 	int _damage;
 	int _range;
 	int _cooldown;
+	int _duration;
+	int _accuracy;
+
+	// only used in this class
 	int _currentCooldown;
+	//int _currentRange;
+	Tile[] _selectedTiles;
 	
 	/// Highlight the tiles that the ability can effect
-	void highlight( int x, int y, bool preview )
+	shared(Tile[]) highlight( uint originID, bool preview )
 	{
 		switch( _targetArea )
 		{
 			default:
-				break;
+				return null;
 			case TargetArea.Single:
-				break;
+				return Game.grid.getTileByID( originID ) ~ cast(shared Tile[])[];
 			case TargetArea.Radial:
-				//highlight( 1, 1, 3, 3, true );
-				break;
+				return Game.grid.getInRange( Game.grid.getTileByID( originID ), range );
 		}
 	}
 	
@@ -57,42 +74,35 @@ public:
 	mixin( Property!( _damage, AccessModifier.Public ) );
 	mixin( Property!( _range, AccessModifier.Public ) );
 	mixin( Property!( _cooldown, AccessModifier.Public ) );
+	mixin( Property!( _duration, AccessModifier.Public ) );
+	mixin( Property!( _accuracy, AccessModifier.Public ) );
 	
-	this ()
+	this()
 	{
 		ID = nextID++;
-		
-		// REMOVE: this is a highlighting test
-		if( ID == 0 )
-		{
-			Input.addKeyDownEvent( Keyboard.F9, ( uint kc ) { preview( 2, 2 ); } );
-		}
+		_currentCooldown = 0;
 	}
 
-	void init( string name, TargetType ttype, TargetArea tarea, int damage, int range, int cooldown )
+	/// Use the ability
+	bool use( uint originID, uint targetID )
 	{
-		_currentCooldown = 0;
-		_name = name;
-		_targetType = ttype;
-		_targetArea = tarea;
-		_damage = damage;
-		_range = range;
-		_cooldown = cooldown;
+		_currentCooldown = cooldown;
+		return true;
 	}
-	
-	void preview( int x, int y )
+
+	/// Preview the ability
+	void preview( uint originID )
 	{
-		highlight( x, y, true );
+		_selectedTiles = highlight( originID, true );
 	}
-	
+
+	// Unpreview the ability
 	void unpreview()
 	{
-		
-	}
-	
-	/// Use the ability
-	void use( uint originID, uint targetID )
-	{
-		_currentCooldown = _cooldown;
+		// reset the tiles that were highlighted
+		foreach( tile; _selectedTiles )
+		{
+			tile.resetSelection();
+		}
 	}
 }

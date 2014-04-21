@@ -1,22 +1,67 @@
 module grid;
-import game, controller, tile, unit;
+import game, controller, tile, unit, turn, action;
 import core, utility, components;
 import gl3n.linalg;
 import std.conv;
 
 const int TILE_SIZE = 10;
 
-/** Inherits from GameObject to simplify drawing/positioning
- */
+/// A grid that contains tiles
 shared class Grid : GameObject
 {
+private:
 	Tile[][] _tiles;
-	mixin( Property!( _tiles, AccessModifier.Public ) );
-	GameObject[ ( TileType.max + 1 ) * ( TileSelection.max + 1 ) ] tileObjects;
-	bool isUnitSelected = false;
-	Unit selectedUnit;
-	int gridX, gridY;
+	bool _isUnitSelected = false;
+	Unit _selectedUnit;
+	int _gridX, _gridY;
 	vec2i sel;
+	
+public:
+	mixin( Property!( _tiles, AccessModifier.Public ) );
+	mixin( Property!( _isUnitSelected, AccessModifier.Public ) );
+	mixin( Property!( _selectedUnit, AccessModifier.Public ) );
+	mixin( Property!( _gridX, AccessModifier.Public ) );
+	mixin( Property!( _gridY, AccessModifier.Public ) );
+
+	// Setup left mouse click
+	this()
+	{
+		Input.addKeyDownEvent( Keyboard.MouseLeft, ( kc )
+		{
+			if( auto obj = Input.mouseObject )
+			{
+				logInfo( "Clicked on ", obj.name );
+
+				// If unit is selected and a tile is clicked, move if possible
+				if( auto tile = cast(shared Tile)obj )
+				{
+					if( isUnitSelected && selectedUnit.checkMove( tile.toID() ) )
+					{
+						// move the unit to the new location
+						Game.turn.sendAction( Action( 0, selectedUnit.ID, tile.toID(), true ) );
+						selectedUnit.move( tile.toID() );
+					}
+				}
+				else
+				{
+					// Deselect a unit if not a tile
+					if( isUnitSelected )
+						selectedUnit.deselect();
+
+					// Select a unit
+					if( auto unit = cast(shared Unit)obj )
+					{
+						selectedUnit = unit;
+						isUnitSelected = true;
+						unit.previewMove();
+						Game.turn.sendAction( Action( 1, unit.ID, unit.position, false ) );
+					}
+				}
+			}
+		} );
+
+		Input.addKeyDownEvent( Keyboard.Keyboard1, ( uint kc ) { if( _selectedUnit) _selectedUnit.useAbility( 1, 1 ); } );
+	}
 	
 	override void onDraw()
 	{
@@ -32,82 +77,17 @@ shared class Grid : GameObject
 	
 	override void onUpdate()
 	{
-		// move the selector around the grid
-		if( Input.getState( "Down", true ) )
-		{
-			tiles[sel.x][sel.y].resetSelection();
-			sel.y += 1;
-			if( sel.y >= gridY ) sel.y = gridY - 1;
-			tiles[sel.x][sel.y].selection = TileSelection.Blue;
-		}
-		else if( Input.getState( "Up", true ) )
-		{
-			tiles[sel.x][sel.y].resetSelection();
-			sel.y -= 1;
-			if( sel.y < 0 ) sel.y = 0;
-			tiles[sel.x][sel.y].selection = TileSelection.Blue;
-		}
-		
-		if( Input.getState( "Right", true ) )
-		{
-			tiles[sel.x][sel.y].resetSelection();
-			sel.x += 1;
-			if( sel.x >= gridX ) sel.x = gridX - 1;
-			tiles[sel.x][sel.y].selection = TileSelection.Blue;
-		}
-		else if( Input.getState( "Left", true ) )
-		{
-			tiles[sel.x][sel.y].resetSelection();
-			sel.x -= 1;
-			if( sel.x < 0 ) sel.x = 0;
-			tiles[sel.x][sel.y].selection = TileSelection.Blue;
-		}
-		
-		// Select a unit
-		if( Input.getState( "Enter", true ) && !isUnitSelected )
-		{
-			foreach( obj; Game.gc.level.objects() )
-			{
-				auto unit = cast(shared Unit)obj;
-				if ( unit !is null && unit.x == sel.x && unit.y == sel.y )
-				{
-					selectedUnit = unit;
-					isUnitSelected = true;
-					foreach( tile; getInRange( _tiles[ unit.x ][ unit.y ], unit.speed ) )
-					{
-						tile.selection = TileSelection.Red;
-					}
-				}
-			}
-		}
-		
-		// Place a selected unit
-		else if( Input.getState( "Enter", true ) && isUnitSelected  && tiles[ sel.x ][ sel.y ].type == TileType.Open )
-		{
-			// change the tile types
-			tiles[ selectedUnit.x ][ selectedUnit.y ].type = TileType.Open;
-			tiles[ sel.x ][ sel.y ].type = TileType.HalfBlocked;
-			
-			// move the unit to the new location
-			selectedUnit.position = sel.x + sel.y * gridX;
-			selectedUnit.updatePosition();
-			isUnitSelected = false;
-		}
-		
-		// Deselect a unit
-		if( Input.getState( "Back", true ) && isUnitSelected )
-		{
-			foreach( tile; getInRange( _tiles[ selectedUnit.x ][ selectedUnit.y ], selectedUnit.speed ) )
-			{
-				tile.selection = TileSelection.None;
-			}
 
-			selectedUnit = null;
-			isUnitSelected = false;
-		}
 	}
 	
-	/// Highlight tiles
+	
+	/// Get a tile by ID
+	shared(Tile) getTileByID( uint tileID )
+	{
+		return tiles[ tileID % gridX ][ tileID / gridX ];
+	}
+	
+	/// Find all tiles in a range
 	shared(Tile[]) getInRange( shared Tile startingTile, uint range )
 	{
 		// Create temp tuples to store stuff in.
@@ -115,39 +95,40 @@ shared class Grid : GameObject
 		alias Tuple!( shared Tile, "tile", uint, "depth" ) searchState;
 		alias Tuple!( int, "x", int, "y" ) point;
 
-		// Keeps track of what tiles have been added already.
-		auto visited = new bool[][]( gridX, gridY );
-		// Queue of states to sort through.
-		searchState[] states;
-		// Tiles inside the range.
-		shared Tile[] foundTiles;
-
+		auto visited = new bool[][]( gridX, gridY ); // Keeps track of what tiles have been added already.
+		searchState[] states; // Queue of states to sort through.
+		shared Tile[] foundTiles; // Tiles inside the range.
+		
 		// Start with initial tile.
 		states ~= searchState( startingTile, 0 );
-
+		
 		while( states.length )
 		{
 			auto state = states[ 0 ];
 			states = states[ 1..$ ];
-
+			
 			if( visited[ state.tile.x ][ state.tile.y ] )
 				continue;
 
-			foundTiles ~= state.tile;
 			visited[ state.tile.x ][ state.tile.y ] = true;
-
+			
 			if( state.depth < range && ( cast()state.tile == cast()startingTile || state.tile.type == TileType.Open ) )
+			{
+				foundTiles ~= state.tile;
 				foreach( coord; [ point( state.tile.x, state.tile.y - 1 ), point( state.tile.x, state.tile.y + 1 ), point( state.tile.x - 1, state.tile.y ), point( state.tile.x + 1, state.tile.y ) ] )
 					if( coord.x < gridX && coord.x >= 0 && coord.y < gridY && coord.y >= 0 && !visited[ coord.x ][ coord.y ] )
 						states ~= searchState( tiles[ coord.x ][ coord.y ], state.depth + 1 );
+			}
 		}
-
+		
 		return foundTiles;
 	}
 	
 	/// Create an ( n x m ) grid of tiles
 	void initTiles( int n, int m )
 	{
+		logInfo("Grid size: ( ", n, ", ", m, " )" );
+		
 		//initialize tiles
 		_tiles = new shared Tile[][]( n, m );
 		gridX = n;
@@ -165,10 +146,38 @@ shared class Grid : GameObject
 			
 			tile.x = x;
 			tile.y = y;
-			tile.gridX = gridX;
+			tile.transform.scale = vec3( TILE_SIZE / 3 );
 
+			// hide the tile
+			tile.stateFlags.drawMesh = false;
+
+			// make the name unique
+			tile.name = "Tile ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )";
+			
 			this.addChild( tile );
 			tiles[ x ][ y ] = tile;
+		}
+
+		// Create the floor from a prefab and add it to the scene
+		// TODO: I'm so sorry I hardcoded, future programmer, it needed to be done at the time.
+		for( int i = 0; i < 9; i++ )
+		{
+			int x = i % 3;
+			int y = i / 3;
+			
+			string[ shared GameObject ] parents;
+			string[][ shared GameObject ] children;
+			auto floor = Prefabs[ "MarbleFloor" ].createInstance( parents, children );
+
+			floor.transform.position.x = x * TILE_SIZE * 8 + 35;
+			floor.transform.position.y = -0.3;
+			floor.transform.position.z = y * TILE_SIZE * 8 + 35;
+			floor.transform.scale = vec3( TILE_SIZE * 4 );
+			
+			// make the name unique
+			floor.name = "Floor ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )";
+			
+			this.addChild( floor );
 		}
 	}
 }

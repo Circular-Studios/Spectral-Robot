@@ -16,6 +16,7 @@ enum TileSelection
 	None,
 	Blue,
 	Red,
+	Black,
 }
 
 shared class Tile : GameObject
@@ -24,11 +25,9 @@ private:
 	TileType _type;
 	TileSelection _selection;
 	GameObject _occupant;
-	int _gridX;
 	
 public:
 	mixin( Property!( _occupant, AccessModifier.Public) );
-	mixin( Property!( _gridX, AccessModifier.Public) );
 	
 	@property void selection( TileSelection s )
 	{
@@ -36,12 +35,19 @@ public:
 		{
 			case TileSelection.None:
 				this.material = Assets.get!Material( "TileDefault" );
+				stateFlags.drawMesh = false;
 				break;
 			case TileSelection.Blue:
 				this.material = Assets.get!Material( "HighlightBlue" );
+				stateFlags.drawMesh = true;
 				break;
 			case TileSelection.Red:
 				this.material = Assets.get!Material( "HighlightRed" );
+				stateFlags.drawMesh = true;
+				break;
+			case TileSelection.Black:
+				this.material = Assets.get!Material( "HighlightBlack" );
+				stateFlags.drawMesh = true;
 		}
 		_selection = s;
 	}
@@ -57,7 +63,7 @@ public:
 				this.selection = TileSelection.Red;
 				break;
 			case TileType.FullyBlocked:
-				this.selection = TileSelection.Red;
+				this.selection = TileSelection.Black;
 		}
 		_type = t;
 	}
@@ -102,11 +108,10 @@ public:
 	{
 		this._type = TileType.Open;
 		this._selection = TileSelection.None;
-		this.transform.scale = vec3( TILE_SIZE / 2 );
 	}
 	
 	uint toID()
 	{
-		return x + ( y * gridX );
+		return x + ( y * Game.grid.gridX );
 	}
 }
