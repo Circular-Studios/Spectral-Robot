@@ -68,6 +68,7 @@ public:
 				_remainingActions--;
 				return true;
 			}
+			return false;
 		}
 		else
 			return false;

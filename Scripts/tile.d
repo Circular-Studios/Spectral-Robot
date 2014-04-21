@@ -35,15 +35,19 @@ public:
 		{
 			case TileSelection.None:
 				this.material = Assets.get!Material( "TileDefault" );
+				stateFlags.drawMesh = false;
 				break;
 			case TileSelection.Blue:
 				this.material = Assets.get!Material( "HighlightBlue" );
+				stateFlags.drawMesh = true;
 				break;
 			case TileSelection.Red:
 				this.material = Assets.get!Material( "HighlightRed" );
+				stateFlags.drawMesh = true;
 				break;
 			case TileSelection.Black:
 				this.material = Assets.get!Material( "HighlightBlack" );
+				stateFlags.drawMesh = true;
 		}
 		_selection = s;
 	}

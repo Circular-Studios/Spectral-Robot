@@ -148,6 +148,9 @@ public:
 			tile.y = y;
 			tile.transform.scale = vec3( TILE_SIZE / 3 );
 
+			// hide the tile
+			tile.stateFlags.drawMesh = false;
+
 			// make the name unique
 			tile.name = "Tile ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )";
 			
