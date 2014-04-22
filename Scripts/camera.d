@@ -3,19 +3,38 @@ import core, graphics, utility;
 import std.algorithm;
 import gl3n.linalg, gl3n.math, gl3n.interpolate;
 
-/// Camera movement around the scene
-shared class AdvancedCamera : GameObject
-{
-	float moveSpeed = 150;
-	Duration rotateTime = 400.msecs;
-	float edgeDistance = 50;
-	float minHeight = 50;
-	float maxHeight = 200;
 
-	override void initialize( Object o)
+class AdvancedCameraFields
+{
+	float MoveSpeed;
+	uint RotateTime;
+	float ZoomSpeed;
+	float EdgeDistance;
+	float MinHeight;
+	float MaxHeight;
+}
+
+/// Camera movement around the scene
+shared class AdvancedCamera : GameObjectInit!AdvancedCameraFields
+{
+	float moveSpeed;
+	Duration rotateTime;
+	float zoomSpeed;
+	float edgeDistance;
+	float minHeight;
+	float maxHeight;
+
+	override void onInitialize( AdvancedCameraFields a )
 	{
 		startPos = transform.position;
 		startRot = transform.rotation;
+
+		moveSpeed = a.MoveSpeed;
+		rotateTime = a.RotateTime.msecs;
+		zoomSpeed = a.ZoomSpeed;
+		edgeDistance = a.EdgeDistance;
+		minHeight = a.MinHeight;
+		maxHeight = a.MaxHeight;
 	}
 	
 	override void onUpdate()
@@ -105,6 +124,15 @@ shared class AdvancedCamera : GameObject
 			moveVec.normalize();
 			moveVec *= moveSpeed * Time.deltaTime;
 			this.transform.position += moveVec;
+		}
+
+		if( Input.getState( "ZoomIn" ) )
+		{
+			transform.position += this.transform.forward * min( ( zoomSpeed * Time.deltaTime ), ( minHeight - transform.position.y ) / this.transform.forward.y );
+		}
+		else if( Input.getState( "ZoomOut" ) )
+		{
+			transform.position += -this.transform.forward * min( ( zoomSpeed * Time.deltaTime ), ( maxHeight - transform.position.y ) / -this.transform.forward.y );
 		}
 
 	}

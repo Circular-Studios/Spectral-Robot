@@ -2,6 +2,13 @@
 Name: Camera
 Script:
     ClassName: camera.AdvancedCamera
+    Fields:
+        MoveSpeed: 150
+        RotateTime: 400
+        ZoomSpeed: 100
+        EdgeDistance: 50
+        MinHeight: 50
+        MaxHeight: 200
 Transform:
     Position: !Vector3 115 100 255
     Rotation: !Vector3 -45 0 0

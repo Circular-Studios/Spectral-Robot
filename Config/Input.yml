@@ -18,10 +18,10 @@ LookLeft:
 LookRight:
     - !Keyboard L
     - !Keyboard Right
-ZoomUp:
-    - !Keyboard N
-ZoomDown:
-    - !Keyboard M
+ZoomIn:
+    - !Keyboard Up
+ZoomOut:
+    - !Keyboard Down
 Enter:
     - !Keyboard Space
 Back:
