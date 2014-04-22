@@ -1,5 +1,6 @@
 Game:
     Verbosity: !Verbosity High
+    ServerIP: 127.0.0.1
 Display:
     Fullscreen: false
     Height: 720

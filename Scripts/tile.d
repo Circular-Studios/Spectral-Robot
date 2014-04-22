@@ -24,7 +24,7 @@ shared class Tile : GameObject
 private:
 	TileType _type;
 	TileSelection _selection;
-	GameObject _occupant;
+	Unit _occupant;
 	
 public:
 	mixin( Property!( _occupant, AccessModifier.Public) );
