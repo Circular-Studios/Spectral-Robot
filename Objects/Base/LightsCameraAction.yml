@@ -8,14 +8,14 @@ Script:
         ZoomSpeed: 100
         EdgeDistance: 50
         MinHeight: 50
-        MaxHeight: 200
+        MaxHeight: 100
 Transform:
-    Position: !Vector3 115 100 255
+    Position: !Vector3 115 0 255
     Rotation: !Vector3 -45 0 0
 Camera: 
     FOV: 59
     Near: 1
-    Far: 300
+    Far: 400
 ---
 Name: DirLight
 Light: !Light-Directional

@@ -26,15 +26,16 @@ shared class AdvancedCamera : GameObjectInit!AdvancedCameraFields
 
 	override void onInitialize( AdvancedCameraFields a )
 	{
-		startPos = transform.position;
-		startRot = transform.rotation;
-
 		moveSpeed = a.MoveSpeed;
 		rotateTime = a.RotateTime.msecs;
 		zoomSpeed = a.ZoomSpeed;
 		edgeDistance = a.EdgeDistance;
 		minHeight = a.MinHeight;
 		maxHeight = a.MaxHeight;
+
+		transform.position.y = (( maxHeight - minHeight ) / 2) + minHeight;
+		startPos = transform.position;
+		startRot = transform.rotation;
 	}
 	
 	override void onUpdate()
@@ -133,6 +134,12 @@ shared class AdvancedCamera : GameObjectInit!AdvancedCameraFields
 		else if( Input.getState( "ZoomOut" ) )
 		{
 			transform.position += -this.transform.forward * min( ( zoomSpeed * Time.deltaTime ), ( maxHeight - transform.position.y ) / -this.transform.forward.y );
+		}
+
+		if( Input.getState( "ResetCamera" ) )
+		{
+			transform.position = startPos;
+			transform.rotation = startRot;
 		}
 
 	}

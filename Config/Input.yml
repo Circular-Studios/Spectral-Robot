@@ -22,6 +22,8 @@ ZoomIn:
     - !Keyboard Up
 ZoomOut:
     - !Keyboard Down
+ResetCamera:
+    - !Keyboard Delete
 Enter:
     - !Keyboard Space
 Back:
