@@ -1,7 +1,7 @@
 ---
 Name: "The Only Level"
 Grid: [24, 24]
-FogOfWar: No
+FogOfWar: Yes
 Units:
     - Name: Werewolf1
       Spawn: [5, 21]

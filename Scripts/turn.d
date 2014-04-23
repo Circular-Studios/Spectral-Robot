@@ -83,10 +83,13 @@ public:
 		
 		logInfo( "New turn: ", currentTeam );
 		
+		// update the units on the team
 		foreach( unit; Game.units )
 		{
 			if( unit.team == currentTeam )
 				unit.newTurn();
 		}
+		
+		Game.grid.updateFogOfWar();
 	}
 }

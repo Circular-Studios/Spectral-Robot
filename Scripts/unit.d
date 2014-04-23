@@ -110,6 +110,9 @@ public:
 			deselect();
 			Game.grid.isUnitSelected = false;
 			
+			// update fog of war
+			Game.grid.updateFogOfWar();
+			
 			// check if the turn is over
 			Game.turn.checkTurnOver();
 		}

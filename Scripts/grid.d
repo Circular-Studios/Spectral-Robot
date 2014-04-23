@@ -13,6 +13,7 @@ private:
 	Tile[][] _tiles;
 	bool _isUnitSelected = false;
 	bool _isAbilitySelected = false;
+	bool _fogOfWar;
 	Unit _selectedUnit;
 	uint _selectedAbility;
 	int _gridX, _gridY;
@@ -23,18 +24,19 @@ public:
 	mixin( Property!( _isUnitSelected, AccessModifier.Public ) );
 	mixin( Property!( _selectedUnit, AccessModifier.Public ) );
 	mixin( Property!( _selectedAbility, AccessModifier.Public ) );
+	mixin( Property!( _fogOfWar, AccessModifier.Public ) );
 	mixin( Property!( _gridX, AccessModifier.Public ) );
 	mixin( Property!( _gridY, AccessModifier.Public ) );
-
+	
 	// Setup left mouse click
 	this()
 	{
 		Input.addKeyDownEvent( Keyboard.MouseLeft, ( kc )
-		{
+		                      {
 			if( auto obj = Input.mouseObject )
 			{
 				logInfo( "Clicked on ", obj.name );
-
+				
 				// If unit is selected and a tile is clicked, move if possible
 				if( auto tile = cast(shared Tile)obj )
 				{
@@ -58,7 +60,7 @@ public:
 					// Deselect a unit if not a tile
 					if( isUnitSelected )
 						selectedUnit.deselect();
-
+					
 					// Select a unit
 					if( auto unit = cast(shared Unit)obj )
 					{
@@ -71,24 +73,6 @@ public:
 			}
 		} );
 	}
-	
-	override void onDraw()
-	{
-		// Draw the tiles
-		for( int i = 0; i < gridX * gridY; i++ )
-		{
-			int x = i % gridX;
-			int z = i / gridY;
-			
-			tiles[ x ][ z ].draw();
-		}
-	}
-	
-	override void onUpdate()
-	{
-
-	}
-	
 	
 	/// Get a tile by ID
 	shared(Tile) getTileByID( uint tileID )
@@ -103,7 +87,7 @@ public:
 		import std.typecons;
 		alias Tuple!( shared Tile, "tile", uint, "depth" ) searchState;
 		alias Tuple!( int, "x", int, "y" ) point;
-
+		
 		auto visited = new bool[][]( gridX, gridY ); // Keeps track of what tiles have been added already.
 		searchState[] states; // Queue of states to sort through.
 		shared Tile[] foundTiles; // Tiles inside the range.
@@ -118,7 +102,7 @@ public:
 			
 			if( visited[ state.tile.x ][ state.tile.y ] )
 				continue;
-
+			
 			visited[ state.tile.x ][ state.tile.y ] = true;
 			
 			if( state.depth < range && ( cast()state.tile == cast()startingTile || state.tile.type == TileType.Open ) )
@@ -131,6 +115,36 @@ public:
 		}
 		
 		return foundTiles;
+	}
+	
+	/// Update the fog of war
+	void updateFogOfWar()
+	{
+		if( _fogOfWar )
+		{
+			shared(Tile[]) visibleTiles;
+			
+			// get the tiles visible to the current team
+			foreach( unit; Game.units )
+			{
+				// hide the unit until we determine who to show
+				unit.stateFlags.drawMesh = false;
+				getTileByID( unit.position ).stateFlags.drawMesh = false;
+				
+				if( unit.team == Game.turn.currentTeam )
+					visibleTiles ~= getInRange( getTileByID( unit.position ), unit.speed );
+			}
+			
+			// show all units on visible tiles
+			foreach( tile; visibleTiles )
+			{
+				if( tile.occupant !is null )
+				{
+					tile.stateFlags.drawMesh = true;
+					tile.occupant.stateFlags.drawMesh = true;
+				}
+			}
+		}
 	}
 	
 	/// Create an ( n x m ) grid of tiles
@@ -156,17 +170,17 @@ public:
 			tile.x = x;
 			tile.y = y;
 			tile.transform.scale = vec3( TILE_SIZE / 3 );
-
+			
 			// hide the tile
 			tile.stateFlags.drawMesh = false;
-
+			
 			// make the name unique
 			tile.name = "Tile ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )";
 			
 			this.addChild( tile );
 			tiles[ x ][ y ] = tile;
 		}
-
+		
 		// Create the floor from a prefab and add it to the scene
 		// TODO: I'm so sorry I hardcoded, future programmer, it needed to be done at the time.
 		for( int i = 0; i < 9; i++ )
@@ -177,7 +191,7 @@ public:
 			string[ shared GameObject ] parents;
 			string[][ shared GameObject ] children;
 			auto floor = Prefabs[ "MarbleFloor" ].createInstance( parents, children );
-
+			
 			floor.transform.position.x = x * TILE_SIZE * 8 + 35;
 			floor.transform.position.y = -0.3;
 			floor.transform.position.z = y * TILE_SIZE * 8 + 35;

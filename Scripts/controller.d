@@ -125,12 +125,14 @@ final shared class Controller
 		
 		// setup variables
 		int[] gridSize;
+		bool fogOfWar;
 		Node unitsNode;
 		Node propsNode;
 		
 		// get the variables from the yaml node
 		string name = levelNode[ "Name" ].as!string;
 		Config.tryGet( "Grid", gridSize, levelNode );
+		Config.tryGet( "FogOfWar", fogOfWar, levelNode );
 		Config.tryGet( "Units", unitsNode, levelNode );
 		Config.tryGet( "Objects", propsNode, levelNode );
 		
@@ -200,5 +202,9 @@ final shared class Controller
 				}
 			}
 		}
+		
+		// do some fog of war
+		Game.grid.fogOfWar = fogOfWar;
+		Game.grid.updateFogOfWar();
 	}
 }
