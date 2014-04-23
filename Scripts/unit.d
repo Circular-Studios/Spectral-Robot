@@ -4,17 +4,18 @@ import core, utility, components;
 import gl3n.linalg, gl3n.interpolate;
 import std.math;
 
+enum ACTIONS_RESET = 3;
+
 shared class Unit : GameObject
 {
 private:
 	static uint nextID = 0;
-	enum ACTIONS_RESET = 3;
 	int _hp;
 	int _speed;
 	int _attack;
 	int _defense;
 	uint _position;
-	int _team;
+	Team _team;
 	int _remainingRange;
 	int _remainingActions;
 	uint[] _abilities;
@@ -24,6 +25,7 @@ public:
 	immutable uint ID;
 	mixin( Property!( _position, AccessModifier.Public) );
 	mixin( Property!( _team, AccessModifier.Public) );
+	mixin( Property!( _remainingActions, AccessModifier.Public) );
 	mixin( Property!( _hp, AccessModifier.Public) );
 	mixin( Property!( _speed, AccessModifier.Public) );
 	mixin( Property!( _attack, AccessModifier.Public) );
@@ -47,7 +49,7 @@ public:
 	}
 	
 	/// Initialize a unit
-	void init( uint position, int team, int hp, int sp, int at, int df, uint[] abilities )
+	void init( uint position, Team team, int hp, int sp, int at, int df, uint[] abilities )
 	{
 		_position = position;
 		_team = team;
@@ -63,17 +65,19 @@ public:
 	/// Use an ability
 	bool useAbility( uint abilityID, uint targetID )
 	{
-		if( _remainingActions > 0 && abilities[ abilityID ] )
+		if( remainingActions > 0 && abilities[ abilityID ] )
 		{
 			if( Game.abilities[ abilityID ].use( this.ID, targetID ) )
 			{
 				_remainingActions--;
+				
+				// if out of actions, check if the turn is over
+				Game.turn.checkTurnOver();
 				return true;
 			}
-			return false;
 		}
-		else
-			return false;
+		
+		return false;
 	}
 	
 	/// Move the unit to a tile
@@ -84,18 +88,18 @@ public:
 			// easy names for the tiles
 			auto curTile = Game.grid.getTileByID( position );
 			auto targetTile = Game.grid.getTileByID( targetTileID );
-
+			
 			// change the tile types
 			curTile.type = TileType.Open;
 			targetTile.type = TileType.HalfBlocked;
-
+			
 			// scale the tile back down
 			curTile.transform.scale = vec3( TILE_SIZE / 3 );
 			
 			// change the tile occupants
 			curTile.occupant = null;
 			targetTile.occupant = this;
-
+			
 			// decrement remaining actions and distance
 			_remainingActions--;
 			_remainingRange -= abs( ( targetTile.x - x ) ) + abs ( ( targetTile.y - y ) );
@@ -105,26 +109,22 @@ public:
 			updatePosition();
 			deselect();
 			Game.grid.isUnitSelected = false;
+			
+			// check if the turn is over
+			Game.turn.checkTurnOver();
 		}
 	}
-
+	
 	/// Check if the move is allowed
 	bool checkMove( uint targetTileID )
 	{
 		auto tile = Game.grid.getTileByID( targetTileID );
-
+		
 		// get the distance away from the unit's current position
 		uint distance = abs( ( tile.x - x ) ) + abs ( ( tile.y - y ) );
-
+		
 		// Check speed, actions, and tileType
-		if( speed > distance &&
-			_remainingActions > 0 &&
-			tile.type == TileType.Open )
-		{
-			return true;
-		}
-
-		return false;
+		return speed > distance && remainingActions > 0 && tile.type == TileType.Open;
 	}
 	
 	/// Highlight the tiles the unit can move to
@@ -165,27 +165,34 @@ public:
 		Game.grid.selectedUnit = null;
 		Game.grid.isUnitSelected = false;
 	}
-
+	
+	/// Prep the unit to begin a turn anew
+	void newTurn()
+	{
+		_remainingActions = ACTIONS_RESET;
+		_remainingRange = speed;
+	}
+	
 	/// Fill the number row with hotkeys to select abilities
 	void setHotkeys()
 	{
 		/*
-		foreach( i, abilityID; _abilities )
-			Input.addKeyDownEvent( mixin( "Keyboard.Keyboard" ~ ( i + 1 ).to!string ), ( uint kc ) 
-			{
-				Grid.abilities[ _abilities[ i ] ].preview( _selectedUnit.abilities[ i ], 1 );
-			} );*/
+		 foreach( i, abilityID; _abilities )
+		 Input.addKeyDownEvent( mixin( "Keyboard.Keyboard" ~ ( i + 1 ).to!string ), ( uint kc ) 
+		 {
+		 Grid.abilities[ _abilities[ i ] ].preview( _selectedUnit.abilities[ i ], 1 );
+		 } );*/
 	}
-
+	
 	/// Free up the hotkeys for another unit to use
 	void removeHotkeys()
 	{
 		/*
-		foreach( i, abilityID; _abilities )
-			Input.removeKeyDownEvent( mixin( "Keyboard.Keyboard" ~ ( i + 1 ).to!string ), ( uint kc ) 
-			{
-				Grid.abilities[ _abilities[ i ] ].preview( _selectedUnit.abilities[ i ], 1 );
-			} );*/
+		 foreach( i, abilityID; _abilities )
+		 Input.removeKeyDownEvent( mixin( "Keyboard.Keyboard" ~ ( i + 1 ).to!string ), ( uint kc ) 
+		 {
+		 Grid.abilities[ _abilities[ i ] ].preview( _selectedUnit.abilities[ i ], 1 );
+		 } );*/
 	}
 	
 	/// Convert grid coordinates to 3D space
