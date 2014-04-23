@@ -16,3 +16,12 @@ Physics:
 UserInterface:
     FilePath: "/UI/index.html"
     Scale: !Vector2 1.0 1.0
+Logging:
+    FilePath: "dash.log"
+    Debug:
+        OutputVerbosity: !Verbosity High
+        LoggingVerbosity: !Verbosity High
+    Release:
+        OutputVerbosity: !Verbosity Medium
+        LoggingVerbosity: !Verbosity Medium
+ 

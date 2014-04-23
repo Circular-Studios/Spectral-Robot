@@ -1,15 +1,15 @@
 ---
 Name: "The Only Level"
 Grid: [24, 24]
-FogOfWar: No
+FogOfWar: Yes
 Units:
     - Name: Werewolf1
       Spawn: [5, 21]
       Rotation: !Vector3 0 180 0
-      Team: 1
+      Team: Wolf
     - Name: Robot1
       Spawn: [12, 0]
-      Team: 2
+      Team: Robot
 Objects:
     - Prefab: Wall
       Location: [0, 1, 0, 22]

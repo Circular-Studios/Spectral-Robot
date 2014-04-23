@@ -1,5 +1,5 @@
 ﻿module controller;
-import unit, grid, ability, tile, game;
+import unit, grid, ability, tile, game, turn;
 import core, utility;
 import yaml;
 import std.path, std.conv;
@@ -44,8 +44,9 @@ final shared class Controller
 		foreach( unitNode; loadYamlDocuments( buildNormalizedPath( FilePath.Resources.Objects, "Units" ) ) )
 		{
 			// setup variables
-			int team, hp, sp, at, df = 0;
-			string abilities;
+			int hp, sp, at, df = 0;
+			Team team;
+			string abilities, teamName;
 			uint[] spawn;
 			shared vec3 rotationVec;
 			shared quat rotation;
@@ -58,7 +59,8 @@ final shared class Controller
 				{
 					nameCheck = true;
 					Config.tryGet( "Spawn", spawn, unitCheck );
-					Config.tryGet( "Team", team, unitCheck );
+					if( Config.tryGet( "Team", teamName, unitCheck ) )
+						team = to!Team( teamName );
 					if( Config.tryGet( "Rotation", rotationVec, unitCheck ) )
 						rotation = quat.euler_rotation( radians( rotationVec.y ), radians( rotationVec.z ), radians( rotationVec.x ) );
 					break;
@@ -86,7 +88,7 @@ final shared class Controller
 				unit.transform.rotation = rotation;
 			Game.level.addChild( unit );
 			Game.units ~= unit;
-
+			
 			// block and occupy the spawn tile
 			Game.grid.tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].type = TileType.HalfBlocked;
 			Game.grid.tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].occupant = unit;
@@ -123,12 +125,14 @@ final shared class Controller
 		
 		// setup variables
 		int[] gridSize;
+		bool fogOfWar;
 		Node unitsNode;
 		Node propsNode;
 		
 		// get the variables from the yaml node
 		string name = levelNode[ "Name" ].as!string;
 		Config.tryGet( "Grid", gridSize, levelNode );
+		Config.tryGet( "FogOfWar", fogOfWar, levelNode );
 		Config.tryGet( "Units", unitsNode, levelNode );
 		Config.tryGet( "Objects", propsNode, levelNode );
 		
@@ -198,5 +202,9 @@ final shared class Controller
 				}
 			}
 		}
+		
+		// do some fog of war
+		Game.grid.fogOfWar = fogOfWar;
+		Game.grid.updateFogOfWar();
 	}
 }

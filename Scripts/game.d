@@ -38,8 +38,8 @@ public:
 		// initalize stuff
 		level = new shared Scene();
 		this.activeScene = level;
-		turn = new shared Turn();
 		grid = new shared Grid();
+		turn = new shared Turn();
 		
 		// add the grid to the level
 		Game.grid.name = "Grid";
@@ -50,7 +50,7 @@ public:
 		
 		// create a camera
 		level.camera = level[ "Camera" ].camera;
-
+		
 		// bind 'r' to server connect
 		Input.addKeyDownEvent( Keyboard.R, kc => connect() );
 		
@@ -60,7 +60,7 @@ public:
 		 Config.get!string( "UserInterface.FilePath" ) 
 		 );*/
 	}
-
+	
 	/// Connect to the server
 	void connect()
 	{
