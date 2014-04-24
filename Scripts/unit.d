@@ -25,6 +25,7 @@ public:
 	immutable uint ID;
 	mixin( Property!( _position, AccessModifier.Public) );
 	mixin( Property!( _team, AccessModifier.Public) );
+	mixin( Property!( _remainingRange, AccessModifier.Public) );
 	mixin( Property!( _remainingActions, AccessModifier.Public) );
 	mixin( Property!( _hp, AccessModifier.Public) );
 	mixin( Property!( _speed, AccessModifier.Public) );
@@ -127,19 +128,22 @@ public:
 		uint distance = abs( ( tile.x - x ) ) + abs ( ( tile.y - y ) );
 		
 		// Check speed, actions, and tileType
-		return speed > distance && remainingActions > 0 && tile.type == TileType.Open;
+		return remainingRange > distance && remainingActions > 0 && tile.type == TileType.Open;
 	}
 	
 	/// Highlight the tiles the unit can move to
 	void previewMove()
 	{
-		selectedTiles = Game.grid.getInRange( Game.grid.tiles[ x ][ y ], _remainingRange );
+		selectedTiles = Game.grid.getInRange( position, _remainingRange );
 		
 		// change the material of the tiles
 		foreach( tile; selectedTiles )
 		{
 			tile.selection = TileSelection.Blue;
 		}
+		
+		// automatically select the first ability
+		Game.grid.selectAbility( 0 );
 		
 		// scale the selected unit's tile
 		auto startTime = Time.totalTime;
@@ -167,6 +171,10 @@ public:
 		// Modify grid variables
 		Game.grid.selectedUnit = null;
 		Game.grid.isUnitSelected = false;
+		
+		// deselect the ability if there was one
+		if ( Game.grid.isAbilitySelected )
+			Game.abilities[ Game.grid.selectedAbility ].unpreview();
 	}
 	
 	/// Prep the unit to begin a turn anew

@@ -22,15 +22,17 @@ private:
 public:
 	mixin( Property!( _tiles, AccessModifier.Public ) );
 	mixin( Property!( _isUnitSelected, AccessModifier.Public ) );
+	mixin( Property!( _isAbilitySelected, AccessModifier.Public ) );
 	mixin( Property!( _selectedUnit, AccessModifier.Public ) );
 	mixin( Property!( _selectedAbility, AccessModifier.Public ) );
 	mixin( Property!( _fogOfWar, AccessModifier.Public ) );
 	mixin( Property!( _gridX, AccessModifier.Public ) );
 	mixin( Property!( _gridY, AccessModifier.Public ) );
 	
-	// Setup left mouse click
+	// Setup key events
 	this()
 	{
+		// Left mouse click
 		Input.addKeyDownEvent( Keyboard.MouseLeft, ( kc )
 		                      {
 			if( auto obj = Input.mouseObject )
@@ -72,6 +74,30 @@ public:
 				}
 			}
 		} );
+		
+		// ability hotkeys
+		// TODO: for loop or something
+		Input.addKeyDownEvent( Keyboard.Keyboard1, ( uint kc ) { selectAbility( 0 ); } );
+		Input.addKeyDownEvent( Keyboard.Keyboard2, ( uint kc ) { selectAbility( 1 ); } );
+		Input.addKeyDownEvent( Keyboard.Keyboard3, ( uint kc ) { selectAbility( 2 ); } );
+		Input.addKeyDownEvent( Keyboard.Keyboard4, ( uint kc ) { selectAbility( 3 ); } );
+		Input.addKeyDownEvent( Keyboard.Keyboard5, ( uint kc ) { selectAbility( 4 ); } );
+		Input.addKeyDownEvent( Keyboard.Keyboard6, ( uint kc ) { selectAbility( 5 ); } );
+		Input.addKeyDownEvent( Keyboard.Keyboard7, ( uint kc ) { selectAbility( 6 ); } );
+		Input.addKeyDownEvent( Keyboard.Keyboard8, ( uint kc ) { selectAbility( 7 ); } );
+		Input.addKeyDownEvent( Keyboard.Keyboard9, ( uint kc ) { selectAbility( 8 ); } );
+	}
+	
+	/// Select an ability from a unit
+	void selectAbility( int ability )
+	{
+		if( isUnitSelected && ability < selectedUnit.abilities.length )
+		{
+			isAbilitySelected = true;
+			selectedAbility = selectedUnit.abilities[ ability ];
+			Game.abilities[ selectedAbility ].preview( selectedUnit.position, selectedUnit.remainingRange );
+			logInfo("Selected ability: ", Game.abilities[ selectedAbility ].name );
+		}
 	}
 	
 	/// Get a tile by ID
@@ -81,7 +107,7 @@ public:
 	}
 	
 	/// Find all tiles in a range
-	shared(Tile[]) getInRange( shared Tile startingTile, uint range )
+	shared(Tile[]) getInRange( uint originID, uint range, uint range2 = 0 )
 	{
 		// Create temp tuples to store stuff in.
 		import std.typecons;
@@ -93,6 +119,7 @@ public:
 		shared Tile[] foundTiles; // Tiles inside the range.
 		
 		// Start with initial tile.
+		shared Tile startingTile = Game.grid.getTileByID( originID );
 		states ~= searchState( startingTile, 0 );
 		
 		while( states.length )
@@ -105,9 +132,14 @@ public:
 			
 			visited[ state.tile.x ][ state.tile.y ] = true;
 			
-			if( state.depth < range && ( cast()state.tile == cast()startingTile || state.tile.type == TileType.Open ) )
+			// check search depth and if this tile is legal
+			if( ( state.depth >= range && state.depth < range2 + range ) || state.depth < range &&
+			   ( cast()state.tile == cast()startingTile || state.tile.type == TileType.Open ) )
 			{
-				foundTiles ~= state.tile;
+				if( range2 == 0 ) foundTiles ~= state.tile;
+				else if( state.depth >= range && state.depth < range2 + range ) foundTiles ~= state.tile;
+				
+				// find more tiles to search
 				foreach( coord; [ point( state.tile.x, state.tile.y - 1 ), point( state.tile.x, state.tile.y + 1 ), point( state.tile.x - 1, state.tile.y ), point( state.tile.x + 1, state.tile.y ) ] )
 					if( coord.x < gridX && coord.x >= 0 && coord.y < gridY && coord.y >= 0 && !visited[ coord.x ][ coord.y ] )
 						states ~= searchState( tiles[ coord.x ][ coord.y ], state.depth + 1 );
@@ -132,7 +164,7 @@ public:
 				getTileByID( unit.position ).stateFlags.drawMesh = false;
 				
 				if( unit.team == Game.turn.currentTeam )
-					visibleTiles ~= getInRange( getTileByID( unit.position ), unit.speed );
+					visibleTiles ~= getInRange(unit.position, unit.speed );
 			}
 			
 			// show all units on visible tiles

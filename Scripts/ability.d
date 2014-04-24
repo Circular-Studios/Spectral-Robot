@@ -46,14 +46,14 @@ private:
 	int _cooldown;
 	int _duration;
 	int _accuracy;
-
+	
 	// only used in this class
 	int _currentCooldown;
 	//int _currentRange;
 	Tile[] _selectedTiles;
 	
 	/// Highlight the tiles that the ability can effect
-	shared(Tile[]) highlight( uint originID, bool preview )
+	shared(Tile[]) highlight( uint originID, uint unitRange, bool preview )
 	{
 		switch( _targetArea )
 		{
@@ -62,7 +62,7 @@ private:
 			case TargetArea.Single:
 				return Game.grid.getTileByID( originID ) ~ cast(shared Tile[])[];
 			case TargetArea.Radial:
-				return Game.grid.getInRange( Game.grid.getTileByID( originID ), range );
+				return Game.grid.getInRange( originID, unitRange, range );
 		}
 	}
 	
@@ -82,27 +82,27 @@ public:
 		ID = nextID++;
 		_currentCooldown = 0;
 	}
-
+	
 	/// Use the ability
 	bool use( uint originID, uint targetID )
 	{
 		_currentCooldown = cooldown;
 		return true;
 	}
-
+	
 	/// Preview the ability
-	void preview( uint originID )
+	void preview( uint originID, uint unitRange )
 	{
 		// get the tiles the ability can effect
-		_selectedTiles = highlight( originID, true );
-
+		_selectedTiles = highlight( originID, unitRange, true );
+		
 		// change the material of the tiles
 		foreach( tile; _selectedTiles )
 		{
 			tile.selection = TileSelection.Red;
 		}
 	}
-
+	
 	// Unpreview the ability
 	void unpreview()
 	{
@@ -111,5 +111,8 @@ public:
 		{
 			tile.resetSelection();
 		}
+		
+		// remove from the grid
+		Game.grid.selectedAbility = 0;
 	}
 }
