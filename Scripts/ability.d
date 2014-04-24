@@ -112,7 +112,8 @@ public:
 			tile.resetSelection();
 		}
 		
-		// remove from the grid
+		// remove from grid
+		Game.grid.isAbilitySelected = false;
 		Game.grid.selectedAbility = 0;
 	}
 }

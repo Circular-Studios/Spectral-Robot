@@ -77,15 +77,15 @@ public:
 		
 		// ability hotkeys
 		// TODO: for loop or something
-		Input.addKeyDownEvent( Keyboard.Keyboard1, ( uint kc ) { selectAbility( 0 ); } );
-		Input.addKeyDownEvent( Keyboard.Keyboard2, ( uint kc ) { selectAbility( 1 ); } );
-		Input.addKeyDownEvent( Keyboard.Keyboard3, ( uint kc ) { selectAbility( 2 ); } );
-		Input.addKeyDownEvent( Keyboard.Keyboard4, ( uint kc ) { selectAbility( 3 ); } );
-		Input.addKeyDownEvent( Keyboard.Keyboard5, ( uint kc ) { selectAbility( 4 ); } );
-		Input.addKeyDownEvent( Keyboard.Keyboard6, ( uint kc ) { selectAbility( 5 ); } );
-		Input.addKeyDownEvent( Keyboard.Keyboard7, ( uint kc ) { selectAbility( 6 ); } );
-		Input.addKeyDownEvent( Keyboard.Keyboard8, ( uint kc ) { selectAbility( 7 ); } );
-		Input.addKeyDownEvent( Keyboard.Keyboard9, ( uint kc ) { selectAbility( 8 ); } );
+		Input.addKeyDownEvent( Keyboard.Keyboard1, kc => selectAbility( 0 ) );
+		Input.addKeyDownEvent( Keyboard.Keyboard2, kc => selectAbility( 1 ) );
+		Input.addKeyDownEvent( Keyboard.Keyboard3, kc => selectAbility( 2 ) );
+		Input.addKeyDownEvent( Keyboard.Keyboard4, kc => selectAbility( 3 ) );
+		Input.addKeyDownEvent( Keyboard.Keyboard5, kc => selectAbility( 4 ) );
+		Input.addKeyDownEvent( Keyboard.Keyboard6, kc => selectAbility( 5 ) );
+		Input.addKeyDownEvent( Keyboard.Keyboard7, kc => selectAbility( 6 ) );
+		Input.addKeyDownEvent( Keyboard.Keyboard8, kc => selectAbility( 7 ) );
+		Input.addKeyDownEvent( Keyboard.Keyboard9, kc => selectAbility( 8 ) );
 	}
 	
 	/// Select an ability from a unit
@@ -195,9 +195,7 @@ public:
 			int x = i % n;
 			int y = i / n;
 			
-			string[ shared GameObject ] parents;
-			string[][ shared GameObject ] children;
-			auto tile = cast( shared Tile )Prefabs[ "Tile" ].createInstance( parents, children );
+			auto tile = cast( shared Tile )Prefabs[ "Tile" ].createInstance();
 			
 			tile.x = x;
 			tile.y = y;
@@ -220,9 +218,7 @@ public:
 			int x = i % 3;
 			int y = i / 3;
 			
-			string[ shared GameObject ] parents;
-			string[][ shared GameObject ] children;
-			auto floor = Prefabs[ "MarbleFloor" ].createInstance( parents, children );
+			auto floor = Prefabs[ "MarbleFloor" ].createInstance();
 			
 			floor.transform.position.x = x * TILE_SIZE * 8 + 35;
 			floor.transform.position.y = -0.3;
