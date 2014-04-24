@@ -30,6 +30,7 @@
 	"importPaths": [ "Scripts/" ],
 	"targetType": "executable",
 	"targetPath": "Binaries",
+	"workingDirectory": "Binaries",
 	"lflags-linux" : [ "./libawesomium-1.6.5.so" ],
 
 	"libs-windows": [
