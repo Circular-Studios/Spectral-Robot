@@ -14,6 +14,8 @@ final shared class Controller
 		
 		// load the game
 		loadLevel( "levelSRTF" ); //TODO: Remove hardcoded value
+
+		logInfo( Game.units.length, " units loaded." );
 	}
 	
 	/// Load and create abilities from yaml
@@ -41,7 +43,8 @@ final shared class Controller
 	{
 		// So we are going to parse the Units folder for the unit files
 		// For those, we'll get the Name of the node, which will be how we call into the gameObjects
-		foreach( unitNode; loadYamlDocuments( buildNormalizedPath( FilePath.Resources.Objects, "Units" ) ) )
+		int i = 0;
+		foreach( Node unitNode; unitsToLoad )
 		{
 			// setup variables
 			int hp, sp, at, df = 0;
@@ -50,45 +53,45 @@ final shared class Controller
 			uint[] spawn;
 			shared vec3 rotationVec;
 			shared quat rotation;
-			
-			// check if we want to load this unit
-			bool nameCheck = false;
-			foreach( Node unitCheck; unitsToLoad )
+
+			foreach( Node unitCheck; loadYamlDocuments( buildNormalizedPath( FilePath.Resources.Objects, "Units" ) ) )
 			{
+				// check if we want to load this unit
 				if( unitNode[ "Name" ].as!string == unitCheck[ "Name" ].as!string )
 				{
-					nameCheck = true;
-					Config.tryGet( "Spawn", spawn, unitCheck );
-					if( Config.tryGet( "Team", teamName, unitCheck ) )
+					Config.tryGet( "Spawn", spawn, unitNode );
+					if( Config.tryGet( "Team", teamName, unitNode ) )
 						team = to!Team( teamName );
-					if( Config.tryGet( "Rotation", rotationVec, unitCheck ) )
+					if( Config.tryGet( "Rotation", rotationVec, unitNode ) )
 						rotation = quat.euler_rotation( radians( rotationVec.y ), radians( rotationVec.z ), radians( rotationVec.x ) );
+
+					// instantiate the prefab of a unit
+					auto unit = cast(shared Unit)Prefabs[ unitCheck[ "Prefab" ].as!string ].createInstance();
+					
+					// get the variables from the node
+					unit.name = unitNode[ "Name" ].as!string ~ i.to!string;
+					Config.tryGet( "HP", hp, unitCheck );
+					Config.tryGet( "Speed", sp, unitCheck );
+					Config.tryGet( "Attack", at, unitCheck );
+					Config.tryGet( "Defense", df, unitCheck );
+					Config.tryGet( "Abilities", abilities, unitCheck );
+					
+					// initialize the unit and add it to the active scene
+					unit.init( toTileID( spawn [ 0 ], spawn[ 1 ] ), team, hp, sp, at, df, loadAbilities( abilities ) );
+					if ( rotation )
+						unit.transform.rotation = rotation;
+					Game.level.addChild( unit );
+					Game.units ~= unit;
+					
+					// block and occupy the spawn tile
+					Game.grid.tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].type = TileType.HalfBlocked;
+					Game.grid.tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].occupant = unit;
+
+					// this keeps the unit names unique
+					i++;
 					break;
 				}
 			}
-			if( !nameCheck ) continue;
-			
-			// instantiate the prefab of a unit
-			auto unit = cast(shared Unit)Prefabs[ unitNode[ "Prefab" ].as!string ].createInstance();
-			
-			// get the variables from the node
-			unit.name = unitNode[ "Name" ].as!string;
-			Config.tryGet( "HP", hp, unitNode );
-			Config.tryGet( "Speed", sp, unitNode );
-			Config.tryGet( "Attack", at, unitNode );
-			Config.tryGet( "Defense", df, unitNode );
-			Config.tryGet( "Abilities", abilities, unitNode );
-			
-			// initialize the unit and add it to the active scene
-			unit.init( toTileID( spawn [ 0 ], spawn[ 1 ] ), team, hp, sp, at, df, loadAbilities( abilities ) );
-			if ( rotation )
-				unit.transform.rotation = rotation;
-			Game.level.addChild( unit );
-			Game.units ~= unit;
-			
-			// block and occupy the spawn tile
-			Game.grid.tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].type = TileType.HalfBlocked;
-			Game.grid.tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].occupant = unit;
 		}
 	}
 	
