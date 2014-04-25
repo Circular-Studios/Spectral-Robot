@@ -79,7 +79,6 @@ final shared class Controller
 			Config.tryGet( "Defense", df, unitNode );
 			Config.tryGet( "Abilities", abilities, unitNode );
 			
-			
 			// initialize the unit and add it to the active scene
 			unit.init( toTileID( spawn [ 0 ], spawn[ 1 ] ), team, hp, sp, at, df, loadAbilities( abilities ) );
 			if ( rotation )

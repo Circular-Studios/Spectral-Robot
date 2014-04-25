@@ -34,7 +34,7 @@ public:
 	{
 		// Left mouse click
 		Input.addKeyDownEvent( Keyboard.MouseLeft, ( kc )
-		                      {
+		{
 			if( auto obj = Input.mouseObject )
 			{
 				logInfo( "Clicked on ", obj.name );
@@ -59,10 +59,6 @@ public:
 				}
 				else
 				{
-					// Deselect a unit if not a tile
-					if( isUnitSelected )
-						selectedUnit.deselect();
-					
 					// Select a unit
 					if( auto unit = cast(shared Unit)obj )
 					{
@@ -70,6 +66,12 @@ public:
 						isUnitSelected = true;
 						unit.previewMove();
 						Game.turn.sendAction( Action( 1, unit.ID, unit.position, false ) );
+					}
+					// Deselect a unit if not a tile
+					else if( isUnitSelected )
+					{
+						logInfo("Deselected ", selectedUnit.name );
+						selectedUnit.deselect();
 					}
 				}
 			}
@@ -96,7 +98,9 @@ public:
 			isAbilitySelected = true;
 			selectedAbility = selectedUnit.abilities[ ability ];
 			Game.abilities[ selectedAbility ].preview( selectedUnit.position, selectedUnit.remainingRange );
-			logInfo("Selected ability: ", Game.abilities[ selectedAbility ].name );
+
+			logInfo("Selected ability: ", Game.abilities[ selectedAbility ].name, ", ",
+				Game.abilities[ selectedAbility ].currentCooldown, " turn(s) to use." );
 		}
 	}
 	
