@@ -94,8 +94,10 @@ public:
 	{
 		// make sure the targetID is allowed
 		bool legalTile = false;
+		logInfo(targetID);
 		foreach( tile; _selectedTiles )
 		{
+			logInfo(tile.toID());
 			if( tile.toID() == targetID )
 				legalTile = true;
 		}
@@ -107,53 +109,56 @@ public:
 				default:
 					break;
 				case TargetArea.Single:
-						applyAbility( originID, targetID );
-					break;
+						return applyAbility( originID, targetID );
 				case TargetArea.Radial:
 					foreach( tile; _selectedTiles )
 					{
-						applyAbility( originID, tile.toID() );
+						return applyAbility( originID, tile.toID() );
 					}
-					break;
 			}
-
+			logInfo("ability.use worked");
 			// reset cooldown
 			_currentCooldown = cooldown;
-			return true;
 		}
-
+		logInfo("ability.use failed");
 		return false;
 	}
 
 	// apply the effects of the ability
-	void applyAbility( uint originID, uint targetID )
+	bool applyAbility( uint originID, uint targetID )
 	{
 		shared Tile originTile = Game.grid.getTileByID( originID );
 		shared Tile targetTile = Game.grid.getTileByID( targetID );
 		// team check
-		if( targetTile.occupant !is null && targetType == TargetType.Tile ||
-		   ( targetType == TargetType.EnemyUnit && targetTile.occupant.team != originTile.occupant.team ) ||
-		   ( targetType == TargetType.AlliedUnit && targetTile.occupant.team == originTile.occupant.team ) )
+		logInfo(targetID, " ", targetTile.occupant !is null);
+		logInfo(originID, " ", originTile.occupant !is null);
+		if( targetTile.occupant !is null && ( targetType == TargetType.Tile ||
+		  ( targetType == TargetType.EnemyUnit && targetTile.occupant.team != originTile.occupant.team ) ||
+		  ( targetType == TargetType.AlliedUnit && targetTile.occupant.team == originTile.occupant.team ) ) )
 		{
 			switch( damageType )
 			{
 				default:
-					//originTile.occupant.hp -= damage;
+					originTile.occupant.applyEffect!"_hp"( damage );
 					break;
 				case DamageType.Buff:
 					break;
 				case DamageType.Debuff:
 					break;
 				case DamageType.Direct:
+					// call the straight line function
 					break;
 				case DamageType.DOT:
-
+					originTile.occupant.applyEffect!"_hp"( damage, duration );
 					break;
 				case DamageType.Healing:
-					//targetTile.occupant.hp += damage;
+					originTile.occupant.applyEffect!"_hp"( -damage );
 					break;
 			}
+			logInfo( originTile.occupant.name, " used ", name, " on ", targetTile.occupant.name );
 		}
+		logInfo("applyAbility failed");
+		return false;
 	}
 	
 	/// Preview the ability

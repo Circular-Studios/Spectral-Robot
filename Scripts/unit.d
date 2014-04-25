@@ -1,8 +1,8 @@
 ﻿module unit;
-import game, ability, grid, tile, turn;
+import game, ability, grid, effect, tile, turn;
 import core, utility, components;
 import gl3n.linalg, gl3n.interpolate;
-import std.math;
+import std.math, std.algorithm;
 
 enum ACTIONS_RESET = 3;
 
@@ -19,29 +19,24 @@ private:
 	int _remainingRange;
 	int _remainingActions;
 	uint[] _abilities;
-	Tile[] selectedTiles;
-	
+	Tile[] _selectedTiles;
+	IEffect[] _activeEffects;
+
 public:
 	immutable uint ID;
 	mixin( Property!( _position, AccessModifier.Public) );
 	mixin( Property!( _team, AccessModifier.Public) );
 	mixin( Property!( _remainingRange, AccessModifier.Public) );
 	mixin( Property!( _remainingActions, AccessModifier.Public) );
+	mixin( Property!( _selectedTiles, AccessModifier.Public) );
+	mixin( Property!( _activeEffects, AccessModifier.Public) );
 	mixin( Property!( _hp, AccessModifier.Public) );
 	mixin( Property!( _speed, AccessModifier.Public) );
 	mixin( Property!( _attack, AccessModifier.Public) );
 	mixin( Property!( _defense, AccessModifier.Public) );
 	mixin( Property!( _abilities, AccessModifier.Public) );
-	
-	@property int x()
-	{
-		return cast(int)position % Game.grid.gridX;
-	}
-	
-	@property int y()
-	{
-		return cast(int)position / Game.grid.gridX;
-	}
+	@property int x() { return cast(int)position % Game.grid.gridX; }
+	@property int y() { return cast(int)position / Game.grid.gridX; }
 	
 	this()
 	{
@@ -66,9 +61,9 @@ public:
 	/// Use an ability
 	bool useAbility( uint abilityID, uint targetID )
 	{
-		if( remainingActions > 0 && abilities[ abilityID ] )
+		if( remainingActions > 0 && (cast()_abilities).countUntil( abilityID ) > -1 )
 		{
-			if( Game.abilities[ abilityID ].use( this.ID, targetID ) )
+			if( Game.abilities[ abilityID ].use( position, targetID ) )
 			{
 				_remainingActions--;
 				
@@ -80,11 +75,44 @@ public:
 		
 		return false;
 	}
+
+	/// Apply an effect to the unit
+	/// 
+	/// Params:
+	///  prop = 	the variable you want to effect
+	///  diff = 	the amount to change prop by
+	///  duration = the number of turns the effect is applied
+	///  reset =	true if prop should return to its original value when the effect is over
+	void applyEffect( string prop )( int diff, int duration = 0, bool reset = false )
+	{
+		// apply the effect for a number of turns
+		if( duration > 0 )
+		{
+			// add the ability to a list
+			_activeEffects ~= new Effect!prop( diff, duration, reset, mixin( prop ) );
+		}
+
+		// apply the effect now
+		mixin( prop ) -= diff;
+	}
+
+	void reEffect( string prop )( int diff, int duration, bool reset, int originalValue )
+	{
+		mixin( prop ) -= diff;
+		duration--;
+		
+		// check if the ability has run its course
+		if( duration <= 0 )
+		{
+			if( reset )
+				mixin( prop ) = originalValue;
+		}
+	}
 	
 	/// Move the unit to a tile
 	void move( uint targetTileID )
 	{
-		if ( checkMove( targetTileID ) )
+		if( checkMove( targetTileID ) )
 		{
 			// easy names for the tiles
 			auto curTile = Game.grid.getTileByID( position );
@@ -153,7 +181,7 @@ public:
 		{
 			Game.grid.getTileByID( position ).transform.scale = 
 				interp( shared vec3( TILE_SIZE / 3 ), shared vec3( TILE_SIZE / 2 ), 
-				       ( Time.totalTime - startTime ) / dur.toSeconds );
+						( Time.totalTime - startTime ) / dur.toSeconds );
 		} );
 	}
 	
@@ -181,8 +209,15 @@ public:
 	/// Prep the unit to begin a turn anew
 	void newTurn()
 	{
+		// reset action and range
 		_remainingActions = ACTIONS_RESET;
 		_remainingRange = speed;
+
+		// apply active effects (reversed to allow for deletions)
+		foreach_reverse( i, effect; _activeEffects )
+		{
+			effect.use( this );
+		}
 	}
 	
 	/// Convert grid coordinates to 3D space

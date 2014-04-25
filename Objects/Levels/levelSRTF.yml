@@ -1,10 +1,10 @@
 ---
 Name: "The Only Level"
 Grid: [24, 24]
-FogOfWar: Yes
+FogOfWar: No
 Units:
     - Name: TechWolf
-      Spawn: [11, 3]
+      Spawn: [21, 22]
       Team: Wolf
     - Name: TechWolf
       Spawn: [1, 2]

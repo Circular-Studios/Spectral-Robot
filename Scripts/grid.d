@@ -56,16 +56,29 @@ public:
 						selectedUnit.previewMove();
 						Game.turn.sendAction( Action( 1, selectedUnit.ID, selectedUnit.position, false ) );
 					}
+					// use the selected ability on the tile
+					else if( isAbilitySelected )
+					{
+						selectedUnit.useAbility( selectedAbility, tile.toID() );
+					}
 				}
 				else
 				{
-					// Select a unit
 					if( auto unit = cast(shared Unit)obj )
 					{
-						selectedUnit = unit;
-						isUnitSelected = true;
-						unit.previewMove();
-						Game.turn.sendAction( Action( 1, unit.ID, unit.position, false ) );
+						// Use the selected ability on the unit
+						if( isAbilitySelected )
+						{
+							selectedUnit.useAbility( selectedAbility, unit.position );
+						}
+						// Select a unit
+						else
+						{
+							selectedUnit = unit;
+							isUnitSelected = true;
+							unit.previewMove();
+							Game.turn.sendAction( Action( 1, unit.ID, unit.position, false ) );
+						}
 					}
 					// Deselect a unit if not a tile
 					else if( isUnitSelected )
