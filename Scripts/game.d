@@ -49,10 +49,10 @@ public:
 		gc = new shared Controller();
 		
 		// create a camera
-		//shared AdvancedCamera camera = cast(shared AdvancedCamera)level["Camera"].camera;
-		//camera.autoClamp();
-		//level.camera = cast(shared Camera)camera;
-		level.camera = level[ "Camera" ].camera;
+		shared AdvancedCamera cam = cast(shared AdvancedCamera)level[ "Camera" ];
+		cam.autoClamp();
+		level.camera = cam.camera;
+
 		
 		// bind 'r' to server connect
 		Input.addKeyDownEvent( Keyboard.R, kc => connect() );
