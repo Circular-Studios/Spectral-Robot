@@ -1,4 +1,5 @@
 ﻿module camera;
+import game, grid;
 import core, graphics, utility;
 import std.algorithm;
 import gl3n.linalg, gl3n.math, gl3n.interpolate;
@@ -23,6 +24,11 @@ shared class AdvancedCamera : GameObjectInit!AdvancedCameraFields
 	float edgeDistance;
 	float minHeight;
 	float maxHeight;
+	float minX;
+	float maxX;
+	float minZ;
+	float maxZ;
+	bool clamped = false;
 
 	override void onInitialize( AdvancedCameraFields a )
 	{
@@ -127,6 +133,9 @@ shared class AdvancedCamera : GameObjectInit!AdvancedCameraFields
 			this.transform.position += moveVec;
 		}
 
+		if( clamped )
+			clampLookPos();
+
 		if( Input.getState( "ZoomIn" ) )
 		{
 			transform.position += this.transform.forward * min( ( zoomSpeed * Time.deltaTime ), ( minHeight - transform.position.y ) / this.transform.forward.y );
@@ -141,7 +150,44 @@ shared class AdvancedCamera : GameObjectInit!AdvancedCameraFields
 			transform.position = startPos;
 			transform.rotation = startRot;
 		}
+	}
 
+	void autoClamp()
+	{
+		minX = Game.grid.transform.position.x;
+		minZ = Game.grid.transform.position.z;
+		maxX = minX + ( Game.grid.gridX * TILE_SIZE );
+		maxZ = minZ + ( Game.grid.gridY * TILE_SIZE );
+		clamped = true;
+	}
+
+	shared(vec3) lookatPos()
+	{
+		return transform.position + ( transform.forward * ( -transform.position.y  / this.transform.forward.y ) );
+	}
+
+	void clampLookPos()
+	{
+		if( lookatPos.x < minX )
+		{
+			logDebug("Clamping at minX");
+			transform.position.x += minX - lookatPos.x;
+		}
+		if( lookatPos.x > maxX )
+		{
+			logDebug("Clamping at maxX");
+			transform.position.x -= lookatPos.x - maxX;
+		}
+		if( lookatPos.z < minZ )
+		{
+			logDebug("Clamping at minZ");
+			transform.position.z += minZ - lookatPos.z;
+		}
+		if( lookatPos.z > maxZ )
+		{
+			logDebug("Clamping at maxZ");
+			transform.position.z -= lookatPos.z - maxZ;
+		}
 	}
 
 private:

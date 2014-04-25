@@ -1,5 +1,5 @@
 module game;
-import controller, grid, turn, action, ability, unit;
+import controller, grid, turn, action, ability, unit, camera;
 import core, graphics, components, utility;
 import speed;
 
@@ -49,7 +49,9 @@ public:
 		gc = new shared Controller();
 		
 		// create a camera
-		level.camera = level[ "Camera" ].camera;
+		shared AdvancedCamera camera = cast(shared AdvancedCamera)level["Camera"].camera;
+		camera.autoClamp();
+		level.camera = cast(shared Camera)camera;
 		
 		// bind 'r' to server connect
 		Input.addKeyDownEvent( Keyboard.R, kc => connect() );
