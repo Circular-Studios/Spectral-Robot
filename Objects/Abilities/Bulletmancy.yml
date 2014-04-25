@@ -1,7 +1,7 @@
 ---
 name: "Attack"
 targetType: EnemyUnit
-targetArea: Radial
+targetArea: Single
 range: 1
 damage: 1
 ---

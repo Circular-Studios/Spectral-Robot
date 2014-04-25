@@ -148,12 +148,13 @@ public:
 		// scale the selected unit's tile
 		auto startTime = Time.totalTime;
 		auto dur = 100.msecs;
-		scheduleTimedTask(
-			{
+		// TODO: use the interpolate task
+		scheduleTimedTask( dur,
+		{
 			Game.grid.getTileByID( position ).transform.scale = 
 				interp( shared vec3( TILE_SIZE / 3 ), shared vec3( TILE_SIZE / 2 ), 
 				       ( Time.totalTime - startTime ) / dur.toSeconds );
-		}, dur );
+		} );
 	}
 	
 	/// Remove focus from the unit and any highlighted tiles
@@ -182,28 +183,6 @@ public:
 	{
 		_remainingActions = ACTIONS_RESET;
 		_remainingRange = speed;
-	}
-	
-	/// Fill the number row with hotkeys to select abilities
-	void setHotkeys()
-	{
-		/*
-		 foreach( i, abilityID; _abilities )
-		 Input.addKeyDownEvent( mixin( "Keyboard.Keyboard" ~ ( i + 1 ).to!string ), ( uint kc ) 
-		 {
-		 Grid.abilities[ _abilities[ i ] ].preview( _selectedUnit.abilities[ i ], 1 );
-		 } );*/
-	}
-	
-	/// Free up the hotkeys for another unit to use
-	void removeHotkeys()
-	{
-		/*
-		 foreach( i, abilityID; _abilities )
-		 Input.removeKeyDownEvent( mixin( "Keyboard.Keyboard" ~ ( i + 1 ).to!string ), ( uint kc ) 
-		 {
-		 Grid.abilities[ _abilities[ i ] ].preview( _selectedUnit.abilities[ i ], 1 );
-		 } );*/
 	}
 	
 	/// Convert grid coordinates to 3D space

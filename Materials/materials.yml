@@ -41,5 +41,5 @@ Specular: werewolf_s
 ---
 Name: Robot
 Diffuse: robot_d
-Normal: blank_n
+Normal: robot_n
 Specular: robot_s

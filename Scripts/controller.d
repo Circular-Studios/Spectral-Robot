@@ -24,7 +24,7 @@ final shared class Controller
 		uint[] abilityIDs;
 		
 		// load the yaml
-		auto yaml = Loader( findInDirectory ( "Abilities", abilitiesFile ) );
+		auto yaml = Loader( findInDirectory ( "Abilities", abilitiesFile ) ~ ".yml" );
 		
 		foreach( Node abilityNode; yaml )
 		{
@@ -69,9 +69,7 @@ final shared class Controller
 			if( !nameCheck ) continue;
 			
 			// instantiate the prefab of a unit
-			string[ shared GameObject ] parents;
-			string[][ shared GameObject ] children;
-			auto unit = cast(shared Unit)Prefabs[ unitNode[ "Prefab" ].as!string ].createInstance( parents, children );
+			auto unit = cast(shared Unit)Prefabs[ unitNode[ "Prefab" ].as!string ].createInstance();
 			
 			// get the variables from the node
 			unit.name = unitNode[ "Name" ].as!string;
@@ -80,7 +78,6 @@ final shared class Controller
 			Config.tryGet( "Attack", at, unitNode );
 			Config.tryGet( "Defense", df, unitNode );
 			Config.tryGet( "Abilities", abilities, unitNode );
-			
 			
 			// initialize the unit and add it to the active scene
 			unit.init( toTileID( spawn [ 0 ], spawn[ 1 ] ), team, hp, sp, at, df, loadAbilities( abilities ) );
@@ -104,11 +101,11 @@ final shared class Controller
 	/// Return the file path for a level to load
 	string findInDirectory( string directory, string fileName )
 	{
-		foreach( file; FilePath.scanDirectory( buildNormalizedPath( FilePath.Resources.Objects, directory ), "*.yml" ) )
+		foreach( file; FilePath.scanDirectory( buildNormalizedPath( FilePath.Resources.Objects, directory ) ) )
 		{
 			if( file.baseFileName() == fileName )
 			{
-				return file.fullPath();
+				return file.directory() ~ "/" ~ file.baseFileName();
 			}
 			
 			//TODO: Handle yaml not existing
@@ -121,7 +118,7 @@ final shared class Controller
 	void loadLevel( string levelName )
 	{
 		// load the level from yaml
-		Node levelNode = loadYamlFile( findInDirectory ( "Levels", levelName ) );
+		Node levelNode = loadYamlFile( findInDirectory( "Levels", levelName ) );
 		
 		// setup variables
 		int[] gridSize;
@@ -179,9 +176,7 @@ final shared class Controller
 				for( int y = loc[ 1 ]; y <= loc[ 3 ]; y += tileSize[ 1 ] )
 				{
 					// instantiate the prefab of a prop
-					string[ shared GameObject ] parents;
-					string[][ shared GameObject ] children;
-					auto prop = Prefabs[ prefab ].createInstance( parents, children );
+					auto prop = Prefabs[ prefab ].createInstance();
 					
 					// make the name unique
 					prop.name = prefab ~ " ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )";
