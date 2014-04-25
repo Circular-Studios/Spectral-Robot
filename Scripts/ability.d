@@ -4,6 +4,7 @@ import game, grid, tile;
 
 enum DamageType
 {
+	Normal,
 	Buff,
 	Debuff,
 	Healing,
@@ -31,6 +32,7 @@ enum TargetArea
 
 enum StatEffected
 {
+	None,
 	Accuracy,
 	Turn, // deplete the actions left on a unit
 }
@@ -130,16 +132,14 @@ public:
 		shared Tile originTile = Game.grid.getTileByID( originID );
 		shared Tile targetTile = Game.grid.getTileByID( targetID );
 		// team check
-		logInfo(targetID, " ", targetTile.occupant !is null);
-		logInfo(originID, " ", originTile.occupant !is null);
 		if( targetTile.occupant !is null && ( targetType == TargetType.Tile ||
 		  ( targetType == TargetType.EnemyUnit && targetTile.occupant.team != originTile.occupant.team ) ||
 		  ( targetType == TargetType.AlliedUnit && targetTile.occupant.team == originTile.occupant.team ) ) )
 		{
-			switch( damageType )
+			final switch( damageType )
 			{
-				default:
-					originTile.occupant.applyEffect!"_hp"( damage );
+				case DamageType.Normal:
+					targetTile.occupant.applyEffect!"_hp"( damage );
 					break;
 				case DamageType.Buff:
 					break;
@@ -149,13 +149,22 @@ public:
 					// call the straight line function
 					break;
 				case DamageType.DOT:
-					originTile.occupant.applyEffect!"_hp"( damage, duration );
+					targetTile.occupant.applyEffect!"_hp"( damage, duration );
 					break;
 				case DamageType.Healing:
-					originTile.occupant.applyEffect!"_hp"( -damage );
+					targetTile.occupant.applyEffect!"_hp"( -damage, duration );
+					break;
+				case DamageType.Reduce:
+					break;
+				case DamageType.LifeSteal:
+					originTile.occupant.applyEffect!"_hp"( -damage, duration );
+					targetTile.occupant.applyEffect!"_hp"( damage, duration );
+					break;
+				case DamageType.Modifier:
 					break;
 			}
 			logInfo( originTile.occupant.name, " used ", name, " on ", targetTile.occupant.name );
+			return true;
 		}
 		logInfo("applyAbility failed");
 		return false;
