@@ -5,17 +5,17 @@ FogOfWar: Yes
 Units:
     - Name: TechWolf
       Spawn: [11, 3]
-      Rotation: !Vector3 0 180 0
-	  Team: Wolf
-	- Name: TechWolf
+      Team: Wolf
+    - Name: TechWolf
       Spawn: [1, 2]
-      Rotation: !Vector3 0 180 0
       Team: Wolf
     - Name: FireRobot
       Spawn: [12, 19]
+      Rotation: !Vector3 0 180 0
       Team: Robot
-	- Name: FireRobot
+    - Name: FireRobot
       Spawn: [21, 23]
+      Rotation: !Vector3 0 180 0
       Team: Robot
 Objects:
     - Prefab: Wall

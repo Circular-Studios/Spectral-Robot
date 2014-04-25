@@ -25,7 +25,6 @@ enum TargetArea
 {
 	Single,
 	Line,
-	Square,
 	Radial,
 	MovingRadial,
 }
@@ -57,7 +56,7 @@ private:
 	Tile[] _selectedTiles;
 	
 	/// Highlight the tiles that the ability can effect
-	shared(Tile[]) highlight( uint originID, uint unitRange, bool preview )
+	shared(Tile[]) highlight( uint originID, uint unitRange )
 	{
 		switch( _targetArea )
 		{
@@ -161,7 +160,7 @@ public:
 	void preview( uint originID, uint unitRange )
 	{
 		// get the tiles the ability can effect
-		_selectedTiles = highlight( originID, unitRange, true );
+		_selectedTiles = highlight( originID, unitRange );
 		
 		// change the material of the tiles
 		foreach( tile; _selectedTiles )
