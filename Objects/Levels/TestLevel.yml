@@ -3,10 +3,10 @@ Name: "The Only Level"
 Grid: [5, 10]
 FogOfWar: No
 Units:
-    - Name: Werewolf1
+    - Name: TechWolf
       Spawn: [1, 1]
       Team: 1
-    - Name: Robot1
+    - Name: FireRobot
       Spawn: [4, 0]
       Team: 2
 Objects:

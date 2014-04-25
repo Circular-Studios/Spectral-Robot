@@ -1,7 +1,7 @@
 ---
 name: "Attack"
 targetType: EnemyUnit
-targetArea: Radial
+targetArea: Single
 range: 1
 damage: 1
 ---
@@ -14,7 +14,7 @@ damageType: DOT
 duration: 3
 cooldown: 3
 ---
-name: "Fire Ball"
+name: "Fireball"
 targetType: EnemyUnit
 targetArea: Single
 range: 2
