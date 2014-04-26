@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+		<meta charset="UTF-8" />
+        <title>SRTF - Gameplay UI</title>
+		<meta name="author" content="Derrick Hunt" />
+		
+		<link rel="stylesheet" type="text/css" href="normalize.css" />
+		<link rel="stylesheet" type="text/css" href="gameplayUI_style.css" />
+		
+		<script src="jquery-2.1.0.min.js"></script>
+    </head>
+    <body>
+		<button id="b1">MULTIPLAYER</button>
+		
+		<button id="b2">TUTORIAL</button>
+		
+		<button id="b3">OPTIONS</button>
+		
+		<button id="b4">CREDITS</button>
+		
+		<button id="b5">EXIT</button>
+		
+		<audio id="select" src="select.wav" type="audio/wav"></audio>
+		<audio id="cancel" src="cancel.wav" type="audio/wav"></audio>
+		
+		 <script>
+		//Button functions
+		$(document).ready(function(){
+			var menuFadeSpd = 500;
+			$('h1').fadeIn(menuFadeSpd);
+			$('#b1').fadeIn(menuFadeSpd);
+			$('#b2').fadeIn(menuFadeSpd);
+			$('#b3').fadeIn(menuFadeSpd);
+			$('#b4').fadeIn(menuFadeSpd);
+			$('#b5').fadeIn(menuFadeSpd);
+		
+			$('#b1').click(function(){ //multiplayer button
+				console.log("multiplayer button clicked");
+				$('#select').get(0).play();
+				setTimeout('window.location.href="multiplayerMenu.html"', 400);
+			});
+			$('#b2').click(function(){ //tutorial/campaign button
+				console.log("tutorial/campaign button clicked");
+			});
+			$('#b3').click(function(){ //options button
+				console.log("options button clicked");
+				$('#select').get(0).play();
+				setTimeout('window.location.href="optionsMenu.html"', 400);
+			});
+			$('#b4').click(function(){ //credits button
+				console.log("credits button clicked");
+				$('#select').get(0).play();
+				setTimeout('window.location.href="creditsMenu.html"', 400);
+			});
+			$('#b5').click(function(){ //exit button
+				console.log("exit button clicked");
+				$('#cancel').get(0).play();
+			});
+		});
+		</script>
+    </body>
+</html>
