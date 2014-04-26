@@ -5,22 +5,27 @@ Script:
     Fields:
         MoveSpeed: 150
         RotateTime: 400
-        ZoomSpeed: 100
+        ZoomSpeed: 300
         EdgeDistance: 50
         MinHeight: 50
-        MaxHeight: 100
+        MaxHeight: 300
 Transform:
     Position: !Vector3 115 0 255
     Rotation: !Vector3 -45 0 0
 Camera: 
     FOV: 59
     Near: 1
-    Far: 400
+    Far: 1000
 ---
 Name: DirLight
 Light: !Light-Directional
     Color: !Vector3 1 1 1
-    Direction: !Vector3 0 -1 -1
+    Direction: !Vector3 -1 -1 -1
+---
+Name: DirLight2
+Light: !Light-Directional
+    Color: !Vector3 1 1 1
+    Direction: !Vector3 1 1 1
 ---
 Name: AmbLight
 Light: !Light-Ambient

@@ -5,16 +5,13 @@ Display:
     Fullscreen: false
     Height: 720
     Width: 1280
-    FieldOfView: 90
-    NearPlane: 0.01
-    FarPlane: 1000
 Graphics:
     BackfaceCulling: true
     VSync: false
 Physics:
     Gravity: !Vector3 0.0 -10.0 0.0
 UserInterface:
-    FilePath: "/UI/index.html"
+    FilePath: "/UI/main_menu/mainMenu.html"
     Scale: !Vector2 1.0 1.0
 Logging:
     FilePath: "dash.log"
@@ -24,4 +21,3 @@ Logging:
     Release:
         OutputVerbosity: !Verbosity Medium
         LoggingVerbosity: !Verbosity Medium
- 

@@ -1,6 +1,6 @@
 ﻿---
-Name: FireRobot
-Prefab: Robot1
+Name: PyroRobot
+Prefab: PyroRobot
 HP: 65
 Speed: 3
 Strength: 8

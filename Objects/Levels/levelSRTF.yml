@@ -6,28 +6,28 @@ Units:
     - Name: TechWolf
       Spawn: [21, 22]
       Team: Wolf
-    - Name: TechWolf
+    - Name: PyroWolf
       Spawn: [1, 2]
       Team: Wolf
-    - Name: FireRobot
+    - Name: PyroRobot
       Spawn: [12, 19]
       Rotation: !Vector3 0 180 0
       Team: Robot
-    - Name: FireRobot
+    - Name: PyroRobot
       Spawn: [21, 23]
       Rotation: !Vector3 0 180 0
       Team: Robot
 Objects:
     - Prefab: Wall
-      Location: [0, 1, 0, 22]
-      TileSize: [1, 2]
-      Rotation: !Vector3 90 0 90
+      Location: [0, 0, 0, 23]
+      TileSize: [1, 4]
+      Rotation: !Vector3 0 0 0
       TileType: FullyBlocked
 
     - Prefab: Wall
-      Location: [23, 1, 23, 22]
-      TileSize: [1, 2]
-      Rotation: !Vector3 90 0 90
+      Location: [23, 0, 23, 23]
+      TileSize: [1, 4]
+      Rotation: !Vector3 0 180 0
       TileType: FullyBlocked
 
     - Prefab: Pillar

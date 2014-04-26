@@ -1,12 +1,12 @@
 ---
-Name: Werewolf1
+Name: TechWolf
 Script:
     ClassName: unit.Unit
 Mesh: werewolf
-Material: Werewolf
+Material: TechWolf
 ---
-Name: Robot1
+Name: PyroRobot
 Script:
     ClassName: unit.Unit
 Mesh: robot
-Material: Robot
+Material: PyroRobot

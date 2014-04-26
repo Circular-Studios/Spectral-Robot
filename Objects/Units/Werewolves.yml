@@ -1,6 +1,6 @@
 ---
 Name: TechWolf
-Prefab: Werewolf1
+Prefab: TechWolf
 HP: 40
 Speed: 4
 Attack: 10
