@@ -20,7 +20,8 @@ public:
 	Ability[ uint ] abilities; // The abilities
 	Unit[] units; // The units
 	Connection serverConn; // the server connection
-	
+	//UserInterface ui;
+
 	// Name that game
 	@property override string title()
 	{
@@ -60,7 +61,7 @@ public:
 		// create the ui
 		/*ui = new shared UserInterface( Config.get!uint( "Display.Width" ),
 		 Config.get!uint( "Display.Height" ), 
-		 Config.get!string( "UserInterface.FilePath" ) 
+		 Config.getPath( "UserInterface.FilePath" ) 
 		 );*/
 	}
 	
@@ -99,6 +100,13 @@ public:
 		logInfo( "Shutting down..." );
 		if( serverConn )
 			serverConn.close();
+		level.destroy();
+		grid.destroy();
+		turn.destroy();
+		units.destroy();
+		abilities.destroy();
+		gc.destroy();
+		//ui.destroy();
 	}
 	
 	override void onSaveState()
