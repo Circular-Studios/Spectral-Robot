@@ -123,7 +123,7 @@ public:
 			targetTile.type = TileType.HalfBlocked;
 			
 			// scale the tile back down
-			curTile.transform.scale = vec3( TILE_SIZE / 3 );
+			curTile.transform.scale = vec3( TILE_SIZE / 2 );
 			
 			// change the tile occupants
 			curTile.occupant = null;
@@ -180,7 +180,7 @@ public:
 		scheduleTimedTask( dur,
 		{
 			Game.grid.getTileByID( position ).transform.scale = 
-				interp( shared vec3( TILE_SIZE / 3 ), shared vec3( TILE_SIZE / 2 ), 
+				interp( shared vec3( TILE_SIZE ), shared vec3( TILE_SIZE / 2 ), 
 						( Time.totalTime - startTime ) / dur.toSeconds );
 		} );
 	}
@@ -195,7 +195,7 @@ public:
 		}
 		
 		// scale the tile back down
-		Game.grid.getTileByID( position ).transform.scale = vec3( TILE_SIZE / 3 );
+		Game.grid.getTileByID( position ).transform.scale = vec3( TILE_SIZE / 2 );
 		
 		// Modify grid variables
 		Game.grid.selectedUnit = null;
@@ -223,7 +223,7 @@ public:
 	/// Convert grid coordinates to 3D space
 	void updatePosition()
 	{
-		this.transform.position.x = this.x * 10;
-		this.transform.position.z = this.y * 10;
+		this.transform.position.x = this.x * TILE_SIZE;
+		this.transform.position.z = this.y * TILE_SIZE;
 	}
 }

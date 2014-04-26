@@ -185,8 +185,9 @@ final shared class Controller
 					prop.name = prefab ~ " ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )";
 					
 					// place the prop
-					prop.transform.position.x = x * TILE_SIZE + ( tileSize[ 0 ] - 1 ) * 0.5;
-					prop.transform.position.z = y * TILE_SIZE + ( tileSize[ 1 ] - 1 ) * 0.5;
+					prop.transform.position.x = x * TILE_SIZE + ( tileSize[ 0 ] / 2 * TILE_SIZE );
+					prop.transform.position.z = y * TILE_SIZE + ( tileSize[ 1 ] / 2 * TILE_SIZE );
+
 					if( rotation )
 						prop.transform.rotation = rotation;
 					

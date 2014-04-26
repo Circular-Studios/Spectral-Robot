@@ -4,7 +4,7 @@ import core, utility, components;
 import gl3n.linalg;
 import std.conv;
 
-const int TILE_SIZE = 10;
+const int TILE_SIZE = 20;
 
 /// A grid that contains tiles
 shared class Grid : GameObject
@@ -151,7 +151,7 @@ public:
 			
 			// check search depth and if this tile is legal
 			if( ( state.depth >= range && state.depth < range2 + range ) || state.depth < range &&
-			   ( cast()state.tile == cast()startingTile || state.tile.type == TileType.Open ) )
+			   ( cast()state.tile == cast()startingTile || state.tile.type == TileType.Open || state.tile.occupant ) )
 			{
 				if( range2 == 0 ) foundTiles ~= state.tile;
 				else if( state.depth >= range && state.depth < range2 + range ) foundTiles ~= state.tile;
@@ -216,7 +216,7 @@ public:
 			
 			tile.x = x;
 			tile.y = y;
-			tile.transform.scale = vec3( TILE_SIZE / 3 );
+			tile.transform.scale = vec3( TILE_SIZE / 2 );
 			
 			// hide the tile
 			tile.stateFlags.drawMesh = false;
@@ -230,17 +230,17 @@ public:
 		
 		// Create the floor from a prefab and add it to the scene
 		// TODO: I'm so sorry I hardcoded, future programmer, it needed to be done at the time.
-		for( int i = 0; i < 9; i++ )
+		for( int i = 0; i < 16; i++ )
 		{
-			int x = i % 3;
-			int y = i / 3;
+			int x = i % 4;
+			int y = i / 4;
 			
 			auto floor = Prefabs[ "MarbleFloor" ].createInstance();
 			
-			floor.transform.position.x = x * TILE_SIZE * 8 + 35;
+			floor.transform.position.x = x * TILE_SIZE * 6 + ( TILE_SIZE * 2.5 );
 			floor.transform.position.y = -0.3;
-			floor.transform.position.z = y * TILE_SIZE * 8 + 35;
-			floor.transform.scale = vec3( TILE_SIZE * 4 );
+			floor.transform.position.z = y * TILE_SIZE * 6 + ( TILE_SIZE * 2.5 );
+			floor.transform.scale = vec3( TILE_SIZE * 3 );
 			
 			// make the name unique
 			floor.name = "Floor ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )";
