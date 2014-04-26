@@ -96,10 +96,8 @@ public:
 	{
 		// make sure the targetID is allowed
 		bool legalTile = false;
-		logInfo(targetID);
 		foreach( tile; _selectedTiles )
 		{
-			logInfo(tile.toID());
 			if( tile.toID() == targetID )
 				legalTile = true;
 		}
