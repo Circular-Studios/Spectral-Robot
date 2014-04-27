@@ -10,7 +10,7 @@ Script:
         MinHeight: 50
         MaxHeight: 300
 Transform:
-    Position: !Vector3 115 0 255
+    Position: !Vector3 230 0 510
     Rotation: !Vector3 -45 0 0
 Camera: 
     FOV: 59

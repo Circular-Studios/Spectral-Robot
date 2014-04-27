@@ -13,7 +13,7 @@ Units:
       Spawn: [12, 19]
       Rotation: !Vector3 0 180 0
       Team: Robot
-    - Name: PyroRobot
+    - Name: TechRobot
       Spawn: [21, 23]
       Rotation: !Vector3 0 180 0
       Team: Robot

@@ -11,7 +11,7 @@ Graphics:
 Physics:
     Gravity: !Vector3 0.0 -10.0 0.0
 UserInterface:
-    FilePath: "/UI/main_menu/mainMenu.html"
+    FilePath: "/UI/mainMenu.html"
     Scale: !Vector2 1.0 1.0
 Logging:
     FilePath: "dash.log"
