@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+		<meta charset="UTF-8" />
+        <title>SRTF - Options Menu</title>
+		<meta name="author" content="Derrick Hunt" />
+		
+		<link rel="stylesheet" type="text/css" href="normalize.css" />
+		<link rel="stylesheet" type="text/css" href="optionsMenu_style.css" />
+		
+		<script src="jquery-2.1.0.min.js"></script>
+    </head>
+    <body>
+		<h1>OPTIONS</h1>
+		
+		<button id="b1">ON</button>
+		<button id="b2">MAIN MENU</button>
+		
+		<audio id="select" src="select.wav" type="audio/wav"></audio>
+		<audio id="cancel" src="cancel.wav" type="audio/wav"></audio>
+		
+		 <script>
+		//Button functions
+		$(document).ready(function(){
+			var menuFadeSpd = 500;
+			$('h1').fadeIn(menuFadeSpd);
+			$('#b1').fadeIn(menuFadeSpd);
+			$('#b2').fadeIn(menuFadeSpd);
+			
+			$('#b1').click(function(){ //on/off button
+				console.log("option1 button clicked");
+				$('#select').get(0).play();
+				if ($('#b1').text() == "ON"){
+					$('#b1').text("OFF");
+				}
+				else{
+					$('#b1').text("ON");
+				}
+			});
+			$('#b2').click(function(){ //main menu button
+				console.log("main menu button clicked");
+				$('#cancel').get(0).play();
+				setTimeout('window.location.href="mainMenu.html"', 400);
+			});
+		});
+		</script>
+    </body>
+</html>

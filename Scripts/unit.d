@@ -1,7 +1,10 @@
 ﻿module unit;
-import game, ability, grid, tile, turn;
+import game, ability, grid, effect, tile, turn;
 import core, utility, components;
-import std.math;
+import gl3n.linalg, gl3n.interpolate;
+import std.math, std.algorithm;
+
+enum ACTIONS_RESET = 3;
 
 shared class Unit : GameObject
 {
@@ -12,81 +15,174 @@ private:
 	int _attack;
 	int _defense;
 	uint _position;
-	int _team;
+	Team _team;
+	int _remainingRange;
+	int _remainingActions;
 	uint[] _abilities;
-	Tile[] selectedTiles;
-	
+	Tile[] _selectedTiles;
+	IEffect[] _activeEffects;
+
 public:
 	immutable uint ID;
 	mixin( Property!( _position, AccessModifier.Public) );
 	mixin( Property!( _team, AccessModifier.Public) );
+	mixin( Property!( _remainingRange, AccessModifier.Public) );
+	mixin( Property!( _remainingActions, AccessModifier.Public) );
+	mixin( Property!( _selectedTiles, AccessModifier.Public) );
+	mixin( Property!( _activeEffects, AccessModifier.Public) );
 	mixin( Property!( _hp, AccessModifier.Public) );
 	mixin( Property!( _speed, AccessModifier.Public) );
 	mixin( Property!( _attack, AccessModifier.Public) );
 	mixin( Property!( _defense, AccessModifier.Public) );
 	mixin( Property!( _abilities, AccessModifier.Public) );
-	
-	@property int x()
-	{
-		return cast(int)position % Game.grid.gridX;
-	}
-	
-	@property int y()
-	{
-		return cast(int)position / Game.grid.gridX;
-	}
+	@property int x() { return cast(int)position % Game.grid.gridX; }
+	@property int y() { return cast(int)position / Game.grid.gridX; }
 	
 	this()
 	{
 		ID = nextID++;
+		_remainingActions = ACTIONS_RESET;
 	}
 	
-	void init( uint position, int team, int hp, int sp, int at, int df, uint[] abilities )
+	/// Initialize a unit
+	void init( uint position, Team team, int hp, int sp, int at, int df, uint[] abilities )
 	{
 		_position = position;
 		_team = team;
 		_hp = hp;
 		_speed = sp;
+		_remainingRange = _speed;
 		_attack = at;
 		_defense = df;
 		_abilities = cast(shared uint[])abilities;
 		updatePosition();
 	}
 	
+	/// Use an ability
+	bool useAbility( uint abilityID, uint targetID )
+	{
+		if( remainingActions > 0 && (cast()_abilities).countUntil( abilityID ) > -1 )
+		{
+			if( Game.abilities[ abilityID ].use( position, targetID ) )
+			{
+				_remainingActions--;
+				
+				// if out of actions, check if the turn is over
+				Game.turn.checkTurnOver();
+				return true;
+			}
+		}
+		
+		return false;
+	}
+
+	/// Apply an effect to the unit
+	/// 
+	/// Params:
+	///  prop = 	the variable you want to effect
+	///  diff = 	the amount to change prop by
+	///  duration = the number of turns the effect is applied
+	///  reset =	true if prop should return to its original value when the effect is over
+	void applyEffect( string prop )( int diff, int duration = 0, bool reset = false )
+	{
+		// apply the effect for a number of turns
+		if( duration > 0 )
+		{
+			// add the ability to a list
+			_activeEffects ~= new Effect!prop( diff, duration, reset, mixin( prop ) );
+		}
+
+		// apply the effect now
+		mixin( prop ) -= diff;
+	}
+
+	void reEffect( string prop )( int diff, int duration, bool reset, int originalValue )
+	{
+		mixin( prop ) -= diff;
+		duration--;
+		
+		// check if the ability has run its course
+		if( duration <= 0 )
+		{
+			if( reset )
+				mixin( prop ) = originalValue;
+		}
+	}
+	
 	/// Move the unit to a tile
 	void move( uint targetTileID )
 	{
-		if ( checkMove( targetTileID ) )
+		if( checkMove( targetTileID ) )
 		{
+			// easy names for the tiles
+			auto curTile = Game.grid.getTileByID( position );
+			auto targetTile = Game.grid.getTileByID( targetTileID );
+			
 			// change the tile types
-			Game.grid.getTileByID( position ).type = TileType.Open;
-			Game.grid.getTileByID( targetTileID ).type = TileType.HalfBlocked;
-
+			curTile.type = TileType.Open;
+			targetTile.type = TileType.HalfBlocked;
+			
+			// scale the tile back down
+			curTile.transform.scale = vec3( TILE_SIZE / 2 );
+			
+			// change the tile occupants
+			curTile.occupant = null;
+			targetTile.occupant = this;
+			
+			// decrement remaining actions and distance
+			_remainingActions--;
+			_remainingRange -= abs( ( targetTile.x - x ) ) + abs ( ( targetTile.y - y ) );
+			
 			// move the unit to the new location
 			position = targetTileID;
 			updatePosition();
 			deselect();
 			Game.grid.isUnitSelected = false;
+			
+			// update fog of war
+			Game.grid.updateFogOfWar();
+			
+			// check if the turn is over
+			Game.turn.checkTurnOver();
 		}
 	}
 	
-	/// Check if unit is within range of the target tile and if tile is Open
+	/// Check if the move is allowed
 	bool checkMove( uint targetTileID )
 	{
 		auto tile = Game.grid.getTileByID( targetTileID );
-		return tile.type == TileType.Open && speed > abs( ( tile.x - x ) ) + abs ( ( tile.y - y ) );
+		
+		// get the distance away from the unit's current position
+		uint distance = abs( ( tile.x - x ) ) + abs ( ( tile.y - y ) );
+		
+		// Check speed, actions, and tileType
+		return remainingRange > distance && remainingActions > 0 && tile.type == TileType.Open;
 	}
 	
 	/// Highlight the tiles the unit can move to
 	void previewMove()
 	{
-		selectedTiles = Game.grid.getInRange( Game.grid.tiles[ x ][ y ], speed );
+		selectedTiles = Game.grid.getInRange( position, _remainingRange );
+
+		// automatically select the first ability
+		Game.grid.selectAbility( 0 );
 		
 		// change the material of the tiles
 		foreach( tile; selectedTiles )
 		{
 			tile.selection = TileSelection.Blue;
 		}
+		
+		// scale the selected unit's tile
+		auto startTime = Time.totalTime;
+		auto dur = 100.msecs;
+		// TODO: use the interpolate task
+		scheduleTimedTask( dur,
+		{
+			Game.grid.getTileByID( position ).transform.scale = 
+				interp( shared vec3( TILE_SIZE ), shared vec3( TILE_SIZE / 2 ), 
+						( Time.totalTime - startTime ) / dur.toSeconds );
+		} );
 	}
 	
 	/// Remove focus from the unit and any highlighted tiles
@@ -97,16 +193,37 @@ public:
 		{
 			tile.resetSelection();
 		}
-
+		
+		// scale the tile back down
+		Game.grid.getTileByID( position ).transform.scale = vec3( TILE_SIZE / 2 );
+		
 		// Modify grid variables
 		Game.grid.selectedUnit = null;
 		Game.grid.isUnitSelected = false;
+		
+		// deselect the ability if there was one
+		if ( Game.grid.isAbilitySelected )
+			Game.abilities[ Game.grid.selectedAbility ].unpreview();
+	}
+	
+	/// Prep the unit to begin a turn anew
+	void newTurn()
+	{
+		// reset action and range
+		_remainingActions = ACTIONS_RESET;
+		_remainingRange = speed;
+
+		// apply active effects (reversed to allow for deletions)
+		foreach_reverse( i, effect; _activeEffects )
+		{
+			effect.use( this );
+		}
 	}
 	
 	/// Convert grid coordinates to 3D space
 	void updatePosition()
 	{
-		this.transform.position.x = this.x * 10;
-		this.transform.position.z = this.y * 10;
+		this.transform.position.x = this.x * TILE_SIZE;
+		this.transform.position.z = this.y * TILE_SIZE;
 	}
 }

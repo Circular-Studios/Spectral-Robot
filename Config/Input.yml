@@ -18,10 +18,12 @@ LookLeft:
 LookRight:
     - !Keyboard L
     - !Keyboard Right
-ZoomUp:
-    - !Keyboard N
-ZoomDown:
-    - !Keyboard M
+ZoomIn:
+    - !Keyboard Up
+ZoomOut:
+    - !Keyboard Down
+ResetCamera:
+    - !Keyboard Delete
 Enter:
     - !Keyboard Space
 Back:

@@ -1,6 +1,5 @@
 module game;
-import controller, grid, turn, action;
-
+import controller, grid, turn, action, ability, unit, camera;
 import core, graphics, components, utility;
 import speed;
 
@@ -10,6 +9,7 @@ import speed;
 	return cast(RobotGhosts)DGame.instance;
 }
 
+/// The base game class
 shared class RobotGhosts : DGame
 {
 public:
@@ -17,8 +17,11 @@ public:
 	Scene level; // The active scene in the engine
 	Grid grid; // The grid in the level
 	Turn turn; // The turn controller
-	Connection serverConn; // the server connection 
-	
+	Ability[ uint ] abilities; // The abilities
+	Unit[] units; // The units
+	Connection serverConn; // the server connection
+	//UserInterface ui;
+
 	// Name that game
 	@property override string title()
 	{
@@ -36,8 +39,8 @@ public:
 		// initalize stuff
 		level = new shared Scene();
 		this.activeScene = level;
-		turn = new shared Turn();
 		grid = new shared Grid();
+		turn = new shared Turn();
 		
 		// add the grid to the level
 		Game.grid.name = "Grid";
@@ -47,24 +50,27 @@ public:
 		gc = new shared Controller();
 		
 		// create a camera
-		level.camera = level[ "Camera" ].camera;
+		shared AdvancedCamera cam = cast(shared AdvancedCamera)level[ "Camera" ];
+		cam.autoClamp();
+		level.camera = cam.camera;
 
+		
 		// bind 'r' to server connect
 		Input.addKeyDownEvent( Keyboard.R, kc => connect() );
 		
 		// create the ui
 		/*ui = new shared UserInterface( Config.get!uint( "Display.Width" ),
 		 Config.get!uint( "Display.Height" ), 
-		 Config.get!string( "UserInterface.FilePath" ) 
+		 Config.getPath( "UserInterface.FilePath" ) 
 		 );*/
 	}
-
+	
 	/// Connect to the server
 	void connect()
 	{
 		if( serverConn )
 			serverConn.close();
-		serverConn = Connection.open( "127.0.0.1", false, ConnectionType.TCP );
+		serverConn = Connection.open( Config.get!string( "Game.ServerIP" ), false, ConnectionType.TCP );
 		serverConn.onReceiveData!string ~= msg => logInfo( "Server Message: ", msg );
 		serverConn.onReceiveData!Action ~= action => turn.doAction( action );
 		serverConn.send!string( "ready", ConnectionType.TCP );
@@ -94,6 +100,13 @@ public:
 		logInfo( "Shutting down..." );
 		if( serverConn )
 			serverConn.close();
+		level.destroy();
+		grid.destroy();
+		turn.destroy();
+		units.destroy();
+		abilities.destroy();
+		gc.destroy();
+		//ui.destroy();
 	}
 	
 	override void onSaveState()

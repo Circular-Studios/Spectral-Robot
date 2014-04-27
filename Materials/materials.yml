@@ -9,6 +9,21 @@ Diffuse: Poop
 Normal: gray_n
 Specular: flat_s
 ---
+Name: MarbleFloor
+Diffuse: marble_d
+Normal: marble_n
+Specular: marble_s
+---
+Name: Wall_1x4
+Diffuse: wall_1x4_d
+Normal: wall_1x4_n
+Specular: wall_1x4_s
+---
+Name: Wall_1x8
+Diffuse: wall_1x8_d
+Normal: wall_1x8_n
+Specular: wall_1x8_s
+---
 Name: TileDefault
 Diffuse: tiledefault_d
 Normal: flat_n
@@ -29,12 +44,42 @@ Diffuse: highlight_black_d
 Normal: flat_n
 Specular: flat_s
 ---
-Name: Werewolf
-Diffuse: werewolf_d
-Normal: werewolf_n
-Specular: werewolf_s
+Name: PyroWolf
+Diffuse: w_pyro_d
+Normal: wolf_n
+Specular: w_pyro_s
 ---
-Name: Robot
-Diffuse: robot_d
-Normal: blank_n
-Specular: robot_s
+Name: NecroWolf
+Diffuse: w_necro_d
+Normal: wolf_n
+Specular: w_necro_s
+---
+Name: BulletWolf
+Diffuse: w_bullet_d
+Normal: wolf_n
+Specular: w_bullet_s
+---
+Name: TechWolf
+Diffuse: w_tech_d
+Normal: wolf_n
+Specular: w_tech_s
+---
+Name: PyroRobot
+Diffuse: r_pyro_d
+Normal: robot_n
+Specular: r_pyro_necro_bullet_s
+---
+Name: NecroRobot
+Diffuse: r_necro_d
+Normal: robot_n
+Specular: r_pyro_necro_bullet_s
+---
+Name: BulletRobot
+Diffuse: r_bullet_d
+Normal: robot_n
+Specular: r_pyro_necro_bullet_s
+---
+Name: TechRobot
+Diffuse: r_tech_d
+Normal: robot_n
+Specular: r_tech_s
