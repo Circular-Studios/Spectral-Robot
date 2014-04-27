@@ -65,9 +65,9 @@ private:
 			default:
 				return null;
 			case TargetArea.Single:
-				return Game.grid.getInRange( originID, unitRange, range );
+				return Game.grid.getMoveAndAttack( originID, unitRange, range )[ 1 ];//Game.grid.getInRange( originID, range, false, unitRange );
 			case TargetArea.Radial:
-				return Game.grid.getInRange( originID, unitRange, range );
+				return Game.grid.getMoveAndAttack( originID, unitRange, range )[ 1 ];//Game.grid.getInRange( originID, range, false, unitRange );
 		}
 	}
 	

@@ -19,7 +19,7 @@ enum TileSelection
 	Black,
 }
 
-shared class Tile : GameObject
+class Tile : GameObject
 {
 private:
 	TileType _type;
@@ -60,7 +60,7 @@ public:
 				this.selection = TileSelection.None;
 				break;
 			case TileType.HalfBlocked:
-				this.selection = TileSelection.Red;
+				this.selection = TileSelection.Black;
 				break;
 			case TileType.FullyBlocked:
 				this.selection = TileSelection.Black;

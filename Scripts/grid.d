@@ -2,7 +2,7 @@ module grid;
 import game, controller, tile, unit, turn, action;
 import core, utility, components;
 import gl3n.linalg;
-import std.conv;
+import std.conv, std.algorithm;
 
 const int TILE_SIZE = 20;
 
@@ -124,7 +124,7 @@ public:
 	}
 	
 	/// Find all tiles in a range
-	shared(Tile[]) getInRange( uint originID, uint range, uint range2 = 0 )
+	shared(Tile[]) getInRange( uint originID, uint range, bool stopOnUnits = false, bool passThroughUnits = true, uint range2 = 0 )
 	{
 		// Create temp tuples to store stuff in.
 		import std.typecons;
@@ -151,19 +151,39 @@ public:
 			
 			// check search depth and if this tile is legal
 			if( ( state.depth >= range && state.depth < range2 + range ) || state.depth < range &&
-			   ( cast()state.tile == cast()startingTile || state.tile.type == TileType.Open || state.tile.occupant ) )
+			   ( cast()state.tile == cast()startingTile || state.tile.type == TileType.Open || ( passThroughUnits && state.tile.occupant !is null ) ) )
 			{
 				if( range2 == 0 ) foundTiles ~= state.tile;
 				else if( state.depth >= range && state.depth < range2 + range ) foundTiles ~= state.tile;
 				
 				// find more tiles to search
 				foreach( coord; [ point( state.tile.x, state.tile.y - 1 ), point( state.tile.x, state.tile.y + 1 ), point( state.tile.x - 1, state.tile.y ), point( state.tile.x + 1, state.tile.y ) ] )
-					if( coord.x < gridX && coord.x >= 0 && coord.y < gridY && coord.y >= 0 && !visited[ coord.x ][ coord.y ] )
+					if( coord.x < gridX && coord.x >= 0 && coord.y < gridY && coord.y >= 0 && !visited[ coord.x ][ coord.y ] && ( !stopOnUnits || ( stopOnUnits && state.tile.occupant !is null ) ) )
 						states ~= searchState( tiles[ coord.x ][ coord.y ], state.depth + 1 );
 			}
 		}
 		
 		return foundTiles;
+	}
+
+	shared(Tile[])[] getMoveAndAttack( uint originID, uint moveRange, uint attackRange )
+	{
+		shared(Tile[]) move = getInRange( originID, moveRange, false, true );
+		shared(Tile[]) attack = getInRange( originID, moveRange + attackRange, true, false );
+
+		logInfo( move.length );
+		logInfo( attack.length );
+
+		attack = attack[ move.length..$ ];
+
+		logInfo( move.length );
+		logInfo( attack.length );
+
+		shared(Tile[])[] moveAttack = new shared(Tile[])[]( 2 );
+		moveAttack[ 0 ] = move;
+		moveAttack[ 1 ] = attack;
+
+		return moveAttack;
 	}
 	
 	/// Update the fog of war
@@ -229,7 +249,6 @@ public:
 		}
 		
 		// Create the floor from a prefab and add it to the scene
-		// TODO: I'm so sorry I hardcoded, future programmer, it needed to be done at the time.
 		for( int i = 0; i < 16; i++ )
 		{
 			int x = i % 4;

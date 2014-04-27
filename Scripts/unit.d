@@ -163,15 +163,15 @@ public:
 	void previewMove()
 	{
 		selectedTiles = Game.grid.getInRange( position, _remainingRange );
+
+		// automatically select the first ability
+		Game.grid.selectAbility( 0 );
 		
 		// change the material of the tiles
 		foreach( tile; selectedTiles )
 		{
 			tile.selection = TileSelection.Blue;
 		}
-		
-		// automatically select the first ability
-		Game.grid.selectAbility( 0 );
 		
 		// scale the selected unit's tile
 		auto startTime = Time.totalTime;
