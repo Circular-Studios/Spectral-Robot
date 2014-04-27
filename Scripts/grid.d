@@ -168,7 +168,7 @@ public:
 
 	shared(Tile[])[] getMoveAndAttack( uint originID, uint moveRange, uint attackRange )
 	{
-		shared(Tile[]) move = getInRange( originID, moveRange, false, true );
+		shared(Tile[]) move = getInRange( originID, moveRange, true, false );
 		shared(Tile[]) attack = getInRange( originID, moveRange + attackRange, true, false );
 
 		logInfo( move.length );
