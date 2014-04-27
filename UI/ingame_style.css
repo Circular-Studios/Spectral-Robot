@@ -1,0 +1,27 @@
+body{
+	background-color:#111;
+	background-image:url('back_grid.png');
+}
+
+.playerCharacter {
+	margin-top: 100px;
+	border: 1px solid #ddd;
+	display:inline-block;
+	min-width: 150px;
+	padding: 5px 15px;
+}
+
+.charName {
+	color: #fff;
+}
+
+.healthContainer {
+	border: 1px solid #ddd;
+	background-color: #f00;
+	width:100%;
+}
+
+.healthBar {
+	width:80%;
+	background-color: #0f0;
+}
