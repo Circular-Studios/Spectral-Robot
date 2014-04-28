@@ -65,9 +65,9 @@ private:
 			default:
 				return null;
 			case TargetArea.Single:
-				return Game.grid.getMoveAndAttack( originID, unitRange, range )[ 1 ];//Game.grid.getInRange( originID, range, false, unitRange );
+				return Game.grid.getInRange( originID, range + unitRange );
 			case TargetArea.Radial:
-				return Game.grid.getMoveAndAttack( originID, unitRange, range )[ 1 ];//Game.grid.getInRange( originID, range, false, unitRange );
+				return Game.grid.getInRange( originID, range + unitRange );
 		}
 	}
 	
@@ -177,7 +177,9 @@ public:
 		// change the material of the tiles
 		foreach( tile; _selectedTiles )
 		{
-			tile.selection = TileSelection.Red;
+			if( tile.selection != TileSelection.Blue || 
+			( tile.occupant !is null && cast()tile.occupant != cast()Game.grid.selectedUnit ) )
+				tile.selection = TileSelection.Red;
 		}
 	}
 	

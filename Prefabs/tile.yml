@@ -1,5 +1,13 @@
 ---
-Name: Tile
+Name: GridSquare
+Script:
+    ClassName: tile.Tile
+Transform:
+    Rotation: !Vector3 0 0 0
+Mesh: grid_square
+Material: TileDefault
+---
+Name: SquareFilled
 Script:
     ClassName: tile.Tile
 Transform:

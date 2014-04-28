@@ -165,26 +165,6 @@ public:
 		
 		return foundTiles;
 	}
-
-	shared(Tile[])[] getMoveAndAttack( uint originID, uint moveRange, uint attackRange )
-	{
-		shared(Tile[]) move = getInRange( originID, moveRange, false, true );
-		shared(Tile[]) attack = getInRange( originID, moveRange + attackRange, true, false );
-
-		logInfo( move.length );
-		logInfo( attack.length );
-
-		attack = attack[ move.length..$ ];
-
-		logInfo( move.length );
-		logInfo( attack.length );
-
-		shared(Tile[])[] moveAttack = new shared(Tile[])[]( 2 );
-		moveAttack[ 0 ] = move;
-		moveAttack[ 1 ] = attack;
-
-		return moveAttack;
-	}
 	
 	/// Update the fog of war
 	void updateFogOfWar()
@@ -232,7 +212,7 @@ public:
 			int x = i % n;
 			int y = i / n;
 			
-			auto tile = cast( shared Tile )Prefabs[ "Tile" ].createInstance();
+			auto tile = cast( shared Tile )Prefabs[ "GridSquare" ].createInstance();
 			
 			tile.x = x;
 			tile.y = y;
