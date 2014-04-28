@@ -4,6 +4,9 @@
 
 		 <link rel="stylesheet" type="text/css" href="normalize.css" />
 		 <link rel="stylesheet" type="text/css" href="ingame_style.css">
+
+		 <script src="jquery-2.1.0.min.js"></script>
+		 <script src="jquery-ui-1.10.4.custom.min.js"></script>
 	</head>
 	<body>
 	
@@ -11,9 +14,16 @@
 	<!-- Healthbar container -->
 	<div class="playerCharacter">
 		<div class="charName"><p>Bender</p></div>
-		<div class="healthbar">100/100</div>
+		<div class="healthContainer"><div class="healthbar">100/100</div></div>
 	</div>
 
+	<div class="healthchanger"></div>
 
+
+	<script type="text/javascript">
+	$(function() {
+		$( ".healthchanger" ).slider();
+	});
+	</script>
 	</body>
 </html>

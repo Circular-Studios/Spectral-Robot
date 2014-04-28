@@ -18,7 +18,7 @@ body{
 .healthContainer {
 	border: 1px solid #ddd;
 	background-color: #f00;
-	width:100%;
+	
 }
 
 .healthBar {
