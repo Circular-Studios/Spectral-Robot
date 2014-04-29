@@ -52,7 +52,7 @@ public:
 		// create a camera
 		shared AdvancedCamera cam = cast(shared AdvancedCamera)level[ "Camera" ];
 		cam.autoClamp();
-		level.camera = cam.camera;
+		level.camera = cam.owner.camera;
 
 		
 		// bind 'r' to server connect

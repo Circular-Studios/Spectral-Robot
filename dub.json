@@ -16,7 +16,7 @@
 		"Colden Cullen"
 	],
 	"dependencies": {
-		"dash": "==0.6.6",
+		"dash": "==0.7.0-beta1",
 		"speed:common": "~master"
 	},
 	"sourcePaths": [ 

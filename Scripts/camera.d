@@ -1,9 +1,8 @@
 ﻿module camera;
 import game, grid;
-import core, graphics, utility;
+import core, components.behavior, graphics, utility;
 import std.algorithm;
 import gl3n.linalg, gl3n.math, gl3n.interpolate;
-
 
 class AdvancedCameraFields
 {
@@ -16,7 +15,7 @@ class AdvancedCameraFields
 }
 
 /// Camera movement around the scene
-shared class AdvancedCamera : GameObjectInit!AdvancedCameraFields
+shared class AdvancedCamera : Behavior!AdvancedCameraFields
 {
 	float moveSpeed;
 	Duration rotateTime;
@@ -30,18 +29,11 @@ shared class AdvancedCamera : GameObjectInit!AdvancedCameraFields
 	float maxZ;
 	bool clamped = false;
 
-	override void onInitialize( AdvancedCameraFields a )
+	override void onInitialize()
 	{
-		moveSpeed = a.MoveSpeed;
-		rotateTime = a.RotateTime.msecs;
-		zoomSpeed = a.ZoomSpeed;
-		edgeDistance = a.EdgeDistance;
-		minHeight = a.MinHeight;
-		maxHeight = a.MaxHeight;
-
-		transform.position.y = (( maxHeight - minHeight ) / 2) + minHeight;
-		startPos = transform.position;
-		startRot = transform.rotation;
+		owner.transform.position.y = (( maxHeight - minHeight ) / 2) + minHeight;
+		startPos = owner.transform.position;
+		startRot = owner.transform.rotation;
 	}
 	
 	override void onUpdate()
@@ -51,14 +43,14 @@ shared class AdvancedCamera : GameObjectInit!AdvancedCameraFields
 			turning = true;
 			auto startTime = Time.totalTime;
 
-			auto prevFace = transform.forward;
-			prevFace *= -transform.position.y / prevFace.y;
+			auto prevFace = owner.transform.forward;
+			prevFace *= -owner.transform.position.y / prevFace.y;
 
-			auto lookPos = transform.position + prevFace;
+			auto lookPos = owner.transform.position + prevFace;
 			auto nextFace = prevFace * quat.identity.rotatey( -90.radians );
-			auto prevRot = transform.rotation;
+			auto prevRot = owner.transform.rotation;
 			auto nextRot = prevRot.rotatey( -90.radians );
-			prevRot = transform.rotation;
+			prevRot = owner.transform.rotation;
 			
 			scheduleTimedTask( rotateTime, 
 			{
@@ -66,9 +58,9 @@ shared class AdvancedCamera : GameObjectInit!AdvancedCameraFields
 				       	min( ( Time.totalTime - startTime ) / rotateTime.toSeconds , 1.0f ) );
 
 				auto curFace = shared vec3( curFaceXZ.x, prevFace.y, curFaceXZ.y );
-				transform.position = lookPos - curFace;
+				owner.transform.position = lookPos - curFace;
 
-				transform.rotation = slerp( prevRot, nextRot, min( ( Time.totalTime - startTime ) / rotateTime.toSeconds , 1.0f ) );
+				owner.transform.rotation = slerp( prevRot, nextRot, min( ( Time.totalTime - startTime ) / rotateTime.toSeconds , 1.0f ) );
 				if( Time.totalTime - startTime >= rotateTime.toSeconds ) turning = false;
 			} );
 		}
@@ -77,23 +69,23 @@ shared class AdvancedCamera : GameObjectInit!AdvancedCameraFields
 						turning = true;
 			auto startTime = Time.totalTime;
 
-			auto prevFace = transform.forward;
-			prevFace *= -transform.position.y / prevFace.y;
+			auto prevFace = owner.transform.forward;
+			prevFace *= -owner.transform.position.y / prevFace.y;
 			
-			auto lookPos = transform.position + prevFace;
+			auto lookPos = owner.transform.position + prevFace;
 			auto nextFace = prevFace * quat.identity.rotatey( 90.radians );
-			auto prevRot = transform.rotation;
+			auto prevRot = owner.transform.rotation;
 			auto nextRot = prevRot.rotatey( 90.radians );
-			prevRot = transform.rotation;
+			prevRot = owner.transform.rotation;
 			scheduleTimedTask( rotateTime, 
 			{
 				auto curFaceXZ = slerp( prevFace.xz, nextFace.xz, 
 				       	min( ( Time.totalTime - startTime ) / rotateTime.toSeconds , 1.0f ) );
 
 				auto curFace = shared vec3( curFaceXZ.x, prevFace.y, curFaceXZ.y );
-				transform.position = lookPos - curFace;
+				owner.transform.position = lookPos - curFace;
 
-				transform.rotation = slerp( prevRot, nextRot, min( ( Time.totalTime - startTime ) / rotateTime.toSeconds , 1.0f ) );
+				owner.transform.rotation = slerp( prevRot, nextRot, min( ( Time.totalTime - startTime ) / rotateTime.toSeconds , 1.0f ) );
 				if( Time.totalTime - startTime >= rotateTime.toSeconds ) turning = false;
 			} );
 		}
@@ -102,35 +94,35 @@ shared class AdvancedCamera : GameObjectInit!AdvancedCameraFields
 		// Left of the screen
 		if( mouse.x < edgeDistance )
 		{
-			auto moveVec = -this.transform.right;
+			auto moveVec = -owner.transform.right;
 			moveVec.y = 0;
 			moveVec.normalize();
 			moveVec *= moveSpeed * Time.deltaTime;
-			this.transform.position += moveVec;
+			owner.transform.position += moveVec;
 		} // Bottom of the screen
 		if( mouse.y < edgeDistance )
 		{
-			auto moveVec = -this.transform.forward;
+			auto moveVec = -owner.transform.forward;
 			moveVec.y = 0;
 			moveVec.normalize();
 			moveVec *= moveSpeed * Time.deltaTime;
-			this.transform.position += moveVec;
+			owner.transform.position += moveVec;
 		} // Right
 		if( mouse.x > Graphics.width - edgeDistance )
 		{
-			auto moveVec = this.transform.right;
+			auto moveVec = owner.transform.right;
 			moveVec.y = 0;
 			moveVec.normalize();
 			moveVec *= moveSpeed * Time.deltaTime;
-			this.transform.position += moveVec;
+			owner.transform.position += moveVec;
 		} // Top
 		if( mouse.y > Graphics.height - edgeDistance )
 		{
-			auto moveVec = this.transform.forward;
+			auto moveVec = owner.transform.forward;
 			moveVec.y = 0;
 			moveVec.normalize();
 			moveVec *= moveSpeed * Time.deltaTime;
-			this.transform.position += moveVec;
+			owner.transform.position += moveVec;
 		}
 
 		if( clamped )
@@ -138,17 +130,17 @@ shared class AdvancedCamera : GameObjectInit!AdvancedCameraFields
 
 		if( Input.getState( "ZoomIn" ) )
 		{
-			transform.position += this.transform.forward * min( ( zoomSpeed * Time.deltaTime ), ( minHeight - transform.position.y ) / this.transform.forward.y );
+			owner.transform.position += owner.transform.forward * min( ( zoomSpeed * Time.deltaTime ), ( minHeight - owner.transform.position.y ) / owner.transform.forward.y );
 		}
 		else if( Input.getState( "ZoomOut" ) )
 		{
-			transform.position += -this.transform.forward * min( ( zoomSpeed * Time.deltaTime ), ( maxHeight - transform.position.y ) / -this.transform.forward.y );
+			owner.transform.position += -owner.transform.forward * min( ( zoomSpeed * Time.deltaTime ), ( maxHeight - owner.transform.position.y ) / -owner.transform.forward.y );
 		}
 
 		if( Input.getState( "ResetCamera" ) )
 		{
-			transform.position = startPos;
-			transform.rotation = startRot;
+			owner.transform.position = startPos;
+			owner.transform.rotation = startRot;
 		}
 	}
 
@@ -163,7 +155,7 @@ shared class AdvancedCamera : GameObjectInit!AdvancedCameraFields
 
 	shared(vec3) lookatPos()
 	{
-		return transform.position + ( transform.forward * ( -transform.position.y  / this.transform.forward.y ) );
+		return owner.transform.position + ( owner.transform.forward * ( -owner.transform.position.y  / owner.transform.forward.y ) );
 	}
 
 	void clampLookPos()
@@ -171,22 +163,22 @@ shared class AdvancedCamera : GameObjectInit!AdvancedCameraFields
 		if( lookatPos.x < minX )
 		{
 			logDebug("Clamping at minX");
-			transform.position.x += minX - lookatPos.x;
+			owner.transform.position.x += minX - lookatPos.x;
 		}
 		if( lookatPos.x > maxX )
 		{
 			logDebug("Clamping at maxX");
-			transform.position.x -= lookatPos.x - maxX;
+			owner.transform.position.x -= lookatPos.x - maxX;
 		}
 		if( lookatPos.z < minZ )
 		{
 			logDebug("Clamping at minZ");
-			transform.position.z += minZ - lookatPos.z;
+			owner.transform.position.z += minZ - lookatPos.z;
 		}
 		if( lookatPos.z > maxZ )
 		{
 			logDebug("Clamping at maxZ");
-			transform.position.z -= lookatPos.z - maxZ;
+			owner.transform.position.z -= lookatPos.z - maxZ;
 		}
 	}
 
