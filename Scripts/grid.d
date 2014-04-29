@@ -41,7 +41,7 @@ public:
 				logInfo( "Clicked on ", obj.name );
 				
 				// If unit is selected and a tile is clicked, move if possible
-				if( auto tile = cast(shared Tile)obj )
+				if( auto tile = obj.behaviors.get!Tile )
 				{
 					if( isUnitSelected && selectedUnit.checkMove( tile.toID() ) )
 					{
@@ -65,7 +65,7 @@ public:
 				}
 				else
 				{
-					if( auto unit = cast(shared Unit)obj )
+					if( auto unit = obj.behaviors.get!Unit )
 					{
 						// Use the selected ability on the unit
 						if( isAbilitySelected )

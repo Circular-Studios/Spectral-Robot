@@ -43,7 +43,6 @@ final shared class Controller
 	{
 		// So we are going to parse the Units folder for the unit files
 		// For those, we'll get the Name of the node, which will be how we call into the gameObjects
-		int i = 0;
 		foreach( Node unitNode; unitsToLoad )
 		{
 			// setup variables
@@ -70,7 +69,6 @@ final shared class Controller
 					auto unit = u.behaviors.get!Unit;
 
 					// get the variables from the node
-					//unit.name = unitNode[ "Name" ].as!string ~ i.to!string;
 					unitCheck.tryFind( "HP", hp );
 					unitCheck.tryFind( "Speed", sp );
 					unitCheck.tryFind( "Attack", at );
@@ -81,15 +79,12 @@ final shared class Controller
 					unit.init( toTileID( spawn [ 0 ], spawn[ 1 ] ), team, hp, sp, at, df, loadAbilities( abilities ) );
 					if ( rotation )
 						unit.transform.rotation = rotation;
-					Game.level.addChild( unit );
+					Game.level.addChild( u );
 					Game.units ~= unit;
 					
 					// block and occupy the spawn tile
 					Game.grid.tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].type = TileType.HalfBlocked;
 					Game.grid.tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].occupant = unit;
-
-					// this keeps the unit names unique
-					i++;
 					break;
 				}
 			}

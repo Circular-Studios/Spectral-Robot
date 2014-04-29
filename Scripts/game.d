@@ -40,7 +40,7 @@ public:
 		level = new shared Scene();
 		this.activeScene = level;
 		auto g = GameObject.createWithBehavior!Grid;
-		grid = g[ 1 ];
+		grid = cast(shared Grid)g[ 1 ];
 		turn = new shared Turn();
 
 		
@@ -52,9 +52,9 @@ public:
 		gc = new shared Controller();
 		
 		// create a camera
-		shared AdvancedCamera cam = level[ "Camera" ].behaviors.get!AdvancedCamera;
+		auto cam = level[ "Camera" ].behaviors.get!AdvancedCamera;
 		cam.autoClamp();
-		level.camera = cam.owner.camera;
+		level.camera = cam.camera;
 		logInfo(level.camera.owner.transform.position);
 		
 		// bind 'r' to server connect
