@@ -2,13 +2,13 @@
 Name: TechWolf
 Behaviors:
     - Class: unit.Unit
-Mesh: werewolf
+Mesh: wolf_idle
 Material: TechWolf
 ---
 Name: PyroWolf
 Behaviors:
     - Class: unit.Unit
-Mesh: werewolf
+Mesh: wolf_idle
 Material: PyroWolf
 ---
 Name: PyroRobot
