@@ -17,6 +17,8 @@ class AdvancedCameraFields
 /// Camera movement around the scene
 shared class AdvancedCamera : Behavior!AdvancedCameraFields
 {
+public:
+	alias owner this;
 	float moveSpeed;
 	Duration rotateTime;
 	float zoomSpeed;
@@ -31,9 +33,16 @@ shared class AdvancedCamera : Behavior!AdvancedCameraFields
 
 	override void onInitialize()
 	{
-		owner.transform.position.y = (( maxHeight - minHeight ) / 2) + minHeight;
-		startPos = owner.transform.position;
-		startRot = owner.transform.rotation;
+		moveSpeed = initArgs.MoveSpeed;
+		rotateTime = initArgs.RotateTime.msecs;
+		zoomSpeed = initArgs.ZoomSpeed;
+		edgeDistance = initArgs.EdgeDistance;
+		minHeight = initArgs.MinHeight;
+		maxHeight = initArgs.MaxHeight;
+
+		transform.position.y = (( maxHeight - minHeight ) / 2) + minHeight;
+		startPos = transform.position;
+		startRot = transform.rotation;
 	}
 	
 	override void onUpdate()
@@ -43,14 +52,14 @@ shared class AdvancedCamera : Behavior!AdvancedCameraFields
 			turning = true;
 			auto startTime = Time.totalTime;
 
-			auto prevFace = owner.transform.forward;
-			prevFace *= -owner.transform.position.y / prevFace.y;
+			auto prevFace = transform.forward;
+			prevFace *= -transform.position.y / prevFace.y;
 
-			auto lookPos = owner.transform.position + prevFace;
+			auto lookPos = transform.position + prevFace;
 			auto nextFace = prevFace * quat.identity.rotatey( -90.radians );
-			auto prevRot = owner.transform.rotation;
+			auto prevRot = transform.rotation;
 			auto nextRot = prevRot.rotatey( -90.radians );
-			prevRot = owner.transform.rotation;
+			prevRot = transform.rotation;
 			
 			scheduleTimedTask( rotateTime, 
 			{
@@ -69,14 +78,14 @@ shared class AdvancedCamera : Behavior!AdvancedCameraFields
 						turning = true;
 			auto startTime = Time.totalTime;
 
-			auto prevFace = owner.transform.forward;
-			prevFace *= -owner.transform.position.y / prevFace.y;
+			auto prevFace = transform.forward;
+			prevFace *= -transform.position.y / prevFace.y;
 			
-			auto lookPos = owner.transform.position + prevFace;
+			auto lookPos = transform.position + prevFace;
 			auto nextFace = prevFace * quat.identity.rotatey( 90.radians );
-			auto prevRot = owner.transform.rotation;
+			auto prevRot = transform.rotation;
 			auto nextRot = prevRot.rotatey( 90.radians );
-			prevRot = owner.transform.rotation;
+			prevRot = transform.rotation;
 			scheduleTimedTask( rotateTime, 
 			{
 				auto curFaceXZ = slerp( prevFace.xz, nextFace.xz, 
@@ -94,35 +103,35 @@ shared class AdvancedCamera : Behavior!AdvancedCameraFields
 		// Left of the screen
 		if( mouse.x < edgeDistance )
 		{
-			auto moveVec = -owner.transform.right;
+			auto moveVec = -transform.right;
 			moveVec.y = 0;
 			moveVec.normalize();
 			moveVec *= moveSpeed * Time.deltaTime;
-			owner.transform.position += moveVec;
+			transform.position += moveVec;
 		} // Bottom of the screen
 		if( mouse.y < edgeDistance )
 		{
-			auto moveVec = -owner.transform.forward;
+			auto moveVec = -transform.forward;
 			moveVec.y = 0;
 			moveVec.normalize();
 			moveVec *= moveSpeed * Time.deltaTime;
-			owner.transform.position += moveVec;
+			transform.position += moveVec;
 		} // Right
 		if( mouse.x > Graphics.width - edgeDistance )
 		{
-			auto moveVec = owner.transform.right;
+			auto moveVec = transform.right;
 			moveVec.y = 0;
 			moveVec.normalize();
 			moveVec *= moveSpeed * Time.deltaTime;
-			owner.transform.position += moveVec;
+			transform.position += moveVec;
 		} // Top
 		if( mouse.y > Graphics.height - edgeDistance )
 		{
-			auto moveVec = owner.transform.forward;
+			auto moveVec = transform.forward;
 			moveVec.y = 0;
 			moveVec.normalize();
 			moveVec *= moveSpeed * Time.deltaTime;
-			owner.transform.position += moveVec;
+			transform.position += moveVec;
 		}
 
 		if( clamped )
@@ -130,17 +139,17 @@ shared class AdvancedCamera : Behavior!AdvancedCameraFields
 
 		if( Input.getState( "ZoomIn" ) )
 		{
-			owner.transform.position += owner.transform.forward * min( ( zoomSpeed * Time.deltaTime ), ( minHeight - owner.transform.position.y ) / owner.transform.forward.y );
+			transform.position += transform.forward * min( ( zoomSpeed * Time.deltaTime ), ( minHeight - transform.position.y ) / transform.forward.y );
 		}
 		else if( Input.getState( "ZoomOut" ) )
 		{
-			owner.transform.position += -owner.transform.forward * min( ( zoomSpeed * Time.deltaTime ), ( maxHeight - owner.transform.position.y ) / -owner.transform.forward.y );
+			transform.position += -transform.forward * min( ( zoomSpeed * Time.deltaTime ), ( maxHeight - transform.position.y ) / -transform.forward.y );
 		}
 
 		if( Input.getState( "ResetCamera" ) )
 		{
-			owner.transform.position = startPos;
-			owner.transform.rotation = startRot;
+			transform.position = startPos;
+			transform.rotation = startRot;
 		}
 	}
 
@@ -155,7 +164,7 @@ shared class AdvancedCamera : Behavior!AdvancedCameraFields
 
 	shared(vec3) lookatPos()
 	{
-		return owner.transform.position + ( owner.transform.forward * ( -owner.transform.position.y  / owner.transform.forward.y ) );
+		return transform.position + ( transform.forward * ( -transform.position.y  / transform.forward.y ) );
 	}
 
 	void clampLookPos()
@@ -163,22 +172,22 @@ shared class AdvancedCamera : Behavior!AdvancedCameraFields
 		if( lookatPos.x < minX )
 		{
 			logDebug("Clamping at minX");
-			owner.transform.position.x += minX - lookatPos.x;
+			transform.position.x += minX - lookatPos.x;
 		}
 		if( lookatPos.x > maxX )
 		{
 			logDebug("Clamping at maxX");
-			owner.transform.position.x -= lookatPos.x - maxX;
+			transform.position.x -= lookatPos.x - maxX;
 		}
 		if( lookatPos.z < minZ )
 		{
 			logDebug("Clamping at minZ");
-			owner.transform.position.z += minZ - lookatPos.z;
+			transform.position.z += minZ - lookatPos.z;
 		}
 		if( lookatPos.z > maxZ )
 		{
 			logDebug("Clamping at maxZ");
-			owner.transform.position.z -= lookatPos.z - maxZ;
+			transform.position.z -= lookatPos.z - maxZ;
 		}
 	}
 

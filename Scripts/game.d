@@ -39,21 +39,23 @@ public:
 		// initalize stuff
 		level = new shared Scene();
 		this.activeScene = level;
-		grid = new shared Grid();
+		auto g = GameObject.createWithBehavior!Grid;
+		grid = g[ 1 ];
 		turn = new shared Turn();
+
 		
 		// add the grid to the level
 		Game.grid.name = "Grid";
-		Game.level.addChild( grid );
+		Game.level.addChild( g[ 0 ] );
 		
 		// get the game loaded
 		gc = new shared Controller();
 		
 		// create a camera
-		shared AdvancedCamera cam = cast(shared AdvancedCamera)level[ "Camera" ];
+		shared AdvancedCamera cam = level[ "Camera" ].behaviors.get!AdvancedCamera;
 		cam.autoClamp();
 		level.camera = cam.owner.camera;
-
+		logInfo(level.camera.owner.transform.position);
 		
 		// bind 'r' to server connect
 		Input.addKeyDownEvent( Keyboard.R, kc => connect() );
@@ -70,7 +72,7 @@ public:
 	{
 		if( serverConn )
 			serverConn.close();
-		serverConn = Connection.open( Config.get!string( "Game.ServerIP" ), false, ConnectionType.TCP );
+		serverConn = Connection.open( config.find!string( "Game.ServerIP" ), false, ConnectionType.TCP );
 		serverConn.onReceiveData!string ~= msg => logInfo( "Server Message: ", msg );
 		serverConn.onReceiveData!Action ~= action => turn.doAction( action );
 		serverConn.send!string( "New connection.", ConnectionType.TCP );

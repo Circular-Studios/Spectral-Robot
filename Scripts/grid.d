@@ -7,7 +7,7 @@ import std.conv, std.algorithm;
 const int TILE_SIZE = 20;
 
 /// A grid that contains tiles
-shared class Grid : GameObject
+shared class Grid : Behavior!()
 {
 private:
 	Tile[][] _tiles;
@@ -20,6 +20,7 @@ private:
 	vec2i sel;
 	
 public:
+	alias owner this;
 	mixin( Property!( _tiles, AccessModifier.Public ) );
 	mixin( Property!( _isUnitSelected, AccessModifier.Public ) );
 	mixin( Property!( _isAbilitySelected, AccessModifier.Public ) );
@@ -212,7 +213,8 @@ public:
 			int x = i % n;
 			int y = i / n;
 			
-			auto tile = cast( shared Tile )Prefabs[ "GridSquare" ].createInstance();
+			auto t = Prefabs[ "GridSquare" ].createInstance();
+			auto tile = t.behaviors.get!Tile;
 			
 			tile.x = x;
 			tile.y = y;
@@ -223,8 +225,8 @@ public:
 			
 			// make the name unique
 			tile.name = "Tile ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )";
-			
-			this.addChild( tile );
+
+			this.addChild( t );
 			tiles[ x ][ y ] = tile;
 		}
 		

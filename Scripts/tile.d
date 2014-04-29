@@ -19,7 +19,7 @@ enum TileSelection
 	Black,
 }
 
-class Tile : GameObject
+class Tile : Behavior!()
 {
 private:
 	TileType _type;
@@ -27,6 +27,7 @@ private:
 	Unit _occupant;
 	
 public:
+	alias owner this;
 	mixin( Property!( _occupant, AccessModifier.Public) );
 	
 	@property void selection( TileSelection s )

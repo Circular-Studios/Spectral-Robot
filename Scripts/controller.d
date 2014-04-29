@@ -66,10 +66,11 @@ final shared class Controller
 						rotation = quat.euler_rotation( radians( rotationVec.y ), radians( rotationVec.z ), radians( rotationVec.x ) );
 
 					// instantiate the prefab of a unit
-					auto unit = cast(shared Unit)Prefabs[ unitCheck[ "Prefab" ].as!string ].createInstance();
-					
+					auto u = Prefabs[ unitCheck[ "Prefab" ].as!string ].createInstance();
+					auto unit = u.behaviors.get!Unit;
+
 					// get the variables from the node
-					unit.name = unitNode[ "Name" ].as!string ~ i.to!string;
+					//unit.name = unitNode[ "Name" ].as!string ~ i.to!string;
 					unitCheck.tryFind( "HP", hp );
 					unitCheck.tryFind( "Speed", sp );
 					unitCheck.tryFind( "Attack", at );

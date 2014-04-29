@@ -3,12 +3,12 @@ Name: Camera
 Behaviors:
     - Class: camera.AdvancedCamera
       Fields:
-          moveSpeed: 150
-          rotateTime: 400
-          zoomSpeed: 300
-          edgeDistance: 50
-          minHeight: 50
-          maxHeight: 300
+          MoveSpeed: 150
+          RotateTime: 400
+          ZoomSpeed: 300
+          EdgeDistance: 50
+          MinHeight: 50
+          MaxHeight: 300
 Transform:
     Position: !Vector3 230 0 510
     Rotation: !Vector3 -45 0 0
