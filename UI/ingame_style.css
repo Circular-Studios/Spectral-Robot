@@ -136,7 +136,7 @@ body{
 
 /***** TOOLTIPS *****/
 .tooltipBox {
-	display: block;
+	display: none;
 	width: 100%;
 	max-width: 360px;
 	height: 100%;
