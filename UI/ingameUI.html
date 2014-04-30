@@ -11,19 +11,66 @@
 	<body>
 	
 	
-	<!-- Healthbar container -->
-	<div class="playerCharacter">
-		<div class="charName"><p>Bender</p></div>
-		<div class="healthContainer"><div class="healthbar">100/100</div></div>
+	<!-- Player container -->
+	<div class="characters">
+		<div class="players">
+			<div class="playerCharacter">
+				<div class="charName">Robots (Player)</div>
+			</div>
+			<div class="playerCharacter">
+				<div class="charName"><p>Hank SchrayBot</p></div>
+				<div class="healthContainer">
+					<div class="healthbar" style="width:80%"></div>
+					<div class="health">80/100</div>
+				</div>
+			</div>
+			<div class="playerCharacter">
+				<div class="charName"><p>Steve RoboGomez</p></div>
+				<div class="healthContainer">
+					<div class="healthbar" style="width:20%"></div>
+					<div class="health">20/100</div>
+				</div>
+			</div>
+		</div>
+		<div class="enemies">
+			<div class="enemyCharacter">
+				<div class="charName">Werewolves (Enemies)</div>
+			</div>
+			<div class="enemyCharacter">
+				<div class="charName"><p>Walter Wolf</p></div>
+				<div class="healthContainer">
+					<div class="healthbar" style="width:40%"></div>
+					<div class="health">40/100</div>
+				</div>
+
+			</div>
+			<div class="enemyCharacter">
+				<div class="charName"><p>Jesse WereMin</p></div>
+				<div class="healthContainer">
+					<div class="healthbar" style="width:90%"></div>
+					<div class="health">90/100</div>
+				</div>
+			</div>
+		</div>
 	</div>
 
-	<div class="healthchanger"></div>
+	<!-- Abilities at the bottom of the screen -->
+	<div class="fullWidthContainer">
+		<div class="abilities">
+			<div class="abilityBox"></div>
+			<div class="abilityBox"></div>
+			<div class="abilityBox"></div>
+			<div class="abilityBox"></div>
+		</div>
+	</div>
 
+	<!-- Tooltip Box -->
+	<div class="fullWidthContainer">
+		<div class="tooltipBox">
+			<h4 class="abilityName">Hadouken</h5>
+			<p class="abilityDescription">Sean doesn't know the attacks, so here is some text to show what it will look like when you hover over an ability.</p>
+		</div>
+	</div>
 
-	<script type="text/javascript">
-	$(function() {
-		$( ".healthchanger" ).slider();
-	});
-	</script>
 	</body>
 </html>
