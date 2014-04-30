@@ -6,7 +6,7 @@ import std.math, std.algorithm;
 
 enum ACTIONS_RESET = 3;
 
-shared class Unit : GameObject
+shared class Unit : Behavior!()
 {
 private:
 	static uint nextID = 0;
@@ -23,6 +23,7 @@ private:
 	IEffect[] _activeEffects;
 
 public:
+	alias owner this;
 	immutable uint ID;
 	mixin( Property!( _position, AccessModifier.Public) );
 	mixin( Property!( _team, AccessModifier.Public) );
@@ -163,15 +164,15 @@ public:
 	void previewMove()
 	{
 		selectedTiles = Game.grid.getInRange( position, _remainingRange );
-
-		// automatically select the first ability
-		Game.grid.selectAbility( 0 );
 		
 		// change the material of the tiles
 		foreach( tile; selectedTiles )
 		{
 			tile.selection = TileSelection.Blue;
 		}
+
+		// automatically select the first ability
+		Game.grid.selectAbility( 0 );
 		
 		// scale the selected unit's tile
 		auto startTime = Time.totalTime;

@@ -7,7 +7,7 @@ import std.conv, std.algorithm;
 const int TILE_SIZE = 20;
 
 /// A grid that contains tiles
-shared class Grid : GameObject
+shared class Grid : Behavior!()
 {
 private:
 	Tile[][] _tiles;
@@ -20,6 +20,7 @@ private:
 	vec2i sel;
 	
 public:
+	alias owner this;
 	mixin( Property!( _tiles, AccessModifier.Public ) );
 	mixin( Property!( _isUnitSelected, AccessModifier.Public ) );
 	mixin( Property!( _isAbilitySelected, AccessModifier.Public ) );
@@ -40,7 +41,7 @@ public:
 				logInfo( "Clicked on ", obj.name );
 				
 				// If unit is selected and a tile is clicked, move if possible
-				if( auto tile = cast(shared Tile)obj )
+				if( auto tile = obj.behaviors.get!Tile )
 				{
 					if( isUnitSelected && selectedUnit.checkMove( tile.toID() ) )
 					{
@@ -64,7 +65,7 @@ public:
 				}
 				else
 				{
-					if( auto unit = cast(shared Unit)obj )
+					if( auto unit = obj.behaviors.get!Unit )
 					{
 						// Use the selected ability on the unit
 						if( isAbilitySelected )
@@ -165,26 +166,6 @@ public:
 		
 		return foundTiles;
 	}
-
-	shared(Tile[])[] getMoveAndAttack( uint originID, uint moveRange, uint attackRange )
-	{
-		shared(Tile[]) move = getInRange( originID, moveRange, false, true );
-		shared(Tile[]) attack = getInRange( originID, moveRange + attackRange, true, false );
-
-		logInfo( move.length );
-		logInfo( attack.length );
-
-		attack = attack[ move.length..$ ];
-
-		logInfo( move.length );
-		logInfo( attack.length );
-
-		shared(Tile[])[] moveAttack = new shared(Tile[])[]( 2 );
-		moveAttack[ 0 ] = move;
-		moveAttack[ 1 ] = attack;
-
-		return moveAttack;
-	}
 	
 	/// Update the fog of war
 	void updateFogOfWar()
@@ -232,7 +213,8 @@ public:
 			int x = i % n;
 			int y = i / n;
 			
-			auto tile = cast( shared Tile )Prefabs[ "Tile" ].createInstance();
+			auto t = Prefabs[ "GridSquare" ].createInstance();
+			auto tile = t.behaviors.get!Tile;
 			
 			tile.x = x;
 			tile.y = y;
@@ -243,8 +225,8 @@ public:
 			
 			// make the name unique
 			tile.name = "Tile ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )";
-			
-			this.addChild( tile );
+
+			this.addChild( t );
 			tiles[ x ][ y ] = tile;
 		}
 		

@@ -1,7 +1,7 @@
 {
 	"name": "robot-ghosts",
 	"description": "An asynchronous multiplayer turn-based strategy game.",
-	"copyright": "Copyright © 2014, Robot Ghosts Team",
+	"copyright": "Copyright © 2014, Circular Studios",
 	"authors": [ 
 		"Daniel Jost",
 		"Jayson Fitch",
@@ -16,7 +16,7 @@
 		"Colden Cullen"
 	],
 	"dependencies": {
-		"dash": "==0.6.6",
+		"dash": "==0.7.0",
 		"speed:common": "~master"
 	},
 	"sourcePaths": [ 
