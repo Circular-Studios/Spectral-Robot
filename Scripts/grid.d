@@ -182,7 +182,7 @@ public:
 				getTileByID( unit.position ).stateFlags.drawMesh = false;
 				
 				if( unit.team == Game.turn.currentTeam )
-					visibleTiles ~= getInRange(unit.position, unit.speed );
+					visibleTiles ~= getInRange( unit.position, unit.speed );
 			}
 			
 			// show all units on visible tiles
@@ -218,7 +218,7 @@ public:
 			
 			tile.x = x;
 			tile.y = y;
-			tile.transform.scale = vec3( TILE_SIZE / 2 );
+			tile.transform.scale = vec3( TILE_SIZE / 2 - 1 );
 			
 			// hide the tile
 			tile.stateFlags.drawMesh = false;

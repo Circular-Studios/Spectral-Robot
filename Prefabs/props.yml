@@ -13,7 +13,7 @@ Material: Wall_1x2
 ---
 Name: Pillar
 Mesh: pillar_01
-Material: poopmat
+Material: Pillar
 ---
 Name: Bookshelf
 Mesh: RG_Cover_Bookcase_Single_01

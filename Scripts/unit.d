@@ -181,7 +181,7 @@ public:
 		scheduleTimedTask( dur,
 		{
 			Game.grid.getTileByID( position ).transform.scale = 
-				interp( shared vec3( 0 ), shared vec3( TILE_SIZE / 2  ), 
+				interp( shared vec3( 0 ), shared vec3( TILE_SIZE / 2 - 1 ), 
 						( Time.totalTime - startTime ) / dur.toSeconds );
 		} );
 	}
@@ -196,7 +196,7 @@ public:
 		}
 		
 		// scale the tile back down
-		Game.grid.getTileByID( position ).transform.scale = vec3( TILE_SIZE / 2  );
+		Game.grid.getTileByID( position ).transform.scale = vec3( TILE_SIZE / 2 - 1 );
 		
 		// Modify grid variables
 		Game.grid.selectedUnit = null;

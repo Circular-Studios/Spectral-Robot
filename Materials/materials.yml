@@ -29,6 +29,11 @@ Diffuse: bookcase_d
 Normal: bookcase_n
 Specular: bookcase_s
 ---
+Name: Pillar
+Diffuse: pillar_d
+Normal: pillar_n
+Specular: pillar_s
+---
 Name: TileDefault
 Diffuse: tiledefault_d
 Normal: flat_n
