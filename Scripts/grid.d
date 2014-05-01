@@ -7,7 +7,7 @@ import std.conv, std.algorithm;
 const int TILE_SIZE = 24;
 
 /// A grid that contains tiles
-shared class Grid : Behavior!()
+class Grid : Behavior!()
 {
 private:
 	Tile[][] _tiles;
@@ -122,25 +122,25 @@ public:
 	}
 	
 	/// Get a tile by ID
-	shared(Tile) getTileByID( uint tileID )
+	Tile getTileByID( uint tileID )
 	{
 		return tiles[ tileID % gridX ][ tileID / gridX ];
 	}
 	
 	/// Find all tiles in a range
-	shared(Tile[]) getInRange( uint originID, uint range, bool stopOnUnits = false, bool passThroughUnits = true, uint range2 = 0 )
+	Tile[] getInRange( uint originID, uint range, bool stopOnUnits = false, bool passThroughUnits = true, uint range2 = 0 )
 	{
 		// Create temp tuples to store stuff in.
 		import std.typecons;
-		alias Tuple!( shared Tile, "tile", uint, "depth" ) searchState;
+		alias Tuple!( Tile, "tile", uint, "depth" ) searchState;
 		alias Tuple!( int, "x", int, "y" ) point;
 		
 		auto visited = new bool[][]( gridX, gridY ); // Keeps track of what tiles have been added already.
 		searchState[] states; // Queue of states to sort through.
-		shared Tile[] foundTiles; // Tiles inside the range.
+		Tile[] foundTiles; // Tiles inside the range.
 		
 		// Start with initial tile.
-		shared Tile startingTile = Game.grid.getTileByID( originID );
+		Tile startingTile = Game.grid.getTileByID( originID );
 		states ~= searchState( startingTile, 0 );
 		
 		while( states.length )
@@ -175,7 +175,8 @@ public:
 	{
 		if( _fogOfWar )
 		{
-			shared(Tile[]) visibleTiles;
+			
+			Tile[] visibleTiles;
 			
 			// get the tiles visible to the current team
 			foreach( unit; Game.units )
@@ -206,7 +207,7 @@ public:
 		logInfo("Grid size: ( ", n, ", ", m, " )" );
 		
 		//initialize tiles
-		_tiles = new shared Tile[][]( n, m );
+		_tiles = new Tile[][]( n, m );
 		gridX = n;
 		gridY = m;
 		

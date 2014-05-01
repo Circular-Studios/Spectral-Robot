@@ -10,7 +10,7 @@ import speed;
 }
 
 /// The base game class
-shared class RobotGhosts : DGame
+class RobotGhosts : DGame
 {
 public:
 	Controller gc; // the game controller
@@ -19,7 +19,7 @@ public:
 	Turn turn; // The turn controller
 	Ability[ uint ] abilities; // The abilities
 	Unit[] units; // The units
-	Connection serverConn; // the server connection
+	shared Connection serverConn; // the server connection
 	//UserInterface ui;
 
 	// Name that game
@@ -37,11 +37,11 @@ public:
 		Input.addKeyDownEvent( Keyboard.F5, ( uint kc ) { currentState = EngineState.Reset; } );
 		
 		// initalize stuff
-		level = new shared Scene();
+		level = new Scene();
 		this.activeScene = level;
 		auto g = GameObject.createWithBehavior!Grid;
-		grid = cast(shared Grid)g[ 1 ];
-		turn = new shared Turn();
+		grid = cast(Grid)g[ 1 ];
+		turn = new Turn();
 
 		
 		// add the grid to the level
@@ -49,7 +49,7 @@ public:
 		Game.level.addChild( g[ 0 ] );
 		
 		// get the game loaded
-		gc = new shared Controller();
+		gc = new Controller();
 		
 		// create a camera
 		auto cam = level[ "Camera" ].behaviors.get!AdvancedCamera;
@@ -60,7 +60,7 @@ public:
 		Input.addKeyDownEvent( Keyboard.R, kc => connect() );
 		
 		// create the ui
-		/*ui = new shared UserInterface( Config.get!uint( "Display.Width" ),
+		/*ui = new UserInterface( Config.get!uint( "Display.Width" ),
 		 Config.get!uint( "Display.Height" ), 
 		 Config.getPath( "UserInterface.FilePath" ) 
 		 );*/

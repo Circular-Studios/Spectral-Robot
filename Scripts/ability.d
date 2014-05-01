@@ -38,7 +38,7 @@ enum StatEffected
 	Damage,
 }
 
-shared class Ability
+class Ability
 {
 private:
 	static uint nextID = 10;
@@ -59,7 +59,7 @@ private:
 	Tile[] _selectedTiles;
 	
 	/// Highlight the tiles that the ability can effect
-	shared(Tile[]) highlight( uint originID, uint range )
+	Tile[] highlight( uint originID, uint range )
 	{
 		switch( _targetArea )
 		{
@@ -127,8 +127,8 @@ public:
 	// apply the effects of the ability
 	bool applyAbility( uint originID, uint targetID )
 	{
-		shared Tile originTile = Game.grid.getTileByID( originID );
-		shared Tile targetTile = Game.grid.getTileByID( targetID );
+		Tile originTile = Game.grid.getTileByID( originID );
+		Tile targetTile = Game.grid.getTileByID( targetID );
 		// team check
 		if( targetTile.occupant !is null && ( targetType == TargetType.Tile ||
 		  ( targetType == TargetType.EnemyUnit && targetTile.occupant.team != originTile.occupant.team ) ||
@@ -178,7 +178,7 @@ public:
 		foreach( tile; _selectedTiles )
 		{
 			if( tile.selection != TileSelection.Blue || 
-			( tile.occupant !is null && cast()tile.occupant != cast()Game.grid.selectedUnit ) )
+			( tile.occupant !is null && tile.occupant != Game.grid.selectedUnit ) )
 				tile.selection = TileSelection.Red;
 		}
 	}

@@ -20,14 +20,14 @@ Camera:
 ---
 Name: DirLight
 Light: !Light-Directional
-    Color: !Vector3 1 1 1
-    Direction: !Vector3 -1 -1 -1
+    Color: !Vector3 .7 .7 .7
+    Direction: !Vector3 -1 -1 0
 ---
-Name: DirLight2
+Name: DirLight
 Light: !Light-Directional
-    Color: !Vector3 1 1 1
-    Direction: !Vector3 1 1 1
+    Color: !Vector3 .7 .7 .7
+    Direction: !Vector3 -1 -1 0
 ---
 Name: AmbLight
 Light: !Light-Ambient
-    Color: !Vector3 .1 .1 .1
+    Color: !Vector3 .2 .2 .2

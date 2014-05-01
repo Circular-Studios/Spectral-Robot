@@ -8,7 +8,7 @@ enum Team {
 	Wolf,
 }
 
-shared class Turn
+class Turn
 {
 public:
 	Action[] lastTurn; // Gets cleared after a turn

@@ -16,7 +16,7 @@ class AdvancedCameraFields
 }
 
 /// Camera movement around the scene
-shared class AdvancedCamera : Behavior!AdvancedCameraFields
+class AdvancedCamera : Behavior!AdvancedCameraFields
 {
 public:
 	alias owner this;
@@ -69,7 +69,7 @@ public:
 				auto curFaceXZ = slerp( prevFace.xz, nextFace.xz, 
 				       	min( ( Time.totalTime - startTime ) / rotateTime.toSeconds , 1.0f ) );
 
-				auto curFace = shared vec3( curFaceXZ.x, prevFace.y, curFaceXZ.y );
+				auto curFace = vec3( curFaceXZ.x, prevFace.y, curFaceXZ.y );
 				owner.transform.position = lookPos - curFace;
 
 				owner.transform.rotation = slerp( prevRot, nextRot, min( ( Time.totalTime - startTime ) / rotateTime.toSeconds , 1.0f ) );
@@ -78,7 +78,7 @@ public:
 		}
 		if( Input.getState("LookRight") && !turning )
 		{
-						turning = true;
+			turning = true;
 			auto startTime = Time.totalTime;
 
 			auto prevFace = transform.forward;
@@ -94,7 +94,7 @@ public:
 				auto curFaceXZ = slerp( prevFace.xz, nextFace.xz, 
 				       	min( ( Time.totalTime - startTime ) / rotateTime.toSeconds , 1.0f ) );
 
-				auto curFace = shared vec3( curFaceXZ.x, prevFace.y, curFaceXZ.y );
+				auto curFace = vec3( curFaceXZ.x, prevFace.y, curFaceXZ.y );
 				owner.transform.position = lookPos - curFace;
 
 				owner.transform.rotation = slerp( prevRot, nextRot, min( ( Time.totalTime - startTime ) / rotateTime.toSeconds , 1.0f ) );
@@ -103,7 +103,7 @@ public:
 		}
 
 		// Mouse & Keyboard movement
-		shared vec2 mouse = Input.mousePos;
+		vec2 mouse = Input.mousePos;
 		// Left
 		if( ( mouseEdgeScroll && mouse.x < edgeDistance ) || Input.getState( "Left" ) )
 		{
@@ -169,7 +169,7 @@ public:
 		clamped = true;
 	}
 
-	shared(vec3) lookatPos()
+	vec3 lookatPos()
 	{
 		return transform.position + ( transform.forward * ( -transform.position.y  / transform.forward.y ) );
 	}
