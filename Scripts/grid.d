@@ -149,10 +149,10 @@ public:
 				continue;
 			
 			visited[ state.tile.x ][ state.tile.y ] = true;
-			
+
 			// check search depth and if this tile is legal
-			if( ( state.depth >= range && state.depth < range2 + range ) || state.depth < range &&
-			   ( cast()state.tile == cast()startingTile || state.tile.type == TileType.Open || ( passThroughUnits && state.tile.occupant !is null ) ) )
+			if( ( state.depth < range || ( state.depth >= range && state.depth < range2 + range ) ) &&
+			   ( state.tile.type == TileType.Open || state.tile.toID == startingTile.toID || ( passThroughUnits && state.tile.occupant !is null ) ) )
 			{
 				if( range2 == 0 ) foundTiles ~= state.tile;
 				else if( state.depth >= range && state.depth < range2 + range ) foundTiles ~= state.tile;
