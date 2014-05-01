@@ -1,19 +1,23 @@
 ---
 Name: Table
-Mesh: crate_01
+Mesh: GridSize
 Material: poopmat
 ---
-Name: Wall
+Name: Wall_1x4
 Mesh: RG_wall_1x8_01
-Material: Wall_1x8
+Material: Wall_1x4
+---
+Name: Wall_1x2
+Mesh: RG_wall_1x4_01
+Material: Wall_1x2
 ---
 Name: Pillar
 Mesh: pillar_01
-Material: poopmat
+Material: Pillar
 ---
 Name: Bookshelf
-Mesh: bookcase_01
-Material: poopmat
+Mesh: RG_Cover_Bookcase_Single_01
+Material: Bookshelf
 ---
 Name: Desk
 Mesh: crate_01

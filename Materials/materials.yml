@@ -14,15 +14,25 @@ Diffuse: marble_d
 Normal: marble_n
 Specular: marble_s
 ---
-Name: Wall_1x4
+Name: Wall_1x2
 Diffuse: wall_1x4_d
 Normal: wall_1x4_n
 Specular: wall_1x4_s
 ---
-Name: Wall_1x8
+Name: Wall_1x4
 Diffuse: wall_1x8_d
 Normal: wall_1x8_n
 Specular: wall_1x8_s
+---
+Name: Bookshelf
+Diffuse: bookcase_d
+Normal: bookcase_n
+Specular: bookcase_s
+---
+Name: Pillar
+Diffuse: pillar_d
+Normal: pillar_n
+Specular: pillar_s
 ---
 Name: TileDefault
 Diffuse: tiledefault_d

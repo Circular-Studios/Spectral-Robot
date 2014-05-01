@@ -20,6 +20,10 @@ public:
 	{
 		// arbitrary starting team
 		currentTeam = Team.Wolf;
+
+		// hotkey to end turn
+		// TODO: Change Keyboard.T to read from Input.yml
+		Input.addKeyDownEvent( Keyboard.T, kc => switchActiveTeam() );
 	}
 	
 	/// Process an action

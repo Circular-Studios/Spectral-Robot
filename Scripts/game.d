@@ -55,7 +55,6 @@ public:
 		auto cam = level[ "Camera" ].behaviors.get!AdvancedCamera;
 		cam.autoClamp();
 		level.camera = cam.camera;
-		logInfo(level.camera.owner.transform.position);
 		
 		// bind 'r' to server connect
 		Input.addKeyDownEvent( Keyboard.R, kc => connect() );

@@ -1,8 +1,8 @@
 ﻿module unit;
 import game, ability, grid, effect, tile, turn;
 import core, utility, components;
-import gl3n.linalg, gl3n.interpolate;
-import std.math, std.algorithm;
+import gl3n.linalg, gl3n.math, gl3n.interpolate;
+import std.algorithm;
 
 enum ACTIONS_RESET = 3;
 
@@ -122,9 +122,22 @@ public:
 			// change the tile types
 			curTile.type = TileType.Open;
 			targetTile.type = TileType.HalfBlocked;
-			
+
+			// Rotate the unit to face the direction he moved
+			//Down
+			transform.rotation = quat.euler_rotation( 0, 0, 0 );
+			// Up
+			if( curTile.y > targetTile.y )
+				transform.rotation = quat.euler_rotation( 180.radians, 0, 0 );
+			// Left
+			else if( curTile.x > targetTile.x )
+				transform.rotation = quat.euler_rotation( 270.radians, 0, 0 );
+			// Right
+			else if( curTile.x < targetTile.x )
+				transform.rotation = quat.euler_rotation( 90.radians, 0, 0 );
+		
 			// scale the tile back down
-			curTile.transform.scale = vec3( TILE_SIZE / 2 );
+			curTile.transform.scale = vec3( TILE_SIZE / 2 - 1 );
 			
 			// change the tile occupants
 			curTile.occupant = null;
@@ -171,19 +184,26 @@ public:
 			tile.selection = TileSelection.Blue;
 		}
 
-		// automatically select the first ability
-		Game.grid.selectAbility( 0 );
-		
-		// scale the selected unit's tile
-		auto startTime = Time.totalTime;
-		auto dur = 100.msecs;
-		// TODO: use the interpolate task
-		scheduleTimedTask( dur,
+		// only run this if a unit isn't already selected
+		if( !Game.grid.isUnitSelected )
 		{
-			Game.grid.getTileByID( position ).transform.scale = 
-				interp( shared vec3( TILE_SIZE ), shared vec3( TILE_SIZE / 2 ), 
-						( Time.totalTime - startTime ) / dur.toSeconds );
-		} );
+			// update the grid
+			Game.grid.isUnitSelected = true;
+
+			// automatically select the first ability
+			Game.grid.selectAbility( 0 );
+			
+			// scale the selected unit's tile
+			auto startTime = Time.totalTime;
+			auto dur = 100.msecs;
+			// TODO: use the interpolate task
+			scheduleTimedTask( dur,
+			{
+				Game.grid.getTileByID( position ).transform.scale = 
+					interp( shared vec3( 0 ), shared vec3( TILE_SIZE / 2 - 1 ), 
+							( Time.totalTime - startTime ) / dur.toSeconds );
+			} );
+		}
 	}
 	
 	/// Remove focus from the unit and any highlighted tiles
@@ -196,7 +216,7 @@ public:
 		}
 		
 		// scale the tile back down
-		Game.grid.getTileByID( position ).transform.scale = vec3( TILE_SIZE / 2 );
+		Game.grid.getTileByID( position ).transform.scale = vec3( TILE_SIZE / 2 - 1 );
 		
 		// Modify grid variables
 		Game.grid.selectedUnit = null;

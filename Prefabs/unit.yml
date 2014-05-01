@@ -14,11 +14,11 @@ Material: PyroWolf
 Name: PyroRobot
 Behaviors:
     - Class: unit.Unit
-Mesh: robot
+Mesh: robot_idle
 Material: PyroRobot
 ---
 Name: TechRobot
 Behaviors:
     - Class: unit.Unit
-Mesh: robot
+Mesh: robot_idle
 Material: TechRobot

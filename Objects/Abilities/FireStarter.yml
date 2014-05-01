@@ -1,9 +1,15 @@
 ---
-name: "Attack"
+name: "Ranged Attack"
+targetType: EnemyUnit
+targetArea: Single
+range: 6
+damage: 5
+---
+name: "Melee Attack"
 targetType: EnemyUnit
 targetArea: Single
 range: 1
-damage: 1
+damage: 6
 ---
 name: "Incinerate"
 targetType: EnemyUnit
@@ -18,39 +24,5 @@ name: "Fireball"
 targetType: EnemyUnit
 targetArea: Single
 range: 2
-damage: 4
-duration: 3
-cooldown: 3
----
-name: "Nova"
-targetType: Tile
-targetArea: MovingRadial
-range: 1
-damage:  6
-damageType: DOT
-duration: 2
-cooldown: 5
----
-name: "Shield"
-targetType: Tile
-targetArea: Single
-damage:  10
-damageType: Reduce
-cooldown: 3
----
-name: "Mark of Flame"
-targetType: EnemyUnit
-targetArea: Single
-range: 4
-damage:  2
-damageType: Modifier
-duration: 2
-cooldown: 3
----
-name: "Heat Death"
-targetType: EnemyUnit
-targetArea: Single
-range: 3
-damage:  4
-damageType: LifeSteal
+damage: 6
 cooldown: 3

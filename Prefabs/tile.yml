@@ -5,7 +5,7 @@ Behaviors:
 Transform:
     Rotation: !Vector3 0 0 0
 Mesh: grid_square
-Material: TileDefault
+Material: HighlightBlack
 ---
 Name: SquareFilled
 Behaviors:

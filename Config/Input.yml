@@ -24,6 +24,8 @@ ZoomOut:
     - !Keyboard Down
 ResetCamera:
     - !Keyboard Delete
+EndTurn:
+    - !Keyboard T
 Enter:
     - !Keyboard Space
 Back:

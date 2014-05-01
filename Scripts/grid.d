@@ -4,7 +4,7 @@ import core, utility, components;
 import gl3n.linalg;
 import std.conv, std.algorithm;
 
-const int TILE_SIZE = 20;
+const int TILE_SIZE = 24;
 
 /// A grid that contains tiles
 shared class Grid : Behavior!()
@@ -53,7 +53,6 @@ public:
 					else if( !isUnitSelected && tile.occupant !is null )
 					{
 						selectedUnit = tile.occupant;
-						isUnitSelected = true;
 						selectedUnit.previewMove();
 						Game.turn.sendAction( Action( 1, selectedUnit.ID, selectedUnit.position, false ) );
 					}
@@ -76,7 +75,6 @@ public:
 						else
 						{
 							selectedUnit = unit;
-							isUnitSelected = true;
 							unit.previewMove();
 							Game.turn.sendAction( Action( 1, unit.ID, unit.position, false ) );
 						}
@@ -107,13 +105,18 @@ public:
 	/// Select an ability from a unit
 	void selectAbility( int ability )
 	{
+		// deselect current ability
+		if( isAbilitySelected )
+			Game.abilities[ selectedAbility ].unpreview();
+
 		if( isUnitSelected && ability < selectedUnit.abilities.length )
 		{
 			isAbilitySelected = true;
 			selectedAbility = selectedUnit.abilities[ ability ];
+			selectedUnit.previewMove();
 			Game.abilities[ selectedAbility ].preview( selectedUnit.position, selectedUnit.remainingRange );
 
-			logInfo("Selected ability: ", Game.abilities[ selectedAbility ].name, ", ",
+			logInfo( "Selected ability: ", Game.abilities[ selectedAbility ].name, ", ",
 				Game.abilities[ selectedAbility ].currentCooldown, " turn(s) to use." );
 		}
 	}
@@ -149,13 +152,13 @@ public:
 				continue;
 			
 			visited[ state.tile.x ][ state.tile.y ] = true;
-			
+
 			// check search depth and if this tile is legal
-			if( ( state.depth >= range && state.depth < range2 + range ) || state.depth < range &&
-			   ( cast()state.tile == cast()startingTile || state.tile.type == TileType.Open || ( passThroughUnits && state.tile.occupant !is null ) ) )
+			if( ( state.depth <= range || ( state.depth > range && state.depth <= range2 + range ) ) &&
+			   ( state.tile.type == TileType.Open || state.tile.toID == startingTile.toID || ( passThroughUnits && state.tile.occupant !is null ) ) )
 			{
 				if( range2 == 0 ) foundTiles ~= state.tile;
-				else if( state.depth >= range && state.depth < range2 + range ) foundTiles ~= state.tile;
+				else if( state.depth > range && state.depth <= range2 + range ) foundTiles ~= state.tile;
 				
 				// find more tiles to search
 				foreach( coord; [ point( state.tile.x, state.tile.y - 1 ), point( state.tile.x, state.tile.y + 1 ), point( state.tile.x - 1, state.tile.y ), point( state.tile.x + 1, state.tile.y ) ] )
@@ -182,7 +185,7 @@ public:
 				getTileByID( unit.position ).stateFlags.drawMesh = false;
 				
 				if( unit.team == Game.turn.currentTeam )
-					visibleTiles ~= getInRange(unit.position, unit.speed );
+					visibleTiles ~= getInRange( unit.position, unit.speed );
 			}
 			
 			// show all units on visible tiles
@@ -213,12 +216,12 @@ public:
 			int x = i % n;
 			int y = i / n;
 			
-			auto t = Prefabs[ "GridSquare" ].createInstance();
+			auto t = Prefabs[ "SquareFilled" ].createInstance();
 			auto tile = t.behaviors.get!Tile;
 			
 			tile.x = x;
 			tile.y = y;
-			tile.transform.scale = vec3( TILE_SIZE / 2 );
+			tile.transform.scale = vec3( TILE_SIZE / 2 - 1 );
 			
 			// hide the tile
 			tile.stateFlags.drawMesh = false;

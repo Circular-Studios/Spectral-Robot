@@ -35,6 +35,7 @@ enum StatEffected
 	None,
 	Accuracy,
 	Turn, // deplete the actions left on a unit
+	Damage,
 }
 
 shared class Ability
@@ -58,16 +59,16 @@ private:
 	Tile[] _selectedTiles;
 	
 	/// Highlight the tiles that the ability can effect
-	shared(Tile[]) highlight( uint originID, uint unitRange )
+	shared(Tile[]) highlight( uint originID, uint range )
 	{
 		switch( _targetArea )
 		{
 			default:
 				return null;
 			case TargetArea.Single:
-				return Game.grid.getInRange( originID, range + unitRange );
+				return Game.grid.getInRange( originID, range );
 			case TargetArea.Radial:
-				return Game.grid.getInRange( originID, range + unitRange );
+				return Game.grid.getInRange( originID, range );
 		}
 	}
 	
@@ -116,11 +117,10 @@ public:
 						return applyAbility( originID, tile.toID() );
 					}
 			}
-			logInfo("ability.use worked");
 			// reset cooldown
 			_currentCooldown = cooldown;
 		}
-		logInfo("ability.use failed");
+		logInfo( "ability.use failed" );
 		return false;
 	}
 
@@ -164,15 +164,15 @@ public:
 			logInfo( originTile.occupant.name, " used ", name, " on ", targetTile.occupant.name );
 			return true;
 		}
-		logInfo("applyAbility failed");
+		logInfo( "applyAbility failed" );
 		return false;
 	}
-	
+
 	/// Preview the ability
 	void preview( uint originID, uint unitRange )
 	{
 		// get the tiles the ability can effect
-		_selectedTiles = highlight( originID, unitRange );
+		_selectedTiles = highlight( originID, range + unitRange );
 		
 		// change the material of the tiles
 		foreach( tile; _selectedTiles )
