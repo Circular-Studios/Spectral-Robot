@@ -35,23 +35,23 @@ Objects:
       TileType: FullyBlocked
 
     - Prefab: Pillar
-      Location: [8, 11, 9, 11]
+      Location: [8, 11]
       TileType: FullyBlocked
 
     - Prefab: Pillar
-      Location: [3, 3, 4, 3]
+      Location: [3, 3]
       TileType: FullyBlocked
 
     - Prefab: Pillar
-      Location: [19, 3, 20, 3]
+      Location: [19, 3]
       TileType: FullyBlocked
 
     - Prefab: Pillar
-      Location: [3, 20, 4, 20]
+      Location: [3, 20]
       TileType: FullyBlocked
 
     - Prefab: Pillar
-      Location: [19, 20, 20, 20]
+      Location: [19, 20]
       TileType: FullyBlocked
 
     - Prefab: Bookshelf

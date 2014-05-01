@@ -29,6 +29,11 @@ Diffuse: bookcase_d
 Normal: bookcase_n
 Specular: bookcase_s
 ---
+Name: Desk
+Diffuse: desk_single_d
+Normal: desk_single_n
+Specular: desk_single_s
+---
 Name: Pillar
 Diffuse: pillar_d
 Normal: pillar_n
