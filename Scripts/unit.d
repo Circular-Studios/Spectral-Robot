@@ -184,19 +184,26 @@ public:
 			tile.selection = TileSelection.Blue;
 		}
 
-		// automatically select the first ability
-		Game.grid.selectAbility( 0 );
-		
-		// scale the selected unit's tile
-		auto startTime = Time.totalTime;
-		auto dur = 100.msecs;
-		// TODO: use the interpolate task
-		scheduleTimedTask( dur,
+		// only run this if a unit isn't already selected
+		if( !Game.grid.isUnitSelected )
 		{
-			Game.grid.getTileByID( position ).transform.scale = 
-				interp( shared vec3( 0 ), shared vec3( TILE_SIZE / 2 - 1 ), 
-						( Time.totalTime - startTime ) / dur.toSeconds );
-		} );
+			// update the grid
+			Game.grid.isUnitSelected = true;
+
+			// automatically select the first ability
+			Game.grid.selectAbility( 0 );
+			
+			// scale the selected unit's tile
+			auto startTime = Time.totalTime;
+			auto dur = 100.msecs;
+			// TODO: use the interpolate task
+			scheduleTimedTask( dur,
+			{
+				Game.grid.getTileByID( position ).transform.scale = 
+					interp( shared vec3( 0 ), shared vec3( TILE_SIZE / 2 - 1 ), 
+							( Time.totalTime - startTime ) / dur.toSeconds );
+			} );
+		}
 	}
 	
 	/// Remove focus from the unit and any highlighted tiles

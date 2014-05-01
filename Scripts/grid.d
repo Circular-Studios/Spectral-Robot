@@ -53,7 +53,6 @@ public:
 					else if( !isUnitSelected && tile.occupant !is null )
 					{
 						selectedUnit = tile.occupant;
-						isUnitSelected = true;
 						selectedUnit.previewMove();
 						Game.turn.sendAction( Action( 1, selectedUnit.ID, selectedUnit.position, false ) );
 					}
@@ -76,7 +75,6 @@ public:
 						else
 						{
 							selectedUnit = unit;
-							isUnitSelected = true;
 							unit.previewMove();
 							Game.turn.sendAction( Action( 1, unit.ID, unit.position, false ) );
 						}
@@ -107,13 +105,18 @@ public:
 	/// Select an ability from a unit
 	void selectAbility( int ability )
 	{
+		// deselect current ability
+		if( isAbilitySelected )
+			Game.abilities[ selectedAbility ].unpreview();
+
 		if( isUnitSelected && ability < selectedUnit.abilities.length )
 		{
 			isAbilitySelected = true;
 			selectedAbility = selectedUnit.abilities[ ability ];
+			selectedUnit.previewMove();
 			Game.abilities[ selectedAbility ].preview( selectedUnit.position, selectedUnit.remainingRange );
 
-			logInfo("Selected ability: ", Game.abilities[ selectedAbility ].name, ", ",
+			logInfo( "Selected ability: ", Game.abilities[ selectedAbility ].name, ", ",
 				Game.abilities[ selectedAbility ].currentCooldown, " turn(s) to use." );
 		}
 	}
@@ -151,11 +154,11 @@ public:
 			visited[ state.tile.x ][ state.tile.y ] = true;
 
 			// check search depth and if this tile is legal
-			if( ( state.depth < range || ( state.depth >= range && state.depth < range2 + range ) ) &&
+			if( ( state.depth <= range || ( state.depth > range && state.depth <= range2 + range ) ) &&
 			   ( state.tile.type == TileType.Open || state.tile.toID == startingTile.toID || ( passThroughUnits && state.tile.occupant !is null ) ) )
 			{
 				if( range2 == 0 ) foundTiles ~= state.tile;
-				else if( state.depth >= range && state.depth < range2 + range ) foundTiles ~= state.tile;
+				else if( state.depth > range && state.depth <= range2 + range ) foundTiles ~= state.tile;
 				
 				// find more tiles to search
 				foreach( coord; [ point( state.tile.x, state.tile.y - 1 ), point( state.tile.x, state.tile.y + 1 ), point( state.tile.x - 1, state.tile.y ), point( state.tile.x + 1, state.tile.y ) ] )
