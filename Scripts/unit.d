@@ -1,8 +1,8 @@
 ﻿module unit;
 import game, ability, grid, effect, tile, turn;
 import core, utility, components;
-import gl3n.linalg, gl3n.interpolate;
-import std.math, std.algorithm;
+import gl3n.linalg, gl3n.math, gl3n.interpolate;
+import std.algorithm;
 
 enum ACTIONS_RESET = 3;
 
@@ -122,9 +122,22 @@ public:
 			// change the tile types
 			curTile.type = TileType.Open;
 			targetTile.type = TileType.HalfBlocked;
-			
+
+			// Rotate the unit to face the direction he moved
+			//Down
+			transform.rotation = quat.euler_rotation( 0, 0, 0 );
+			// Up
+			if( curTile.y > targetTile.y )
+				transform.rotation = quat.euler_rotation( 180.radians, 0, 0 );
+			// Left
+			else if( curTile.x > targetTile.x )
+				transform.rotation = quat.euler_rotation( 270.radians, 0, 0 );
+			// Right
+			else if( curTile.x < targetTile.x )
+				transform.rotation = quat.euler_rotation( 90.radians, 0, 0 );
+		
 			// scale the tile back down
-			curTile.transform.scale = vec3( TILE_SIZE / 2 );
+			curTile.transform.scale = vec3( TILE_SIZE / 2 - 1 );
 			
 			// change the tile occupants
 			curTile.occupant = null;
