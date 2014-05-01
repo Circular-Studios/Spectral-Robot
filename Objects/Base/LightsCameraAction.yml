@@ -9,6 +9,7 @@ Behaviors:
           EdgeDistance: 50
           MinHeight: 50
           MaxHeight: 300
+          MouseEdgeScroll: No
 Transform:
     Position: !Vector3 230 0 510
     Rotation: !Vector3 -45 0 0

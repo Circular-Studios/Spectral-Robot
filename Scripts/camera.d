@@ -12,6 +12,7 @@ class AdvancedCameraFields
 	float EdgeDistance;
 	float MinHeight;
 	float MaxHeight;
+	bool MouseEdgeScroll;
 }
 
 /// Camera movement around the scene
@@ -30,6 +31,7 @@ public:
 	float minZ;
 	float maxZ;
 	bool clamped = false;
+	bool mouseEdgeScroll;
 
 	override void onInitialize()
 	{
@@ -39,6 +41,7 @@ public:
 		edgeDistance = initArgs.EdgeDistance;
 		minHeight = initArgs.MinHeight;
 		maxHeight = initArgs.MaxHeight;
+		mouseEdgeScroll = initArgs.MouseEdgeScroll;
 
 		transform.position.y = (( maxHeight - minHeight ) / 2) + minHeight;
 		startPos = transform.position;
@@ -99,33 +102,37 @@ public:
 			} );
 		}
 
+		// Mouse & Keyboard movement
 		shared vec2 mouse = Input.mousePos;
-		// Left of the screen
-		if( mouse.x < edgeDistance )
+		// Left
+		if( ( mouseEdgeScroll && mouse.x < edgeDistance ) || Input.getState( "Left" ) )
 		{
 			auto moveVec = -transform.right;
 			moveVec.y = 0;
 			moveVec.normalize();
 			moveVec *= moveSpeed * Time.deltaTime;
 			transform.position += moveVec;
-		} // Bottom of the screen
-		if( mouse.y < edgeDistance )
+		} 
+		// Bottom
+		if( ( mouseEdgeScroll && mouse.y < edgeDistance ) || Input.getState( "Down" ) )
 		{
 			auto moveVec = -transform.forward;
 			moveVec.y = 0;
 			moveVec.normalize();
 			moveVec *= moveSpeed * Time.deltaTime;
 			transform.position += moveVec;
-		} // Right
-		if( mouse.x > Graphics.width - edgeDistance )
+		} 
+		// Right
+		if( ( mouseEdgeScroll && mouse.x > Graphics.width - edgeDistance ) || Input.getState( "Right" ) )
 		{
 			auto moveVec = transform.right;
 			moveVec.y = 0;
 			moveVec.normalize();
 			moveVec *= moveSpeed * Time.deltaTime;
 			transform.position += moveVec;
-		} // Top
-		if( mouse.y > Graphics.height - edgeDistance )
+		} 
+		// Top
+		if( ( mouseEdgeScroll && mouse.y > Graphics.height - edgeDistance ) || Input.getState( "Up" ) )
 		{
 			auto moveVec = transform.forward;
 			moveVec.y = 0;
