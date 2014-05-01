@@ -35,6 +35,7 @@ enum StatEffected
 	None,
 	Accuracy,
 	Turn, // deplete the actions left on a unit
+	Damage,
 }
 
 shared class Ability
