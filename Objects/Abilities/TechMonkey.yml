@@ -23,3 +23,5 @@ targetType: Tile
 targetArea: Single
 damageType: Buff
 cooldown: 4
+statEffected: Damage
+bonus: 2
