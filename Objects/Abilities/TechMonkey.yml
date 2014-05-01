@@ -1,10 +1,15 @@
 ---
-name: "Attack"
+name: "Ranged Attack"
+targetType: EnemyUnit
+targetArea: Single
+range: 6
+damage: 5
+---
+name: "Melee Attack"
 targetType: EnemyUnit
 targetArea: Single
 range: 1
-damage: 1
-accuracy: 14
+damage: 6
 ---
 name: "Discharge Grenade"
 targetType: EnemyUnit
@@ -12,38 +17,9 @@ targetArea: Radial
 range: 6
 damage: 4
 cooldown: 2
-accuracy: 12
----
-name: "Automated Aiming System"
-targetType: Tile
-targetArea: Single
-damageType: Buff
-statEffected: Accuracy
-cooldown: 2
-accuracy: 10
 ---
 name: "Overload"
 targetType: Tile
 targetArea: Single
 damageType: Buff
 cooldown: 4
-accuracy: 15
----
-name: "Summon Turret"
-targetType: Tile
-targetArea: Single
-range: 4
-cooldown: 2
----
-name: "Turret Shot"
-targetType: EnemyUnit
-targetArea: Single
-range: 2
-damage: 2
-damageType: Direct
----
-name: "Detonate"
-targetType: AlliedUnit
-targetArea: Radial
-range: 2
-damage: 6
