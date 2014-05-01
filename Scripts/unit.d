@@ -170,7 +170,7 @@ public:
 		uint distance = abs( ( tile.x - x ) ) + abs ( ( tile.y - y ) );
 		
 		// Check speed, actions, and tileType
-		return remainingRange > distance && remainingActions > 0 && tile.type == TileType.Open;
+		return remainingRange >= distance && remainingActions > 0 && tile.type == TileType.Open;
 	}
 	
 	/// Highlight the tiles the unit can move to
