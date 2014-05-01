@@ -1,29 +1,22 @@
 ---
-name: "Attack"
+name: "Ranged Attack"
+targetType: EnemyUnit
+targetArea: Single
+range: 5
+damage: 6
+---
+name: "Melee Attack"
 targetType: EnemyUnit
 targetArea: Single
 range: 1
-damage: 1
-accuracy: 14
----
-name: "Summon"
-targetType: Tile
-targetArea: Single
-range: 1
-cooldown: 2
-accuracy: 5
----
-name: "Undead Attack"
-targetType: EnemyUnit
-targetArea: Radial
-range: 1
-damage: 1
+damage: 6
 ---
 name: "Consume"
-targetType: AlliedUnit
+targetType: EnemyUnit
 targetArea: Single
 range: 1
-cooldown: 3
+cooldown: 5
+damage - 4
 ---
 name: "From The Grave"
 targetType: Space
@@ -32,21 +25,3 @@ range: 6
 damage: 2
 duration: 3
 cooldown: 4
----
-name: "Death's Embrace"
-targetType: EnemyUnit
-targetArea: Radial
-range: 100 # global ability
-damageType: Debuff
-statEffected: Movement
-cooldown: 3
-accuracy: 15
----
-name: "Bad Luck"
-targetType: EnemyUnit
-targetArea: Radial
-range: 100
-damageType: Debuff
-statEffected: Turn # if successful, the unit gives up their turn
-cooldown: 2
-accuracy: 8
