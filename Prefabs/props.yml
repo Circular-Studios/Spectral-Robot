@@ -16,11 +16,11 @@ Mesh: RG_wall_1x4_01
 Material: Wall_1x4
 ---
 Name: Wall_Corner_In
-Mesh: RG_corner_in_01
+Mesh: RG_wall_corner_in_01
 Material: Wall_Corner_In
 ---
 Name: Wall_Corner_Out
-Mesh: RG_corner_out_01
+Mesh: RG_wall_corner_out_01
 Material: Wall_Corner_Out
 ---
 Name: Pillar

@@ -14,25 +14,140 @@ Units:
       Rotation: !Vector3 0 180 0
       Team: Robot
     - Name: TechRobot
-      Spawn: [21, 23]
+      Spawn: [21, 20]
       Rotation: !Vector3 0 180 0
       Team: Robot
 Objects:
     - Prefab: Wall_1x4
-      Location: [0, 0, 0, 19]
+      Location: [0, 0, 0, 3]
+      TileSize: [1, 4]
+      TileType: FullyBlocked
+
+    - Prefab: Wall_1x4
+      Location: [0, 9, 0, 11]
       TileSize: [1, 4]
       TileType: FullyBlocked
 
     - Prefab: Wall_1x2
-      Location: [0, 20, 0, 23]
+      Location: [0, 3, 0, 7]
+      TileSize: [1, 2]
+      TileType: FullyBlocked
+
+    - Prefab: Wall_1x2
+      Location: [0, 12, 0, 16]
       TileSize: [1, 2]
       TileType: FullyBlocked
 
     - Prefab: Wall_1x4
-      Location: [23, 0, 23, 23]
+      Location: [0, 18, 0, 18]
+      TileSize: [1, 4]
+      TileType: FullyBlocked
+
+    - Prefab: Wall_1x1
+      Location: [0, 21, 0, 22]
+      TileSize: [1 , 1]
+      TileType: FullyBlocked
+
+    - Prefab: Wall_Corner_In
+      Location: [23, 0]
+      Rotation: !Vector3 0 180 0
+
+    - Prefab: Wall_Corner_In
+      Location: [23, 23]
+      Rotation: !Vector3 0 90 0
+
+    - Prefab: Wall_Corner_In
+      Location: [0, 23]
+      TileType: FullyBlocked
+
+    - Prefab: Wall_1x4
+      Location: [2, 23, 5, 23]
+      TileSize: [4, 1]
+      Rotation: !Vector3 0 90 0
+      TileType: FullyBlocked
+
+    - Prefab: Wall_1x2
+      Location: [5, 23, 8, 23]
+      TileSize: [2, 1]
+      Rotation: !Vector3 0 90 0
+      TileType: FullyBlocked
+
+    - Prefab: Wall_1x4
+      Location: [9, 23, 15, 23]
+      TileSize: [4, 1]
+      Rotation: !Vector3 0 90 0
+      TileType: FullyBlocked
+
+    - Prefab: Wall_1x2
+      Location: [16, 23, 20, 23]
+      TileSize: [2, 1]
+      Rotation: !Vector3 0 90 0
+      TileType: FullyBlocked
+
+    - Prefab: Wall_1x1
+      Location: [22, 23]
+      TileSize: [1, 1]
+      Rotation: !Vector3 0 90 0
+      TileType: FullyBlocked
+
+    - Prefab: Wall_1x4
+      Location: [23, 2, 23, 6]
       TileSize: [1, 4]
       Rotation: !Vector3 0 180 0
       TileType: FullyBlocked
+
+    - Prefab: Wall_1x2
+      Location: [23, 9, 23, 13]
+      TileSize: [1, 2]
+      Rotation: !Vector3 0 180 0
+      TileType: FullyBlocked
+
+    - Prefab: Wall_1x4
+      Location: [23, 15, 23, 19]
+      TileSize: [1, 4]
+      Rotation: !Vector3 0 180 0
+      TileType: FullyBlocked
+
+    - Prefab: Wall_1x1
+      Location: [23, 22]
+      TileSize: [1, 1]
+      Rotation: !Vector3 0 180 0
+      TileType: FullyBlocked
+
+    - Prefab: Wall_Corner_Out
+      Location: [4, 0]
+      Rotation: !Vector3 0 180 0
+      TileType: FullyBlocked
+
+    - Prefab: Wall_1x1
+      Location: [5, 0, 5, 0]
+      TileSize: [1, 1]
+      Rotation: !Vector3 0 270 0
+      TileType: FullyBlocked
+
+    - Prefab: Wall_1x2
+      Location: [6, 0, 8, 0]
+      TileSize: [2, 1]
+      Rotation: !Vector3 0 270 0
+      TileType: FullyBlocked  
+
+    - Prefab: Wall_1x4
+      Location: [10, 0, 17, 0]
+      TileSize: [4, 1]
+      Rotation: !Vector3 0 270 0
+      TileType: FullyBlocked
+
+    - Prefab: Wall_1x2
+      Location: [17, 0, 20, 0]
+      TileSize: [2, 1]
+      Rotation: !Vector3 0 270 0
+      TileType: FullyBlocked
+
+    - Prefab: Wall_1x1
+      Location: [21, 0, 22, 0]
+      TileSize: [1, 1]
+      Rotation: !Vector3 0 270 0
+      TileType: FullyBlocked  
 
     - Prefab: Pillar
       Location: [8, 11]
