@@ -1,5 +1,5 @@
 ﻿module unit;
-import game, ability, grid, effect, tile, turn;
+import game, ability, action, grid, effect, tile, turn;
 import core, utility, components;
 import gl3n.linalg, gl3n.math, gl3n.interpolate;
 import std.algorithm;
@@ -141,26 +141,28 @@ public:
 			curTile.occupant = null;
 			targetTile.occupant = this;
 			
-			// decrement remaining actions and distance
-			actionUsed();
-			_remainingRange -= abs( ( targetTile.x - x ) ) + abs ( ( targetTile.y - y ) );
-			
 			// move the unit to the new location
 			position = targetTileID;
 			updatePosition();
 			deselect();
 			Game.grid.isUnitSelected = false;
+
+			// decrement remaining actions and distance
+			actionUsed();
+			_remainingRange -= abs( ( targetTile.x - x ) ) + abs ( ( targetTile.y - y ) );
 			
 			// update fog of war
 			Game.grid.updateFogOfWar();
 			
 			// check if the turn is over
 			Game.turn.checkTurnOver();
+
+			Game.turn.sendAction( Action( 0, ID, position, true ) );
 		}
 	}
 	
 	/// Check if the move is allowed
-	bool checkMove( uint targetTileID )
+	bool checkMove( shared uint targetTileID )
 	{
 		auto tile = Game.grid.getTileByID( targetTileID );
 		
@@ -186,7 +188,7 @@ public:
 			{
 				tile.transform.scale = 
 					interp( shared vec3( 0 ), shared vec3( TILE_SIZE / 2 ), 
-					       ( Time.totalTime - startTime ) / dur.toSeconds );
+								 ( Time.totalTime - startTime ) / dur.toSeconds );
 			} );*/
 		}
 
@@ -198,6 +200,8 @@ public:
 
 			// automatically select the first ability
 			Game.grid.selectAbility( 0 );
+
+			Game.turn.sendAction( Action( 1, ID, position, false ) );
 		}
 	}
 	
