@@ -104,6 +104,7 @@ body{
 .fullWidthContainer {
 	width: 100%;
 	bottom: 0px;
+	left: 0;
 	position: fixed;
 }
 
@@ -137,9 +138,12 @@ body{
 /***** TOOLTIPS *****/
 .tooltipBox {
 	display: none;
-	width: 100%;
-	max-width: 360px;
-	height: 100%;
+	max-width: 500px;
+	max-height: 100000px;
+	position: absolute;
+	left: 0px; bottom: 0px;
+
+	text-align: left;
 
 	border: 1px solid #fff;
 
@@ -155,4 +159,8 @@ body{
 
 .abilityDescription {
 	color: #ddd;
+}
+
+.abilityBox:hover .tooltipBox {
+	display: block;
 }

@@ -55,113 +55,136 @@
 	</div>
 
 	<!-- Abilities at the bottom of the screen -->
-	<div class="fullWidthContainer">
-		<div class="abilities">
-			<div class="abilityBox"></div>
-			<div class="abilityBox"></div>
-			<div class="abilityBox"></div>
-			<div class="abilityBox"></div>
-		</div>
-	</div>
 
-	<!-- Tooltip Box -->
-
-	<!-- FireStarter Abilities -->
+	<!-- Firestarter -->
 	<div class="fullWidthContainer">
-		<div class="tooltipBox">
-			<h4 class="abilityName">Fireball</h5>
-			<p class="abilityDescription">Launches a fireball at an enemy<br>
-										  Range: 2 Spaces<br>
-										  Damage: 6<br>
-										  Accuracy: 12<br>
-										  Classification: Single Target, Ranged</p>
-		</div>
-	</div>
-
-	<div class="fullWidthContainer">
-		<div class="tooltipBox">
-			<h4 class="abilityName">Incincerate</h5>
-			<p class="abilityDescription">Lights an enemy on fire, doing damage over 2-4 turns. Damage is applied at the beginning of each turn<br>
-										  Range: 3 Spaces. Target cannot be adjacent to the user.<br>
-										  Damage: 2/turn<br>
-										  Accuracy: 10. This ability cannot crit.<br>
-										  Classification: Single Target, Ranged, DOT</p>
+		<div class="abilities firestarter">
+			<div class="abilityBox"></div>
+			<div class="abilityBox"></div>
+			<div class="abilityBox">
+				<div class="tooltipBox fireball">
+					<h4 class="abilityName">Fireball</h5>
+					<p class="abilityDescription">Launches a fireball at an enemy<br>
+												  Range: 2 Spaces<br>
+												  Damage: 6<br>
+												  Accuracy: 12<br>
+												  Classification: Single Target, Ranged</p>
+				</div>
+			</div>
+			<div class="abilityBox">
+					<div class="tooltipBox incinerate">
+						<h4 class="abilityName">Incincerate</h5>
+						<p class="abilityDescription">Lights an enemy on fire, doing damage over 2-4 turns. Damage is applied at the beginning of each turn<br>
+													  Range: 3 Spaces. Target cannot be adjacent to the user.<br>
+													  Damage: 2/turn<br>
+													  Accuracy: 10. This ability cannot crit.<br>
+													  Classification: Single Target, Ranged, DOT</p>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 
 	<!-- DeadBringer -->
 	<div class="fullWidthContainer">
-		<div class="tooltipBox">
-			<h4 class="abilityName">From the Grave</h5>
-			<p class="abilityDescription">Place a 2x2 boon in an target location. Units within this area are slowed and take damage. Damage is only applied once, but the slow is applied constantly. Reduces Enemy Movement by 2 spaces (minimum 1 space movement).<br>
-										  Range: 6 spaces<br>
-										  Damage: 2<br>
-										  Duration: 3 turns<br>
-										  Cooldown: 4 turns<br>
-										  Classification: Ranged, AOE, Debuff, Boon</p>
+		<div class="abilities deadbringer">
+			<div class="abilityBox"></div>
+			<div class="abilityBox"></div>
+			<div class="abilityBox">
+				<div class="tooltipBox fromTheGrave">
+					<h4 class="abilityName">From the Grave</h5>
+					<p class="abilityDescription">Place a 2x2 boon in an target location. Units within this area are slowed and take damage. Damage is only applied once, but the slow is applied constantly. Reduces Enemy Movement by 2 spaces (minimum 1 space movement).<br>
+												  Range: 6 spaces<br>
+												  Damage: 2<br>
+												  Duration: 3 turns<br>
+												  Cooldown: 4 turns<br>
+												  Classification: Ranged, AOE, Debuff, Boon</p>
+				</div>
+			</div>
+			<div class="abilityBox">
+				<div class="tooltipBox consume">
+					<h4 class="abilityName">Consume</h5>
+					<p class="abilityDescription">Gnaw at an enemy. You gain health equal to a third (1/3) of the enemy’s current health, rounded up.<br>
+												  Range: 1 space<br>
+												  Damage: 33% enemys' hp<br>
+												  Accuracy: 10<br>
+												  Cooldown: 5 turns<br>
+												  Classification: Single Target, Effect</p>
+				</div>
+			</div>
 		</div>
 	</div>
 
+	<!-- BulletMancer -->
 	<div class="fullWidthContainer">
-		<div class="tooltipBox">
-			<h4 class="abilityName">Consume</h5>
-			<p class="abilityDescription">Gnaw at an enemy. You gain health equal to a third (1/3) of the enemy’s current health, rounded up.<br>
-										  Range: 1 space<br>
-										  Damage: 33% enemys' hp<br>
-										  Accuracy: 10<br>
-										  Cooldown: 5 turns<br>
-										  Classification: Single Target, Effect</p>
+		<div class="abilities bulletmancer">
+			<div class="abilityBox"></div>
+			<div class="abilityBox"></div>
+			<div class="abilityBox">
+				<div class="tooltipBox healingBarrage">
+					<h4 class="abilityName">Healing Barrage</h5>
+					<p class="abilityDescription">Fire a barrage of bullets at an allied unit. You heal them for a specific amount. This ability can crit, and can miss.<br>
+												  Range: 4 Spaces<br>
+												  Healing: 3<br>
+												  Cooldown: 2 turns<br>
+												  Accuracy: 8<br>
+												  NOTE: If you critically miss, you deal damage to the unit you are trying to heal.<br>
+												  Classification: Single Allied Target, Ranged, Stat Effect</p>
+				</div>
+			</div>
+			<div class="abilityBox">
+				<div class="tooltipBox cannonShot">
+					<h4 class="abilityName">Cannon Shot</h5>
+					<p class="abilityDescription">Fire a cannon ball at a unit. This attack does AOE damage a radius of 2 around the target unit.<br>
+												  Range: 5 Spaces<br>
+												  Damage: 6 AOE. 9 to unit in target zone<br>
+												  Accuracy: 14<br>
+												  Classification: Single Target, Ranged, AOE</p>
+				</div>
+			</div>
 		</div>
 	</div>
 
-	<!-- Bulletmancer Abilities -->
+	<!-- TechMonkey -->
 	<div class="fullWidthContainer">
-		<div class="tooltipBox">
-			<h4 class="abilityName">Healing Barrage</h5>
-			<p class="abilityDescription">Fire a barrage of bullets at an allied unit. You heal them for a specific amount. This ability can crit, and can miss.<br>
-										  Range: 4 Spaces<br>
-										  Healing: 3<br>
-										  Cooldown: 2 turns<br>
-										  Accuracy: 8<br>
-										  NOTE: If you critically miss, you deal damage to the unit you are trying to heal.<br>
-										  Classification: Single Allied Target, Ranged, Stat Effect</p>
+		<div class="abilities techmonkey">
+			<div class="abilityBox"></div>
+			<div class="abilityBox"></div>
+			<div class="abilityBox">
+				<div class="tooltipBox dischargeGrenade">
+					<h4 class="abilityName">Discharge Grenade</h5>
+					<p class="abilityDescription">Release a small AOE lightning burst. Area of Effect is one space away from the grenade landing point in each direction. Each enemy caught in the AOE has a chance to escape said damage, by rolling against the accuracy rating the user makes (you cannot escape Natural Crit (a roll of 20)).<br>
+												  Range: 6 Spaces<br>
+												  Damage: 5<br>
+												  Cooldown: 2 turns<br>
+												  Accuracy: 12<br>
+												  Classification: Single Target, Ranged, AOE</p>
+				</div>
+			</div>
+			<div class="abilityBox">
+				<div class="tooltipBox overload">
+					<h4 class="abilityName">Overload</h5>
+					<p class="abilityDescription">Invokes an advanced damage calculation algorithm, increasing the damage of the next attack made. This algorithm is privy though, and if it fails, can decrease the total damage of the next attack made.<br>
+												  Range: 3 Spaces. Target cannot be adjacent to the user.<br>
+												  Effect: If success, the total calculated damage of the net attack made is increased by a flat amount of six(6). If failed, the total damage of the next attack made is decreased by a flat amount of five(5).<br>
+												  Cooldown: 4 turns<br>
+												  Classification: Self Target, Buff</p>
+				</div>
+			</div>
 		</div>
 	</div>
 
-	<div class="fullWidthContainer">
-		<div class="tooltipBox">
-			<h4 class="abilityName">Cannon Shot</h5>
-			<p class="abilityDescription">Fire a cannon ball at a unit. This attack does AOE damage a radius of 2 around the target unit.<br>
-										  Range: 5 Spaces<br>
-										  Damage: 6 AOE. 9 to unit in target zone<br>
-										  Accuracy: 14<br>
-										  Classification: Single Target, Ranged, AOE</p>
-		</div>
-	</div>
+	<!-- Tooltip Box -->
 
-	<!-- TechMonkey Abilities -->
-	<div class="fullWidthContainer">
-		<div class="tooltipBox">
-			<h4 class="abilityName">Discharge Grenade</h5>
-			<p class="abilityDescription">Release a small AOE lightning burst. Area of Effect is one space away from the grenade landing point in each direction. Each enemy caught in the AOE has a chance to escape said damage, by rolling against the accuracy rating the user makes (you cannot escape Natural Crit (a roll of 20)).<br>
-										  Range: 6 Spaces<br>
-										  Damage: 5<br>
-										  Cooldown: 2 turns<br>
-										  Accuracy: 12<br>
-										  Classification: Single Target, Ranged, AOE</p>
-		</div>
-	</div>
+				<!-- Bulletmancer Abilities -->
+				
 
-	<div class="fullWidthContainer">
-		<div class="tooltipBox">
-			<h4 class="abilityName">Overload</h5>
-			<p class="abilityDescription">Invokes an advanced damage calculation algorithm, increasing the damage of the next attack made. This algorithm is privy though, and if it fails, can decrease the total damage of the next attack made.<br>
-										  Range: 3 Spaces. Target cannot be adjacent to the user.<br>
-										  Effect: If success, the total calculated damage of the net attack made is increased by a flat amount of six(6). If failed, the total damage of the next attack made is decreased by a flat amount of five(5).<br>
-										  Cooldown: 4 turns<br>
-										  Classification: Self Target, Buff</p>
-		</div>
-	</div>
+				
+
+				<!-- TechMonkey Abilities -->
+				
+
+				
 
 	</body>
 </html>
