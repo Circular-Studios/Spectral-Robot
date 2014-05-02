@@ -50,7 +50,7 @@ public:
 		auto obj = this;
 		Input.addAxisEvent( Axes.MouseScroll, ( ac, newVal )
 		{
-			/*static*/ float prev = 0.0f;
+			static float prev = 0.0f;
 			if( newVal > prev )
 			{
 				obj.transform.position += obj.transform.forward * min( ( zoomSpeed * Time.deltaTime ), ( minHeight - obj.transform.position.y ) / obj.transform.forward.y );
