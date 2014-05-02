@@ -50,7 +50,7 @@ public:
 						selectedUnit.move( tile.toID() );
 					}
 					// select a unit if the tile has an occupying unit
-					else if( !isUnitSelected && tile.occupant !is null )
+					else if( !isUnitSelected && tile.occupant !is null && tile.occupant.remainingActions > 0 )
 					{
 						selectedUnit = tile.occupant;
 						selectedUnit.previewMove();
@@ -72,7 +72,7 @@ public:
 							selectedUnit.useAbility( selectedAbility, unit.position );
 						}
 						// Select a unit
-						else
+						else if( unit.remainingActions > 0 )
 						{
 							selectedUnit = unit;
 							unit.previewMove();
@@ -82,7 +82,6 @@ public:
 					// Deselect a unit if not a tile
 					else if( isUnitSelected )
 					{
-						logInfo("Deselected ", selectedUnit.name );
 						selectedUnit.deselect();
 					}
 				}
@@ -221,7 +220,7 @@ public:
 			
 			tile.x = x;
 			tile.y = y;
-			tile.transform.scale = vec3( TILE_SIZE / 2 - 1 );
+			tile.transform.scale = vec3( TILE_SIZE / 2 );
 			
 			// hide the tile
 			tile.stateFlags.drawMesh = false;

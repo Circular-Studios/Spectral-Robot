@@ -66,10 +66,7 @@ public:
 		{
 			if( Game.abilities[ abilityID ].use( position, targetID ) )
 			{
-				_remainingActions--;
-				
-				// if out of actions, check if the turn is over
-				Game.turn.checkTurnOver();
+				actionUsed();
 				return true;
 			}
 		}
@@ -97,6 +94,7 @@ public:
 		mixin( prop ) -= diff;
 	}
 
+	/// Use an effect stored in the unit
 	void reEffect( string prop )( int diff, int duration, bool reset, int originalValue )
 	{
 		mixin( prop ) -= diff;
@@ -121,7 +119,7 @@ public:
 			
 			// change the tile types
 			curTile.type = TileType.Open;
-			targetTile.type = TileType.HalfBlocked;
+			targetTile.type = TileType.OccupantActive;
 
 			// Rotate the unit to face the direction he moved
 			//Down
@@ -137,14 +135,14 @@ public:
 				transform.rotation = quat.euler_rotation( 90.radians, 0, 0 );
 		
 			// scale the tile back down
-			curTile.transform.scale = vec3( TILE_SIZE / 2 - 1 );
+			curTile.transform.scale = vec3( TILE_SIZE / 2 );
 			
 			// change the tile occupants
 			curTile.occupant = null;
 			targetTile.occupant = this;
 			
 			// decrement remaining actions and distance
-			_remainingActions--;
+			actionUsed();
 			_remainingRange -= abs( ( targetTile.x - x ) ) + abs ( ( targetTile.y - y ) );
 			
 			// move the unit to the new location
@@ -182,6 +180,14 @@ public:
 		foreach( tile; selectedTiles )
 		{
 			tile.selection = TileSelection.Blue;
+			/*auto startTime = Time.totalTime;
+			auto dur = 100.msecs;
+			scheduleTimedTask( dur,
+			{
+				tile.transform.scale = 
+					interp( shared vec3( 0 ), shared vec3( TILE_SIZE / 2 ), 
+					       ( Time.totalTime - startTime ) / dur.toSeconds );
+			} );*/
 		}
 
 		// only run this if a unit isn't already selected
@@ -192,17 +198,6 @@ public:
 
 			// automatically select the first ability
 			Game.grid.selectAbility( 0 );
-			
-			// scale the selected unit's tile
-			auto startTime = Time.totalTime;
-			auto dur = 100.msecs;
-			// TODO: use the interpolate task
-			scheduleTimedTask( dur,
-			{
-				Game.grid.getTileByID( position ).transform.scale = 
-					interp( shared vec3( 0 ), shared vec3( TILE_SIZE / 2 - 1 ), 
-							( Time.totalTime - startTime ) / dur.toSeconds );
-			} );
 		}
 	}
 	
@@ -216,7 +211,7 @@ public:
 		}
 		
 		// scale the tile back down
-		Game.grid.getTileByID( position ).transform.scale = vec3( TILE_SIZE / 2 - 1 );
+		Game.grid.getTileByID( position ).transform.scale = vec3( TILE_SIZE / 2 );
 		
 		// Modify grid variables
 		Game.grid.selectedUnit = null;
@@ -225,6 +220,20 @@ public:
 		// deselect the ability if there was one
 		if ( Game.grid.isAbilitySelected )
 			Game.abilities[ Game.grid.selectedAbility ].unpreview();
+
+		logInfo( "Deselected ", name, ", ", remainingActions, " action(s) remaining." );
+	}
+
+	/// Decrement remaining actions 
+	void actionUsed( int numActions = 1 )
+	{
+		_remainingActions -= numActions;
+		if( remainingActions <= 0 )
+		{
+			Game.grid.getTileByID( position ).type = TileType.OccupantInactive;
+			Game.turn.checkTurnOver();
+		}
+		deselect();
 	}
 	
 	/// Prep the unit to begin a turn anew
@@ -233,9 +242,10 @@ public:
 		// reset action and range
 		_remainingActions = ACTIONS_RESET;
 		_remainingRange = speed;
+		Game.grid.getTileByID( position ).type = TileType.OccupantActive;
 
 		// apply active effects (reversed to allow for deletions)
-		foreach_reverse( i, effect; _activeEffects )
+		foreach_reverse( effect; _activeEffects )
 		{
 			effect.use( this );
 		}
