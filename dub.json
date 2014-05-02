@@ -50,8 +50,8 @@
 			"workingDirectory": "Binaries",
 			"versions": [ "Server", "VibeCustomMain" ],
 			"dependencies": {
-				"speed:common": "~master",
-				"speed:server": "~master"	
+				"speed:common": "==0.1.1",
+				"speed:server": "==0.1.1"	
 			}
 		}
 	]

@@ -5,7 +5,7 @@ version( Server ):
 import action;
 import speed, speed.db;
 //import vibe.d;
-import std.stdio;
+import std.stdio, std.string;
 
 void main()
 {
@@ -34,7 +34,11 @@ void main()
 		connMan.start();
 
 		// Hit enter to restart.
-		readln();
+		if( readln().chomp().toLower() == "exit" )
+		{
+			connMan.close();
+			return;
+		}
 
 		connMan.close();
 	}
