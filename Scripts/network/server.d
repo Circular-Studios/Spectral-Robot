@@ -9,14 +9,17 @@ import std.stdio;
 
 void main()
 {
+	uint numPlayers;
 	auto connMan = ConnectionManager.open();
 
 	connMan.onNewConnection ~= ( shared Connection conn )
 	{
+		numPlayers++;
 		conn.onReceiveData!string ~= ( string msg )
 		{
 			writeln( "Recieved message: ", msg );
 			connMan.send!string( "ECHO: " ~ msg, ConnectionType.TCP );
+			connMan.send!uint( numPlayers );
 		};
 
 		conn.onReceiveData!Action ~= ( Action action )
