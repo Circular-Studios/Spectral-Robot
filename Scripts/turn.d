@@ -31,9 +31,12 @@ public:
 		// hotkey to end turn
 		Input.addKeyDownEvent( "EndTurn", ( kc )
 		{
-			// send the switch to the server
-			Game.turn.sendAction( Action( 9, 0, 0, true ) );
-			switchActiveTeam();
+			if( currentTeam == activeTeam )
+			{
+				// send the switch to the server
+				Game.turn.sendAction( Action( 9, 0, 0, true ) );
+				switchActiveTeam();
+			}
 		} );
 	}
 	
