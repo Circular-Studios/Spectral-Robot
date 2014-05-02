@@ -109,7 +109,7 @@ body{
 }
 
 .abilities {
-	display: table;
+	display: none;
 	bottom: 0px;
 	
 	height: 100px;

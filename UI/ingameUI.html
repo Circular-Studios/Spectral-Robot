@@ -1,12 +1,14 @@
 <html>
 	<head>
-		 <title>In-game UI</title>
+		<title>In-game UI</title>
 
-		 <link rel="stylesheet" type="text/css" href="normalize.css" />
-		 <link rel="stylesheet" type="text/css" href="ingame_style.css">
+		<link rel="stylesheet" type="text/css" href="normalize.css" />
+		<link rel="stylesheet" type="text/css" href="ingame_style.css">
 
-		 <script src="jquery-2.1.0.min.js"></script>
-		 <script src="jquery-ui-1.10.4.custom.min.js"></script>
+		<script src="jquery-2.1.0.min.js"></script>
+		<script src="jquery-ui-1.10.4.custom.min.js"></script>
+
+		
 	</head>
 	<body>
 	
@@ -17,15 +19,17 @@
 			<div class="playerCharacter">
 				<div class="charName">Robots (Player)</div>
 			</div>
-			<div class="playerCharacter">
-				<div class="charName"><p>Hank SchrayBot</p></div>
+			<div class="playerCharacter" onclick="selectCharacter( 4 )">
+				<div class="charName"><h3>Hank SchrayBot</h3></div>
+				<div class="charName"><h4>Class: Bulletmancer</h4></div>
 				<div class="healthContainer">
 					<div class="healthbar" style="width:80%"></div>
 					<div class="health">80/100</div>
 				</div>
 			</div>
-			<div class="playerCharacter">
-				<div class="charName"><p>Steve RoboGomez</p></div>
+			<div class="playerCharacter" onclick="selectCharacter( 3 )">
+				<div class="charName"><h3>Steve RoboGomez</h3></div>
+				<div class="charName"><h4>Class: Tech Monkey</h4></div>
 				<div class="healthContainer">
 					<div class="healthbar" style="width:20%"></div>
 					<div class="health">20/100</div>
@@ -36,16 +40,18 @@
 			<div class="enemyCharacter">
 				<div class="charName">Werewolves (Enemies)</div>
 			</div>
-			<div class="enemyCharacter">
-				<div class="charName"><p>Walter Wolf</p></div>
+			<div class="enemyCharacter" onclick="selectCharacter( 1 )">
+				<div class="charName"><h3>Walter Wolf</h3></div>
+				<div class="charName"><h4>Class: Firestarter</h4></div>
 				<div class="healthContainer">
 					<div class="healthbar" style="width:40%"></div>
 					<div class="health">40/100</div>
 				</div>
 
 			</div>
-			<div class="enemyCharacter">
-				<div class="charName"><p>Jesse WereMin</p></div>
+			<div class="enemyCharacter" onclick="selectCharacter( 2 )">
+				<div class="charName"><h3>Jesse WereMin</h3></div>
+				<div class="charName"><h4>Class: Deadbringer</h4></div>
 				<div class="healthContainer">
 					<div class="healthbar" style="width:90%"></div>
 					<div class="health">90/100</div>
@@ -58,9 +64,23 @@
 
 	<!-- Firestarter -->
 	<div class="fullWidthContainer">
-		<div class="abilities firestarter">
-			<div class="abilityBox"></div>
-			<div class="abilityBox"></div>
+		<div class="abilities firestarter" id="one">
+			<div class="abilityBox">
+				<div class="tooltipBox basicRanged">
+					<h4 class="abilityName">Basic Ranged Attack</h4>
+					<p class="abilityDescription">Range: 5 spaces<br>
+												  Accuracy: 12<br>
+												  DMG: 5</p>
+				</div>
+			</div>
+			<div class="abilityBox">
+				<div class="tooltipBox basicMelee">
+					<h4 class="abilityName">Basic Melee Attack</h4>
+					<p class="abilityDescription">Range: 1 space<br>
+												  Accuracy: 14<br>
+												  DMG: 6</p>
+				</div>
+			</div>
 			<div class="abilityBox">
 				<div class="tooltipBox fireball">
 					<h4 class="abilityName">Fireball</h5>
@@ -87,9 +107,23 @@
 
 	<!-- DeadBringer -->
 	<div class="fullWidthContainer">
-		<div class="abilities deadbringer">
-			<div class="abilityBox"></div>
-			<div class="abilityBox"></div>
+		<div class="abilities deadbringer" id="two">
+			<div class="abilityBox">
+				<div class="tooltipBox basicRanged">
+					<h4 class="abilityName">Basic Ranged Attack</h4>
+					<p class="abilityDescription">Range: 5 spaces<br>
+												  Accuracy: 12<br>
+												  DMG: 5</p>
+				</div>
+			</div>
+			<div class="abilityBox">
+				<div class="tooltipBox basicMelee">
+					<h4 class="abilityName">Basic Melee Attack</h4>
+					<p class="abilityDescription">Range: 1 space<br>
+												  Accuracy: 14<br>
+												  DMG: 6</p>
+				</div>
+			</div>
 			<div class="abilityBox">
 				<div class="tooltipBox fromTheGrave">
 					<h4 class="abilityName">From the Grave</h5>
@@ -117,9 +151,23 @@
 
 	<!-- BulletMancer -->
 	<div class="fullWidthContainer">
-		<div class="abilities bulletmancer">
-			<div class="abilityBox"></div>
-			<div class="abilityBox"></div>
+		<div class="abilities bulletmancer" id="three">
+			<div class="abilityBox">
+				<div class="tooltipBox basicRanged">
+					<h4 class="abilityName">Basic Ranged Attack</h4>
+					<p class="abilityDescription">Range: 5 spaces<br>
+												  Accuracy: 12<br>
+												  DMG: 5</p>
+				</div>
+			</div>
+			<div class="abilityBox">
+				<div class="tooltipBox basicMelee">
+					<h4 class="abilityName">Basic Melee Attack</h4>
+					<p class="abilityDescription">Range: 1 space<br>
+												  Accuracy: 14<br>
+												  DMG: 6</p>
+				</div>
+			</div>
 			<div class="abilityBox">
 				<div class="tooltipBox healingBarrage">
 					<h4 class="abilityName">Healing Barrage</h5>
@@ -147,9 +195,23 @@
 
 	<!-- TechMonkey -->
 	<div class="fullWidthContainer">
-		<div class="abilities techmonkey">
-			<div class="abilityBox"></div>
-			<div class="abilityBox"></div>
+		<div class="abilities techmonkey" id="four">
+			<div class="abilityBox">
+				<div class="tooltipBox basicRanged">
+					<h4 class="abilityName">Basic Ranged Attack</h4>
+					<p class="abilityDescription">Range: 5 spaces<br>
+												  Accuracy: 12<br>
+												  DMG: 5</p>
+				</div>
+			</div>
+			<div class="abilityBox">
+				<div class="tooltipBox basicMelee">
+					<h4 class="abilityName">Basic Melee Attack</h4>
+					<p class="abilityDescription">Range: 1 space<br>
+												  Accuracy: 14<br>
+												  DMG: 6</p>
+				</div>
+			</div>
 			<div class="abilityBox">
 				<div class="tooltipBox dischargeGrenade">
 					<h4 class="abilityName">Discharge Grenade</h5>
@@ -174,17 +236,48 @@
 		</div>
 	</div>
 
-	<!-- Tooltip Box -->
+	<script type="text/javascript">
+		var selectedChar = 0;
 
-				<!-- Bulletmancer Abilities -->
-				
+		function selectCharacter( i ) { 
+			selectedChar = i;
+			if( selectedChar == 1 )
+			{
+				document.getElementById( "one" ).style.display = "table";
 
-				
+				document.getElementById( "two" ).style.display = "none";
+				document.getElementById( "three" ).style.display = "none";
+				document.getElementById( "four" ).style.display = "none";
+			}
 
-				<!-- TechMonkey Abilities -->
-				
+			if( selectedChar == 2 )
+			{
+				document.getElementById( "two" ).style.display = "table";
 
-				
+				document.getElementById( "one" ).style.display = "none";
+				document.getElementById( "three" ).style.display = "none";
+				document.getElementById( "four" ).style.display = "none";
+			}
 
+			if( selectedChar == 3 )
+			{
+				document.getElementById( "three" ).style.display = "table";
+
+				document.getElementById( "one" ).style.display = "none";
+				document.getElementById( "two" ).style.display = "none";
+				document.getElementById( "four" ).style.display = "none";
+			}
+
+			if( selectedChar == 4 )
+			{
+				document.getElementById( "four" ).style.display = "table";
+
+				document.getElementById( "one" ).style.display = "none";
+				document.getElementById( "two" ).style.display = "none";
+				document.getElementById( "three" ).style.display = "none";
+			}
+		}
+
+		</script>
 	</body>
 </html>
