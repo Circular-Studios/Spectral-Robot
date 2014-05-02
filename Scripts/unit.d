@@ -149,7 +149,7 @@ public:
 
 			// decrement remaining actions and distance
 			actionUsed();
-			_remainingRange -= abs( ( targetTile.x - x ) ) + abs ( ( targetTile.y - y ) );
+			_remainingRange -= abs( ( targetTile.x - curTile.x ) ) + abs ( ( targetTile.y - curTile.y ) );
 			
 			// update fog of war
 			Game.grid.updateFogOfWar();

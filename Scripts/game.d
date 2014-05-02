@@ -20,6 +20,7 @@ public:
 	Ability[ uint ] abilities; // The abilities
 	Unit[] units; // The units
 	shared Connection serverConn; // the server connection
+	GameState gameState;
 	//UserInterface ui;
 
 	// Name that game
@@ -58,6 +59,8 @@ public:
 		 Config.get!uint( "Display.Height" ), 
 		 Config.getPath( "UserInterface.FilePath" ) 
 		 );*/
+
+		gameState = GameState.InGame;
 	}
 	
 	/// Connect to the server
@@ -88,6 +91,17 @@ public:
 	override void onDraw()
 	{
 		//ui.draw();
+		final switch( gameState )
+		{
+			case GameState.InGame:
+				Game.stateFlags.updateScene = true;
+				Game.stateFlags.updateTasks = true;
+				break;
+			case GameState.Menu:
+				Game.stateFlags.updateScene = false;
+				Game.stateFlags.updateTasks = false;
+				break;
+		}
 	}
 	
 	override void onShutdown()
@@ -108,4 +122,10 @@ public:
 	{
 		logInfo( "Resetting..." );
 	}
+}
+
+enum GameState
+{
+	InGame,
+	Menu,
 }
