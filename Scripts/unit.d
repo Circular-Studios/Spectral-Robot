@@ -66,7 +66,7 @@ public:
 		{
 			if( Game.abilities[ abilityID ].use( position, targetID ) )
 			{
-				Game.turn.sendAction( Action( abilityID, ID, position, true ) );
+				Game.turn.sendAction( Action( abilityID, position, targetID, true ) );
 				actionUsed();
 				return true;
 			}
@@ -158,7 +158,7 @@ public:
 			// check if the turn is over
 			Game.turn.checkTurnOver();
 
-			Game.turn.sendAction( Action( 0, ID, position, true ) );
+			Game.turn.sendAction( Action( 0, position, targetTileID , true ) );
 		}
 	}
 	

@@ -77,7 +77,7 @@ public:
 							{
 								if( selectedUnit )
 								{
-									Game.turn.sendAction( Action( 2, selectedUnit.ID, selectedUnit.position, false ) );
+									Game.turn.sendAction( Action( 2, selectedUnit.position, 0, false ) );
 									selectedUnit.deselect();
 								}
 								unit.previewMove();
@@ -87,7 +87,7 @@ public:
 					// Deselect a unit if not a tile
 					else if( isUnitSelected )
 					{
-						Game.turn.sendAction( Action( 2, selectedUnit.ID, selectedUnit.position, false ) );
+						Game.turn.sendAction( Action( 2, selectedUnit.position, 0, false ) );
 						selectedUnit.deselect();
 					}
 				}
