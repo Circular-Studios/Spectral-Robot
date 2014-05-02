@@ -64,17 +64,21 @@ public:
 				{
 					if( auto unit = obj.behaviors.get!Unit )
 					{
-						// Use the selected ability on the unit if in range
-						if( isAbilitySelected && Game.abilities[ selectedAbility ].checkRange( selectedUnit.position, unit.position ) )
+						// only allow interaction with your own units on your turn
+						if( Game.turn.currentTeam == Game.turn.activeTeam )
 						{
-							selectedUnit.useAbility( selectedAbility, unit.position );
-						}
-						// Select a unit
-						else if( unit.remainingActions > 0 )
-						{
-							if( selectedUnit ) selectedUnit.deselect();
-							selectedUnit = unit;
-							unit.previewMove();
+							// Use the selected ability on the unit if in range
+							if( isAbilitySelected && Game.abilities[ selectedAbility ].checkRange( selectedUnit.position, unit.position ) )
+							{
+								selectedUnit.useAbility( selectedAbility, unit.position );
+							}
+							// Select a unit
+							else if( unit.remainingActions > 0 )
+							{
+								if( selectedUnit ) selectedUnit.deselect();
+								selectedUnit = unit;
+								unit.previewMove();
+							}
 						}
 					}
 					// Deselect a unit if not a tile
@@ -106,6 +110,7 @@ public:
 		if( isAbilitySelected )
 			Game.abilities[ selectedAbility ].unpreview();
 
+		logInfo(isUnitSelected, ", ", selectedUnit);
 		if( isUnitSelected && ability < selectedUnit.abilities.length )
 		{
 			isAbilitySelected = true;

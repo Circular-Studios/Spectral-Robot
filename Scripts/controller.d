@@ -83,8 +83,8 @@ final class Controller
 					Game.units ~= unit;
 					
 					// block and occupy the spawn tile
-					Game.grid.tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].type = TileType.OccupantActive;
 					Game.grid.tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].occupant = unit;
+					Game.grid.tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].type = TileType.OccupantActive;
 					break;
 				}
 			}

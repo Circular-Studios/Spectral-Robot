@@ -70,6 +70,7 @@ public:
 			serverConn.close();
 		serverConn = Connection.open( config.find!string( "Game.ServerIP" ), false, ConnectionType.TCP );
 		serverConn.onReceiveData!string ~= msg => logInfo( "Server Message: ", msg );
+		serverConn.onReceiveData!uint ~= numPlayers => turn.setTeam( numPlayers );
 		serverConn.onReceiveData!Action ~= action => turn.doAction( action );
 		serverConn.send!string( "New connection.", ConnectionType.TCP );
 	}

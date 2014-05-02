@@ -1,6 +1,6 @@
 module turn;
-import game, ability, unit, action;
 import core, utility;
+import game, grid, tile, ability, unit, action;
 import speed;
 
 enum Team {
@@ -13,13 +13,13 @@ class Turn
 public:
 	Action[] lastTurn; // Gets cleared after a turn
 	Action[] currentTurn; // Gets populated as the user makes actions
-	Team currentTeam;
-	
+	Team currentTeam; // the team this player controls
+	Team activeTeam; // the active team
 	
 	this()
 	{
 		// arbitrary starting team
-		currentTeam = Team.Wolf;
+		activeTeam = Team.Robot;
 
 		// update the units on the team
 		foreach( unit; Game.units )
@@ -71,35 +71,50 @@ public:
 		bool turnOver = true;
 		foreach( unit; Game.units )
 		{
-			if( unit.team == currentTeam && unit.remainingActions > 0 )
+			if( unit.team == activeTeam && unit.remainingActions > 0 )
 				turnOver = false;
 		}
 		if ( turnOver )
 			switchActiveTeam();
 	}
+
+	/// Set the team of the player
+	void setTeam( uint teamNum )
+	{
+		if( teamNum == 1 )
+		{
+			currentTeam = Team.Robot;
+		}
+		else
+		{
+			currentTeam = Team.Wolf;
+		}
+	}
 	
 	/// Switch the active team
 	void switchActiveTeam()
 	{
-		switch ( currentTeam )
+		switch ( activeTeam )
 		{
 			default:
 				break;
 			case Team.Robot:
-				currentTeam = Team.Wolf;
+				activeTeam = Team.Wolf;
 				break;
 			case Team.Wolf:
-				currentTeam = Team.Robot;
+				activeTeam = Team.Robot;
 				break;
 		}
 		
-		logInfo( "New turn: ", currentTeam );
+		logInfo( "Active team: ", activeTeam );
 		
 		// update the units on the team
 		foreach( unit; Game.units )
 		{
-			if( unit.team == currentTeam )
+			if( unit.team == activeTeam )
 				unit.newTurn();
+			else
+				Game.grid.getTileByID( unit.position ).type = TileType.OccupantInactive;
 		}
 		
 		Game.grid.updateFogOfWar();
