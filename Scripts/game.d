@@ -20,7 +20,7 @@ public:
 	Ability[ uint ] abilities; // The abilities
 	Unit[] units; // The units
 	shared Connection serverConn; // the server connection
-	//UserInterface ui;
+	UserInterface ui;
 
 	// Name that game
 	@property override string title()
@@ -54,10 +54,10 @@ public:
 		Input.addKeyDownEvent( Keyboard.R, kc => connect() );
 		
 		// create the ui
-		/*ui = new UserInterface( Config.get!uint( "Display.Width" ),
-		 Config.get!uint( "Display.Height" ), 
-		 Config.getPath( "UserInterface.FilePath" ) 
-		 );*/
+		uint w, h;
+        w = config.find!uint( "Display.Width" );
+        h = config.find!uint( "Display.Height" );
+        ui = new UserInterface(w, h, config.find!string( "UserInterface.FilePath" ) );
 	}
 	
 	/// Connect to the server
@@ -73,7 +73,7 @@ public:
 	
 	override void onUpdate()
 	{
-		//ui.update();
+		ui.update();
 		try
 		{
 			if( serverConn )
@@ -87,7 +87,7 @@ public:
 	
 	override void onDraw()
 	{
-		//ui.draw();
+		ui.draw();
 	}
 	
 	override void onShutdown()
@@ -101,7 +101,7 @@ public:
 		units.destroy();
 		abilities.destroy();
 		gc.destroy();
-		//ui.destroy();
+		ui.shutdown();
 	}
 	
 	override void onSaveState()
