@@ -5,29 +5,41 @@ version( Server ):
 import action;
 import speed, speed.db;
 //import vibe.d;
-import std.stdio;
+import std.stdio, std.string;
 
 void main()
 {
-	uint numPlayers;
-	auto connMan = ConnectionManager.open();
-
-	connMan.onNewConnection ~= ( shared Connection conn )
+	while( true )
 	{
-		numPlayers++;
-		conn.onReceiveData!string ~= ( string msg )
+		uint numPlayers;
+		auto connMan = ConnectionManager.open();
+
+		connMan.onNewConnection ~= ( shared Connection conn )
 		{
-			writeln( "Recieved message: ", msg );
-			connMan.send!string( "ECHO: " ~ msg, ConnectionType.TCP );
-			connMan.send!uint( numPlayers );
+			numPlayers++;
+			conn.onReceiveData!string ~= ( string msg )
+			{
+				writeln( "Recieved message: ", msg );
+				connMan.send!string( "ECHO: " ~ msg, ConnectionType.TCP );
+				connMan.send!uint( numPlayers );
+			};
+
+			conn.onReceiveData!Action ~= ( Action action )
+			{
+				writeln( "Received action: ", action.actionID, ",", action.originID, ",", action.targetID, ",", action.saveToDatabase );
+				connMan.send!Action( action, ConnectionType.TCP );
+			};
 		};
 
-		conn.onReceiveData!Action ~= ( Action action )
-		{
-			writeln( "Received action: ", action.actionID, ",", action.originID, ",", action.targetID, ",", action.saveToDatabase );
-			connMan.send!Action( action, ConnectionType.TCP );
-		};
-	};
+		connMan.start();
 
-	connMan.start();
+		// Hit enter to restart.
+		if( readln().chomp().toLower() == "exit" )
+		{
+			connMan.close();
+			return;
+		}
+
+		connMan.close();
+	}
 }

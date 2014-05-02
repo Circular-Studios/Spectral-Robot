@@ -46,10 +46,12 @@
 			"sourcePaths": [ "Scripts/network" ],
 			"mainSourceFile": "Scripts/network/server.d",
 			"targetType": "executable",
+			"targetPath": "Binaries",
+			"workingDirectory": "Binaries",
 			"versions": [ "Server", "VibeCustomMain" ],
 			"dependencies": {
-				"speed:common": "~master",
-				"speed:server": "~master"	
+				"speed:common": "==0.1.1",
+				"speed:server": "==0.1.1"	
 			}
 		}
 	]
