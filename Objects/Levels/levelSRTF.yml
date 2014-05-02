@@ -4,17 +4,17 @@ Grid: [24, 24]
 FogOfWar: No
 Units:
     - Name: TechWolf
-      Spawn: [14, 19]
+      Spawn: [17, 5]
       Team: Wolf
     - Name: PyroWolf
-      Spawn: [1, 2]
+      Spawn: [5, 5]
       Team: Wolf
     - Name: PyroRobot
       Spawn: [12, 19]
       Rotation: !Vector3 0 180 0
       Team: Robot
     - Name: TechRobot
-      Spawn: [21, 20]
+      Spawn: [6, 18]
       Rotation: !Vector3 0 180 0
       Team: Robot
 Objects:
@@ -149,41 +149,71 @@ Objects:
       Rotation: !Vector3 0 270 0
       TileType: FullyBlocked  
 
-    - Prefab: Pillar
-      Location: [8, 11]
-      TileType: FullyBlocked
-
-    - Prefab: Pillar
-      Location: [3, 3]
-      TileType: FullyBlocked
-
-    - Prefab: Pillar
-      Location: [19, 3]
-      TileType: FullyBlocked
-
-    - Prefab: Pillar
-      Location: [3, 20]
-      TileType: FullyBlocked
-
-    - Prefab: Pillar
-      Location: [19, 20]
+    - Prefab: Bookshelf
+      Location: [5, 3, 7, 3]
+      TileSize: [1, 2]
+      Rotation: !Vector3 0 90 0
       TileType: FullyBlocked
 
     - Prefab: Bookshelf
-      Location: [6, 6, 6, 7]
+      Location: [20, 6]
+      TileType: FullyBlocked
+
+    - Prefab: Pillar
+      Location: [5, 12]
+      TileType: FullyBlocked
+
+    - Prefab: Pillar
+      Location: [18, 12]
+      TileType: FullyBlocked
+
+    - Prefab: Bookshelf
+      Location: [3, 5, 3, 6]
       TileSize: [1, 2]
       TileType: FullyBlocked
 
+    - Prefab: Bookshelf
+      Location: [16, 3, 18, 3]
+      TileSize: [1, 2]
+      Rotation: !Vector3 0 90 0
+      TileType: FullyBlocked
+
     - Prefab: Desk
-      Location: [11, 16, 11, 17]
+      Location: [10, 15, 10, 17]
+      TileSize: [1, 2]
+      TileType: HalfBlocked
+
+    - Prefab: Desk
+      Location: [14, 15, 14, 17]
       TileSize: [1, 2]
       TileType: HalfBlocked
 
     - Prefab: Bookshelf
-      Location: [7, 16, 7, 17]
+      Location: [5, 20, 7, 20]
       TileSize: [1, 2]
+      Rotation: !Vector3 0 270 0
       TileType: FullyBlocked
 
-    - Prefab: Table
-      Location: [15, 19]
+    - Prefab: Bookshelf
+      Location: [16, 20, 18, 20]
+      TileSize: [1, 2]
+      Rotation: !Vector3 0 270 0
+      TileType: FullyBlocked
+
+    - Prefab: Bookshelf
+      Location: [4, 18]
+      TileType: FullyBlocked
+
+    - Prefab: Bookshelf
+      Location: [19, 18]
+      TileType: FullyBlocked
+
+    - Prefab: Desk
+      Location: [10, 6, 10, 8]
+      TileSize: [1, 2]
+      TileType: HalfBlocked
+
+    - Prefab: Desk
+      Location: [14, 6, 14, 8]
+      TileSize: [1, 2]
       TileType: HalfBlocked
