@@ -65,7 +65,6 @@ public:
 				{
 					if( auto unit = obj.behaviors.get!Unit )
 					{
-						logInfo( Game.turn.currentTeam );
 						// only allow interaction with your own units on your turn
 						if( Game.turn.currentTeam == Game.turn.activeTeam )
 						{
@@ -117,7 +116,6 @@ public:
 		if( isAbilitySelected )
 			Game.abilities[ selectedAbility ].unpreview();
 
-		logInfo(isUnitSelected, ", ", selectedUnit);
 		if( isUnitSelected && ability < selectedUnit.abilities.length )
 		{
 			isAbilitySelected = true;

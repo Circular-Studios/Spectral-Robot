@@ -52,6 +52,11 @@ public:
 		{
 			Game.units[ action.originID ].deselect();
 		}
+		// Switch active team
+		else if( action.actionID == 9 )
+		{
+			switchActiveTeam();
+		}
 		// Use an ability
 		else
 		{
@@ -94,6 +99,13 @@ public:
 		{
 			currentTeam = Team.Wolf;
 		}
+
+		// update the units on the team
+		foreach( unit; Game.units )
+		{
+			if( unit.team == currentTeam )
+				Game.grid.getTileByID( unit.position ).type = TileType.OccupantInactive;
+		}
 	}
 	
 	/// Switch the active team
@@ -111,6 +123,9 @@ public:
 				break;
 		}
 		
+		// send the switch to the server
+		Game.turn.sendAction( Action( 9, 0, 0, true ) );
+
 		logInfo( "Active team: ", activeTeam );
 		
 		// update the units on the team
