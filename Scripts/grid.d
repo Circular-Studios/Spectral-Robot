@@ -39,34 +39,34 @@ public:
 			if( auto obj = Input.mouseObject )
 			{
 				logInfo( "Clicked on ", obj.name );
-				
-				// If unit is selected and a tile is clicked, move if possible
-				if( auto tile = obj.behaviors.get!Tile )
+
+				// only allow interaction on your turn
+				if( Game.turn.currentTeam == Game.turn.activeTeam )
 				{
-					if( isUnitSelected && selectedUnit.checkMove( tile.toID() ) )
+					// If unit is selected and a tile is clicked, move if possible
+					if( auto tile = obj.behaviors.get!Tile )
 					{
-						// move the unit to the new location
-						Game.turn.sendAction( Action( 0, selectedUnit.ID, tile.toID(), true ) );
-						selectedUnit.move( tile.toID() );
+						if( isUnitSelected && selectedUnit.checkMove( tile.toID() ) )
+						{
+							// move the unit to the new location
+							Game.turn.sendAction( Action( 0, selectedUnit.ID, tile.toID(), true ) );
+							selectedUnit.move( tile.toID() );
+						}
+						// select a unit if the tile has an occupying unit
+						else if( !isUnitSelected && tile.occupant !is null && tile.occupant.remainingActions > 0 && tile.occupant.team == Game.turn.currentTeam )
+						{
+							selectedUnit.previewMove();
+							Game.turn.sendAction( Action( 1, selectedUnit.ID, 0, false ) );
+						}
+						// use the selected ability on the tile
+						else if( isAbilitySelected )
+						{
+							selectedUnit.useAbility( selectedAbility, tile.toID() );
+						}
 					}
-					// select a unit if the tile has an occupying unit
-					else if( !isUnitSelected && tile.occupant !is null && tile.occupant.remainingActions > 0 )
+					else
 					{
-						Game.turn.sendAction( Action( 1, selectedUnit.ID, 0, false ) );
-						selectedUnit.previewMove();
-					}
-					// use the selected ability on the tile
-					else if( isAbilitySelected )
-					{
-						selectedUnit.useAbility( selectedAbility, tile.toID() );
-					}
-				}
-				else
-				{
-					if( auto unit = obj.behaviors.get!Unit )
-					{
-						// only allow interaction with your own units on your turn
-						if( Game.turn.currentTeam == Game.turn.activeTeam )
+						if( auto unit = obj.behaviors.get!Unit )
 						{
 							// Use the selected ability on the unit if in range
 							if( isAbilitySelected && Game.abilities[ selectedAbility ].checkRange( selectedUnit.position, unit.position ) )
@@ -74,7 +74,7 @@ public:
 								selectedUnit.useAbility( selectedAbility, unit.position );
 							}
 							// Select a unit
-							else if( unit.remainingActions > 0 )
+							else if( unit.remainingActions > 0 && unit.team == Game.turn.currentTeam )
 							{
 								if( selectedUnit )
 								{
@@ -85,12 +85,12 @@ public:
 								unit.previewMove();
 							}
 						}
-					}
-					// Deselect a unit if not a tile
-					else if( isUnitSelected )
-					{
-						Game.turn.sendAction( Action( 2, selectedUnit.ID, 0, false ) );
-						selectedUnit.deselect();
+						// Deselect a unit if not a tile
+						else if( isUnitSelected )
+						{
+							Game.turn.sendAction( Action( 2, selectedUnit.ID, 0, false ) );
+							selectedUnit.deselect();
+						}
 					}
 				}
 			}
