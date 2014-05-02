@@ -5,13 +5,14 @@ version( Server ):
 import action;
 import speed, speed.db;
 //import vibe.d;
+import core.thread;
 import std.stdio, std.string;
 
 void main()
 {
 	while( true )
 	{
-		uint numPlayers;
+		uint numPlayers = 0;
 		auto connMan = ConnectionManager.open();
 
 		connMan.onNewConnection ~= ( shared Connection conn )
@@ -21,7 +22,8 @@ void main()
 			{
 				writeln( "Recieved message: ", msg );
 				connMan.send!string( "ECHO: " ~ msg, ConnectionType.TCP );
-				connMan.send!uint( numPlayers );
+				conn.send!uint( numPlayers );
+				writeln( "numPlayers: ", numPlayers );
 			};
 
 			conn.onReceiveData!Action ~= ( Action action )
@@ -41,5 +43,6 @@ void main()
 		}
 
 		connMan.close();
+		Thread.sleep( 500.msecs );
 	}
 }
