@@ -29,8 +29,12 @@ public:
 		}
 
 		// hotkey to end turn
-		// TODO: Change Keyboard.T to read from Input.yml
-		Input.addKeyDownEvent( Keyboard.T, kc => switchActiveTeam() );
+		Input.addKeyDownEvent( "EndTurn", ( kc )
+		{
+			// send the switch to the server
+			Game.turn.sendAction( Action( 9, 0, 0, true ) );
+			switchActiveTeam();
+		} );
 	}
 	
 	/// Process an action
@@ -103,7 +107,7 @@ public:
 		// update the units on the team
 		foreach( unit; Game.units )
 		{
-			if( unit.team == currentTeam )
+			if( unit.team != currentTeam )
 				Game.grid.getTileByID( unit.position ).type = TileType.OccupantInactive;
 		}
 	}
@@ -122,9 +126,6 @@ public:
 				activeTeam = Team.Robot;
 				break;
 		}
-		
-		// send the switch to the server
-		Game.turn.sendAction( Action( 9, 0, 0, true ) );
 
 		logInfo( "Active team: ", activeTeam );
 		
