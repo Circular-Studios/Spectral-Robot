@@ -41,14 +41,8 @@ public:
 		this.activeScene = level;
 		auto g = GameObject.createWithBehavior!Grid;
 		grid = cast(shared Grid)g[ 1 ];
-		turn = new shared Turn();
-
-		
-		// add the grid to the level
-		Game.grid.name = "Grid";
 		Game.level.addChild( g[ 0 ] );
-		
-		// get the game loaded
+		turn = new shared Turn();
 		gc = new shared Controller();
 		
 		// create a camera

@@ -21,6 +21,13 @@ public:
 		// arbitrary starting team
 		currentTeam = Team.Wolf;
 
+		// update the units on the team
+		foreach( unit; Game.units )
+		{
+			if( unit.team == currentTeam )
+				unit.newTurn();
+		}
+
 		// hotkey to end turn
 		// TODO: Change Keyboard.T to read from Input.yml
 		Input.addKeyDownEvent( Keyboard.T, kc => switchActiveTeam() );
@@ -40,6 +47,7 @@ public:
 		{
 			Game.units[ action.originID ].previewMove();
 		}
+		// Use an ability
 		else
 		{
 			Game.abilities[ action.actionID ].use( action.originID, action.targetID );

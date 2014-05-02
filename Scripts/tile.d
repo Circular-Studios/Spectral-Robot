@@ -9,6 +9,8 @@ enum TileType
 	Open, // Does not block
 	HalfBlocked, // Blocks movement, but not vision/attacks
 	FullyBlocked, // Blocks movement, vision, and attacks
+	OccupantActive,
+	OccupantInactive,
 }
 
 enum TileSelection
@@ -16,6 +18,7 @@ enum TileSelection
 	None,
 	Blue,
 	Red,
+	Green,
 	Black,
 }
 
@@ -35,19 +38,23 @@ public:
 		final switch( s )
 		{
 			case TileSelection.None:
-				this.material = Assets.get!Material( "TileDefault" );
+				this.material = Assets.get!Material( "BlackTile" );
 				stateFlags.drawMesh = false;
 				break;
 			case TileSelection.Blue:
-				this.material = Assets.get!Material( "HighlightBlue" );
+				this.material = Assets.get!Material( "BlueTile" );
 				stateFlags.drawMesh = true;
 				break;
 			case TileSelection.Red:
-				this.material = Assets.get!Material( "HighlightRed" );
+				this.material = Assets.get!Material( "RedTile" );
+				stateFlags.drawMesh = true;
+				break;
+			case TileSelection.Green:
+				this.material = Assets.get!Material( "GreenTile" );
 				stateFlags.drawMesh = true;
 				break;
 			case TileSelection.Black:
-				this.material = Assets.get!Material( "HighlightBlack" );
+				this.material = Assets.get!Material( "BlackTile" );
 				stateFlags.drawMesh = true;
 		}
 		_selection = s;
@@ -61,10 +68,17 @@ public:
 				this.selection = TileSelection.None;
 				break;
 			case TileType.HalfBlocked:
-				this.selection = TileSelection.Black;
+				this.selection = TileSelection.None;
 				break;
 			case TileType.FullyBlocked:
+				this.selection = TileSelection.None;
+				break;
+			case TileType.OccupantActive:
+				this.selection = TileSelection.Green;
+				break;
+			case TileType.OccupantInactive:
 				this.selection = TileSelection.Black;
+				break;
 		}
 		_type = t;
 	}

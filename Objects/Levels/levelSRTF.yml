@@ -35,23 +35,23 @@ Objects:
       TileType: FullyBlocked
 
     - Prefab: Pillar
-      Location: [8, 11, 9, 11]
+      Location: [8, 11]
       TileType: FullyBlocked
 
     - Prefab: Pillar
-      Location: [3, 3, 4, 3]
+      Location: [3, 3]
       TileType: FullyBlocked
 
     - Prefab: Pillar
-      Location: [19, 3, 20, 3]
+      Location: [19, 3]
       TileType: FullyBlocked
 
     - Prefab: Pillar
-      Location: [3, 20, 4, 20]
+      Location: [3, 20]
       TileType: FullyBlocked
 
     - Prefab: Pillar
-      Location: [19, 20, 20, 20]
+      Location: [19, 20]
       TileType: FullyBlocked
 
     - Prefab: Bookshelf
@@ -60,25 +60,14 @@ Objects:
       TileType: FullyBlocked
 
     - Prefab: Desk
-      Location: [11, 6, 12, 6]
-      TileType: HalfBlocked
-
-    - Prefab: Desk
-      Location: [11, 16, 12, 16]
+      Location: [11, 16, 11, 17]
+      TileSize: [1, 2]
       TileType: HalfBlocked
 
     - Prefab: Bookshelf
       Location: [7, 16, 7, 17]
       TileSize: [1, 2]
       TileType: FullyBlocked
-
-    - Prefab: Desk
-      Location: [16, 15]
-      TileType: HalfBlocked 
-
-    - Prefab: Desk
-      Location: [16, 7]
-      TileType: HalfBlocked
 
     - Prefab: Table
       Location: [15, 19]

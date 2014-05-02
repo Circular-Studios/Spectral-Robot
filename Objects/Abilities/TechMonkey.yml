@@ -22,6 +22,6 @@ name: "Overload"
 targetType: Tile
 targetArea: Single
 damageType: Buff
+damage: 2
 cooldown: 4
 statEffected: Damage
-bonus: 2

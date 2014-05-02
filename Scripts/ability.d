@@ -140,6 +140,8 @@ public:
 					targetTile.occupant.applyEffect!"_hp"( damage );
 					break;
 				case DamageType.Buff:
+					// TODO: Expand this to use the StatEffected enum
+					targetTile.occupant.applyEffect!"_attack"( damage, duration, true );
 					break;
 				case DamageType.Debuff:
 					break;
