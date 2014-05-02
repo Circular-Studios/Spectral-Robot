@@ -52,7 +52,7 @@ public:
 					// select a unit if the tile has an occupying unit
 					else if( !isUnitSelected && tile.occupant !is null && tile.occupant.remainingActions > 0 )
 					{
-						Game.turn.sendAction( Action( 1, tile.occupant.ID, 0, false ) );
+						Game.turn.sendAction( Action( 1, selectedUnit.ID, 0, false ) );
 						selectedUnit.previewMove();
 					}
 					// use the selected ability on the tile
@@ -82,7 +82,7 @@ public:
 									Game.turn.sendAction( Action( 2, selectedUnit.ID, 0, false ) );
 									selectedUnit.deselect();
 								}
-								Game.turn.sendAction( Action( 0, unit.ID, 0, true ) );
+								Game.turn.sendAction( Action( 1, unit.ID, 0, false ) );
 								unit.previewMove();
 							}
 						}
