@@ -47,6 +47,11 @@ public:
 		{
 			Game.units[ action.originID ].previewMove();
 		}
+		// Preview move for a unit
+		else if( action.actionID == 2 )
+		{
+			Game.units[ action.originID ].deselect();
+		}
 		// Use an ability
 		else
 		{

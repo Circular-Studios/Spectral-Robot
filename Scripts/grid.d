@@ -51,7 +51,6 @@ public:
 					// select a unit if the tile has an occupying unit
 					else if( !isUnitSelected && tile.occupant !is null && tile.occupant.remainingActions > 0 )
 					{
-						selectedUnit = tile.occupant;
 						selectedUnit.previewMove();
 					}
 					// use the selected ability on the tile
@@ -64,6 +63,7 @@ public:
 				{
 					if( auto unit = obj.behaviors.get!Unit )
 					{
+						logInfo( Game.turn.currentTeam );
 						// only allow interaction with your own units on your turn
 						if( Game.turn.currentTeam == Game.turn.activeTeam )
 						{
@@ -75,8 +75,11 @@ public:
 							// Select a unit
 							else if( unit.remainingActions > 0 )
 							{
-								if( selectedUnit ) selectedUnit.deselect();
-								selectedUnit = unit;
+								if( selectedUnit )
+								{
+									Game.turn.sendAction( Action( 2, selectedUnit.ID, selectedUnit.position, false ) );
+									selectedUnit.deselect();
+								}
 								unit.previewMove();
 							}
 						}
@@ -84,6 +87,7 @@ public:
 					// Deselect a unit if not a tile
 					else if( isUnitSelected )
 					{
+						Game.turn.sendAction( Action( 2, selectedUnit.ID, selectedUnit.position, false ) );
 						selectedUnit.deselect();
 					}
 				}

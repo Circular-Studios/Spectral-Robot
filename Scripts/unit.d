@@ -198,6 +198,7 @@ public:
 		{
 			// update the grid
 			Game.grid.isUnitSelected = true;
+			Game.grid.selectedUnit = this;
 
 			// automatically select the first ability
 			Game.grid.selectAbility( 0 );
