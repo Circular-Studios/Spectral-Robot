@@ -1,6 +1,7 @@
 ﻿module ability;
 import core, utility;
 import game, grid, tile;
+import gl3n.math;
 
 enum DamageType
 {
@@ -49,6 +50,7 @@ private:
 	StatEffected _statEffected;
 	int _damage;
 	int _range;
+	int _unitRange;
 	int _cooldown;
 	int _duration;
 	int _accuracy;
@@ -134,10 +136,11 @@ public:
 		  ( targetType == TargetType.EnemyUnit && targetTile.occupant.team != originTile.occupant.team ) ||
 		  ( targetType == TargetType.AlliedUnit && targetTile.occupant.team == originTile.occupant.team ) ) )
 		{
+			int attack = originTile.occupant.attack + damage;
 			final switch( damageType )
 			{
 				case DamageType.Normal:
-					targetTile.occupant.applyEffect!"_hp"( damage );
+					targetTile.occupant.applyEffect!"_hp"( attack );
 					break;
 				case DamageType.Buff:
 					// TODO: Expand this to use the StatEffected enum
@@ -149,16 +152,16 @@ public:
 					// call the straight line function
 					break;
 				case DamageType.DOT:
-					targetTile.occupant.applyEffect!"_hp"( damage, duration );
+					targetTile.occupant.applyEffect!"_hp"( attack, duration );
 					break;
 				case DamageType.Healing:
-					targetTile.occupant.applyEffect!"_hp"( -damage, duration );
+					targetTile.occupant.applyEffect!"_hp"( -attack, duration );
 					break;
 				case DamageType.Reduce:
 					break;
 				case DamageType.LifeSteal:
-					originTile.occupant.applyEffect!"_hp"( -damage, duration );
-					targetTile.occupant.applyEffect!"_hp"( damage, duration );
+					originTile.occupant.applyEffect!"_hp"( -attack, duration );
+					targetTile.occupant.applyEffect!"_hp"( attack, duration );
 					break;
 				case DamageType.Modifier:
 					break;
@@ -170,10 +173,19 @@ public:
 		return false;
 	}
 
+	/// Check if a tile is within range of the ability
+	bool checkRange( shared uint originID, shared uint targetID )
+	{
+		auto origin = Game.grid.getTileByID( originID );
+		auto target = Game.grid.getTileByID( targetID );
+		return range + _unitRange >= abs( ( target.x - origin.x ) ) + abs( ( target.y - origin.y ) );
+	}
+
 	/// Preview the ability
 	void preview( uint originID, uint unitRange )
 	{
 		// get the tiles the ability can effect
+		_unitRange = unitRange;
 		_selectedTiles = highlight( originID, range + unitRange );
 		
 		// change the material of the tiles
