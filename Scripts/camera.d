@@ -46,6 +46,22 @@ public:
 		transform.position.y = (( maxHeight - minHeight ) / 2) + minHeight;
 		startPos = transform.position;
 		startRot = transform.rotation;
+
+		auto obj = this;
+		Input.addAxisEvent( Axes.MouseScroll, ( ac, newVal )
+		{
+			/*static*/ float prev = 0.0f;
+			if( newVal > prev )
+			{
+				obj.transform.position += obj.transform.forward * min( ( zoomSpeed * Time.deltaTime ), ( minHeight - obj.transform.position.y ) / obj.transform.forward.y );
+			}
+			else if( newVal < prev )
+			{
+				obj.transform.position += -obj.transform.forward * min( ( zoomSpeed * Time.deltaTime ), ( maxHeight - obj.transform.position.y ) / -obj.transform.forward.y );
+			}
+
+			prev = newVal;
+		} );
 	}
 	
 	override void onUpdate()
@@ -143,15 +159,6 @@ public:
 
 		if( clamped )
 			clampLookPos();
-
-		if( Input.getState( "ZoomIn" ) )
-		{
-			transform.position += transform.forward * min( ( zoomSpeed * Time.deltaTime ), ( minHeight - transform.position.y ) / transform.forward.y );
-		}
-		else if( Input.getState( "ZoomOut" ) )
-		{
-			transform.position += -transform.forward * min( ( zoomSpeed * Time.deltaTime ), ( maxHeight - transform.position.y ) / -transform.forward.y );
-		}
 
 		if( Input.getState( "ResetCamera" ) )
 		{
