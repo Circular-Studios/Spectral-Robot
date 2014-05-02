@@ -3,7 +3,7 @@ version( Server ):
 //import utility;
 
 import action;
-import speed, speed.db;
+import speed;//, speed.db;
 //import vibe.d;
 import core.thread;
 import std.stdio, std.string;
@@ -29,7 +29,12 @@ void main()
 			conn.onReceiveData!Action ~= ( Action action )
 			{
 				writeln( "Received action: ", action.actionID, ",", action.originID, ",", action.targetID, ",", action.saveToDatabase );
-				connMan.send!Action( action, ConnectionType.TCP );
+
+				foreach( otherConn; connMan.connections )
+				{
+					if( cast()otherConn != cast()conn )
+						otherConn.send!Action( action, ConnectionType.TCP );
+				}
 			};
 		};
 

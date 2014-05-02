@@ -17,7 +17,7 @@
 	],
 	"dependencies": {
 		"dash": "==0.8.0-beta1",
-		"speed:common": "~master"
+		"speed:common": "==0.1.2"
 	},
 	"sourcePaths": [ 
 		"Config/",
@@ -50,8 +50,7 @@
 			"workingDirectory": "Binaries",
 			"versions": [ "Server", "VibeCustomMain" ],
 			"dependencies": {
-				"speed:common": "==0.1.1",
-				"speed:server": "==0.1.1"	
+				"speed:common": "==0.1.2"	
 			}
 		}
 	]
