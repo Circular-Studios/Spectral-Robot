@@ -46,11 +46,13 @@ public:
 					if( isUnitSelected && selectedUnit.checkMove( tile.toID() ) )
 					{
 						// move the unit to the new location
+						Game.turn.sendAction( Action( 0, selectedUnit.ID, targetTileID, true ) );
 						selectedUnit.move( tile.toID() );
 					}
 					// select a unit if the tile has an occupying unit
 					else if( !isUnitSelected && tile.occupant !is null && tile.occupant.remainingActions > 0 )
 					{
+						Game.turn.sendAction( Action( 1, tile.occupant.ID, 0, false ) );
 						selectedUnit.previewMove();
 					}
 					// use the selected ability on the tile
@@ -77,9 +79,10 @@ public:
 							{
 								if( selectedUnit )
 								{
-									Game.turn.sendAction( Action( 2, selectedUnit.position, 0, false ) );
+									Game.turn.sendAction( Action( 2, selectedUnit.ID, 0, false ) );
 									selectedUnit.deselect();
 								}
+								Game.turn.sendAction( Action( 0, unit.ID, 0, true ) );
 								unit.previewMove();
 							}
 						}
@@ -87,7 +90,7 @@ public:
 					// Deselect a unit if not a tile
 					else if( isUnitSelected )
 					{
-						Game.turn.sendAction( Action( 2, selectedUnit.position, 0, false ) );
+						Game.turn.sendAction( Action( 2, selectedUnit.ID, 0, false ) );
 						selectedUnit.deselect();
 					}
 				}

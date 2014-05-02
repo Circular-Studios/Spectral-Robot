@@ -157,8 +157,6 @@ public:
 			
 			// check if the turn is over
 			Game.turn.checkTurnOver();
-
-			Game.turn.sendAction( Action( 0, position, targetTileID , true ) );
 		}
 	}
 	
@@ -202,7 +200,6 @@ public:
 
 			// automatically select the first ability
 			Game.grid.selectAbility( 0 );
-			Game.turn.sendAction( Action( 1, ID, position, false ) );
 		}
 	}
 	
