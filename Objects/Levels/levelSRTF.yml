@@ -150,21 +150,24 @@ Objects:
       TileType: FullyBlocked  
 
     - Prefab: Bookshelf
-      Location: [5, 3, 7, 3]
-      TileSize: [1, 2]
+      Location: [5, 3, 6, 3]
+      TileSize: [2, 1]
       Rotation: !Vector3 0 90 0
       TileType: FullyBlocked
 
     - Prefab: Bookshelf
-      Location: [20, 6]
+      Location: [20, 5, 20, 6]
+      TileSize: [1, 2]
       TileType: FullyBlocked
 
     - Prefab: Pillar
-      Location: [5, 12]
+      Location: [3, 11, 5, 13]
+      TileSize: [3, 3]
       TileType: FullyBlocked
 
     - Prefab: Pillar
-      Location: [18, 12]
+      Location: [18, 11, 20, 13]
+      TileSize: [3, 3]
       TileType: FullyBlocked
 
     - Prefab: Bookshelf
@@ -173,47 +176,49 @@ Objects:
       TileType: FullyBlocked
 
     - Prefab: Bookshelf
-      Location: [16, 3, 18, 3]
-      TileSize: [1, 2]
+      Location: [17, 3, 18, 3]
+      TileSize: [2, 1]
       Rotation: !Vector3 0 90 0
       TileType: FullyBlocked
 
     - Prefab: Desk
-      Location: [10, 15, 10, 17]
+      Location: [10, 15, 10, 18]
       TileSize: [1, 2]
       TileType: HalfBlocked
 
     - Prefab: Desk
-      Location: [14, 15, 14, 17]
+      Location: [14, 15, 14, 18]
       TileSize: [1, 2]
       TileType: HalfBlocked
 
     - Prefab: Bookshelf
-      Location: [5, 20, 7, 20]
-      TileSize: [1, 2]
+      Location: [5, 21, 6, 21]
+      TileSize: [2, 1]
       Rotation: !Vector3 0 270 0
       TileType: FullyBlocked
 
     - Prefab: Bookshelf
-      Location: [16, 20, 18, 20]
-      TileSize: [1, 2]
+      Location: [17, 21, 18, 21]
+      TileSize: [2, 1]
       Rotation: !Vector3 0 270 0
       TileType: FullyBlocked
 
     - Prefab: Bookshelf
-      Location: [4, 18]
+      Location: [3, 18, 3, 19]
+      TileSize: [1, 2]
       TileType: FullyBlocked
 
     - Prefab: Bookshelf
-      Location: [19, 18]
+      Location: [20, 18, 20, 19]
+      TileSize: [1, 2]
       TileType: FullyBlocked
 
     - Prefab: Desk
-      Location: [10, 6, 10, 8]
+      Location: [10, 6, 10, 9]
       TileSize: [1, 2]
       TileType: HalfBlocked
 
     - Prefab: Desk
-      Location: [14, 6, 14, 8]
+      Location: [14, 6, 14, 9]
       TileSize: [1, 2]
       TileType: HalfBlocked
