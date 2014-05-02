@@ -89,7 +89,10 @@ public:
 				turnOver = false;
 		}
 		if ( turnOver )
+		{
+			Game.turn.sendAction( Action( 9, 0, 0, true ) );
 			switchActiveTeam();
+		}
 	}
 
 	/// Set the team of the player
