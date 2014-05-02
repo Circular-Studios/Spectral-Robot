@@ -1,34 +1,26 @@
 Up:
-    - !Keyboard W
+    Keyboard: W
 Down:
-    - !Keyboard S
+    Keyboard: S
 Left:
-    - !Keyboard A
+    Keyboard: A
 Right:
-    - !Keyboard D
-LookUp:
-    - !Keyboard I
-    - !Keyboard Up
-LookDown:
-    - !Keyboard K
-    - !Keyboard Down
+    Keyboard: D
 LookLeft:
-    - !Keyboard J
-    - !Keyboard Left
+    Keyboard: Left
 LookRight:
-    - !Keyboard L
-    - !Keyboard Right
+    Keyboard: Right
 ZoomIn:
-    - !Keyboard Up
+    Keyboard: Up
 ZoomOut:
-    - !Keyboard Down
+    Keyboard: Down
 ResetCamera:
-    - !Keyboard Delete
+    Keyboard: Delete
 EndTurn:
-    - !Keyboard T
+    Keyboard: T
 Enter:
-    - !Keyboard Space
+    Keyboard: Space
 Back:
-    - !Keyboard Backspace
+    Keyboard: Backspace
 ResetGame:
-    - !Keyboard F5
+    Keyboard: F5

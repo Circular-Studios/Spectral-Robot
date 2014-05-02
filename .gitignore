@@ -8,6 +8,7 @@
 *.suo
 *.user
 *.sln.docstates
+dub.selections.json
 
 # Build results
 [Dd]ebug/

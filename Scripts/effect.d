@@ -2,17 +2,17 @@
 import game, unit;
 import core, utility;
 
-shared class IEffect 
+class IEffect 
 {
 	int diff;
 	int duration;
 	bool reset;
 	int originalValue;
 
-	void use( shared Unit unit ) { }
+	void use( Unit unit ) { }
 }
 
-shared class Effect( string prop ) : IEffect
+class Effect( string prop ) : IEffect
 {
 	enum Prop = prop;
 	
@@ -24,7 +24,7 @@ shared class Effect( string prop ) : IEffect
 		this.originalValue = originalValue;
 	}
 	
-	override void use( shared Unit unit )
+	override void use( Unit unit )
 	{
 		logInfo("effect used");
 		duration--;

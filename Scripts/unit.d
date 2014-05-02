@@ -6,7 +6,7 @@ import std.algorithm;
 
 enum ACTIONS_RESET = 3;
 
-shared class Unit : Behavior!()
+class Unit : Behavior!()
 {
 private:
 	static uint nextID = 0;
@@ -55,14 +55,14 @@ public:
 		_remainingRange = _speed;
 		_attack = at;
 		_defense = df;
-		_abilities = cast(shared uint[])abilities;
+		_abilities = abilities;
 		updatePosition();
 	}
 	
 	/// Use an ability
 	bool useAbility( uint abilityID, uint targetID )
 	{
-		if( remainingActions > 0 && (cast()_abilities).countUntil( abilityID ) > -1 )
+		if( remainingActions > 0 && _abilities.countUntil( abilityID ) > -1 )
 		{
 			if( Game.abilities[ abilityID ].use( position, targetID ) )
 			{
@@ -162,7 +162,7 @@ public:
 	}
 	
 	/// Check if the move is allowed
-	bool checkMove( shared uint targetTileID )
+	bool checkMove( uint targetTileID )
 	{
 		auto tile = Game.grid.getTileByID( targetTileID );
 		
@@ -187,7 +187,7 @@ public:
 			scheduleTimedTask( dur,
 			{
 				tile.transform.scale = 
-					interp( shared vec3( 0 ), shared vec3( TILE_SIZE / 2 ), 
+					interp( vec3( 0 ), vec3( TILE_SIZE / 2 ), 
 								 ( Time.totalTime - startTime ) / dur.toSeconds );
 			} );*/
 		}
@@ -200,7 +200,6 @@ public:
 
 			// automatically select the first ability
 			Game.grid.selectAbility( 0 );
-
 			Game.turn.sendAction( Action( 1, ID, position, false ) );
 		}
 	}

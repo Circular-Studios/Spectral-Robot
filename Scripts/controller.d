@@ -5,7 +5,7 @@ import yaml;
 import std.path, std.conv;
 import gl3n.linalg, gl3n.math;
 
-final shared class Controller
+final class Controller
 {
 	this()
 	{
@@ -30,7 +30,7 @@ final shared class Controller
 		
 		foreach( Node abilityNode; yaml )
 		{
-			auto ability = abilityNode.getObject!(shared Ability)();
+			auto ability = abilityNode.getObject!(Ability)();
 			Game.abilities[ ability.ID ] = ability;
 			abilityIDs ~= ability.ID;
 		}
@@ -50,8 +50,8 @@ final shared class Controller
 			Team team;
 			string abilities, teamName;
 			uint[] spawn;
-			shared vec3 rotationVec;
-			shared quat rotation;
+			vec3 rotationVec;
+			quat rotation;
 
 			foreach( Node unitCheck; loadYamlDocuments( buildNormalizedPath( FilePath.Resources.Objects, "Units" ) ) )
 			{
@@ -146,8 +146,8 @@ final shared class Controller
 			int[] tileSize;
 			string name, prefab, ttype;
 			TileType tileType;
-			shared vec3 rotationVec;
-			shared quat rotation;
+			vec3 rotationVec;
+			quat rotation;
 			
 			// get the variables from the node
 			propNode.tryFind( "Location", loc );
