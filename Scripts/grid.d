@@ -55,7 +55,7 @@ public:
 						// select a unit if the tile has an occupying unit
 						else if( !isUnitSelected && tile.occupant !is null && tile.occupant.remainingActions > 0 && tile.occupant.team == Game.turn.currentTeam )
 						{
-							selectedUnit.previewMove();
+							tile.occupant.previewMove();
 							Game.turn.sendAction( Action( 1, selectedUnit.ID, 0, false ) );
 						}
 						// use the selected ability on the tile
