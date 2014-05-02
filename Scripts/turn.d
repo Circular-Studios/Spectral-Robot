@@ -29,8 +29,12 @@ public:
 		}
 
 		// hotkey to end turn
-		// TODO: Change Keyboard.T to read from Input.yml
-		Input.addKeyDownEvent( Keyboard.T, kc => switchActiveTeam() );
+		Input.addKeyDownEvent( "EndTurn", ( kc )
+		{
+			// send the switch to the server
+			Game.turn.sendAction( Action( 9, 0, 0, true ) );
+			switchActiveTeam();
+		} );
 	}
 	
 	/// Process an action
@@ -46,6 +50,16 @@ public:
 		else if( action.actionID == 1 )
 		{
 			Game.units[ action.originID ].previewMove();
+		}
+		// Preview move for a unit
+		else if( action.actionID == 2 )
+		{
+			Game.units[ action.originID ].deselect();
+		}
+		// Switch active team
+		else if( action.actionID == 9 )
+		{
+			switchActiveTeam();
 		}
 		// Use an ability
 		else
@@ -75,7 +89,10 @@ public:
 				turnOver = false;
 		}
 		if ( turnOver )
+		{
+			Game.turn.sendAction( Action( 9, 0, 0, true ) );
 			switchActiveTeam();
+		}
 	}
 
 	/// Set the team of the player
@@ -88,6 +105,13 @@ public:
 		else
 		{
 			currentTeam = Team.Wolf;
+		}
+
+		// update the units on the team
+		foreach( unit; Game.units )
+		{
+			if( unit.team != currentTeam )
+				Game.grid.getTileByID( unit.position ).type = TileType.OccupantInactive;
 		}
 	}
 	
@@ -105,7 +129,7 @@ public:
 				activeTeam = Team.Robot;
 				break;
 		}
-		
+
 		logInfo( "Active team: ", activeTeam );
 		
 		// update the units on the team
