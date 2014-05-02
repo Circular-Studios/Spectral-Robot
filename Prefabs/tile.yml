@@ -5,7 +5,7 @@ Behaviors:
 Transform:
     Rotation: !Vector3 0 0 0
 Mesh: grid_square
-Material: HighlightBlack
+Material: BlackTile
 ---
 Name: SquareFilled
 Behaviors:
@@ -13,7 +13,7 @@ Behaviors:
 Transform:
     Rotation: !Vector3 -90 0 0
 Mesh: unitsquare
-Material: TileDefault
+Material: BlackTile
 ---
 Name: MarbleFloor
 Transform:

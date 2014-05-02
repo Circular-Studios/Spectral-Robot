@@ -60,25 +60,14 @@ Objects:
       TileType: FullyBlocked
 
     - Prefab: Desk
-      Location: [11, 6, 12, 6]
-      TileType: HalfBlocked
-
-    - Prefab: Desk
-      Location: [11, 16, 12, 16]
+      Location: [11, 16, 11, 17]
+      TileSize: [1, 2]
       TileType: HalfBlocked
 
     - Prefab: Bookshelf
       Location: [7, 16, 7, 17]
       TileSize: [1, 2]
       TileType: FullyBlocked
-
-    - Prefab: Desk
-      Location: [16, 15]
-      TileType: HalfBlocked 
-
-    - Prefab: Desk
-      Location: [16, 7]
-      TileType: HalfBlocked
 
     - Prefab: Table
       Location: [15, 19]
