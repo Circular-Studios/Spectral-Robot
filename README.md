@@ -1,7 +1,4 @@
-RobotGhosts
-===========
-
-Spectral Robot Task Force
+![Spectral banner](https://cloud.githubusercontent.com/assets/512416/2869601/e68b30ca-d27b-11e3-8834-66cd12440707.png)
 
 ### How to Run Spectral
 

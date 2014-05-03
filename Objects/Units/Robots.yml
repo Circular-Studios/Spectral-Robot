@@ -1,24 +1,16 @@
 ﻿---
 Name: PyroRobot
 Prefab: PyroRobot
-HP: 65
-Speed: 3
-Strength: 8
-Agility: 7
-Intelligence: 1
-Critical: 15
+HP: 40
+Speed: 4
 Attack: 10
 Defense: 10
 Abilities: FireStarter
 ---
 Name: TechRobot
 Prefab: TechRobot
-HP: 65
-Speed: 3
-Strength: 8
-Agility: 7
-Intelligence: 1
-Critical: 15
+HP: 40
+Speed: 4
 Attack: 10
 Defense: 10
 Abilities: TechMonkey

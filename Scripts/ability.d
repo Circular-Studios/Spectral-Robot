@@ -54,9 +54,9 @@ private:
 	int _cooldown;
 	int _duration;
 	int _accuracy;
+	int _currentCooldown;
 	
 	// only used in this class
-	int _currentCooldown;
 	//int _currentRange;
 	Tile[] _selectedTiles;
 	
@@ -87,6 +87,13 @@ public:
 	mixin( Property!( _currentCooldown, AccessModifier.Public ) );
 	mixin( Property!( _duration, AccessModifier.Public ) );
 	mixin( Property!( _accuracy, AccessModifier.Public ) );
+
+	/// Temporary function until we can modify properties as lvalue
+	void decrementCooldown()
+	{
+		if( _currentCooldown > 0 )
+			_currentCooldown--;
+	}
 	
 	this()
 	{
@@ -97,30 +104,31 @@ public:
 	/// Use the ability
 	bool use( uint originID, uint targetID )
 	{
-		// make sure the targetID is allowed
-		bool legalTile = false;
-		foreach( tile; _selectedTiles )
+		if( currentCooldown <= 0 )
 		{
-			if( tile.toID() == targetID )
-				legalTile = true;
-		}
-
-		if( legalTile )
-		{
-			switch( _targetArea )
+			// make sure the targetID is allowed
+			bool legalTile = false;
+			foreach( tile; _selectedTiles )
 			{
-				default:
-					break;
-				case TargetArea.Single:
-						return applyAbility( originID, targetID );
-				case TargetArea.Radial:
-					foreach( tile; _selectedTiles )
-					{
-						return applyAbility( originID, tile.toID() );
-					}
+				if( tile.toID() == targetID )
+					legalTile = true;
 			}
-			// reset cooldown
-			_currentCooldown = cooldown;
+
+			if( legalTile )
+			{
+				switch( _targetArea )
+				{
+					default:
+						break;
+					case TargetArea.Single:
+							return applyAbility( originID, targetID );
+					case TargetArea.Radial:
+						foreach( tile; _selectedTiles )
+						{
+							return applyAbility( originID, tile.toID() );
+						}
+				}
+			}
 		}
 		logInfo( "ability.use failed" );
 		return false;
@@ -166,6 +174,9 @@ public:
 				case DamageType.Modifier:
 					break;
 			}
+			// reset cooldown
+			currentCooldown = cooldown;
+
 			logInfo( originTile.occupant.name, " used ", name, " on ", targetTile.occupant.name );
 			return true;
 		}
