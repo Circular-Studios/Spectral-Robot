@@ -66,7 +66,6 @@ public:
 		{
 			if( Game.abilities[ abilityID ].use( position, targetID ) )
 			{
-				Game.turn.sendAction( Action( abilityID, ID, targetID, true ) );
 				actionUsed();
 				return true;
 			}
