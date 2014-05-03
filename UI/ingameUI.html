@@ -19,7 +19,7 @@
 			<div class="playerCharacter">
 				<div class="charName">Robots (Player)</div>
 			</div>
-			<div class="playerCharacter" onclick="selectCharacter( 4 )">
+			<div class="playerCharacter" onclick="selectCharacter( 3 )">
 				<div class="charName"><h3>Fire Bot</h3></div>
 				<div class="charName"><h4>Class: Firestarter</h4></div>
 				<div class="healthContainer">
@@ -27,7 +27,7 @@
 					<div class="health"><span><span id="hp4">40</span>/40</span></div>
 				</div>
 			</div>
-			<div class="playerCharacter" onclick="selectCharacter( 3 )">
+			<div class="playerCharacter" onclick="selectCharacter( 2 )">
 				<div class="charName"><h3>Tech Bot</h3></div>
 				<div class="charName"><h4>Class: Tech Monkey</h4></div>
 				<div class="healthContainer">
@@ -40,7 +40,7 @@
 			<div class="enemyCharacter">
 				<div class="charName">Werewolves (Enemies)</div>
 			</div>
-			<div class="enemyCharacter" onclick="selectCharacter( 1 )">
+			<div class="enemyCharacter" onclick="selectCharacter( 0 )">
 				<div class="charName"><h3>Fire Wolf</h3></div>
 				<div class="charName"><h4>Class: Firestarter</h4></div>
 				<div class="healthContainer">
@@ -49,9 +49,9 @@
 				</div>
 
 			</div>
-			<div class="enemyCharacter" onclick="selectCharacter( 2 )">
+			<div class="enemyCharacter" onclick="selectCharacter( 1 )">
 				<div class="charName"><h3>Tech Wolf</h3></div>
-				<div class="charName"><h4>Class: Deadbringer</h4></div>
+				<div class="charName"><h4>Class: Tech Monkey</h4></div>
 				<div class="healthContainer">
 					<div class="healthbar" style="width:100%" id="char2"></div>
 					<div class="health"><span><span id="hp2">40</span>/40</span></div>
@@ -241,19 +241,19 @@
 
 		function setHp( hp, charNum ) {
 				var percentHp = (hp / 40) * 100;
-			if( charNum == 1 ) {
+			if( charNum == 0 ) {
 				document.getElementById( "char1" ).style.width = percentHp + "%";
 				document.getElementById( "hp1" ).innerHTML = ''+hp;
 			}
-			if( charNum == 2 ) {
+			if( charNum == 1 ) {
 				document.getElementById( "char2" ).style.width = percentHp + "%";
 				document.getElementById( "hp2" ).innerHTML = ''+hp;
 			}
-			if( charNum == 3 ) {
+			if( charNum == 2 ) {
 				document.getElementById( "char3" ).style.width = percentHp + "%";
 				document.getElementById( "hp3" ).innerHTML = ''+hp;
 			}
-			if( charNum == 4 ) {
+			if( charNum == 3 ) {
 				document.getElementById( "char4" ).style.width = percentHp + "%";
 				document.getElementById( "hp4" ).innerHTML = ''+hp;
 			}
@@ -261,7 +261,7 @@
 
 		function selectCharacter( i ) { 
 			selectedChar = i;
-			if( selectedChar == 1 )
+			if( selectedChar == 0 )
 			{
 				document.getElementById( "four" ).style.display = "table";
 
@@ -270,25 +270,25 @@
 				document.getElementById( "one" ).style.display = "none";
 			}
 
+			if( selectedChar == 1 )
+			{
+				document.getElementById( "one" ).style.display = "table";
+
+				document.getElementById( "four" ).style.display = "none";
+				document.getElementById( "three" ).style.display = "none";
+				document.getElementById( "two" ).style.display = "none";
+			}
+
 			if( selectedChar == 2 )
 			{
 				document.getElementById( "one" ).style.display = "table";
 
-				document.getElementById( "four" ).style.display = "none";
 				document.getElementById( "three" ).style.display = "none";
 				document.getElementById( "two" ).style.display = "none";
+				document.getElementById( "four" ).style.display = "none";
 			}
 
 			if( selectedChar == 3 )
-			{
-				document.getElementById( "one" ).style.display = "table";
-
-				document.getElementById( "three" ).style.display = "none";
-				document.getElementById( "two" ).style.display = "none";
-				document.getElementById( "four" ).style.display = "none";
-			}
-
-			if( selectedChar == 4 )
 			{
 				document.getElementById( "four" ).style.display = "table";
 
