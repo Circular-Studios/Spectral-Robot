@@ -78,6 +78,7 @@ public:
 						// use the selected ability on the tile
 						else if( isAbilitySelected )
 						{
+							Game.turn.sendAction( Action( selectedAbility, selectedUnit.ID, tile.toID(), true ) );
 							selectedUnit.useAbility( selectedAbility, tile.toID() );
 						}
 					}
@@ -88,6 +89,7 @@ public:
 							// Use the selected ability on the unit if in range
 							if( isAbilitySelected && Game.abilities[ selectedAbility ].checkRange( selectedUnit.position, unit.position ) )
 							{
+								Game.turn.sendAction( Action( selectedAbility, selectedUnit.ID, unit.position, true ) );
 								selectedUnit.useAbility( selectedAbility, unit.position );
 							}
 							// Select a unit
