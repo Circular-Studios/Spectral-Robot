@@ -17,7 +17,7 @@
 	],
 	"dependencies": {
 		"dash": "==0.8.0-beta1",
-		"speed:common": "~master"
+		"speed:common": "==0.1.2"
 	},
 	"sourcePaths": [ 
 		"Config/",
@@ -46,10 +46,11 @@
 			"sourcePaths": [ "Scripts/network" ],
 			"mainSourceFile": "Scripts/network/server.d",
 			"targetType": "executable",
+			"targetPath": "Binaries",
+			"workingDirectory": "Binaries",
 			"versions": [ "Server", "VibeCustomMain" ],
 			"dependencies": {
-				"speed:common": "~master",
-				"speed:server": "~master"	
+				"speed:common": "==0.1.2"	
 			}
 		}
 	]

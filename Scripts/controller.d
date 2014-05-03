@@ -83,8 +83,8 @@ final class Controller
 					Game.units ~= unit;
 					
 					// block and occupy the spawn tile
-					Game.grid.tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].type = TileType.OccupantActive;
 					Game.grid.tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].occupant = unit;
+					Game.grid.tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].type = TileType.OccupantActive;
 					break;
 				}
 			}
@@ -181,8 +181,15 @@ final class Controller
 					prop.name = prefab ~ " ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )";
 					
 					// place the prop
-					prop.transform.position.x = x * TILE_SIZE + ( tileSize[ 0 ] / 2 * TILE_SIZE / 2 );
-					prop.transform.position.z = y * TILE_SIZE + ( tileSize[ 1 ] / 2 * TILE_SIZE / 2 );
+					if( tileSize[ 0 ] % 2 == 0 )
+						prop.transform.position.x = x * TILE_SIZE + ( tileSize[ 0 ] / 2 * TILE_SIZE / 2 );
+					else
+						prop.transform.position.x = x * TILE_SIZE + ( tileSize[ 0 ] / 2 * TILE_SIZE );
+					
+					if( tileSize[ 1 ] % 2 == 0 )
+						prop.transform.position.z = y * TILE_SIZE + ( tileSize[ 1 ] / 2 * TILE_SIZE / 2 );
+					else
+						prop.transform.position.z = y * TILE_SIZE + ( tileSize[ 1 ] / 2 * TILE_SIZE );
 
 					if( rotation )
 						prop.transform.rotation = rotation;

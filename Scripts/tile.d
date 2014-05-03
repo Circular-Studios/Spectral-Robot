@@ -74,7 +74,10 @@ public:
 				this.selection = TileSelection.None;
 				break;
 			case TileType.OccupantActive:
-				this.selection = TileSelection.Green;
+				if( occupant !is null && occupant.team == Game.turn.currentTeam )
+					this.selection = TileSelection.Green;
+				else
+					this.selection = TileSelection.Black;
 				break;
 			case TileType.OccupantInactive:
 				this.selection = TileSelection.Black;

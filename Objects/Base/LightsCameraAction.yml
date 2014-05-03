@@ -5,7 +5,7 @@ Behaviors:
       Fields:
           MoveSpeed: 150
           RotateTime: 400
-          ZoomSpeed: 300
+          ZoomSpeed: 600
           EdgeDistance: 50
           MinHeight: 50
           MaxHeight: 300

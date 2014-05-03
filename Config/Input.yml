@@ -7,13 +7,9 @@ Left:
 Right:
     Keyboard: D
 LookLeft:
-    Keyboard: Left
+    Keyboard: Q
 LookRight:
-    Keyboard: Right
-ZoomIn:
-    Keyboard: Up
-ZoomOut:
-    Keyboard: Down
+    Keyboard: E
 ResetCamera:
     Keyboard: Delete
 EndTurn:

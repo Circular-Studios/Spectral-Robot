@@ -1,6 +1,6 @@
 module turn;
-import game, ability, unit, action;
 import core, utility;
+import game, grid, tile, ability, unit, action;
 import speed;
 
 enum Team {
@@ -13,13 +13,13 @@ class Turn
 public:
 	Action[] lastTurn; // Gets cleared after a turn
 	Action[] currentTurn; // Gets populated as the user makes actions
-	Team currentTeam;
-	
+	Team currentTeam; // the team this player controls
+	Team activeTeam; // the active team
 	
 	this()
 	{
 		// arbitrary starting team
-		currentTeam = Team.Wolf;
+		activeTeam = Team.Robot;
 
 		// update the units on the team
 		foreach( unit; Game.units )
@@ -29,8 +29,15 @@ public:
 		}
 
 		// hotkey to end turn
-		// TODO: Change Keyboard.T to read from Input.yml
-		Input.addKeyDownEvent( Keyboard.T, kc => switchActiveTeam() );
+		Input.addKeyDownEvent( "EndTurn", ( kc )
+		{
+			if( currentTeam == activeTeam )
+			{
+				// send the switch to the server
+				Game.turn.sendAction( Action( 9, 0, 0, true ) );
+				switchActiveTeam();
+			}
+		} );
 	}
 	
 	/// Process an action
@@ -46,6 +53,16 @@ public:
 		else if( action.actionID == 1 )
 		{
 			Game.units[ action.originID ].previewMove();
+		}
+		// Preview move for a unit
+		else if( action.actionID == 2 )
+		{
+			Game.units[ action.originID ].deselect();
+		}
+		// Switch active team
+		else if( action.actionID == 9 )
+		{
+			switchActiveTeam();
 		}
 		// Use an ability
 		else
@@ -71,35 +88,60 @@ public:
 		bool turnOver = true;
 		foreach( unit; Game.units )
 		{
-			if( unit.team == currentTeam && unit.remainingActions > 0 )
+			if( unit.team == activeTeam && unit.remainingActions > 0 )
 				turnOver = false;
 		}
 		if ( turnOver )
+		{
+			Game.turn.sendAction( Action( 9, 0, 0, true ) );
 			switchActiveTeam();
+		}
+	}
+
+	/// Set the team of the player
+	void setTeam( uint teamNum )
+	{
+		if( teamNum == 1 )
+		{
+			currentTeam = Team.Robot;
+		}
+		else
+		{
+			currentTeam = Team.Wolf;
+		}
+
+		// update the units on the team
+		foreach( unit; Game.units )
+		{
+			if( unit.team != currentTeam )
+				Game.grid.getTileByID( unit.position ).type = TileType.OccupantInactive;
+		}
 	}
 	
 	/// Switch the active team
 	void switchActiveTeam()
 	{
-		switch ( currentTeam )
+		switch ( activeTeam )
 		{
 			default:
 				break;
 			case Team.Robot:
-				currentTeam = Team.Wolf;
+				activeTeam = Team.Wolf;
 				break;
 			case Team.Wolf:
-				currentTeam = Team.Robot;
+				activeTeam = Team.Robot;
 				break;
 		}
-		
-		logInfo( "New turn: ", currentTeam );
+
+		logInfo( "Active team: ", activeTeam );
 		
 		// update the units on the team
 		foreach( unit; Game.units )
 		{
-			if( unit.team == currentTeam )
+			if( unit.team == activeTeam )
 				unit.newTurn();
+			else
+				Game.grid.getTileByID( unit.position ).type = TileType.OccupantInactive;
 		}
 		
 		Game.grid.updateFogOfWar();

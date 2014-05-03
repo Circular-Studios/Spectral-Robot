@@ -66,6 +66,7 @@ public:
 		{
 			if( Game.abilities[ abilityID ].use( position, targetID ) )
 			{
+				Game.turn.sendAction( Action( abilityID, position, targetID, true ) );
 				actionUsed();
 				return true;
 			}
@@ -149,15 +150,13 @@ public:
 
 			// decrement remaining actions and distance
 			actionUsed();
-			_remainingRange -= abs( ( targetTile.x - x ) ) + abs ( ( targetTile.y - y ) );
+			_remainingRange -= abs( ( targetTile.x - curTile.x ) ) + abs ( ( targetTile.y - curTile.y ) );
 			
 			// update fog of war
 			Game.grid.updateFogOfWar();
 			
 			// check if the turn is over
 			Game.turn.checkTurnOver();
-
-			Game.turn.sendAction( Action( 0, ID, position, true ) );
 		}
 	}
 	
@@ -197,10 +196,10 @@ public:
 		{
 			// update the grid
 			Game.grid.isUnitSelected = true;
+			Game.grid.selectedUnit = this;
 
 			// automatically select the first ability
 			Game.grid.selectAbility( 0 );
-			Game.turn.sendAction( Action( 1, ID, position, false ) );
 		}
 	}
 	
