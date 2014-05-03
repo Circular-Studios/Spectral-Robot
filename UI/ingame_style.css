@@ -128,10 +128,51 @@ body{
 	margin: 20px 36px;
 	height: 50px;
 	width: 50px;
-	background-color: #000;
 	border: 1px solid #ddd;
 	text-align: center;
+	background-size: 100% 100%;
 }
+
+.abilityBox.basicRanged {
+	background-image: url( 'iconset/ranged.png' );
+}
+
+.abilityBox.basicMelee {
+	background-image: url( 'iconset/melee.png' );
+}
+
+.abilityBox.fireball {
+	background-image: url( 'iconset/fireball.png' );
+}
+
+.abilityBox.incinerate {
+	background-image: url( 'iconset/incinerate.png' );
+}
+
+.abilityBox.fromTheGrave {
+	background-image: url( 'iconset/grave.png' );
+}
+
+.abilityBox.consume {
+	background-image: url( 'iconset/consume.png' );
+}
+
+.abilityBox.healingBarrage {
+	background-image: url( 'iconset/healing.png' );
+}
+
+.abilityBox.cannonShot {
+	background-image: url( 'iconset/cannon.png' );
+}
+
+.abilityBox.dischargeGrenade {
+	background-image: url( 'iconset/grenade.png' );
+}
+
+.abilityBox.overload {
+	background-image: url( 'iconset/overload.png' );
+}
+
 /***** END ABILITIES *****/
 
 
