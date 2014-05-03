@@ -79,8 +79,9 @@ public:
 						else if( isAbilitySelected )
 						{
 							uint originID = selectedUnit.ID;
+							uint abilityID = selectedAbility;
 							if( selectedUnit.useAbility( selectedAbility, tile.toID() ) )
-								Game.turn.sendAction( Action( selectedAbility, originID, tile.toID(), true ) );
+								Game.turn.sendAction( Action( abilityID, originID, tile.toID(), true ) );
 						}
 					}
 					else
@@ -91,8 +92,9 @@ public:
 							if( isAbilitySelected && Game.abilities[ selectedAbility ].checkRange( selectedUnit.position, unit.position ) )
 							{
 								uint originID = selectedUnit.ID;
+								uint abilityID = selectedAbility;
 								if( selectedUnit.useAbility( selectedAbility, unit.position ) )
-									Game.turn.sendAction( Action( selectedAbility, originID, unit.position, true ) );
+									Game.turn.sendAction( Action( abilityID, originID, unit.position, true ) );
 							}
 							// Select a unit
 							else if( unit.remainingActions > 0 && unit.team == Game.turn.currentTeam )
