@@ -177,6 +177,8 @@ public:
 			// reset cooldown
 			currentCooldown = cooldown;
 
+			Game.ui.callJSFunction( "setHp", [targetTile.occupant.hp, targetTile.occupant.ID] );
+
 			logInfo( originTile.occupant.name, " used ", name, " on ", targetTile.occupant.name );
 			return true;
 		}

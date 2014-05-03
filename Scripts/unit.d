@@ -230,8 +230,6 @@ public:
 	/// Decrement remaining actions 
 	void actionUsed( int numActions = 1 )
 	{
-		Game.ui.callJSFunction( "setHp", [_hp, ID] );
-
 		_remainingActions -= numActions;
 		if( remainingActions <= 0 )
 		{
