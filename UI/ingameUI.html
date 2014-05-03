@@ -10,7 +10,7 @@
 
 		
 	</head>
-	<body>
+	<body onload="selectCharacter( 1 )">
 	
 	
 	<!-- Player container -->
@@ -24,7 +24,7 @@
 				<div class="charName"><h4>Class: Bulletmancer</h4></div>
 				<div class="healthContainer">
 					<div class="healthbar" style="width:100%" id="char4"></div>
-					<div class="health"><span>100/100</span></div>
+					<div class="health"><span>40/40</span></div>
 				</div>
 			</div>
 			<div class="playerCharacter" onclick="selectCharacter( 3 )">
@@ -32,7 +32,7 @@
 				<div class="charName"><h4>Class: Tech Monkey</h4></div>
 				<div class="healthContainer">
 					<div class="healthbar" style="width:100%" id="char3"></div>
-					<div class="health"><span>100/100</span></div>
+					<div class="health"><span>40/40</span></div>
 				</div>
 			</div>
 		</div>
@@ -45,7 +45,7 @@
 				<div class="charName"><h4>Class: Firestarter</h4></div>
 				<div class="healthContainer">
 					<div class="healthbar" style="width:100%" id="char1"></div>
-					<div class="health"><span>100/100</span></div>
+					<div class="health"><span>40/40</span></div>
 				</div>
 
 			</div>
@@ -54,7 +54,7 @@
 				<div class="charName"><h4>Class: Deadbringer</h4></div>
 				<div class="healthContainer">
 					<div class="healthbar" style="width:100%" id="char2"></div>
-					<div class="health"><span>100/100</span></div>
+					<div class="health"><span>40/40</span></div>
 				</div>
 			</div>
 		</div>
@@ -239,10 +239,10 @@
 	<script type="text/javascript">
 		var selectedChar = 0;
 
-		function setHp( hp, characterId ) {
-			if( characterId	== 1) {
-				document.getElementById( "char1" ).style.width = Math.round(hp / 100) + "%";
-			}
+		function setHp( hp ) {
+				var percentHp = hp / 40;
+				document.getElementById( "char1" ).style.width = percentHp + "%";
+			
 		}
 
 		function selectCharacter( i ) { 
