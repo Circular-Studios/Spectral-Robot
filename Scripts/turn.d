@@ -59,6 +59,11 @@ public:
 		{
 			Game.units[ action.originID ].deselect();
 		}
+		// Select ability
+		else if( action.actionID == 3 )
+		{
+			Game.grid.selectAbility( action.originID );
+		}
 		// Switch active team
 		else if( action.actionID == 9 )
 		{
