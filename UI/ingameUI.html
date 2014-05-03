@@ -239,10 +239,20 @@
 	<script type="text/javascript">
 		var selectedChar = 0;
 
-		function setHp( hp ) {
-				var percentHp = hp / 40;
+		function setHp( hp, charNum ) {
+				var percentHp = (hp / 40) * 100;
+			if( charNum == 1 ) {
 				document.getElementById( "char1" ).style.width = percentHp + "%";
-			
+			}
+			if( charNum == 2 ) {
+				document.getElementById( "char2" ).style.width = percentHp + "%";
+			}
+			if( charNum == 3 ) {
+				document.getElementById( "char3" ).style.width = percentHp + "%";
+			}
+			if( charNum == 4 ) {
+				document.getElementById( "char4" ).style.width = percentHp + "%";
+			}
 		}
 
 		function selectCharacter( i ) { 
