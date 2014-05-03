@@ -1,6 +1,7 @@
 module turn;
 import core, utility;
 import game, grid, tile, ability, unit, action;
+import gl3n.linalg, gl3n.math;
 import speed;
 
 enum Team {
@@ -59,6 +60,11 @@ public:
 		{
 			Game.units[ action.originID ].deselect();
 		}
+		// Select ability
+		else if( action.actionID == 3 )
+		{
+			Game.grid.selectAbility( action.originID );
+		}
 		// Switch active team
 		else if( action.actionID == 9 )
 		{
@@ -67,7 +73,7 @@ public:
 		// Use an ability
 		else
 		{
-			Game.abilities[ action.actionID ].use( action.originID, action.targetID );
+			Game.units[ action.originID ].useAbility( action.actionID, action.targetID );
 		}
 	}
 	
@@ -108,6 +114,10 @@ public:
 		else
 		{
 			currentTeam = Team.Wolf;
+
+			// make the camera look nice
+			Game.level.camera.owner.transform.position = vec3( 300, Game.level.camera.owner.transform.position.y, 0 );
+			Game.level.camera.owner.transform.rotation = quat.euler_rotation( radians( 180 ), 0, radians( -45 ) );
 		}
 
 		// update the units on the team

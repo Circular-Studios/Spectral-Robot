@@ -2,9 +2,16 @@ module grid;
 import game, controller, tile, unit, turn, action;
 import core, utility, components;
 import gl3n.linalg;
-import std.conv, std.algorithm;
+import std.conv, std.algorithm, std.range, std.array;
 
 const int TILE_SIZE = 24;
+
+// taken from http://forum.dlang.org/post/vqfvihyezbmwcjkmpzin@forum.dlang.org
+template Unroll( alias CODE, alias N, alias SEP="" )
+{
+	enum t = replace( CODE, "%", "%1$d" );
+	enum Unroll = iota( N ).map!( i => format( t, i ) ).join( SEP );
+}
 
 /// A grid that contains tiles
 class Grid : Behavior!()
@@ -33,6 +40,16 @@ public:
 	// Setup key events
 	this()
 	{
+		// Deselect selected unit
+		Input.addKeyDownEvent( "Back", ( uint kc ) 
+		{ 
+			if( isUnitSelected && Game.turn.currentTeam == Game.turn.activeTeam )
+			{
+				Game.turn.sendAction( Action( 2, selectedUnit.ID, 0, false ) );
+				selectedUnit.deselect();
+			}
+		} );
+
 		// Left mouse click
 		Input.addKeyDownEvent( Keyboard.MouseLeft, ( kc )
 		{
@@ -61,7 +78,10 @@ public:
 						// use the selected ability on the tile
 						else if( isAbilitySelected )
 						{
-							selectedUnit.useAbility( selectedAbility, tile.toID() );
+							uint originID = selectedUnit.ID;
+							uint abilityID = selectedAbility;
+							if( selectedUnit.useAbility( selectedAbility, tile.toID() ) )
+								Game.turn.sendAction( Action( abilityID, originID, tile.toID(), true ) );
 						}
 					}
 					else
@@ -71,7 +91,10 @@ public:
 							// Use the selected ability on the unit if in range
 							if( isAbilitySelected && Game.abilities[ selectedAbility ].checkRange( selectedUnit.position, unit.position ) )
 							{
-								selectedUnit.useAbility( selectedAbility, unit.position );
+								uint originID = selectedUnit.ID;
+								uint abilityID = selectedAbility;
+								if( selectedUnit.useAbility( selectedAbility, unit.position ) )
+									Game.turn.sendAction( Action( abilityID, originID, unit.position, true ) );
 							}
 							// Select a unit
 							else if( unit.remainingActions > 0 && unit.team == Game.turn.currentTeam )
@@ -97,16 +120,13 @@ public:
 		} );
 		
 		// ability hotkeys
-		// TODO: for loop or something
-		Input.addKeyDownEvent( Keyboard.Keyboard1, kc => selectAbility( 0 ) );
-		Input.addKeyDownEvent( Keyboard.Keyboard2, kc => selectAbility( 1 ) );
-		Input.addKeyDownEvent( Keyboard.Keyboard3, kc => selectAbility( 2 ) );
-		Input.addKeyDownEvent( Keyboard.Keyboard4, kc => selectAbility( 3 ) );
-		Input.addKeyDownEvent( Keyboard.Keyboard5, kc => selectAbility( 4 ) );
-		Input.addKeyDownEvent( Keyboard.Keyboard6, kc => selectAbility( 5 ) );
-		Input.addKeyDownEvent( Keyboard.Keyboard7, kc => selectAbility( 6 ) );
-		Input.addKeyDownEvent( Keyboard.Keyboard8, kc => selectAbility( 7 ) );
-		Input.addKeyDownEvent( Keyboard.Keyboard9, kc => selectAbility( 8 ) );
+		enum keyboard = "Keyboard.Keyboard";
+		mixin( Unroll!( 
+			"Input.addKeyDownEvent( mixin( keyboard ~ ( % + 1 ).to!string ), ( uint kc )
+			{
+				Game.turn.sendAction( Action( 3, %, 0, false ) );
+				selectAbility( % );
+			} );", 9, "" ));
 	}
 	
 	/// Select an ability from a unit

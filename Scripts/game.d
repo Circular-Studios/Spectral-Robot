@@ -33,8 +33,8 @@ public:
 		logInfo( "Initializing ", title, "..." );
 		
 		// setup a couple helper keys
-		Input.addKeyDownEvent( Keyboard.Escape, ( uint kc ) { currentState = EngineState.Quit; } );
-		Input.addKeyDownEvent( Keyboard.F5, ( uint kc ) { currentState = EngineState.Reset; } );
+		Input.addKeyDownEvent( "QuitToDesktop", ( uint kc ) { currentState = EngineState.Quit; } );
+		Input.addKeyDownEvent( "ResetGame", ( uint kc ) { currentState = EngineState.Reset; } );
 		
 		// initalize stuff
 		level = new Scene();

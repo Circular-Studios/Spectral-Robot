@@ -10,13 +10,15 @@ LookLeft:
     Keyboard: Q
 LookRight:
     Keyboard: E
-ResetCamera:
+QuitToDesktop:
     Keyboard: Delete
 EndTurn:
     Keyboard: T
 Enter:
     Keyboard: Space
 Back:
-    Keyboard: Backspace
+    Keyboard: Escape
 ResetGame:
     Keyboard: F5
+ResetCamera:
+    Keyboard: F9

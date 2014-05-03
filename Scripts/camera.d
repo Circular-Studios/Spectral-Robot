@@ -43,7 +43,7 @@ public:
 		maxHeight = initArgs.MaxHeight;
 		mouseEdgeScroll = initArgs.MouseEdgeScroll;
 
-		transform.position.y = (( maxHeight - minHeight ) / 2) + minHeight;
+		transform.position.y = ( ( maxHeight - minHeight ) / 2 ) + minHeight;
 		startPos = transform.position;
 		startRot = transform.rotation;
 
@@ -66,7 +66,7 @@ public:
 	
 	override void onUpdate()
 	{	
-		if( Input.getState("LookLeft") && !turning )
+		if( Input.getState( "LookLeft" ) && !turning )
 		{
 			turning = true;
 			auto startTime = Time.totalTime;
@@ -92,7 +92,7 @@ public:
 				if( Time.totalTime - startTime >= rotateTime.toSeconds ) turning = false;
 			} );
 		}
-		if( Input.getState("LookRight") && !turning )
+		if( Input.getState( "LookRight" ) && !turning )
 		{
 			turning = true;
 			auto startTime = Time.totalTime;
@@ -185,29 +185,28 @@ public:
 	{
 		if( lookatPos.x < minX )
 		{
-			logDebug("Clamping at minX");
+			logDebug( "Clamping at minX" );
 			transform.position.x += minX - lookatPos.x;
 		}
 		if( lookatPos.x > maxX )
 		{
-			logDebug("Clamping at maxX");
+			logDebug( "Clamping at maxX" );
 			transform.position.x -= lookatPos.x - maxX;
 		}
 		if( lookatPos.z < minZ )
 		{
-			logDebug("Clamping at minZ");
+			logDebug( "Clamping at minZ" );
 			transform.position.z += minZ - lookatPos.z;
 		}
 		if( lookatPos.z > maxZ )
 		{
-			logDebug("Clamping at maxZ");
+			logDebug( "Clamping at maxZ" );
 			transform.position.z -= lookatPos.z - maxZ;
 		}
 	}
 
 private:
 	bool turning;
-
 	vec3 startPos;
 	quat startRot;
 }
