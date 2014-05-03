@@ -90,7 +90,7 @@ public:
 							if( isAbilitySelected && Game.abilities[ selectedAbility ].checkRange( selectedUnit.position, unit.position ) )
 							{
 								if( selectedUnit.useAbility( selectedAbility, unit.position ) )
-									Game.turn.sendAction( Action( abilityID, ID, targetID, true ) );
+									Game.turn.sendAction( Action( selectedAbility, selectedUnit.ID, unit.position, true ) );
 							}
 							// Select a unit
 							else if( unit.remainingActions > 0 && unit.team == Game.turn.currentTeam )
