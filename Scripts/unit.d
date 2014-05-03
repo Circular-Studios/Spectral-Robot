@@ -250,6 +250,12 @@ public:
 		{
 			effect.use( this );
 		}
+
+		// decrement cooldown on abilities
+		foreach( ability; abilities )
+		{
+			Game.abilities[ ability ].decrementCooldown(); 
+		}
 	}
 	
 	/// Convert grid coordinates to 3D space
