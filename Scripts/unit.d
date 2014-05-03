@@ -175,6 +175,8 @@ public:
 	void previewMove()
 	{
 		selectedTiles = Game.grid.getInRange( position, _remainingRange );
+
+		Game.ui.callJSFunction( "selectCharacter", [ID] ); 
 		
 		// change the material of the tiles
 		foreach( tile; selectedTiles )
@@ -228,6 +230,8 @@ public:
 	/// Decrement remaining actions 
 	void actionUsed( int numActions = 1 )
 	{
+		Game.ui.callJSFunction( "setHp", [_hp, ID] );
+
 		_remainingActions -= numActions;
 		if( remainingActions <= 0 )
 		{

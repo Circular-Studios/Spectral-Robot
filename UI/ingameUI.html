@@ -10,7 +10,7 @@
 
 		
 	</head>
-	<body onload="selectCharacter( 1 )">
+	<body>
 	
 	
 	<!-- Player container -->
@@ -20,15 +20,15 @@
 				<div class="charName">Robots (Player)</div>
 			</div>
 			<div class="playerCharacter" onclick="selectCharacter( 4 )">
-				<div class="charName"><h3>Hank SchrayBot</h3></div>
-				<div class="charName"><h4>Class: Bulletmancer</h4></div>
+				<div class="charName"><h3>Fire Bot</h3></div>
+				<div class="charName"><h4>Class: Firestarter</h4></div>
 				<div class="healthContainer">
 					<div class="healthbar" style="width:100%" id="char4"></div>
 					<div class="health"><span>40/40</span></div>
 				</div>
 			</div>
 			<div class="playerCharacter" onclick="selectCharacter( 3 )">
-				<div class="charName"><h3>Steve RoboGomez</h3></div>
+				<div class="charName"><h3>Tech Bot</h3></div>
 				<div class="charName"><h4>Class: Tech Monkey</h4></div>
 				<div class="healthContainer">
 					<div class="healthbar" style="width:100%" id="char3"></div>
@@ -41,7 +41,7 @@
 				<div class="charName">Werewolves (Enemies)</div>
 			</div>
 			<div class="enemyCharacter" onclick="selectCharacter( 1 )">
-				<div class="charName"><h3>Walter Wolf</h3></div>
+				<div class="charName"><h3>Fire Wolf</h3></div>
 				<div class="charName"><h4>Class: Firestarter</h4></div>
 				<div class="healthContainer">
 					<div class="healthbar" style="width:100%" id="char1"></div>
@@ -50,7 +50,7 @@
 
 			</div>
 			<div class="enemyCharacter" onclick="selectCharacter( 2 )">
-				<div class="charName"><h3>Jesse WereMin</h3></div>
+				<div class="charName"><h3>Tech Wolf</h3></div>
 				<div class="charName"><h4>Class: Deadbringer</h4></div>
 				<div class="healthContainer">
 					<div class="healthbar" style="width:100%" id="char2"></div>
@@ -268,18 +268,18 @@
 
 			if( selectedChar == 2 )
 			{
-				document.getElementById( "two" ).style.display = "table";
+				document.getElementById( "four" ).style.display = "table";
 
 				document.getElementById( "one" ).style.display = "none";
 				document.getElementById( "three" ).style.display = "none";
-				document.getElementById( "four" ).style.display = "none";
+				document.getElementById( "two" ).style.display = "none";
 			}
 
 			if( selectedChar == 3 )
 			{
-				document.getElementById( "three" ).style.display = "table";
+				document.getElementById( "one" ).style.display = "table";
 
-				document.getElementById( "one" ).style.display = "none";
+				document.getElementById( "three" ).style.display = "none";
 				document.getElementById( "two" ).style.display = "none";
 				document.getElementById( "four" ).style.display = "none";
 			}
