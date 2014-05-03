@@ -2,8 +2,8 @@ Game:
     ServerIP: 127.0.0.1
 Display:
     Fullscreen: false
-    Height: 720
-    Width: 1280
+    Height: 1000
+    Width: 1777
 Graphics:
     BackfaceCulling: true
     VSync: false

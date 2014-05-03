@@ -25,4 +25,4 @@ Light: !Light-Directional
 ---
 Name: AmbLight
 Light: !Light-Ambient
-    Color: !Vector3 .2 .2 .2
+    Color: !Vector3 .4 .4 .4
