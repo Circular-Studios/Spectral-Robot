@@ -242,12 +242,12 @@
 		function setHp( hp, charNum ) {
 				var percentHp = (hp / 40) * 100;
 			if( charNum == 1 ) {
-				document.getElementById( "char4" ).style.width = percentHp + "%";
-				document.getElementById( "hp4" ).innerHTML = ''+hp;
-			}
-			if( charNum == 2 ) {
 				document.getElementById( "char3" ).style.width = percentHp + "%";
 				document.getElementById( "hp3" ).innerHTML = ''+hp;
+			}
+			if( charNum == 2 ) {
+				document.getElementById( "char4" ).style.width = percentHp + "%";
+				document.getElementById( "hp4" ).innerHTML = ''+hp;
 			}
 			if( charNum == 3 ) {
 				document.getElementById( "char1" ).style.width = percentHp + "%";
