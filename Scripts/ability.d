@@ -91,7 +91,7 @@ public:
 	/// Temporary function until we can modify properties as lvalue
 	void decrementCooldown()
 	{
-		if( _currentCooldown > 0 )
+		//if( _currentCooldown > 0 )
 			//_currentCooldown--;
 	}
 	
