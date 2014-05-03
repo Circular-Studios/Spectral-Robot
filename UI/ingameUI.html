@@ -24,7 +24,7 @@
 				<div class="charName"><h4>Class: Firestarter</h4></div>
 				<div class="healthContainer">
 					<div class="healthbar" style="width:100%" id="char4"></div>
-					<div class="health"><span>40/40</span></div>
+					<div class="health"><span><span id="hp4">40</span>/40</span></div>
 				</div>
 			</div>
 			<div class="playerCharacter" onclick="selectCharacter( 3 )">
@@ -32,7 +32,7 @@
 				<div class="charName"><h4>Class: Tech Monkey</h4></div>
 				<div class="healthContainer">
 					<div class="healthbar" style="width:100%" id="char3"></div>
-					<div class="health"><span>40/40</span></div>
+					<div class="health"><span><span id="hp3">40</span>/40</span></div>
 				</div>
 			</div>
 		</div>
@@ -45,7 +45,7 @@
 				<div class="charName"><h4>Class: Firestarter</h4></div>
 				<div class="healthContainer">
 					<div class="healthbar" style="width:100%" id="char1"></div>
-					<div class="health"><span>40/40</span></div>
+					<div class="health"><span><span id="hp1">40</span>/40</span></div>
 				</div>
 
 			</div>
@@ -54,7 +54,7 @@
 				<div class="charName"><h4>Class: Deadbringer</h4></div>
 				<div class="healthContainer">
 					<div class="healthbar" style="width:100%" id="char2"></div>
-					<div class="health"><span>40/40</span></div>
+					<div class="health"><span><span id="hp2">40</span>/40</span></div>
 				</div>
 			</div>
 		</div>
@@ -243,15 +243,19 @@
 				var percentHp = (hp / 40) * 100;
 			if( charNum == 1 ) {
 				document.getElementById( "char1" ).style.width = percentHp + "%";
+				document.getElementById( "hp1" ).innerHTML = ''+hp;
 			}
 			if( charNum == 2 ) {
 				document.getElementById( "char2" ).style.width = percentHp + "%";
+				document.getElementById( "hp2" ).innerHTML = ''+hp;
 			}
 			if( charNum == 3 ) {
 				document.getElementById( "char3" ).style.width = percentHp + "%";
+				document.getElementById( "hp3" ).innerHTML = ''+hp;
 			}
 			if( charNum == 4 ) {
 				document.getElementById( "char4" ).style.width = percentHp + "%";
+				document.getElementById( "hp4" ).innerHTML = ''+hp;
 			}
 		}
 
