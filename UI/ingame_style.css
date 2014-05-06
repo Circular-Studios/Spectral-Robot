@@ -173,6 +173,16 @@ body{
 	background-image: url( 'iconset/overload.png' );
 }
 
+.abilityNumbers {
+	display: table;
+}
+
+.abilityNum {
+	display: inline;
+	color: #fff;
+	margin: 58px;
+}
+
 /***** END ABILITIES *****/
 
 

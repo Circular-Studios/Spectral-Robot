@@ -17,9 +17,9 @@
 	<div class="characters">
 		<div class="players">
 			<div class="playerCharacter">
-				<div class="charName">Robots (Player)</div>
+				<div class="charName">Robots</div>
 			</div>
-			<div class="playerCharacter" onclick="selectCharacter( 3 )">
+			<div class="playerCharacter" onclick="selectCharacter( 2 )">
 				<div class="charName"><h3>Fire Bot</h3></div>
 				<div class="charName"><h4>Class: Firestarter</h4></div>
 				<div class="healthContainer">
@@ -27,7 +27,7 @@
 					<div class="health"><span><span id="hp4">40</span>/40</span></div>
 				</div>
 			</div>
-			<div class="playerCharacter" onclick="selectCharacter( 2 )">
+			<div class="playerCharacter" onclick="selectCharacter( 3 )">
 				<div class="charName"><h3>Tech Bot</h3></div>
 				<div class="charName"><h4>Class: Tech Monkey</h4></div>
 				<div class="healthContainer">
@@ -38,9 +38,9 @@
 		</div>
 		<div class="enemies">
 			<div class="enemyCharacter">
-				<div class="charName">Werewolves (Enemies)</div>
+				<div class="charName">Werewolves</div>
 			</div>
-			<div class="enemyCharacter" onclick="selectCharacter( 0 )">
+			<div class="enemyCharacter" onclick="selectCharacter( 1 )">
 				<div class="charName"><h3>Fire Wolf</h3></div>
 				<div class="charName"><h4>Class: Firestarter</h4></div>
 				<div class="healthContainer">
@@ -49,7 +49,7 @@
 				</div>
 
 			</div>
-			<div class="enemyCharacter" onclick="selectCharacter( 1 )">
+			<div class="enemyCharacter" onclick="selectCharacter( 0 )">
 				<div class="charName"><h3>Tech Wolf</h3></div>
 				<div class="charName"><h4>Class: Tech Monkey</h4></div>
 				<div class="healthContainer">
@@ -100,6 +100,12 @@
 													  Accuracy: 10. This ability cannot crit.<br>
 													  Classification: Single Target, Ranged, DOT</p>
 					</div>
+				</div>
+				<div class="abilityNumbers">
+					<div class="abilityNum">1</div>
+					<div class="abilityNum">2</div>
+					<div class="abilityNum">3</div>
+					<div class="abilityNum">4</div>
 				</div>
 			</div>
 		</div>
@@ -233,6 +239,12 @@
 												  Classification: Self Target, Buff</p>
 				</div>
 			</div>
+				<div class="abilityNumbers">
+					<div class="abilityNum">1</div>
+					<div class="abilityNum">2</div>
+					<div class="abilityNum">3</div>
+					<div class="abilityNum">4</div>
+				</div>	
 		</div>
 	</div>
 
@@ -242,20 +254,20 @@
 		function setHp( hp, charNum ) {
 				var percentHp = (hp / 40) * 100;
 			if( charNum == 0 ) {
-				document.getElementById( "char1" ).style.width = percentHp + "%";
-				document.getElementById( "hp1" ).innerHTML = ''+hp;
-			}
-			if( charNum == 1 ) {
 				document.getElementById( "char2" ).style.width = percentHp + "%";
 				document.getElementById( "hp2" ).innerHTML = ''+hp;
 			}
-			if( charNum == 2 ) {
-				document.getElementById( "char3" ).style.width = percentHp + "%";
-				document.getElementById( "hp3" ).innerHTML = ''+hp;
+			if( charNum == 1 ) {
+				document.getElementById( "char1" ).style.width = percentHp + "%";
+				document.getElementById( "hp1" ).innerHTML = ''+hp;
 			}
-			if( charNum == 3 ) {
+			if( charNum == 2 ) {
 				document.getElementById( "char4" ).style.width = percentHp + "%";
 				document.getElementById( "hp4" ).innerHTML = ''+hp;
+			}
+			if( charNum == 3 ) {
+				document.getElementById( "char3" ).style.width = percentHp + "%";
+				document.getElementById( "hp3" ).innerHTML = ''+hp;
 			}
 		}
 
