@@ -10,7 +10,7 @@ import speed;
 }
 
 /// The base game class
-shared class RobotGhosts : DGame
+class RobotGhosts : DGame
 {
 public:
 	Controller gc; // the game controller
@@ -19,8 +19,8 @@ public:
 	Turn turn; // The turn controller
 	Ability[ uint ] abilities; // The abilities
 	Unit[] units; // The units
-	Connection serverConn; // the server connection
-	//UserInterface ui;
+	shared Connection serverConn; // the server connection
+	UserInterface ui;
 
 	// Name that game
 	@property override string title()
@@ -33,36 +33,31 @@ public:
 		logInfo( "Initializing ", title, "..." );
 		
 		// setup a couple helper keys
-		Input.addKeyDownEvent( Keyboard.Escape, ( uint kc ) { currentState = EngineState.Quit; } );
-		Input.addKeyDownEvent( Keyboard.F5, ( uint kc ) { currentState = EngineState.Reset; } );
+		Input.addKeyDownEvent( "QuitToDesktop", ( uint kc ) { currentState = EngineState.Quit; } );
+		Input.addKeyDownEvent( "ResetGame", ( uint kc ) { currentState = EngineState.Reset; } );
 		
 		// initalize stuff
-		level = new shared Scene();
+		level = new Scene();
 		this.activeScene = level;
-		grid = new shared Grid();
-		turn = new shared Turn();
-		
-		// add the grid to the level
-		Game.grid.name = "Grid";
-		Game.level.addChild( grid );
-		
-		// get the game loaded
-		gc = new shared Controller();
+		auto g = GameObject.createWithBehavior!Grid;
+		grid = g[ 1 ];
+		Game.level.addChild( g[ 0 ] );
+		turn = new Turn();
+		gc = new Controller();
 		
 		// create a camera
-		shared AdvancedCamera cam = cast(shared AdvancedCamera)level[ "Camera" ];
+		auto cam = level[ "Camera" ].behaviors.get!AdvancedCamera;
 		cam.autoClamp();
 		level.camera = cam.camera;
-
 		
 		// bind 'r' to server connect
 		Input.addKeyDownEvent( Keyboard.R, kc => connect() );
 		
 		// create the ui
-		/*ui = new shared UserInterface( Config.get!uint( "Display.Width" ),
-		 Config.get!uint( "Display.Height" ), 
-		 Config.getPath( "UserInterface.FilePath" ) 
-		 );*/
+		uint w, h;
+        w = config.find!uint( "Display.Width" );
+        h = config.find!uint( "Display.Height" );
+        ui = new UserInterface(w, h, config.find!string( "UserInterface.FilePath" ) );
 	}
 	
 	/// Connect to the server
@@ -70,15 +65,16 @@ public:
 	{
 		if( serverConn )
 			serverConn.close();
-		serverConn = Connection.open( Config.get!string( "Game.ServerIP" ), false, ConnectionType.TCP );
+		serverConn = Connection.open( config.find!string( "Game.ServerIP" ), false, ConnectionType.TCP );
 		serverConn.onReceiveData!string ~= msg => logInfo( "Server Message: ", msg );
+		serverConn.onReceiveData!uint ~= numPlayers => turn.setTeam( numPlayers );
 		serverConn.onReceiveData!Action ~= action => turn.doAction( action );
 		serverConn.send!string( "ready", ConnectionType.TCP );
 	}
 	
 	override void onUpdate()
 	{
-		//ui.update();
+		ui.update();
 		try
 		{
 			if( serverConn )
@@ -92,7 +88,7 @@ public:
 	
 	override void onDraw()
 	{
-		//ui.draw();
+		ui.draw();
 	}
 	
 	override void onShutdown()
@@ -106,7 +102,7 @@ public:
 		units.destroy();
 		abilities.destroy();
 		gc.destroy();
-		//ui.destroy();
+		ui.shutdown();
 	}
 	
 	override void onSaveState()

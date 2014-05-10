@@ -1,7 +1,7 @@
 {
 	"name": "robot-ghosts",
 	"description": "An asynchronous multiplayer turn-based strategy game.",
-	"copyright": "Copyright © 2014, Robot Ghosts Team",
+	"copyright": "Copyright © 2014, Circular Studios",
 	"authors": [ 
 		"Daniel Jost",
 		"Jayson Fitch",
@@ -16,8 +16,8 @@
 		"Colden Cullen"
 	],
 	"dependencies": {
-		"dash": "==0.6.6",
-		"speed:common": "~master"
+		"dash": "==0.8.0",
+		"speed:common": "==0.1.3"
 	},
 	"sourcePaths": [ 
 		"Config/",
@@ -46,10 +46,11 @@
 			"sourcePaths": [ "Scripts/network" ],
 			"mainSourceFile": "Scripts/network/server.d",
 			"targetType": "executable",
+			"targetPath": "Binaries",
+			"workingDirectory": "Binaries",
 			"versions": [ "Server", "VibeCustomMain" ],
 			"dependencies": {
-				"speed:common": "~master",
-				"speed:server": "~master"	
+				"speed": "==0.1.3"
 			}
 		}
 	]

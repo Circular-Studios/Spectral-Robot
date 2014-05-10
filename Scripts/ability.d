@@ -1,6 +1,7 @@
 ﻿module ability;
 import core, utility;
 import game, grid, tile;
+import gl3n.math;
 
 enum DamageType
 {
@@ -35,9 +36,10 @@ enum StatEffected
 	None,
 	Accuracy,
 	Turn, // deplete the actions left on a unit
+	Damage,
 }
 
-shared class Ability
+class Ability
 {
 private:
 	static uint nextID = 10;
@@ -48,26 +50,27 @@ private:
 	StatEffected _statEffected;
 	int _damage;
 	int _range;
+	int _unitRange;
 	int _cooldown;
 	int _duration;
 	int _accuracy;
+	int _currentCooldown;
 	
 	// only used in this class
-	int _currentCooldown;
 	//int _currentRange;
 	Tile[] _selectedTiles;
 	
 	/// Highlight the tiles that the ability can effect
-	shared(Tile[]) highlight( uint originID, uint unitRange )
+	Tile[] highlight( uint originID, uint range )
 	{
 		switch( _targetArea )
 		{
 			default:
 				return null;
 			case TargetArea.Single:
-				return Game.grid.getMoveAndAttack( originID, unitRange, range )[ 1 ];//Game.grid.getInRange( originID, range, false, unitRange );
+				return Game.grid.getInRange( originID, range );
 			case TargetArea.Radial:
-				return Game.grid.getMoveAndAttack( originID, unitRange, range )[ 1 ];//Game.grid.getInRange( originID, range, false, unitRange );
+				return Game.grid.getInRange( originID, range );
 		}
 	}
 	
@@ -84,6 +87,13 @@ public:
 	mixin( Property!( _currentCooldown, AccessModifier.Public ) );
 	mixin( Property!( _duration, AccessModifier.Public ) );
 	mixin( Property!( _accuracy, AccessModifier.Public ) );
+
+	/// Temporary function until we can modify properties as lvalue
+	void decrementCooldown()
+	{
+		//if( _currentCooldown > 0 )
+			//_currentCooldown--;
+	}
 	
 	this()
 	{
@@ -94,52 +104,55 @@ public:
 	/// Use the ability
 	bool use( uint originID, uint targetID )
 	{
-		// make sure the targetID is allowed
-		bool legalTile = false;
-		foreach( tile; _selectedTiles )
-		{
-			if( tile.toID() == targetID )
-				legalTile = true;
-		}
-
-		if( legalTile )
-		{
-			switch( _targetArea )
+		//if( currentCooldown <= 0 )
+		//{
+			// make sure the targetID is allowed
+			bool legalTile = false;
+			foreach( tile; _selectedTiles )
 			{
-				default:
-					break;
-				case TargetArea.Single:
-						return applyAbility( originID, targetID );
-				case TargetArea.Radial:
-					foreach( tile; _selectedTiles )
-					{
-						return applyAbility( originID, tile.toID() );
-					}
+				if( tile.toID() == targetID )
+					legalTile = true;
 			}
-			logInfo("ability.use worked");
-			// reset cooldown
-			_currentCooldown = cooldown;
-		}
-		logInfo("ability.use failed");
+
+			if( legalTile )
+			{
+				switch( _targetArea )
+				{
+					default:
+						break;
+					case TargetArea.Single:
+							return applyAbility( originID, targetID );
+					case TargetArea.Radial:
+						foreach( tile; _selectedTiles )
+						{
+							return applyAbility( originID, tile.toID() );
+						}
+				}
+			}
+		//}
+		logInfo( "ability.use failed" );
 		return false;
 	}
 
 	// apply the effects of the ability
 	bool applyAbility( uint originID, uint targetID )
 	{
-		shared Tile originTile = Game.grid.getTileByID( originID );
-		shared Tile targetTile = Game.grid.getTileByID( targetID );
+		Tile originTile = Game.grid.getTileByID( originID );
+		Tile targetTile = Game.grid.getTileByID( targetID );
 		// team check
 		if( targetTile.occupant !is null && ( targetType == TargetType.Tile ||
 		  ( targetType == TargetType.EnemyUnit && targetTile.occupant.team != originTile.occupant.team ) ||
 		  ( targetType == TargetType.AlliedUnit && targetTile.occupant.team == originTile.occupant.team ) ) )
 		{
+			int attack = originTile.occupant.attack + damage;
 			final switch( damageType )
 			{
 				case DamageType.Normal:
-					targetTile.occupant.applyEffect!"_hp"( damage );
+					targetTile.occupant.applyEffect!"_hp"( attack );
 					break;
 				case DamageType.Buff:
+					// TODO: Expand this to use the StatEffected enum
+					targetTile.occupant.applyEffect!"_attack"( damage, duration, true );
 					break;
 				case DamageType.Debuff:
 					break;
@@ -147,37 +160,53 @@ public:
 					// call the straight line function
 					break;
 				case DamageType.DOT:
-					targetTile.occupant.applyEffect!"_hp"( damage, duration );
+					targetTile.occupant.applyEffect!"_hp"( attack, duration );
 					break;
 				case DamageType.Healing:
-					targetTile.occupant.applyEffect!"_hp"( -damage, duration );
+					targetTile.occupant.applyEffect!"_hp"( -attack, duration );
 					break;
 				case DamageType.Reduce:
 					break;
 				case DamageType.LifeSteal:
-					originTile.occupant.applyEffect!"_hp"( -damage, duration );
-					targetTile.occupant.applyEffect!"_hp"( damage, duration );
+					originTile.occupant.applyEffect!"_hp"( -attack, duration );
+					targetTile.occupant.applyEffect!"_hp"( attack, duration );
 					break;
 				case DamageType.Modifier:
 					break;
 			}
+			// reset cooldown
+			currentCooldown = cooldown;
+
+			Game.ui.callJSFunction( "setHp", [targetTile.occupant.hp, targetTile.occupant.ID] );
+
 			logInfo( originTile.occupant.name, " used ", name, " on ", targetTile.occupant.name );
 			return true;
 		}
-		logInfo("applyAbility failed");
+		logInfo( "applyAbility failed" );
 		return false;
 	}
-	
+
+	/// Check if a tile is within range of the ability
+	bool checkRange( uint originID, uint targetID )
+	{
+		auto origin = Game.grid.getTileByID( originID );
+		auto target = Game.grid.getTileByID( targetID );
+		return range + _unitRange >= abs( ( target.x - origin.x ) ) + abs( ( target.y - origin.y ) );
+	}
+
 	/// Preview the ability
 	void preview( uint originID, uint unitRange )
 	{
 		// get the tiles the ability can effect
-		_selectedTiles = highlight( originID, unitRange );
+		_unitRange = unitRange;
+		_selectedTiles = highlight( originID, range + unitRange );
 		
 		// change the material of the tiles
 		foreach( tile; _selectedTiles )
 		{
-			tile.selection = TileSelection.Red;
+			if( tile.selection != TileSelection.Blue || 
+			( tile.occupant !is null && tile.occupant != Game.grid.selectedUnit ) )
+				tile.selection = TileSelection.Red;
 		}
 	}
 	

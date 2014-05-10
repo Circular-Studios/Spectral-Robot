@@ -1,10 +1,10 @@
 module network.server;
 version( Server ):
-//import utility;
 
 public import action;
 import speed, speed.db;
 //import vibe.d;
+import core.thread;
 import std.stdio, std.algorithm;
 
 import dvorm;
@@ -40,46 +40,68 @@ static this()
 	databaseConnection = DbConnection( DbType.Mongo, "127.0.0.1", ushort.init, null, null, "spectral" );
 }
 
+
 void main()
 {
-	auto connMan = ConnectionManager.open();
-	auto gameID = 0;
-
-	connMan.onNewConnection ~= ( shared Connection conn )
+	for( uint gamesPlayed = 0; ; ++gamesPlayed )
 	{
-		conn.onReceiveData!string ~= ( string msg )
+		uint numPlayers = 0;
+		auto connMan = ConnectionManager.open();
+
+		connMan.onNewConnection ~= ( shared Connection conn )
 		{
-			if( msg == "ready")
+			numPlayers++;
+			conn.onReceiveData!string ~= ( string msg )
 			{
-				auto turns = Turn.findAll().filter!(turn => turn.gameID == gameID);
-				
-				foreach( Turn t; turns )
+				writeln( "Recieved message: ", msg );
+				connMan.send!string( "ECHO: " ~ msg, ConnectionType.TCP );
+				conn.send!uint( numPlayers );
+				writeln( "numPlayers: ", numPlayers );
+
+				/*
+				if( msg == "ready")
 				{
-					writeln( "Sending turn: ",  t.toAction);
-					connMan.send!Action( t.toAction, ConnectionType.TCP );
+					auto turns = Turn.findAll().filter!(turn => turn.gameID == gameID);
+					
+					foreach( Turn t; turns )
+					{
+						writeln( "Sending turn: ",  t.toAction);
+						connMan.send!Action( t.toAction, ConnectionType.TCP );
+					}
 				}
-			}
+				*/
+			};
 
-			writeln( "Recieved message: ", msg );
-			connMan.send!string( "ECHO: " ~ msg, ConnectionType.TCP );
-		};
-
-		conn.onReceiveData!Action ~= ( Action action )
-		{
-			writeln( "Received action: ", action.actionID, ",", action.originID, ",", action.targetID, ",", action.saveToDatabase );
-			connMan.send!Action( action, ConnectionType.TCP );
-
-			if( action.saveToDatabase )
+			conn.onReceiveData!Action ~= ( Action action )
 			{
-				auto sesh = new Turn( action, gameID );
-				sesh.save();
-				writeln( "Saved session. New count: ", Turn.findAll().length );
+				writeln( "Received action: ", action.actionID, ",", action.originID, ",", action.targetID, ",", action.saveToDatabase );
+
+				foreach( otherConn; connMan.connections )
+				{
+					if( cast()otherConn != cast()conn )
+						otherConn.send!Action( action, ConnectionType.TCP );
+				}
+
+				/*
+				if( action.saveToDatabase )
+				{
+					auto sesh = new Turn( action, gamesPlayed );
+					sesh.save();
+					writeln( "Saved session. New count: ", Turn.findAll().length );
 
 
-				//Turn.findAll().filter!(turn => turn.gameID == gameID);
-			}
+					//Turn.findAll().filter!(turn => turn.gameID == gamesPlayed);
+				}
+				8*/
+			};
 		};
-	};
 
-	connMan.start();
+		connMan.start();
+
+		// Wait for all players to disconnect.
+		while( numPlayers != 0 ) { }
+
+		connMan.close();
+		Thread.sleep( 500.msecs );
+	}
 }

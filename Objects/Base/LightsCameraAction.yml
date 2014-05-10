@@ -1,16 +1,17 @@
 ---
 Name: Camera
-Script:
-    ClassName: camera.AdvancedCamera
-    Fields:
-        MoveSpeed: 150
-        RotateTime: 400
-        ZoomSpeed: 300
-        EdgeDistance: 50
-        MinHeight: 50
-        MaxHeight: 300
+Behaviors:
+    - Class: camera.AdvancedCamera
+      Fields:
+          MoveSpeed: 150
+          RotateTime: 400
+          ZoomSpeed: 800
+          EdgeDistance: 50
+          MinHeight: 50
+          MaxHeight: 300
+          MouseEdgeScroll: No
 Transform:
-    Position: !Vector3 230 0 510
+    Position: !Vector3 300 0 560
     Rotation: !Vector3 -45 0 0
 Camera: 
     FOV: 59
@@ -19,14 +20,9 @@ Camera:
 ---
 Name: DirLight
 Light: !Light-Directional
-    Color: !Vector3 1 1 1
-    Direction: !Vector3 -1 -1 -1
----
-Name: DirLight2
-Light: !Light-Directional
-    Color: !Vector3 1 1 1
-    Direction: !Vector3 1 1 1
+    Color: !Vector3 1.4 1.4 1.4
+    Direction: !Vector3 -1 -1 0
 ---
 Name: AmbLight
 Light: !Light-Ambient
-    Color: !Vector3 .1 .1 .1
+    Color: !Vector3 .4 .4 .4

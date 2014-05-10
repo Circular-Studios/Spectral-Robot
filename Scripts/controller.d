@@ -5,7 +5,7 @@ import yaml;
 import std.path, std.conv;
 import gl3n.linalg, gl3n.math;
 
-final shared class Controller
+final class Controller
 {
 	this()
 	{
@@ -30,7 +30,7 @@ final shared class Controller
 		
 		foreach( Node abilityNode; yaml )
 		{
-			auto ability = Config.getObject!(shared Ability)( abilityNode );
+			auto ability = abilityNode.getObject!(Ability)();
 			Game.abilities[ ability.ID ] = ability;
 			abilityIDs ~= ability.ID;
 		}
@@ -43,7 +43,6 @@ final shared class Controller
 	{
 		// So we are going to parse the Units folder for the unit files
 		// For those, we'll get the Name of the node, which will be how we call into the gameObjects
-		int i = 0;
 		foreach( Node unitNode; unitsToLoad )
 		{
 			// setup variables
@@ -51,44 +50,41 @@ final shared class Controller
 			Team team;
 			string abilities, teamName;
 			uint[] spawn;
-			shared vec3 rotationVec;
-			shared quat rotation;
+			vec3 rotationVec;
+			quat rotation;
 
 			foreach( Node unitCheck; loadYamlDocuments( buildNormalizedPath( FilePath.Resources.Objects, "Units" ) ) )
 			{
 				// check if we want to load this unit
 				if( unitNode[ "Name" ].as!string == unitCheck[ "Name" ].as!string )
 				{
-					Config.tryGet( "Spawn", spawn, unitNode );
-					if( Config.tryGet( "Team", teamName, unitNode ) )
+					unitNode.tryFind( "Spawn", spawn );
+					if( unitNode.tryFind( "Team", teamName ) )
 						team = to!Team( teamName );
-					if( Config.tryGet( "Rotation", rotationVec, unitNode ) )
+					if( unitNode.tryFind( "Rotation", rotationVec ) )
 						rotation = quat.euler_rotation( radians( rotationVec.y ), radians( rotationVec.z ), radians( rotationVec.x ) );
 
 					// instantiate the prefab of a unit
-					auto unit = cast(shared Unit)Prefabs[ unitCheck[ "Prefab" ].as!string ].createInstance();
-					
+					auto u = Prefabs[ unitCheck[ "Prefab" ].as!string ].createInstance();
+					auto unit = u.behaviors.get!Unit;
+
 					// get the variables from the node
-					unit.name = unitNode[ "Name" ].as!string ~ i.to!string;
-					Config.tryGet( "HP", hp, unitCheck );
-					Config.tryGet( "Speed", sp, unitCheck );
-					Config.tryGet( "Attack", at, unitCheck );
-					Config.tryGet( "Defense", df, unitCheck );
-					Config.tryGet( "Abilities", abilities, unitCheck );
+					unitCheck.tryFind( "HP", hp );
+					unitCheck.tryFind( "Speed", sp );
+					unitCheck.tryFind( "Attack", at );
+					unitCheck.tryFind( "Defense", df );
+					unitCheck.tryFind( "Abilities", abilities );
 					
 					// initialize the unit and add it to the active scene
 					unit.init( toTileID( spawn [ 0 ], spawn[ 1 ] ), team, hp, sp, at, df, loadAbilities( abilities ) );
 					if ( rotation )
 						unit.transform.rotation = rotation;
-					Game.level.addChild( unit );
+					Game.level.addChild( u );
 					Game.units ~= unit;
 					
 					// block and occupy the spawn tile
-					Game.grid.tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].type = TileType.HalfBlocked;
 					Game.grid.tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].occupant = unit;
-
-					// this keeps the unit names unique
-					i++;
+					Game.grid.tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].type = TileType.OccupantActive;
 					break;
 				}
 			}
@@ -128,13 +124,13 @@ final shared class Controller
 		bool fogOfWar;
 		Node unitsNode;
 		Node propsNode;
-		
+
 		// get the variables from the yaml node
 		string name = levelNode[ "Name" ].as!string;
-		Config.tryGet( "Grid", gridSize, levelNode );
-		Config.tryGet( "FogOfWar", fogOfWar, levelNode );
-		Config.tryGet( "Units", unitsNode, levelNode );
-		Config.tryGet( "Objects", propsNode, levelNode );
+		levelNode.tryFind( "Grid", gridSize );
+		levelNode.tryFind( "FogOfWar", fogOfWar );
+		levelNode.tryFind( "Units", unitsNode );
+		levelNode.tryFind( "Objects", propsNode );
 		
 		// fill the grid
 		Game.grid.initTiles( gridSize[ 0 ], gridSize[ 1 ] );
@@ -150,16 +146,16 @@ final shared class Controller
 			int[] tileSize;
 			string name, prefab, ttype;
 			TileType tileType;
-			shared vec3 rotationVec;
-			shared quat rotation;
+			vec3 rotationVec;
+			quat rotation;
 			
 			// get the variables from the node
-			Config.tryGet( "Location", loc, propNode );
-			Config.tryGet( "Prefab", prefab, propNode );
-			Config.tryGet( "TileSize", tileSize, propNode );
-			if( Config.tryGet( "TileType", ttype, propNode ) )
+			propNode.tryFind( "Location", loc );
+			propNode.tryFind( "Prefab", prefab );
+			propNode.tryFind( "TileSize", tileSize );
+			if( propNode.tryFind( "TileType", ttype ) )
 				tileType = to!TileType( ttype );
-			if( Config.tryGet( "Rotation", rotationVec, propNode ) )
+			if( propNode.tryFind( "Rotation", rotationVec ) )
 				rotation = quat.euler_rotation( radians( rotationVec.y ), radians( rotationVec.z ), radians( rotationVec.x ) );
 			
 			// fix up single-tile props for the double for-loop
@@ -185,8 +181,15 @@ final shared class Controller
 					prop.name = prefab ~ " ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )";
 					
 					// place the prop
-					prop.transform.position.x = x * TILE_SIZE + ( tileSize[ 0 ] / 2 * TILE_SIZE );
-					prop.transform.position.z = y * TILE_SIZE + ( tileSize[ 1 ] / 2 * TILE_SIZE );
+					if( tileSize[ 0 ] % 2 == 0 )
+						prop.transform.position.x = x * TILE_SIZE + ( tileSize[ 0 ] / 2 * TILE_SIZE / 2 );
+					else
+						prop.transform.position.x = x * TILE_SIZE + ( tileSize[ 0 ] / 2 * TILE_SIZE );
+					
+					if( tileSize[ 1 ] % 2 == 0 )
+						prop.transform.position.z = y * TILE_SIZE + ( tileSize[ 1 ] / 2 * TILE_SIZE / 2 );
+					else
+						prop.transform.position.z = y * TILE_SIZE + ( tileSize[ 1 ] / 2 * TILE_SIZE );
 
 					if( rotation )
 						prop.transform.rotation = rotation;

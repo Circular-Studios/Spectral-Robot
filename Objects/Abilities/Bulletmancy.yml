@@ -1,9 +1,15 @@
 ---
-name: "Attack"
+name: "Melee Attack"
 targetType: EnemyUnit
 targetArea: Single
 range: 1
-damage: 1
+damage: 6
+---
+name: "Ranged Attack"
+targetType: EnemyUnit
+targetArea: Single
+range: 5
+damage: 5
 ---
 name: "Healing Barage"
 targetType: AlliedUnit
@@ -13,34 +19,10 @@ damage: 6
 damageType: Healing
 cooldown: 2
 ---
-name: "Flank"
-targetType: EnemyUnit
-targetArea: Single
-range: 8
-damage: 1
-cooldown: 2
----
-name: "Cannon Shot"
+"Cannon Shot"
 targetType: EnemyUnit
 targetArea: Radial
 range: 5
 damage: 9
 cooldown: 5
----
-name: "Rapid Fire"
-targetType: EnemyUnit
-targetArea: Single
-range: 3
-damage: 3
-damageType: DOT
-cooldown: 4
-duration: 3
----
-name: "Suppress"
-targetType: EnemyUnit
-targetArea: Single
-range: 5
-damage: 5
-damageType: Debuff
-statEffected: Accuracy
-cooldown: 5
+

@@ -1,24 +1,24 @@
 ---
 Name: TechWolf
-Script:
-    ClassName: unit.Unit
-Mesh: werewolf
+Behaviors:
+    - Class: unit.Unit
+Mesh: wolf_idle
 Material: TechWolf
 ---
 Name: PyroWolf
-Script:
-    ClassName: unit.Unit
-Mesh: werewolf
+Behaviors:
+    - Class: unit.Unit
+Mesh: wolf_idle
 Material: PyroWolf
 ---
 Name: PyroRobot
-Script:
-    ClassName: unit.Unit
-Mesh: robot
+Behaviors:
+    - Class: unit.Unit
+Mesh: robot_idle
 Material: PyroRobot
 ---
 Name: TechRobot
-Script:
-    ClassName: unit.Unit
-Mesh: robot
+Behaviors:
+    - Class: unit.Unit
+Mesh: robot_idle
 Material: TechRobot

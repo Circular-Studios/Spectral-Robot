@@ -1,9 +1,8 @@
 ﻿module camera;
 import game, grid;
-import core, graphics, utility;
+import core, components.behavior, graphics, utility;
 import std.algorithm;
 import gl3n.linalg, gl3n.math, gl3n.interpolate;
-
 
 class AdvancedCameraFields
 {
@@ -13,11 +12,14 @@ class AdvancedCameraFields
 	float EdgeDistance;
 	float MinHeight;
 	float MaxHeight;
+	bool MouseEdgeScroll;
 }
 
 /// Camera movement around the scene
-shared class AdvancedCamera : GameObjectInit!AdvancedCameraFields
+class AdvancedCamera : Behavior!AdvancedCameraFields
 {
+public:
+	alias owner this;
 	float moveSpeed;
 	Duration rotateTime;
 	float zoomSpeed;
@@ -29,24 +31,42 @@ shared class AdvancedCamera : GameObjectInit!AdvancedCameraFields
 	float minZ;
 	float maxZ;
 	bool clamped = false;
+	bool mouseEdgeScroll;
 
-	override void onInitialize( AdvancedCameraFields a )
+	override void onInitialize()
 	{
-		moveSpeed = a.MoveSpeed;
-		rotateTime = a.RotateTime.msecs;
-		zoomSpeed = a.ZoomSpeed;
-		edgeDistance = a.EdgeDistance;
-		minHeight = a.MinHeight;
-		maxHeight = a.MaxHeight;
+		moveSpeed = initArgs.MoveSpeed;
+		rotateTime = initArgs.RotateTime.msecs;
+		zoomSpeed = initArgs.ZoomSpeed;
+		edgeDistance = initArgs.EdgeDistance;
+		minHeight = initArgs.MinHeight;
+		maxHeight = initArgs.MaxHeight;
+		mouseEdgeScroll = initArgs.MouseEdgeScroll;
 
-		transform.position.y = (( maxHeight - minHeight ) / 2) + minHeight;
+		transform.position.y = ( ( maxHeight - minHeight ) / 2 ) + minHeight;
 		startPos = transform.position;
 		startRot = transform.rotation;
+
+		auto obj = this;
+		Input.addAxisEvent( Axes.MouseScroll, ( ac, newVal )
+		{
+			static float prev = 0.0f;
+			if( newVal > prev )
+			{
+				obj.transform.position += obj.transform.forward * min( ( zoomSpeed * Time.deltaTime ), ( minHeight - obj.transform.position.y ) / obj.transform.forward.y );
+			}
+			else if( newVal < prev )
+			{
+				obj.transform.position += -obj.transform.forward * min( ( zoomSpeed * Time.deltaTime ), ( maxHeight - obj.transform.position.y ) / -obj.transform.forward.y );
+			}
+
+			prev = newVal;
+		} );
 	}
 	
 	override void onUpdate()
 	{	
-		if( Input.getState("LookLeft") && !turning )
+		if( Input.getState( "LookLeft" ) && !turning )
 		{
 			turning = true;
 			auto startTime = Time.totalTime;
@@ -65,16 +85,16 @@ shared class AdvancedCamera : GameObjectInit!AdvancedCameraFields
 				auto curFaceXZ = slerp( prevFace.xz, nextFace.xz, 
 				       	min( ( Time.totalTime - startTime ) / rotateTime.toSeconds , 1.0f ) );
 
-				auto curFace = shared vec3( curFaceXZ.x, prevFace.y, curFaceXZ.y );
-				transform.position = lookPos - curFace;
+				auto curFace = vec3( curFaceXZ.x, prevFace.y, curFaceXZ.y );
+				owner.transform.position = lookPos - curFace;
 
-				transform.rotation = slerp( prevRot, nextRot, min( ( Time.totalTime - startTime ) / rotateTime.toSeconds , 1.0f ) );
+				owner.transform.rotation = slerp( prevRot, nextRot, min( ( Time.totalTime - startTime ) / rotateTime.toSeconds , 1.0f ) );
 				if( Time.totalTime - startTime >= rotateTime.toSeconds ) turning = false;
 			} );
 		}
-		if( Input.getState("LookRight") && !turning )
+		if( Input.getState( "LookRight" ) && !turning )
 		{
-						turning = true;
+			turning = true;
 			auto startTime = Time.totalTime;
 
 			auto prevFace = transform.forward;
@@ -90,60 +110,55 @@ shared class AdvancedCamera : GameObjectInit!AdvancedCameraFields
 				auto curFaceXZ = slerp( prevFace.xz, nextFace.xz, 
 				       	min( ( Time.totalTime - startTime ) / rotateTime.toSeconds , 1.0f ) );
 
-				auto curFace = shared vec3( curFaceXZ.x, prevFace.y, curFaceXZ.y );
-				transform.position = lookPos - curFace;
+				auto curFace = vec3( curFaceXZ.x, prevFace.y, curFaceXZ.y );
+				owner.transform.position = lookPos - curFace;
 
-				transform.rotation = slerp( prevRot, nextRot, min( ( Time.totalTime - startTime ) / rotateTime.toSeconds , 1.0f ) );
+				owner.transform.rotation = slerp( prevRot, nextRot, min( ( Time.totalTime - startTime ) / rotateTime.toSeconds , 1.0f ) );
 				if( Time.totalTime - startTime >= rotateTime.toSeconds ) turning = false;
 			} );
 		}
 
-		shared vec2 mouse = Input.mousePos;
-		// Left of the screen
-		if( mouse.x < edgeDistance )
+		// Mouse & Keyboard movement
+		vec2 mouse = Input.mousePos;
+		// Left
+		if( ( mouseEdgeScroll && mouse.x < edgeDistance ) || Input.getState( "Left" ) )
 		{
-			auto moveVec = -this.transform.right;
+			auto moveVec = -transform.right;
 			moveVec.y = 0;
 			moveVec.normalize();
 			moveVec *= moveSpeed * Time.deltaTime;
-			this.transform.position += moveVec;
-		} // Bottom of the screen
-		if( mouse.y < edgeDistance )
+			transform.position += moveVec;
+		} 
+		// Bottom
+		if( ( mouseEdgeScroll && mouse.y < edgeDistance ) || Input.getState( "Down" ) )
 		{
-			auto moveVec = -this.transform.forward;
+			auto moveVec = -transform.forward;
 			moveVec.y = 0;
 			moveVec.normalize();
 			moveVec *= moveSpeed * Time.deltaTime;
-			this.transform.position += moveVec;
-		} // Right
-		if( mouse.x > Graphics.width - edgeDistance )
+			transform.position += moveVec;
+		} 
+		// Right
+		if( ( mouseEdgeScroll && mouse.x > Graphics.width - edgeDistance ) || Input.getState( "Right" ) )
 		{
-			auto moveVec = this.transform.right;
+			auto moveVec = transform.right;
 			moveVec.y = 0;
 			moveVec.normalize();
 			moveVec *= moveSpeed * Time.deltaTime;
-			this.transform.position += moveVec;
-		} // Top
-		if( mouse.y > Graphics.height - edgeDistance )
+			transform.position += moveVec;
+		} 
+		// Top
+		if( ( mouseEdgeScroll && mouse.y > Graphics.height - edgeDistance ) || Input.getState( "Up" ) )
 		{
-			auto moveVec = this.transform.forward;
+			auto moveVec = transform.forward;
 			moveVec.y = 0;
 			moveVec.normalize();
 			moveVec *= moveSpeed * Time.deltaTime;
-			this.transform.position += moveVec;
+			transform.position += moveVec;
 		}
 
 		if( clamped )
 			clampLookPos();
-
-		if( Input.getState( "ZoomIn" ) )
-		{
-			transform.position += this.transform.forward * min( ( zoomSpeed * Time.deltaTime ), ( minHeight - transform.position.y ) / this.transform.forward.y );
-		}
-		else if( Input.getState( "ZoomOut" ) )
-		{
-			transform.position += -this.transform.forward * min( ( zoomSpeed * Time.deltaTime ), ( maxHeight - transform.position.y ) / -this.transform.forward.y );
-		}
 
 		if( Input.getState( "ResetCamera" ) )
 		{
@@ -161,38 +176,37 @@ shared class AdvancedCamera : GameObjectInit!AdvancedCameraFields
 		clamped = true;
 	}
 
-	shared(vec3) lookatPos()
+	vec3 lookatPos()
 	{
-		return transform.position + ( transform.forward * ( -transform.position.y  / this.transform.forward.y ) );
+		return transform.position + ( transform.forward * ( -transform.position.y  / transform.forward.y ) );
 	}
 
 	void clampLookPos()
 	{
 		if( lookatPos.x < minX )
 		{
-			logDebug("Clamping at minX");
+			logDebug( "Clamping at minX" );
 			transform.position.x += minX - lookatPos.x;
 		}
 		if( lookatPos.x > maxX )
 		{
-			logDebug("Clamping at maxX");
+			logDebug( "Clamping at maxX" );
 			transform.position.x -= lookatPos.x - maxX;
 		}
 		if( lookatPos.z < minZ )
 		{
-			logDebug("Clamping at minZ");
+			logDebug( "Clamping at minZ" );
 			transform.position.z += minZ - lookatPos.z;
 		}
 		if( lookatPos.z > maxZ )
 		{
-			logDebug("Clamping at maxZ");
+			logDebug( "Clamping at maxZ" );
 			transform.position.z -= lookatPos.z - maxZ;
 		}
 	}
 
 private:
 	bool turning;
-
 	vec3 startPos;
 	quat startRot;
 }

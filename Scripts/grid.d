@@ -2,12 +2,19 @@ module grid;
 import game, controller, tile, unit, turn, action;
 import core, utility, components;
 import gl3n.linalg;
-import std.conv, std.algorithm;
+import std.conv, std.algorithm, std.range, std.array;
 
-const int TILE_SIZE = 20;
+const int TILE_SIZE = 24;
+
+// taken from http://forum.dlang.org/post/vqfvihyezbmwcjkmpzin@forum.dlang.org
+template Unroll( alias CODE, alias N, alias SEP="" )
+{
+	enum t = replace( CODE, "%", "%1$d" );
+	enum Unroll = iota( N ).map!( i => format( t, i ) ).join( SEP );
+}
 
 /// A grid that contains tiles
-shared class Grid : GameObject
+class Grid : Behavior!()
 {
 private:
 	Tile[][] _tiles;
@@ -20,6 +27,7 @@ private:
 	vec2i sel;
 	
 public:
+	alias owner this;
 	mixin( Property!( _tiles, AccessModifier.Public ) );
 	mixin( Property!( _isUnitSelected, AccessModifier.Public ) );
 	mixin( Property!( _isAbilitySelected, AccessModifier.Public ) );
@@ -32,111 +40,134 @@ public:
 	// Setup key events
 	this()
 	{
+		// Deselect selected unit
+		Input.addKeyDownEvent( "Back", ( uint kc ) 
+		{ 
+			if( isUnitSelected && Game.turn.currentTeam == Game.turn.activeTeam )
+			{
+				Game.turn.sendAction( Action( 2, selectedUnit.ID, 0, false ) );
+				selectedUnit.deselect();
+			}
+		} );
+
 		// Left mouse click
 		Input.addKeyDownEvent( Keyboard.MouseLeft, ( kc )
 		{
 			if( auto obj = Input.mouseObject )
 			{
 				logInfo( "Clicked on ", obj.name );
-				
-				// If unit is selected and a tile is clicked, move if possible
-				if( auto tile = cast(shared Tile)obj )
+
+				// only allow interaction on your turn
+				if( Game.turn.currentTeam == Game.turn.activeTeam )
 				{
-					if( isUnitSelected && selectedUnit.checkMove( tile.toID() ) )
+					// If unit is selected and a tile is clicked, move if possible
+					if( auto tile = obj.behaviors.get!Tile )
 					{
-						// move the unit to the new location
-						Game.turn.sendAction( Action( 0, selectedUnit.ID, tile.toID(), true ) );
-						selectedUnit.move( tile.toID() );
-					}
-					// select a unit if the tile has an occupying unit
-					else if( !isUnitSelected && tile.occupant !is null )
-					{
-						selectedUnit = tile.occupant;
-						isUnitSelected = true;
-						selectedUnit.previewMove();
-						Game.turn.sendAction( Action( 1, selectedUnit.ID, selectedUnit.position, false ) );
-					}
-					// use the selected ability on the tile
-					else if( isAbilitySelected )
-					{
-						selectedUnit.useAbility( selectedAbility, tile.toID() );
-					}
-				}
-				else
-				{
-					if( auto unit = cast(shared Unit)obj )
-					{
-						// Use the selected ability on the unit
-						if( isAbilitySelected )
+						if( isUnitSelected && selectedUnit.checkMove( tile.toID() ) )
 						{
-							selectedUnit.useAbility( selectedAbility, unit.position );
+							// move the unit to the new location
+							Game.turn.sendAction( Action( 0, selectedUnit.ID, tile.toID(), true ) );
+							selectedUnit.move( tile.toID() );
 						}
-						// Select a unit
-						else
+						// select a unit if the tile has an occupying unit
+						else if( !isUnitSelected && tile.occupant !is null && tile.occupant.remainingActions > 0 && tile.occupant.team == Game.turn.currentTeam )
 						{
-							selectedUnit = unit;
-							isUnitSelected = true;
-							unit.previewMove();
-							Game.turn.sendAction( Action( 1, unit.ID, unit.position, false ) );
+							tile.occupant.previewMove();
+							Game.turn.sendAction( Action( 1, selectedUnit.ID, 0, false ) );
+						}
+						// use the selected ability on the tile
+						else if( isAbilitySelected )
+						{
+							uint originID = selectedUnit.ID;
+							uint abilityID = selectedAbility;
+							if( selectedUnit.useAbility( selectedAbility, tile.toID() ) )
+								Game.turn.sendAction( Action( abilityID, originID, tile.toID(), true ) );
 						}
 					}
-					// Deselect a unit if not a tile
-					else if( isUnitSelected )
+					else
 					{
-						logInfo("Deselected ", selectedUnit.name );
-						selectedUnit.deselect();
+						if( auto unit = obj.behaviors.get!Unit )
+						{
+							// Use the selected ability on the unit if in range
+							if( isAbilitySelected && Game.abilities[ selectedAbility ].checkRange( selectedUnit.position, unit.position ) )
+							{
+								uint originID = selectedUnit.ID;
+								uint abilityID = selectedAbility;
+								if( selectedUnit.useAbility( selectedAbility, unit.position ) )
+									Game.turn.sendAction( Action( abilityID, originID, unit.position, true ) );
+							}
+							// Select a unit
+							else if( unit.remainingActions > 0 && unit.team == Game.turn.currentTeam )
+							{
+								if( selectedUnit )
+								{
+									Game.turn.sendAction( Action( 2, selectedUnit.ID, 0, false ) );
+									selectedUnit.deselect();
+								}
+								Game.turn.sendAction( Action( 1, unit.ID, 0, false ) );
+								unit.previewMove();
+							}
+						}
+						// Deselect a unit if not a tile
+						else if( isUnitSelected )
+						{
+							Game.turn.sendAction( Action( 2, selectedUnit.ID, 0, false ) );
+							selectedUnit.deselect();
+						}
 					}
 				}
 			}
 		} );
 		
 		// ability hotkeys
-		// TODO: for loop or something
-		Input.addKeyDownEvent( Keyboard.Keyboard1, kc => selectAbility( 0 ) );
-		Input.addKeyDownEvent( Keyboard.Keyboard2, kc => selectAbility( 1 ) );
-		Input.addKeyDownEvent( Keyboard.Keyboard3, kc => selectAbility( 2 ) );
-		Input.addKeyDownEvent( Keyboard.Keyboard4, kc => selectAbility( 3 ) );
-		Input.addKeyDownEvent( Keyboard.Keyboard5, kc => selectAbility( 4 ) );
-		Input.addKeyDownEvent( Keyboard.Keyboard6, kc => selectAbility( 5 ) );
-		Input.addKeyDownEvent( Keyboard.Keyboard7, kc => selectAbility( 6 ) );
-		Input.addKeyDownEvent( Keyboard.Keyboard8, kc => selectAbility( 7 ) );
-		Input.addKeyDownEvent( Keyboard.Keyboard9, kc => selectAbility( 8 ) );
+		enum keyboard = "Keyboard.Keyboard";
+		mixin( Unroll!( 
+			"Input.addKeyDownEvent( mixin( keyboard ~ ( % + 1 ).to!string ), ( uint kc )
+			{
+				Game.turn.sendAction( Action( 3, %, 0, false ) );
+				selectAbility( % );
+			} );", 9, "" ));
 	}
 	
 	/// Select an ability from a unit
 	void selectAbility( int ability )
 	{
+		// deselect current ability
+		if( isAbilitySelected )
+			Game.abilities[ selectedAbility ].unpreview();
+
 		if( isUnitSelected && ability < selectedUnit.abilities.length )
 		{
 			isAbilitySelected = true;
 			selectedAbility = selectedUnit.abilities[ ability ];
+			selectedUnit.previewMove();
 			Game.abilities[ selectedAbility ].preview( selectedUnit.position, selectedUnit.remainingRange );
 
-			logInfo("Selected ability: ", Game.abilities[ selectedAbility ].name, ", ",
+			logInfo( "Selected ability: ", Game.abilities[ selectedAbility ].name, ", ",
 				Game.abilities[ selectedAbility ].currentCooldown, " turn(s) to use." );
 		}
 	}
 	
 	/// Get a tile by ID
-	shared(Tile) getTileByID( uint tileID )
+	Tile getTileByID( uint tileID )
 	{
 		return tiles[ tileID % gridX ][ tileID / gridX ];
 	}
 	
 	/// Find all tiles in a range
-	shared(Tile[]) getInRange( uint originID, uint range, bool stopOnUnits = false, bool passThroughUnits = true, uint range2 = 0 )
+	Tile[] getInRange( uint originID, uint range, bool stopOnUnits = false, bool passThroughUnits = true, uint range2 = 0 )
 	{
 		// Create temp tuples to store stuff in.
 		import std.typecons;
-		alias Tuple!( shared Tile, "tile", uint, "depth" ) searchState;
+		alias Tuple!( Tile, "tile", uint, "depth" ) searchState;
 		alias Tuple!( int, "x", int, "y" ) point;
 		
 		auto visited = new bool[][]( gridX, gridY ); // Keeps track of what tiles have been added already.
 		searchState[] states; // Queue of states to sort through.
-		shared Tile[] foundTiles; // Tiles inside the range.
+		Tile[] foundTiles; // Tiles inside the range.
 		
 		// Start with initial tile.
-		shared Tile startingTile = Game.grid.getTileByID( originID );
+		Tile startingTile = Game.grid.getTileByID( originID );
 		states ~= searchState( startingTile, 0 );
 		
 		while( states.length )
@@ -148,13 +179,13 @@ public:
 				continue;
 			
 			visited[ state.tile.x ][ state.tile.y ] = true;
-			
+
 			// check search depth and if this tile is legal
-			if( ( state.depth >= range && state.depth < range2 + range ) || state.depth < range &&
-			   ( cast()state.tile == cast()startingTile || state.tile.type == TileType.Open || ( passThroughUnits && state.tile.occupant !is null ) ) )
+			if( ( state.depth <= range || ( state.depth > range && state.depth <= range2 + range ) ) &&
+			   ( state.tile.type == TileType.Open || state.tile.toID == startingTile.toID || ( passThroughUnits && state.tile.occupant !is null ) ) )
 			{
 				if( range2 == 0 ) foundTiles ~= state.tile;
-				else if( state.depth >= range && state.depth < range2 + range ) foundTiles ~= state.tile;
+				else if( state.depth > range && state.depth <= range2 + range ) foundTiles ~= state.tile;
 				
 				// find more tiles to search
 				foreach( coord; [ point( state.tile.x, state.tile.y - 1 ), point( state.tile.x, state.tile.y + 1 ), point( state.tile.x - 1, state.tile.y ), point( state.tile.x + 1, state.tile.y ) ] )
@@ -165,33 +196,14 @@ public:
 		
 		return foundTiles;
 	}
-
-	shared(Tile[])[] getMoveAndAttack( uint originID, uint moveRange, uint attackRange )
-	{
-		shared(Tile[]) move = getInRange( originID, moveRange, true, false );
-		shared(Tile[]) attack = getInRange( originID, moveRange + attackRange, true, false );
-
-		logInfo( move.length );
-		logInfo( attack.length );
-
-		attack = attack[ move.length..$ ];
-
-		logInfo( move.length );
-		logInfo( attack.length );
-
-		shared(Tile[])[] moveAttack = new shared(Tile[])[]( 2 );
-		moveAttack[ 0 ] = move;
-		moveAttack[ 1 ] = attack;
-
-		return moveAttack;
-	}
 	
 	/// Update the fog of war
 	void updateFogOfWar()
 	{
 		if( _fogOfWar )
 		{
-			shared(Tile[]) visibleTiles;
+			
+			Tile[] visibleTiles;
 			
 			// get the tiles visible to the current team
 			foreach( unit; Game.units )
@@ -201,7 +213,7 @@ public:
 				getTileByID( unit.position ).stateFlags.drawMesh = false;
 				
 				if( unit.team == Game.turn.currentTeam )
-					visibleTiles ~= getInRange(unit.position, unit.speed );
+					visibleTiles ~= getInRange( unit.position, unit.speed );
 			}
 			
 			// show all units on visible tiles
@@ -222,7 +234,7 @@ public:
 		logInfo("Grid size: ( ", n, ", ", m, " )" );
 		
 		//initialize tiles
-		_tiles = new shared Tile[][]( n, m );
+		_tiles = new Tile[][]( n, m );
 		gridX = n;
 		gridY = m;
 		
@@ -232,7 +244,8 @@ public:
 			int x = i % n;
 			int y = i / n;
 			
-			auto tile = cast( shared Tile )Prefabs[ "Tile" ].createInstance();
+			auto t = Prefabs[ "SquareFilled" ].createInstance();
+			auto tile = t.behaviors.get!Tile;
 			
 			tile.x = x;
 			tile.y = y;
@@ -243,8 +256,8 @@ public:
 			
 			// make the name unique
 			tile.name = "Tile ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )";
-			
-			this.addChild( tile );
+
+			this.addChild( t );
 			tiles[ x ][ y ] = tile;
 		}
 		
