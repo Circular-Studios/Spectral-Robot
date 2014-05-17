@@ -1,15 +1,15 @@
 ---
 Name: GridSquare
-Behaviors:
-    - Class: tile.Tile
+Tile:
+    
 Transform:
     Rotation: !Vector3 0 0 0
 Mesh: grid_square
 Material: BlackTile
 ---
 Name: SquareFilled
-Behaviors:
-    - Class: tile.Tile
+Tile:
+    
 Transform:
     Rotation: !Vector3 -90 0 0
 Mesh: unitsquare

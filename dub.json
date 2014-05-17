@@ -16,8 +16,8 @@
 		"Colden Cullen"
 	],
 	"dependencies": {
-		"dash": "==0.8.0",
-		"speed:common": "==0.1.2"
+		"dash": "==0.9.0",
+		"speed:common": "==0.1.5"
 	},
 	"sourcePaths": [ 
 		"Config/",
@@ -31,6 +31,7 @@
 	"targetType": "executable",
 	"targetPath": "Binaries",
 	"workingDirectory": "Binaries",
+	"stringImportPaths": [ "./" ],
 	"lflags-linux" : [ "./libawesomium-1.6.5.so" ],
 
 	"libs-windows": [
@@ -38,7 +39,13 @@
 		"gdi32", "ole32", "kernel32",
 		"user32", "comctl32", "comdlg32"
 	],
-
+	"buildTypes": {
+		"release": {
+			"versions": [ "EmbedContent" ],
+			"buildOptions": [ "releaseMode", "optimize", "inline" ],
+			"lflags-windows": [ "/EXETYPE:NT", "/SUBSYSTEM:WINDOWS" ]
+		}
+	},
 	"subPackages": [
 		{
 			"name": "server",
@@ -50,7 +57,7 @@
 			"workingDirectory": "Binaries",
 			"versions": [ "Server", "VibeCustomMain" ],
 			"dependencies": {
-				"speed:common": "==0.1.2"	
+				"speed:common": "==0.1.5"	
 			}
 		}
 	]

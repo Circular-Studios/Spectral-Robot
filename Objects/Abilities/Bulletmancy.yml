@@ -19,7 +19,7 @@ damage: 6
 damageType: Healing
 cooldown: 2
 ---
-"Cannon Shot"
+name: "Cannon Shot"
 targetType: EnemyUnit
 targetArea: Radial
 range: 5

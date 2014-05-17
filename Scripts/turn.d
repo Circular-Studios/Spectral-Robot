@@ -30,7 +30,7 @@ public:
 		}
 
 		// hotkey to end turn
-		Input.addKeyDownEvent( "EndTurn", ( kc )
+		Input.addButtonDownEvent( "EndTurn", ( kc )
 		{
 			if( currentTeam == activeTeam )
 			{

@@ -1,24 +1,24 @@
 ---
 Name: TechWolf
-Behaviors:
-    - Class: unit.Unit
+Unit:
+    
 Mesh: wolf_idle
 Material: TechWolf
 ---
 Name: PyroWolf
-Behaviors:
-    - Class: unit.Unit
+Unit:
+    
 Mesh: wolf_idle
 Material: PyroWolf
 ---
 Name: PyroRobot
-Behaviors:
-    - Class: unit.Unit
+Unit:
+    
 Mesh: robot_idle
 Material: PyroRobot
 ---
 Name: TechRobot
-Behaviors:
-    - Class: unit.Unit
+Unit:
+    
 Mesh: robot_idle
 Material: TechRobot

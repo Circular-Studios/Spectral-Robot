@@ -12,6 +12,8 @@ LookRight:
     Keyboard: E
 QuitToDesktop:
     Keyboard: Delete
+ConnectToServer:
+    Keyboard: R
 EndTurn:
     Keyboard: T
 Enter:

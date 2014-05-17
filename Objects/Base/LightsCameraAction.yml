@@ -1,15 +1,13 @@
 ---
 Name: Camera
-Behaviors:
-    - Class: camera.AdvancedCamera
-      Fields:
-          MoveSpeed: 150
-          RotateTime: 400
-          ZoomSpeed: 800
-          EdgeDistance: 50
-          MinHeight: 50
-          MaxHeight: 300
-          MouseEdgeScroll: No
+AdvancedCamera:
+    MoveSpeed: 150
+    RotateTime: 400
+    ZoomSpeed: 800
+    EdgeDistance: 50
+    MinHeight: 50
+    MaxHeight: 300
+    MouseEdgeScroll: No
 Transform:
     Position: !Vector3 300 0 560
     Rotation: !Vector3 -45 0 0
@@ -19,10 +17,10 @@ Camera:
     Far: 1000
 ---
 Name: DirLight
-Light: !Light-Directional
+DirectionalLight:
     Color: !Vector3 1.4 1.4 1.4
     Direction: !Vector3 -1 -1 0
 ---
 Name: AmbLight
-Light: !Light-Ambient
+AmbientLight:
     Color: !Vector3 .4 .4 .4

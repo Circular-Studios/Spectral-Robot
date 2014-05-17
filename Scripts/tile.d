@@ -22,7 +22,8 @@ enum TileSelection
 	Black,
 }
 
-class Tile : Behavior!()
+@yamlComponent()
+class Tile : Component
 {
 private:
 	TileType _type;
@@ -38,23 +39,23 @@ public:
 		final switch( s )
 		{
 			case TileSelection.None:
-				this.material = Assets.get!Material( "BlackTile" );
+				this.addComponent( Assets.get!Material( "BlackTile" ) );
 				stateFlags.drawMesh = false;
 				break;
 			case TileSelection.Blue:
-				this.material = Assets.get!Material( "BlueTile" );
+				this.addComponent( Assets.get!Material( "BlueTile" ) );
 				stateFlags.drawMesh = true;
 				break;
 			case TileSelection.Red:
-				this.material = Assets.get!Material( "RedTile" );
+				this.addComponent( Assets.get!Material( "RedTile" ) );
 				stateFlags.drawMesh = true;
 				break;
 			case TileSelection.Green:
-				this.material = Assets.get!Material( "GreenTile" );
+				this.addComponent( Assets.get!Material( "GreenTile" ) );
 				stateFlags.drawMesh = true;
 				break;
 			case TileSelection.Black:
-				this.material = Assets.get!Material( "BlackTile" );
+				this.addComponent( Assets.get!Material( "BlackTile" ) );
 				stateFlags.drawMesh = true;
 		}
 		_selection = s;

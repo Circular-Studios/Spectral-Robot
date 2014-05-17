@@ -16,7 +16,7 @@ targetType: EnemyUnit
 targetArea: Single
 range: 1
 cooldown: 5
-damage - 4
+damage: 4
 ---
 name: "From The Grave"
 targetType: Space

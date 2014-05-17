@@ -6,7 +6,8 @@ import std.algorithm;
 
 enum ACTIONS_RESET = 3;
 
-class Unit : Behavior!()
+@yamlComponent()
+class Unit : Component
 {
 private:
 	static uint nextID = 0;

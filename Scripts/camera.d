@@ -1,54 +1,43 @@
 ﻿module camera;
 import game, grid;
-import core, components.behavior, graphics, utility;
+import core, components, graphics, utility;
 import std.algorithm;
 import gl3n.linalg, gl3n.math, gl3n.interpolate;
 
-class AdvancedCameraFields
-{
-	float MoveSpeed;
-	uint RotateTime;
-	float ZoomSpeed;
-	float EdgeDistance;
-	float MinHeight;
-	float MaxHeight;
-	bool MouseEdgeScroll;
-}
-
 /// Camera movement around the scene
-class AdvancedCamera : Behavior!AdvancedCameraFields
+@yamlComponent()
+class AdvancedCamera : Component
 {
 public:
 	alias owner this;
+	@field( "MoveSpeed" )
 	float moveSpeed;
+	@field( "RotateTime" )
 	Duration rotateTime;
+	@field( "ZoomSpeed" )
 	float zoomSpeed;
+	@field( "EdgeDistance" )
 	float edgeDistance;
+	@field( "MinHeight" )
 	float minHeight;
+	@field( "MaxHeight" )
 	float maxHeight;
 	float minX;
 	float maxX;
 	float minZ;
 	float maxZ;
 	bool clamped = false;
+	@field( "MouseEdgeScroll" )
 	bool mouseEdgeScroll;
 
-	override void onInitialize()
+	void initialize()
 	{
-		moveSpeed = initArgs.MoveSpeed;
-		rotateTime = initArgs.RotateTime.msecs;
-		zoomSpeed = initArgs.ZoomSpeed;
-		edgeDistance = initArgs.EdgeDistance;
-		minHeight = initArgs.MinHeight;
-		maxHeight = initArgs.MaxHeight;
-		mouseEdgeScroll = initArgs.MouseEdgeScroll;
-
 		transform.position.y = ( ( maxHeight - minHeight ) / 2 ) + minHeight;
 		startPos = transform.position;
 		startRot = transform.rotation;
 
 		auto obj = this;
-		Input.addAxisEvent( Axes.MouseScroll, ( ac, newVal )
+		Mouse.addAxisEvent( Mouse.Axes.ScrollWheel, ( ac, newVal )
 		{
 			static float prev = 0.0f;
 			if( newVal > prev )
@@ -64,7 +53,7 @@ public:
 		} );
 	}
 	
-	override void onUpdate()
+	void onUpdate()
 	{	
 		if( Input.getState( "LookLeft" ) && !turning )
 		{

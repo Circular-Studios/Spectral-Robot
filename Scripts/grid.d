@@ -14,7 +14,8 @@ template Unroll( alias CODE, alias N, alias SEP="" )
 }
 
 /// A grid that contains tiles
-class Grid : Behavior!()
+@yamlComponent()
+class Grid : Component
 {
 private:
 	Tile[][] _tiles;
@@ -41,7 +42,7 @@ public:
 	this()
 	{
 		// Deselect selected unit
-		Input.addKeyDownEvent( "Back", ( uint kc ) 
+		Input.addButtonDownEvent( "Back", ( uint kc ) 
 		{ 
 			if( isUnitSelected && Game.turn.currentTeam == Game.turn.activeTeam )
 			{
@@ -51,7 +52,7 @@ public:
 		} );
 
 		// Left mouse click
-		Input.addKeyDownEvent( Keyboard.MouseLeft, ( kc )
+		Mouse.addButtonDownEvent( Mouse.Buttons.Left, ( kc )
 		{
 			if( auto obj = Input.mouseObject )
 			{
@@ -61,7 +62,7 @@ public:
 				if( Game.turn.currentTeam == Game.turn.activeTeam )
 				{
 					// If unit is selected and a tile is clicked, move if possible
-					if( auto tile = obj.behaviors.get!Tile )
+					if( auto tile = obj.getComponent!Tile )
 					{
 						if( isUnitSelected && selectedUnit.checkMove( tile.toID() ) )
 						{
@@ -86,7 +87,7 @@ public:
 					}
 					else
 					{
-						if( auto unit = obj.behaviors.get!Unit )
+						if( auto unit = obj.getComponent!Unit )
 						{
 							// Use the selected ability on the unit if in range
 							if( isAbilitySelected && Game.abilities[ selectedAbility ].checkRange( selectedUnit.position, unit.position ) )
@@ -120,9 +121,9 @@ public:
 		} );
 		
 		// ability hotkeys
-		enum keyboard = "Keyboard.Keyboard";
+		enum keyboard = "Keyboard.Buttons.Keyboard";
 		mixin( Unroll!( 
-			"Input.addKeyDownEvent( mixin( keyboard ~ ( % + 1 ).to!string ), ( uint kc )
+			"Keyboard.addButtonDownEvent( mixin( keyboard ~ ( % + 1 ).to!string ), ( kc )
 			{
 				Game.turn.sendAction( Action( 3, %, 0, false ) );
 				selectAbility( % );
@@ -245,7 +246,7 @@ public:
 			int y = i / n;
 			
 			auto t = Prefabs[ "SquareFilled" ].createInstance();
-			auto tile = t.behaviors.get!Tile;
+			auto tile = t.getComponent!Tile;
 			
 			tile.x = x;
 			tile.y = y;

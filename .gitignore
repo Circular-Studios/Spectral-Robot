@@ -9,6 +9,8 @@
 *.user
 *.sln.docstates
 dub.selections.json
+Content.yml
+game.zip
 
 # Build results
 [Dd]ebug/

@@ -1,7 +1,14 @@
 module game;
-import controller, grid, turn, action, ability, unit, camera;
+import controller, grid, turn, action, ability, unit, camera, tile;
 import core, graphics, components, utility;
 import speed;
+
+// magical sprinkles
+mixin( registerComponents!q{unit} );
+mixin( registerComponents!q{grid} );
+mixin( registerComponents!q{tile} );
+mixin( registerComponents!q{camera} );
+mixin ContentImport;
 
 // An easier way to access the game instance
 @property RobotGhosts Game()
@@ -33,25 +40,25 @@ public:
 		logInfo( "Initializing ", title, "..." );
 		
 		// setup a couple helper keys
-		Input.addKeyDownEvent( "QuitToDesktop", ( uint kc ) { currentState = EngineState.Quit; } );
-		Input.addKeyDownEvent( "ResetGame", ( uint kc ) { currentState = EngineState.Reset; } );
+		Input.addButtonDownEvent( "QuitToDesktop", ( uint kc ) { currentState = EngineState.Quit; } );
+		Input.addButtonDownEvent( "ResetGame", ( uint kc ) { currentState = EngineState.Reset; } );
 		
 		// initalize stuff
 		level = new Scene();
 		this.activeScene = level;
-		auto g = GameObject.createWithBehavior!Grid;
-		grid = g[ 1 ];
-		Game.level.addChild( g[ 0 ] );
+		auto g = new GameObject( new Grid );
+		grid = g.getComponent!Grid;
+		Game.level.addChild( g );
 		turn = new Turn();
 		gc = new Controller();
 		
 		// create a camera
-		auto cam = level[ "Camera" ].behaviors.get!AdvancedCamera;
+		auto cam = level[ "Camera" ].getComponent!AdvancedCamera;
 		cam.autoClamp();
 		level.camera = cam.camera;
 		
 		// bind 'r' to server connect
-		Input.addKeyDownEvent( Keyboard.R, kc => connect() );
+		Input.addButtonDownEvent( "ConnectToServer", kc => connect() );
 		
 		// create the ui
 		uint w, h;

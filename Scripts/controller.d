@@ -26,7 +26,7 @@ final class Controller
 		uint[] abilityIDs;
 		
 		// load the yaml
-		auto yaml = Loader( findInDirectory ( "Abilities", abilitiesFile ) ~ ".yml" );
+		auto yaml = Loader( findInDirectory ( "Abilities", abilitiesFile ) );
 		
 		foreach( Node abilityNode; yaml )
 		{
@@ -53,7 +53,7 @@ final class Controller
 			vec3 rotationVec;
 			quat rotation;
 
-			foreach( Node unitCheck; loadYamlDocuments( buildNormalizedPath( FilePath.Resources.Objects, "Units" ) ) )
+			foreach( Node unitCheck; loadYamlDocuments( buildNormalizedPath( Resources.Objects, "Units" ) ) )
 			{
 				// check if we want to load this unit
 				if( unitNode[ "Name" ].as!string == unitCheck[ "Name" ].as!string )
@@ -66,7 +66,7 @@ final class Controller
 
 					// instantiate the prefab of a unit
 					auto u = Prefabs[ unitCheck[ "Prefab" ].as!string ].createInstance();
-					auto unit = u.behaviors.get!Unit;
+					auto unit = u.getComponent!Unit;
 
 					// get the variables from the node
 					unitCheck.tryFind( "HP", hp );
@@ -100,11 +100,11 @@ final class Controller
 	/// Return the file path for a level to load
 	string findInDirectory( string directory, string fileName )
 	{
-		foreach( file; FilePath.scanDirectory( buildNormalizedPath( FilePath.Resources.Objects, directory ) ) )
+		foreach( file; scanDirectory( buildNormalizedPath( Resources.Objects, directory ) ) )
 		{
 			if( file.baseFileName() == fileName )
 			{
-				return file.directory() ~ "/" ~ file.baseFileName();
+				return file.fullPath;
 			}
 			
 			//TODO: Handle yaml not existing
