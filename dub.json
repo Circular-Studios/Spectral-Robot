@@ -2,7 +2,7 @@
 	"name": "robot-ghosts",
 	"description": "An asynchronous multiplayer turn-based strategy game.",
 	"copyright": "Copyright © 2014, Circular Studios",
-	"authors": [ 
+	"authors": [
 		"Daniel Jost",
 		"Jayson Fitch",
 		"Shivam Rawal",
@@ -19,13 +19,13 @@
 		"dash": "==0.9.0",
 		"speed:common": "==0.1.5"
 	},
-	"sourcePaths": [ 
+	"sourcePaths": [
 		"Config/",
 		"Materials/",
 		"Objects/",
 		"Prefabs/",
 		"Scripts/",
-		"UI" 
+		"UI"
 	],
 	"importPaths": [ "Scripts/" ],
 	"targetType": "executable",
@@ -42,8 +42,7 @@
 	"buildTypes": {
 		"release": {
 			"versions": [ "EmbedContent" ],
-			"buildOptions": [ "releaseMode", "optimize", "inline" ],
-			"lflags-windows": [ "/EXETYPE:NT", "/SUBSYSTEM:WINDOWS" ]
+			"buildOptions": [ "releaseMode", "optimize", "inline", "debugInfo" ]
 		}
 	},
 	"subPackages": [
@@ -57,7 +56,7 @@
 			"workingDirectory": "Binaries",
 			"versions": [ "Server", "VibeCustomMain" ],
 			"dependencies": {
-				"speed:common": "==0.1.5"	
+				"speed:common": "==0.1.5"
 			}
 		}
 	]

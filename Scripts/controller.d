@@ -11,33 +11,33 @@ final class Controller
 	{
 		// first load all the objects
 		Game.level.loadObjects( "Base" );
-		
+
 		// load the game
 		loadLevel( "levelSRTF" ); //TODO: Remove hardcoded value
 
 		logInfo( Game.units.length, " units loaded." );
 	}
-	
+
 	/// Load and create abilities from yaml
-	/// 
+	///
 	/// Returns: a list of the IDs created
 	uint[] loadAbilities( string abilitiesFile )
 	{
 		uint[] abilityIDs;
-		
+
 		// load the yaml
-		auto yaml = Loader( findInDirectory ( "Abilities", abilitiesFile ) );
-		
+		auto yaml = loadAllDocumentsInYamlFile( Resources.Objects ~ "/Abilities/" ~ abilitiesFile ~ ".yml" );
+
 		foreach( Node abilityNode; yaml )
 		{
 			auto ability = abilityNode.getObject!(Ability)();
 			Game.abilities[ ability.ID ] = ability;
 			abilityIDs ~= ability.ID;
 		}
-		
+
 		return abilityIDs;
 	}
-	
+
 	/// Load and create units from yaml
 	void loadUnits( Node unitsToLoad )
 	{
@@ -74,14 +74,14 @@ final class Controller
 					unitCheck.tryFind( "Attack", at );
 					unitCheck.tryFind( "Defense", df );
 					unitCheck.tryFind( "Abilities", abilities );
-					
+
 					// initialize the unit and add it to the active scene
 					unit.init( toTileID( spawn [ 0 ], spawn[ 1 ] ), team, hp, sp, at, df, loadAbilities( abilities ) );
 					if ( rotation )
 						unit.transform.rotation = rotation;
 					Game.level.addChild( u );
 					Game.units ~= unit;
-					
+
 					// block and occupy the spawn tile
 					Game.grid.tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].occupant = unit;
 					Game.grid.tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].type = TileType.OccupantActive;
@@ -90,35 +90,19 @@ final class Controller
 			}
 		}
 	}
-	
+
 	/// Convert ( x, y ) coordinates to an ID
 	uint toTileID( uint x, uint y )
 	{
 		return x + ( y * Game.grid.gridX );
 	}
-	
-	/// Return the file path for a level to load
-	string findInDirectory( string directory, string fileName )
-	{
-		foreach( file; scanDirectory( buildNormalizedPath( Resources.Objects, directory ) ) )
-		{
-			if( file.baseFileName() == fileName )
-			{
-				return file.fullPath;
-			}
-			
-			//TODO: Handle yaml not existing
-		}
-		
-		return null;
-	}
-	
+
 	/// Load and create a level from yaml
 	void loadLevel( string levelName )
 	{
 		// load the level from yaml
-		Node levelNode = loadYamlFile( findInDirectory( "Levels", levelName ) );
-		
+		Node levelNode = loadYamlFile( Resources.Objects ~ "/Levels/" ~ levelName ~ ".yml" );
+
 		// setup variables
 		int[] gridSize;
 		bool fogOfWar;
@@ -131,13 +115,13 @@ final class Controller
 		levelNode.tryFind( "FogOfWar", fogOfWar );
 		levelNode.tryFind( "Units", unitsNode );
 		levelNode.tryFind( "Objects", propsNode );
-		
+
 		// fill the grid
 		Game.grid.initTiles( gridSize[ 0 ], gridSize[ 1 ] );
-		
+
 		// create the units
 		loadUnits( unitsNode );
-		
+
 		// add props to the scene
 		foreach( Node propNode; propsNode )
 		{
@@ -148,7 +132,7 @@ final class Controller
 			TileType tileType;
 			vec3 rotationVec;
 			quat rotation;
-			
+
 			// get the variables from the node
 			propNode.tryFind( "Location", loc );
 			propNode.tryFind( "Prefab", prefab );
@@ -157,18 +141,18 @@ final class Controller
 				tileType = to!TileType( ttype );
 			if( propNode.tryFind( "Rotation", rotationVec ) )
 				rotation = quat.euler_rotation( radians( rotationVec.y ), radians( rotationVec.z ), radians( rotationVec.x ) );
-			
+
 			// fix up single-tile props for the double for-loop
 			if ( loc.length == 2 )
 			{
 				loc ~= loc[ 0 ];
 				loc ~= loc[ 1 ];
 			}
-			
+
 			// default values for tileSize if not in the yaml
 			if ( !tileSize )
 				tileSize = [ 1, 1 ];
-			
+
 			// create a prop on each tile it occupies
 			for( int x = loc[ 0 ]; x <= loc[ 2 ]; x += tileSize[ 0 ] )
 			{
@@ -176,16 +160,16 @@ final class Controller
 				{
 					// instantiate the prefab of a prop
 					auto prop = Prefabs[ prefab ].createInstance();
-					
+
 					// make the name unique
 					prop.name = prefab ~ " ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )";
-					
+
 					// place the prop
 					if( tileSize[ 0 ] % 2 == 0 )
 						prop.transform.position.x = x * TILE_SIZE + ( tileSize[ 0 ] / 2 * TILE_SIZE / 2 );
 					else
 						prop.transform.position.x = x * TILE_SIZE + ( tileSize[ 0 ] / 2 * TILE_SIZE );
-					
+
 					if( tileSize[ 1 ] % 2 == 0 )
 						prop.transform.position.z = y * TILE_SIZE + ( tileSize[ 1 ] / 2 * TILE_SIZE / 2 );
 					else
@@ -193,10 +177,10 @@ final class Controller
 
 					if( rotation )
 						prop.transform.rotation = rotation;
-					
+
 					// add the prop to the scene
 					Game.level.addChild( prop );
-					
+
 					// change the TileType of occupying tiles
 					for ( int xx = x; xx < x + tileSize[ 0 ]; xx++ )
 						for ( int yy = y; yy < y + tileSize[ 1 ]; yy++ )
@@ -204,7 +188,7 @@ final class Controller
 				}
 			}
 		}
-		
+
 		// do some fog of war
 		Game.grid.fogOfWar = fogOfWar;
 		Game.grid.updateFogOfWar();
