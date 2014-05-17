@@ -42,7 +42,8 @@
 	"buildTypes": {
 		"release": {
 			"versions": [ "EmbedContent" ],
-			"buildOptions": [ "releaseMode", "optimize", "inline", "debugInfo" ]
+			"buildOptions": [ "releaseMode", "optimize", "inline" ],
+			"lflags-windows": [ "/EXETYPE:NT", "/SUBSYSTEM:WINDOWS" ]
 		}
 	},
 	"subPackages": [
