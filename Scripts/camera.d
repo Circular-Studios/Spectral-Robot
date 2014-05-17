@@ -13,6 +13,7 @@ public:
 	@field( "MoveSpeed" )
 	float moveSpeed;
 	@field( "RotateTime" )
+	uint rotateTimeMsecs;
 	Duration rotateTime;
 	@field( "ZoomSpeed" )
 	float zoomSpeed;
@@ -30,8 +31,9 @@ public:
 	@field( "MouseEdgeScroll" )
 	bool mouseEdgeScroll;
 
-	void initialize()
+	override void initialize()
 	{
+		rotateTime = rotateTimeMsecs.msecs;
 		transform.position.y = ( ( maxHeight - minHeight ) / 2 ) + minHeight;
 		startPos = transform.position;
 		startRot = transform.rotation;
@@ -52,9 +54,9 @@ public:
 			prev = newVal;
 		} );
 	}
-	
-	void onUpdate()
-	{	
+
+	override void update()
+	{
 		if( Input.getState( "LookLeft" ) && !turning )
 		{
 			turning = true;
@@ -68,10 +70,10 @@ public:
 			auto prevRot = transform.rotation;
 			auto nextRot = prevRot.rotatey( -90.radians );
 			prevRot = transform.rotation;
-			
-			scheduleTimedTask( rotateTime, 
+
+			scheduleTimedTask( rotateTime,
 			{
-				auto curFaceXZ = slerp( prevFace.xz, nextFace.xz, 
+				auto curFaceXZ = slerp( prevFace.xz, nextFace.xz,
 				       	min( ( Time.totalTime - startTime ) / rotateTime.toSeconds , 1.0f ) );
 
 				auto curFace = vec3( curFaceXZ.x, prevFace.y, curFaceXZ.y );
@@ -88,15 +90,15 @@ public:
 
 			auto prevFace = transform.forward;
 			prevFace *= -transform.position.y / prevFace.y;
-			
+
 			auto lookPos = transform.position + prevFace;
 			auto nextFace = prevFace * quat.identity.rotatey( 90.radians );
 			auto prevRot = transform.rotation;
 			auto nextRot = prevRot.rotatey( 90.radians );
 			prevRot = transform.rotation;
-			scheduleTimedTask( rotateTime, 
+			scheduleTimedTask( rotateTime,
 			{
-				auto curFaceXZ = slerp( prevFace.xz, nextFace.xz, 
+				auto curFaceXZ = slerp( prevFace.xz, nextFace.xz,
 				       	min( ( Time.totalTime - startTime ) / rotateTime.toSeconds , 1.0f ) );
 
 				auto curFace = vec3( curFaceXZ.x, prevFace.y, curFaceXZ.y );
@@ -117,7 +119,7 @@ public:
 			moveVec.normalize();
 			moveVec *= moveSpeed * Time.deltaTime;
 			transform.position += moveVec;
-		} 
+		}
 		// Bottom
 		if( ( mouseEdgeScroll && mouse.y < edgeDistance ) || Input.getState( "Down" ) )
 		{
@@ -126,7 +128,7 @@ public:
 			moveVec.normalize();
 			moveVec *= moveSpeed * Time.deltaTime;
 			transform.position += moveVec;
-		} 
+		}
 		// Right
 		if( ( mouseEdgeScroll && mouse.x > Graphics.width - edgeDistance ) || Input.getState( "Right" ) )
 		{
@@ -135,7 +137,7 @@ public:
 			moveVec.normalize();
 			moveVec *= moveSpeed * Time.deltaTime;
 			transform.position += moveVec;
-		} 
+		}
 		// Top
 		if( ( mouseEdgeScroll && mouse.y > Graphics.height - edgeDistance ) || Input.getState( "Up" ) )
 		{
