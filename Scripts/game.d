@@ -62,9 +62,9 @@ public:
 		
 		// create the ui
 		uint w, h;
-        w = config.find!uint( "Display.Width" );
-        h = config.find!uint( "Display.Height" );
-        ui = new UserInterface(w, h, config.find!string( "UserInterface.FilePath" ) );
+		w = config.find!uint( "Display.Width" );
+		h = config.find!uint( "Display.Height" );
+		ui = new UserInterface( w, h, config.find!string( "UserInterface.FilePath" ) );
 	}
 	
 	/// Connect to the server

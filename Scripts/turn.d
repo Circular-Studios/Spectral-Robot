@@ -45,6 +45,7 @@ public:
 	void doAction( Action action )
 	{
 		logInfo( "Action received ", action );
+
 		// Move a unit
 		if( action.actionID == 0 )
 		{
@@ -55,7 +56,7 @@ public:
 		{
 			Game.units[ action.originID ].previewMove();
 		}
-		// Preview move for a unit
+		// Deselect a unit
 		else if( action.actionID == 2 )
 		{
 			Game.units[ action.originID ].deselect();
