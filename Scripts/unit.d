@@ -183,6 +183,8 @@ public:
 		foreach( tile; selectedTiles )
 		{
 			tile.selection = TileSelection.Blue;
+
+			// animate the tile
 			/*auto startTime = Time.totalTime;
 			auto dur = 100.msecs;
 			scheduleTimedTask( dur,

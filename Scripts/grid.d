@@ -156,6 +156,13 @@ public:
 	}
 	
 	/// Find all tiles in a range
+	/// 
+	/// Params:
+	/// originID =			the original tile ID
+	/// range =				how far away from the original tile to spread
+	/// stopOnUnits =		true to return tiles with units on them, but no further
+	/// passThroughUnits =	true to ignore units when searching tiles
+	/// range2 =			If a non-zero value is given, the function will return tiles starting at range and ending at range2.
 	Tile[] getInRange( uint originID, uint range, bool stopOnUnits = false, bool passThroughUnits = true, uint range2 = 0 )
 	{
 		// Create temp tuples to store stuff in.
@@ -182,15 +189,27 @@ public:
 			visited[ state.tile.x ][ state.tile.y ] = true;
 
 			// check search depth and if this tile is legal
-			if( ( state.depth <= range || ( state.depth > range && state.depth <= range2 + range ) ) &&
-			   ( state.tile.type == TileType.Open || state.tile.toID == startingTile.toID || ( passThroughUnits && state.tile.occupant !is null ) ) )
+			if( ( state.depth <= range 
+			 || ( state.depth > range && state.depth <= range2 + range ) ) && 	// tile must be in range
+				( state.tile.type == TileType.Open 								// and the tile is open
+			 || state.tile.toID == startingTile.toID 							// or this is the starting tile
+			 || ( passThroughUnits && state.tile.occupant !is null ) ) )		// or there is a unit that we want to bypass
 			{
+				// reconfirm search depth and add to final tile set
 				if( range2 == 0 ) foundTiles ~= state.tile;
 				else if( state.depth > range && state.depth <= range2 + range ) foundTiles ~= state.tile;
 				
-				// find more tiles to search
-				foreach( coord; [ point( state.tile.x, state.tile.y - 1 ), point( state.tile.x, state.tile.y + 1 ), point( state.tile.x - 1, state.tile.y ), point( state.tile.x + 1, state.tile.y ) ] )
-					if( coord.x < gridX && coord.x >= 0 && coord.y < gridY && coord.y >= 0 && !visited[ coord.x ][ coord.y ] && ( !stopOnUnits || ( stopOnUnits && state.tile.occupant !is null ) ) )
+				// find more tiles to search (get the 4 tiles nearby)
+				foreach( coord; [ 
+					point( state.tile.x, state.tile.y - 1 ), 
+					point( state.tile.x, state.tile.y + 1 ), 
+					point( state.tile.x - 1, state.tile.y ), 
+					point( state.tile.x + 1, state.tile.y ) ] )
+					if( coord.x < gridX && coord.x >= 0 	// legal tile on x-axis
+						&& coord.y < gridY && coord.y >= 0 	// legal tile on y-axis
+						&& !visited[ coord.x ][ coord.y ] 	// the tile hasn't been visited
+						&& ( !stopOnUnits 					// and don't stop on units
+						|| ( stopOnUnits && state.tile.occupant !is null ) ) ) // or the tile has no unit in it
 						states ~= searchState( tiles[ coord.x ][ coord.y ], state.depth + 1 );
 			}
 		}
@@ -201,9 +220,8 @@ public:
 	/// Update the fog of war
 	void updateFogOfWar()
 	{
-		if( _fogOfWar )
+		if( fogOfWar )
 		{
-			
 			Tile[] visibleTiles;
 			
 			// get the tiles visible to the current team
@@ -212,7 +230,8 @@ public:
 				// hide the unit until we determine who to show
 				unit.stateFlags.drawMesh = false;
 				getTileByID( unit.position ).stateFlags.drawMesh = false;
-				
+
+				// add the current team to the fog removal list
 				if( unit.team == Game.turn.currentTeam )
 					visibleTiles ~= getInRange( unit.position, unit.speed );
 			}
@@ -255,7 +274,7 @@ public:
 			// hide the tile
 			tile.stateFlags.drawMesh = false;
 			
-			// make the name unique
+			// make the name unique for debugging
 			tile.name = "Tile ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )";
 
 			this.addChild( t );
@@ -263,6 +282,7 @@ public:
 		}
 		
 		// Create the floor from a prefab and add it to the scene
+		// TODO: Move floor creation to the map YAML.
 		for( int i = 0; i < 16; i++ )
 		{
 			int x = i % 4;

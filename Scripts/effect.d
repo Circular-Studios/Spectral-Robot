@@ -26,7 +26,7 @@ class Effect( string prop ) : IEffect
 	
 	override void use( Unit unit )
 	{
-		logInfo("effect used");
+		logInfo( "Effect used." );
 		duration--;
 		unit.reEffect!prop( diff, duration, reset, originalValue );
 		

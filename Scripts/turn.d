@@ -117,6 +117,7 @@ public:
 			currentTeam = Team.Wolf;
 
 			// make the camera look nice
+			// TODO: This will break when we have multiple levels
 			Game.level.camera.owner.transform.position = vec3( 300, Game.level.camera.owner.transform.position.y, 0 );
 			Game.level.camera.owner.transform.rotation = quat.euler_rotation( radians( 180 ), 0, radians( -45 ) );
 		}
