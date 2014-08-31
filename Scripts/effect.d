@@ -1,6 +1,6 @@
 ﻿module effect;
 import game, unit;
-import core, utility;
+import dash.core, dash.utility;
 
 class IEffect 
 {

@@ -1,6 +1,6 @@
 ﻿module unit;
 import game, ability, action, grid, effect, tile, turn;
-import core, utility, components;
+import dash.core, dash.utility, dash.components;
 import gl3n.linalg, gl3n.math, gl3n.interpolate;
 import std.algorithm;
 

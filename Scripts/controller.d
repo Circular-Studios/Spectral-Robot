@@ -1,6 +1,6 @@
 ﻿module controller;
 import unit, grid, ability, tile, game, turn;
-import core, utility;
+import dash.core, dash.utility;
 import yaml;
 import std.path, std.conv;
 import gl3n.linalg, gl3n.math;

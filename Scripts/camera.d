@@ -1,6 +1,6 @@
 ﻿module camera;
 import game, grid;
-import core, components, graphics, utility;
+import dash;
 import std.algorithm;
 import gl3n.linalg, gl3n.math, gl3n.interpolate;
 

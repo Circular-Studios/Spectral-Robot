@@ -11,6 +11,7 @@
 dub.selections.json
 Content.yml
 game.zip
+*.lib
 
 # Build results
 [Dd]ebug/

@@ -1,5 +1,5 @@
 module turn;
-import core, utility;
+import dash.core, dash.utility;
 import game, grid, tile, ability, unit, action;
 import gl3n.linalg, gl3n.math;
 import speed;

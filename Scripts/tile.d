@@ -1,6 +1,6 @@
 ﻿module tile;
 import game, controller, grid, unit;
-import core, utility, components;
+import dash.core, dash.utility, dash.components;
 import gl3n.linalg;
 import std.conv;
 

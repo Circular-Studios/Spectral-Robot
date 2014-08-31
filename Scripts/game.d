@@ -1,6 +1,6 @@
 module game;
 import controller, grid, turn, action, ability, unit, camera, tile;
-import core, graphics, components, utility;
+import dash;
 import speed;
 
 // magical sprinkles

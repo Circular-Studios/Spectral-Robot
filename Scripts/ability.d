@@ -1,5 +1,5 @@
 ﻿module ability;
-import core, utility;
+import dash.core, dash.utility;
 import game, grid, tile;
 import gl3n.math;
 
@@ -192,6 +192,11 @@ public:
 		auto origin = Game.grid.getTileByID( originID );
 		auto target = Game.grid.getTileByID( targetID );
 		return range + _unitRange >= abs( ( target.x - origin.x ) ) + abs( ( target.y - origin.y ) );
+	}
+
+	unittest
+	{
+		assert( checkRange( 3, 4 ) == true );
 	}
 
 	/// Preview the ability
