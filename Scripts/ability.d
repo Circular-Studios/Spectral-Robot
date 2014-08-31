@@ -196,7 +196,11 @@ public:
 
 	unittest
 	{
-		assert( checkRange( 3, 4 ) == true );
+		Ability test = new Ability();
+		test.range = 1;
+		test.unitRange = 1;
+		assert( test.checkRange( 0, 0 ) == true );
+		assert( test.checkRange( 0, 3 ) == false );
 	}
 
 	/// Preview the ability

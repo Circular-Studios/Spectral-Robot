@@ -13,7 +13,9 @@
 		"Tristan Meere",
 		"Tyler Wozniak",
 		"Sean Brennan",
-		"Colden Cullen"
+		"Colden Cullen",
+		"Gwendolyn Hart",
+		"Liam Middlebrook"
 	],
 	"dependencies": {
 		"dash": "==0.9.5",

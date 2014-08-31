@@ -122,12 +122,12 @@ public:
 		
 		// ability hotkeys
 		enum keyboard = "Keyboard.Buttons.Keyboard";
-		mixin( Unroll!( 
-			"Keyboard.addButtonDownEvent( mixin( keyboard ~ ( % + 1 ).to!string ), ( kc )
+		mixin( Unroll!(q{ 
+			Keyboard.addButtonDownEvent( mixin( keyboard ~ ( % + 1 ).to!string ), ( kc )
 			{
 				Game.turn.sendAction( Action( 3, %, 0, false ) );
 				selectAbility( % );
-			} );", 9, "" ));
+			} );}, 9, "" ));
 	}
 	
 	/// Select an ability from a unit
