@@ -22,6 +22,7 @@ private:
 	uint[] _abilities;
 	Tile[] _selectedTiles;
 	IEffect[] _activeEffects;
+	GameObject _parent;
 
 public:
 	alias owner this;
@@ -37,6 +38,7 @@ public:
 	mixin( Property!( _attack, AccessModifier.Public) );
 	mixin( Property!( _defense, AccessModifier.Public) );
 	mixin( Property!( _abilities, AccessModifier.Public) );
+	mixin( Property!( _parent, AccessModifier.Public) );
 	@property int x() { return cast(int)position % Game.grid.gridX; }
 	@property int y() { return cast(int)position / Game.grid.gridX; }
 	
@@ -268,5 +270,35 @@ public:
 	{
 		this.transform.position.x = this.x * TILE_SIZE;
 		this.transform.position.z = this.y * TILE_SIZE;
+	}
+
+	override void update()
+	{
+		// on death
+		if( _hp <= 0 )
+		{
+			// get index of unit in Game.units
+			int idx;
+			for( int i = 0; i < Game.units.length; i++ )
+			{
+				if( Game.units[i] == this )
+				{
+					idx = i;
+				}
+			}
+
+			// slice unit outside of game.units
+			Game.units = Game.units[0..idx]~Game.units[idx+1..Game.units.length];
+
+			// remove from level
+			Game.level.removechild( _parent );
+
+			// set tile back to it's default state
+			Game.grid.getTileByID( position ).type( TileType.Open );
+			Game.grid.getTileByID( position ).selection( TileSelection.None );
+			Game.grid.getTileByID( position ).occupant = null;
+
+			_hp = 0;
+		}
 	}
 }

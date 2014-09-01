@@ -75,6 +75,9 @@ final class Controller
 					unitCheck.tryFind( "Defense", df );
 					unitCheck.tryFind( "Abilities", abilities );
 
+					// Give unit reference to it's parent
+					unit.parent = u;
+
 					// initialize the unit and add it to the active scene
 					unit.init( toTileID( spawn [ 0 ], spawn[ 1 ] ), team, hp, sp, at, df, loadAbilities( abilities ) );
 					if ( rotation )
