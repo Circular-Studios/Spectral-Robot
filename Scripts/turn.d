@@ -145,6 +145,10 @@ public:
 				break;
 		}
 
+		// hotseat multiplayer
+		if( !Game.serverConn )
+			currentTeam = activeTeam;
+
 		logInfo( "Active team: ", activeTeam );
 		
 		// update the units on the team
