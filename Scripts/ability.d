@@ -104,8 +104,8 @@ public:
 	/// Use the ability
 	bool use( uint originID, uint targetID )
 	{
-		//if( currentCooldown <= 0 )
-		//{
+		if( currentCooldown <= 0 )
+		{
 			// make sure the targetID is allowed
 			bool legalTile = false;
 			foreach( tile; _selectedTiles )
@@ -129,7 +129,7 @@ public:
 						}
 				}
 			}
-		//}
+		}
 		logInfo( "ability.use failed" );
 		return false;
 	}

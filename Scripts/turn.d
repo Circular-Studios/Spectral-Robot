@@ -97,6 +97,10 @@ public:
 		{
 			if( unit.team == activeTeam && unit.remainingActions > 0 )
 				turnOver = false;
+			foreach ( ability; unit.abilities)
+			{
+				Game.abilities[ability].decrementCooldown();
+			}
 		}
 		if ( turnOver )
 		{
