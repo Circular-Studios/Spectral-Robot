@@ -108,7 +108,9 @@ public:
 		{
 			// make sure the targetID is allowed
 			bool legalTile = false;
-			foreach( tile; _selectedTiles )
+
+			// check from all tiles within range
+			foreach( tile; Game.grid.getInRange(originID, range + _unitRange) )
 			{
 				if( tile.toID() == targetID )
 					legalTile = true;
