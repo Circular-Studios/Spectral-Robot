@@ -105,22 +105,22 @@ public:
 	
 	@property int x()
 	{
-		return cast(int)this.transform.position.x / TILE_SIZE;
+		return cast(int)this.transform.position.x / HEX_WIDTH;
 	}
 	
 	@property void x( int X )
 	{
-		this.transform.position.x = X * TILE_SIZE;
+		this.transform.position.x = X * HEX_WIDTH;
 	}
 	
 	@property int y()
 	{
-		return cast(int)this.transform.position.z / TILE_SIZE;
+		return cast(int)this.transform.position.z / HEX_WIDTH;
 	}
 	
 	@property void y( int Y )
 	{
-		this.transform.position.z = Y * TILE_SIZE;
+		this.transform.position.z = ( x % 2 == 1 ) ? Y * HEX_WIDTH : Y * HEX_WIDTH + ( HEX_WIDTH / 2 );
 	}
 	
 	this()

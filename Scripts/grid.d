@@ -5,9 +5,12 @@ import gl3n.linalg;
 import std.conv, std.algorithm, std.range, std.array;
 
 const int TILE_SIZE = 24;
+const int HEX_SIZE = 12;
+const int HEX_WIDTH = HEX_SIZE * 2;
+const float HEX_HEIGHT = sqrt( 3.0 ) / 2 * HEX_WIDTH;
 
 // taken from http://forum.dlang.org/post/vqfvihyezbmwcjkmpzin@forum.dlang.org
-template Unroll( alias CODE, alias N, alias SEP="" )
+template Unroll( alias CODE, alias N, alias SEP = "" )
 {
 	enum t = replace( CODE, "%", "%1$d" );
 	enum Unroll = iota( N ).map!( i => format( t, i ) ).join( SEP );
@@ -264,15 +267,15 @@ public:
 			int x = i % n;
 			int y = i / n;
 			
-			auto t = Prefabs[ "SquareFilled" ].createInstance();
+			auto t = Prefabs[ "GridHex" ].createInstance();
 			auto tile = t.getComponent!Tile;
 			
 			tile.x = x;
 			tile.y = y;
-			tile.transform.scale = vec3( TILE_SIZE / 2 );
+			//tile.transform.scale = vec3( HEX_SIZE );
 			
 			// hide the tile
-			tile.stateFlags.drawMesh = false;
+			//tile.stateFlags.drawMesh = false;
 			
 			// make the name unique for debugging
 			tile.name = "Tile ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )";

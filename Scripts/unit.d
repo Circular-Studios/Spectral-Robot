@@ -219,7 +219,7 @@ public:
 		}
 		
 		// scale the tile back down
-		Game.grid.getTileByID( position ).transform.scale = vec3( TILE_SIZE / 2 );
+		//Game.grid.getTileByID( position ).transform.scale = vec3( TILE_SIZE / 2 );
 		
 		// Modify grid variables
 		Game.grid.selectedUnit = null;

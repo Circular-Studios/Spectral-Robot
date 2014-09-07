@@ -50,24 +50,24 @@ Normal: pillar_n
 Specular: pillar_s
 ---
 Name: BlueTile
-Diffuse: grid_blue_d
+Diffuse: hex_blue_d
 Normal: flat_n
-Specular: grid_s
+Specular: hex_s
 ---
 Name: RedTile
-Diffuse: grid_red_d
+Diffuse: hex_red_d
 Normal: flat_n
-Specular: grid_s
+Specular: hex_s
 ---
 Name: GreenTile
-Diffuse: grid_green_d
+Diffuse: hex_green_d
 Normal: flat_n
-Specular: grid_s
+Specular: hex_s
 ---
 Name: BlackTile
-Diffuse: grid_s
+Diffuse: hex_s
 Normal: flat_n
-Specular: grid_s
+Specular: hex_s
 ---
 Name: PyroWolf
 Diffuse: w_pyro_d
