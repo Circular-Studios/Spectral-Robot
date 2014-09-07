@@ -301,4 +301,13 @@ public:
 			this.addChild( floor );
 		}
 	}
+
+	bool isTileOpen( int x, int y )
+	{
+		if (x >= 0 && y >= 0 && x < _gridX && y < _gridY)
+		{
+			return _tiles[ x ][ y ].type() == TileType.Open;
+		}
+		return false;
+	}
 }
