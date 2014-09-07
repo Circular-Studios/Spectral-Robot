@@ -153,6 +153,7 @@ public:
 		if( !Game.serverConn )
 			currentTeam = activeTeam;
 
+
 		logInfo( "Active team: ", activeTeam );
 		
 		// update the units on the team
@@ -165,5 +166,23 @@ public:
 		}
 		
 		Game.grid.updateFogOfWar();
+		
+		if ( !Game.enableAi )
+			Game.ai.startTurn( activeTeam );
+	}
+
+	Unit[] getUnitsOnTeam( Team team )
+	{
+		Unit[] units = new Unit[]( 2 );
+		int i = 0;
+
+		// return the units on the team
+		foreach( unit; Game.units )
+		{
+			if( unit.team == team )
+				units[ i++ ] = unit;
+		}
+
+		return units;
 	}
 }

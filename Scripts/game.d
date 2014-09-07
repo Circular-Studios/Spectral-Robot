@@ -1,5 +1,5 @@
 module game;
-import controller, grid, turn, action, ability, unit, camera, tile;
+import controller, grid, turn, action, ability, unit, camera, tile, aiManager;
 import dash;
 import speed;
 
@@ -28,6 +28,8 @@ public:
 	Unit[] units; // The units
 	shared Connection serverConn; // the server connection
 	UserInterface ui;
+	bool enableAi;
+	AiManager ai;
 
 	// Name that game
 	@property override string title()
@@ -64,7 +66,10 @@ public:
 		uint w, h;
 		w = config.find!uint( "Display.Width" );
 		h = config.find!uint( "Display.Height" );
+
 		ui = new UserInterface( w, h, config.find!string( "UserInterface.FilePath" ) );
+
+		ai = new AiManager();
 	}
 	
 	/// Connect to the server
