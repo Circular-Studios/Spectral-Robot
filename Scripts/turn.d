@@ -1,8 +1,7 @@
 module turn;
-import dash.core, dash.utility;
+import dash.core, dash.utility, dash.net;
 import game, grid, tile, ability, unit, action;
 import gl3n.linalg, gl3n.math;
-import speed;
 
 enum Team {
 	Robot,

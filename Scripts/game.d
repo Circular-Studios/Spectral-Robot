@@ -1,7 +1,6 @@
 module game;
 import controller, grid, turn, action, ability, unit, camera, tile;
 import dash;
-import speed;
 
 // magical sprinkles
 mixin( registerComponents!q{unit} );

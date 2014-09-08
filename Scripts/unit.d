@@ -291,7 +291,7 @@ public:
 			Game.units = Game.units[0..idx]~Game.units[idx+1..Game.units.length];
 
 			// remove from level
-			Game.level.removechild( _parent );
+			Game.level.removeChild( _parent );
 
 			// set tile back to it's default state
 			Game.grid.getTileByID( position ).type( TileType.Open );
