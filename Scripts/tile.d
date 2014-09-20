@@ -123,6 +123,16 @@ public:
 		this.transform.position.z = ( x % 2 == 1 ) ? Y * HEX_WIDTH : Y * HEX_WIDTH + ( HEX_WIDTH / 2 );
 	}
 	
+	@property float z()
+	{
+		return this.transform.position.y;
+	}
+	
+	@property void z( int Z )
+	{
+		this.transform.position.y = Z * TILE_SIZE / 6;
+	}
+	
 	this()
 	{
 		this._type = TileType.Open;

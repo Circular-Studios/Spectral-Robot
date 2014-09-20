@@ -272,7 +272,8 @@ public:
 			
 			tile.x = x;
 			tile.y = y;
-			//tile.transform.scale = vec3( HEX_SIZE );
+			tile.z = 0;
+			//tile.transform.scale = vec3( TILE_SIZE / 2 );
 			
 			// hide the tile
 			//tile.stateFlags.drawMesh = false;

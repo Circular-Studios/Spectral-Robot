@@ -41,6 +41,7 @@ public:
 	mixin( Property!( _parent, AccessModifier.Public) );
 	@property int x() { return cast(int)position % Game.grid.gridX; }
 	@property int y() { return cast(int)position / Game.grid.gridX; }
+	@property float z() { return Game.grid.getTileByID(position).z; }
 	
 	this()
 	{
@@ -270,6 +271,7 @@ public:
 	{
 		this.transform.position.x = this.x * TILE_SIZE;
 		this.transform.position.z = this.y * TILE_SIZE;
+		this.transform.position.y = this.z;
 	}
 
 	override void update()
@@ -291,7 +293,7 @@ public:
 			Game.units = Game.units[0..idx]~Game.units[idx+1..Game.units.length];
 
 			// remove from level
-			Game.level.removechild( _parent );
+			Game.level.removeChild( _parent );
 
 			// set tile back to it's default state
 			Game.grid.getTileByID( position ).type( TileType.Open );

@@ -20,6 +20,7 @@ Name: DirLight
 DirectionalLight:
     Color: !Vector3 1.4 1.4 1.4
     Direction: !Vector3 -1 -1 0
+    CastShadows: Yes
 ---
 Name: AmbLight
 AmbientLight:

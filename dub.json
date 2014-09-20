@@ -18,8 +18,7 @@
 		"Liam Middlebrook"
 	],
 	"dependencies": {
-		"dash": "==0.9.5",
-		"speed:common": "==0.1.5"
+		"dash": "==0.10.0"
 	},
 	"sourcePaths": [
 		"Config/",

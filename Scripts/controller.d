@@ -61,9 +61,16 @@ final class Controller
 					unitNode.tryFind( "Spawn", spawn );
 					if( unitNode.tryFind( "Team", teamName ) )
 						team = to!Team( teamName );
+						// validate team
 					if( unitNode.tryFind( "Rotation", rotationVec ) )
 						rotation = quat.euler_rotation( radians( rotationVec.y ), radians( rotationVec.z ), radians( rotationVec.x ) );
-
+						
+					// validate spawn position
+					if (spawn[0] > Game.grid.gridX || spawn[1] > Game.grid.gridY) {
+						logInfo("Unit '", unitNode["Name"].as!string, "' is not within the grid and therefore not built.");
+						break;
+					}
+					
 					// instantiate the prefab of a unit
 					auto u = Prefabs[ unitCheck[ "Prefab" ].as!string ].createInstance();
 					auto unit = u.getComponent!Unit;
@@ -74,9 +81,6 @@ final class Controller
 					unitCheck.tryFind( "Attack", at );
 					unitCheck.tryFind( "Defense", df );
 					unitCheck.tryFind( "Abilities", abilities );
-
-					// Give unit reference to it's parent
-					unit.parent = u;
 
 					// initialize the unit and add it to the active scene
 					unit.init( toTileID( spawn [ 0 ], spawn[ 1 ] ), team, hp, sp, at, df, loadAbilities( abilities ) );
@@ -122,14 +126,12 @@ final class Controller
 		// fill the grid
 		Game.grid.initTiles( gridSize[ 0 ], gridSize[ 1 ] );
 
-		// create the units
-		loadUnits( unitsNode );
-
 		// add props to the scene
 		foreach( Node propNode; propsNode )
 		{
 			// setup variables
 			int[] loc;
+			int height;
 			int[] tileSize;
 			string name, prefab, ttype;
 			TileType tileType;
@@ -138,59 +140,91 @@ final class Controller
 
 			// get the variables from the node
 			propNode.tryFind( "Location", loc );
-			propNode.tryFind( "Prefab", prefab );
-			propNode.tryFind( "TileSize", tileSize );
-			if( propNode.tryFind( "TileType", ttype ) )
-				tileType = to!TileType( ttype );
-			if( propNode.tryFind( "Rotation", rotationVec ) )
-				rotation = quat.euler_rotation( radians( rotationVec.y ), radians( rotationVec.z ), radians( rotationVec.x ) );
+			if (!propNode.tryFind( "Prefab", prefab )) {
+				// define the height of some tiles
+				propNode.tryFind("Height", height);
+				
+				for (int x = loc[0]; x <= loc[2]; x++) {
+					for (int y = loc[1]; y <= loc[3]; y++) {
+						Game.grid.getTileByID(toTileID(x, y)).z = height;
+						logInfo(x, ", ", y);
+					}
+				}
+			} else {
+				// make an object
+				propNode.tryFind( "TileSize", tileSize );
+				if( propNode.tryFind( "TileType", ttype ) )
+					tileType = to!TileType( ttype );
+				if( propNode.tryFind( "Rotation", rotationVec ) )
+					rotation = quat.euler_rotation( radians( rotationVec.y ), radians( rotationVec.z ), radians( rotationVec.x ) );
+					
+				// check that the tile size and location are compatible
+				if (loc.length > 2) {
+					if (tileSize[0] > 1) {
+						if ((loc[2] - loc[0] + 1) % (tileSize[0]) != 0) {
+							logInfo("Object at location ", loc, " has improper location for tile size along the x-axis.  Object building aborted.");
+							break;
+						}
+					} else if (tileSize[1] > 1) {
+						if ((loc[3] - loc[1] + 1) % (tileSize[1]) != 0) {
+							logInfo("Object at location ", loc, " has improper location for tile size along the y-axis.  Object building aborted.");
+							break;
+						}
+					}
+				}
 
-			// fix up single-tile props for the double for-loop
-			if ( loc.length == 2 )
-			{
-				loc ~= loc[ 0 ];
-				loc ~= loc[ 1 ];
-			}
-
-			// default values for tileSize if not in the yaml
-			if ( !tileSize )
-				tileSize = [ 1, 1 ];
-
-			// create a prop on each tile it occupies
-			for( int x = loc[ 0 ]; x <= loc[ 2 ]; x += tileSize[ 0 ] )
-			{
-				for( int y = loc[ 1 ]; y <= loc[ 3 ]; y += tileSize[ 1 ] )
+				// fix up single-tile props for the double for-loop
+				if ( loc.length == 2 )
 				{
-					// instantiate the prefab of a prop
-					auto prop = Prefabs[ prefab ].createInstance();
+					loc ~= loc[ 0 ];
+					loc ~= loc[ 1 ];
+				}
 
-					// make the name unique
-					prop.name = prefab ~ " ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )";
+				// default values for tileSize if not in the yaml
+				if ( !tileSize )
+					tileSize = [ 1, 1 ];
 
-					// place the prop
-					if( tileSize[ 0 ] % 2 == 0 )
-						prop.transform.position.x = x * TILE_SIZE + ( tileSize[ 0 ] / 2 * TILE_SIZE / 2 );
-					else
-						prop.transform.position.x = x * TILE_SIZE + ( tileSize[ 0 ] / 2 * TILE_SIZE );
+				// create a prop on each tile it occupies
+				for( int x = loc[ 0 ]; x <= loc[ 2 ]; x += tileSize[ 0 ] )
+				{
+					for( int y = loc[ 1 ]; y <= loc[ 3 ]; y += tileSize[ 1 ] )
+					{
+						// instantiate the prefab of a prop
+						auto prop = Prefabs[ prefab ].createInstance();
 
-					if( tileSize[ 1 ] % 2 == 0 )
-						prop.transform.position.z = y * TILE_SIZE + ( tileSize[ 1 ] / 2 * TILE_SIZE / 2 );
-					else
-						prop.transform.position.z = y * TILE_SIZE + ( tileSize[ 1 ] / 2 * TILE_SIZE );
+						// make the name unique
+						prop.name = prefab ~ " ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )";
 
-					if( rotation )
-						prop.transform.rotation = rotation;
+						// place the prop
+						if( tileSize[ 0 ] % 2 == 0 )
+							prop.transform.position.x = x * TILE_SIZE + ( tileSize[ 0 ] / 2 * TILE_SIZE / 2 );
+						else
+							prop.transform.position.x = x * TILE_SIZE + ( tileSize[ 0 ] / 2 * TILE_SIZE );
 
-					// add the prop to the scene
-					Game.level.addChild( prop );
+						if( tileSize[ 1 ] % 2 == 0 )
+							prop.transform.position.z = y * TILE_SIZE + ( tileSize[ 1 ] / 2 * TILE_SIZE / 2 );
+						else
+							prop.transform.position.z = y * TILE_SIZE + ( tileSize[ 1 ] / 2 * TILE_SIZE );
+							
+						prop.transform.position.y = Game.grid.getTileByID(toTileID(x, y)).z;
 
-					// change the TileType of occupying tiles
-					for ( int xx = x; xx < x + tileSize[ 0 ]; xx++ )
-						for ( int yy = y; yy < y + tileSize[ 1 ]; yy++ )
-							Game.grid.tiles[ xx ][ yy ].type = tileType;
+						if( rotation )
+							prop.transform.rotation = rotation;
+
+						// add the prop to the scene
+						Game.level.addChild( prop );
+
+						// change the TileType of occupying tiles
+						for ( int xx = x; xx < x + tileSize[ 0 ]; xx++ )
+							for ( int yy = y; yy < y + tileSize[ 1 ]; yy++ )
+								Game.grid.tiles[ xx ][ yy ].type = tileType;
+					}
 				}
 			}
 		}
+		
+		// create the units
+		loadUnits( unitsNode );
 
 		// do some fog of war
 		Game.grid.fogOfWar = fogOfWar;
