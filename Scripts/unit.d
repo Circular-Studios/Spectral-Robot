@@ -269,8 +269,8 @@ public:
 	/// Convert grid coordinates to 3D space
 	void updatePosition()
 	{
-		this.transform.position.x = this.x * TILE_SIZE;
-		this.transform.position.z = this.y * TILE_SIZE;
+		this.transform.position.x = this.x * HEX_WIDTH * HEX_WIDTH_MOD;
+		this.transform.position.z = ( this.x % 2 == 1 ) ? this.y * HEX_WIDTH : this.y * HEX_WIDTH + ( HEX_WIDTH / 2 );
 		this.transform.position.y = this.z;
 	}
 
@@ -290,7 +290,7 @@ public:
 			}
 
 			// slice unit outside of game.units
-			Game.units = Game.units[0..idx]~Game.units[idx+1..Game.units.length];
+			Game.units = Game.units[ 0 .. idx ]~Game.units[ idx + 1 .. Game.units.length ];
 
 			// remove from level
 			Game.level.removeChild( _parent );

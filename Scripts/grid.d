@@ -7,6 +7,7 @@ import std.conv, std.algorithm, std.range, std.array;
 const int TILE_SIZE = 24;
 const int HEX_SIZE = 12;
 const int HEX_WIDTH = HEX_SIZE * 2;
+const float HEX_WIDTH_MOD = 0.85;
 const float HEX_HEIGHT = sqrt( 3.0 ) / 2 * HEX_WIDTH;
 
 // taken from http://forum.dlang.org/post/vqfvihyezbmwcjkmpzin@forum.dlang.org

@@ -197,16 +197,16 @@ final class Controller
 
 						// place the prop
 						if( tileSize[ 0 ] % 2 == 0 )
-							prop.transform.position.x = x * TILE_SIZE + ( tileSize[ 0 ] / 2 * TILE_SIZE / 2 );
+							prop.transform.position.x = x * HEX_WIDTH * HEX_WIDTH_MOD + ( tileSize[ 0 ] / 2 * HEX_WIDTH / 2 );
 						else
-							prop.transform.position.x = x * TILE_SIZE + ( tileSize[ 0 ] / 2 * TILE_SIZE );
+							prop.transform.position.x = x * HEX_WIDTH * HEX_WIDTH_MOD + ( tileSize[ 0 ] / 2 * HEX_WIDTH );
 
 						if( tileSize[ 1 ] % 2 == 0 )
-							prop.transform.position.z = y * TILE_SIZE + ( tileSize[ 1 ] / 2 * TILE_SIZE / 2 );
+							prop.transform.position.z = y * HEX_WIDTH + ( tileSize[ 1 ] / 2 * HEX_WIDTH / 2 );
 						else
-							prop.transform.position.z = y * TILE_SIZE + ( tileSize[ 1 ] / 2 * TILE_SIZE );
+							prop.transform.position.z = y * HEX_WIDTH + ( tileSize[ 1 ] / 2 * HEX_WIDTH );
 							
-						prop.transform.position.y = Game.grid.getTileByID(toTileID(x, y)).z;
+						prop.transform.position.y = Game.grid.getTileByID( toTileID( x, y ) ).z;
 
 						if( rotation )
 							prop.transform.rotation = rotation;

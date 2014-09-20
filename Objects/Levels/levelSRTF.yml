@@ -55,6 +55,7 @@ Objects:
     - Prefab: Wall_Corner_In
       Location: [23, 0]
       Rotation: !Vector3 0 180 0
+      TileType: FullyBlocked
 
     - Prefab: Wall_Corner_In
       Location: [23, 23]
