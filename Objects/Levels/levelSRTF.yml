@@ -28,22 +28,22 @@ Objects:
       TileType: FullyBlocked
 
     - Prefab: Wall_1x4
-      Location: [0, 9, 0, 11]
+      Location: [0, 9, 0, 12]
       TileSize: [1, 4]
       TileType: FullyBlocked
 
     - Prefab: Wall_1x2
-      Location: [0, 3, 0, 7]
+      Location: [0, 3, 0, 8]
       TileSize: [1, 2]
       TileType: FullyBlocked
 
     - Prefab: Wall_1x2
-      Location: [0, 12, 0, 16]
+      Location: [0, 12, 0, 17]
       TileSize: [1, 2]
       TileType: FullyBlocked
 
     - Prefab: Wall_1x4
-      Location: [0, 18, 0, 18]
+      Location: [0, 18, 0, 21]
       TileSize: [1, 4]
       TileType: FullyBlocked
 
@@ -77,13 +77,13 @@ Objects:
       TileType: FullyBlocked
 
     - Prefab: Wall_1x4
-      Location: [9, 23, 15, 23]
+      Location: [9, 23, 16, 23]
       TileSize: [4, 1]
       Rotation: !Vector3 0 90 0
       TileType: FullyBlocked
 
     - Prefab: Wall_1x2
-      Location: [16, 23, 20, 23]
+      Location: [16, 23, 21, 23]
       TileSize: [2, 1]
       Rotation: !Vector3 0 90 0
       TileType: FullyBlocked
@@ -95,19 +95,19 @@ Objects:
       TileType: FullyBlocked
 
     - Prefab: Wall_1x4
-      Location: [23, 2, 23, 6]
+      Location: [23, 2, 23, 9]
       TileSize: [1, 4]
       Rotation: !Vector3 0 180 0
       TileType: FullyBlocked
 
     - Prefab: Wall_1x2
-      Location: [23, 9, 23, 13]
+      Location: [23, 9, 23, 14]
       TileSize: [1, 2]
       Rotation: !Vector3 0 180 0
       TileType: FullyBlocked
 
     - Prefab: Wall_1x4
-      Location: [23, 15, 23, 19]
+      Location: [23, 15, 23, 22]
       TileSize: [1, 4]
       Rotation: !Vector3 0 180 0
       TileType: FullyBlocked
@@ -130,7 +130,7 @@ Objects:
       TileType: FullyBlocked
 
     - Prefab: Wall_1x2
-      Location: [6, 0, 8, 0]
+      Location: [6, 0, 9, 0]
       TileSize: [2, 1]
       Rotation: !Vector3 0 270 0
       TileType: FullyBlocked  

@@ -8,6 +8,14 @@ enum Team {
 	Wolf,
 }
 
+enum NetworkAction {
+	move, // move unit
+	preview, // preview move for unit
+	deselect, // deselect unit
+	select, // select ability
+	switchTeam, // switch active team
+}
+
 class Turn
 {
 public:
@@ -45,35 +53,36 @@ public:
 	{
 		logInfo( "Action received ", action );
 
-		// Move a unit
-		if( action.actionID == 0 )
-		{
-			Game.units[ action.originID ].move( action.targetID );
-		}
-		// Preview move for a unit
-		else if( action.actionID == 1 )
-		{
-			Game.units[ action.originID ].previewMove();
-		}
-		// Deselect a unit
-		else if( action.actionID == 2 )
-		{
-			Game.units[ action.originID ].deselect();
-		}
-		// Select ability
-		else if( action.actionID == 3 )
-		{
-			Game.grid.selectAbility( action.originID );
-		}
-		// Switch active team
-		else if( action.actionID == 9 )
-		{
-			switchActiveTeam();
-		}
-		// Use an ability
-		else
-		{
-			Game.units[ action.originID ].useAbility( action.actionID, action.targetID );
+		switch(action.actionID) {
+			// Move a unit
+			case NetworkAction.move:
+				Game.units[ action.originID ].move( action.targetID );
+				break;
+				
+			// Preview move for a unit
+			case NetworkAction.preview:
+				Game.units[ action.originID ].previewMove();
+				break;
+				
+			// Deselect a unit
+			case NetworkAction.deselect:
+				Game.units[ action.originID ].deselect();
+				break;
+				
+			// Select ability
+			case NetworkAction.select:
+				Game.grid.selectAbility( action.originID );
+				break;
+				
+			// Switch active team
+			case NetworkAction.switchTeam:
+				switchActiveTeam();
+				break;
+				
+			// Use an ability
+			default:
+				Game.units[ action.originID ].useAbility( action.actionID, action.targetID );
+				break;
 		}
 	}
 	
