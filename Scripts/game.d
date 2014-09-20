@@ -41,7 +41,13 @@ public:
 		// setup a couple helper keys
 		Input.addButtonDownEvent( "QuitToDesktop", ( uint kc ) { currentState = EngineState.Quit; } );
 		Input.addButtonDownEvent( "ResetGame", ( uint kc ) { currentState = EngineState.Reset; } );
-		
+
+		// setup some gamemode test keys
+		Input.addButtonDownEvent( "LoadCTF", ( uint kc ) { loadLevel( "levelSRTF", "CTF" ); } );
+		Input.addButtonDownEvent( "LoadDeathmatch", ( uint kc ) { loadLevel( "levelSRTF", "Deathmatch" ); } );
+
+		//loadLevel( "levelSRTF", "Deathmatch" );
+
 		// initalize stuff
 		level = new Scene();
 		this.activeScene = level;
@@ -49,7 +55,36 @@ public:
 		grid = g.getComponent!Grid;
 		Game.level.addChild( g );
 		turn = new Turn();
-		gc = new Controller();
+		gc = new Controller( "levelSRTF", "Deathmatch" );
+		
+		// create a camera
+		auto cam = level[ "Camera" ].getComponent!AdvancedCamera;
+		cam.autoClamp();
+		level.camera = cam.camera;
+		
+		// bind 'r' to server connect
+		Input.addButtonDownEvent( "ConnectToServer", kc => connect() );
+		
+		// create the ui
+		uint w, h;
+		w = config.find!uint( "Display.Width" );
+		h = config.find!uint( "Display.Height" );
+		ui = new UserInterface( w, h, config.find!string( "UserInterface.FilePath" ) );
+
+	}
+
+	void loadLevel( string levelName, string gameMode )
+	{
+		onShutdown();
+
+		// initalize stuff
+		level = new Scene();
+		this.activeScene = level;
+		auto g = new GameObject( new Grid );
+		grid = g.getComponent!Grid;
+		Game.level.addChild( g );
+		turn = new Turn();
+		gc = new Controller( levelName, gameMode );
 		
 		// create a camera
 		auto cam = level[ "Camera" ].getComponent!AdvancedCamera;
@@ -65,7 +100,7 @@ public:
 		h = config.find!uint( "Display.Height" );
 		ui = new UserInterface( w, h, config.find!string( "UserInterface.FilePath" ) );
 	}
-	
+
 	/// Connect to the server
 	void connect()
 	{

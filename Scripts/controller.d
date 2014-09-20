@@ -7,13 +7,13 @@ import gl3n.linalg, gl3n.math;
 
 final class Controller
 {
-	this()
+	this( string level, string gameMode )
 	{
 		// first load all the objects
 		Game.level.loadObjects( "Base" );
 
 		// load the game
-		loadLevel( "levelSRTF" ); //TODO: Remove hardcoded value
+		loadLevel( level, gameMode );
 
 		logInfo( Game.units.length, " units loaded." );
 	}
@@ -105,7 +105,7 @@ final class Controller
 	}
 
 	/// Load and create a level from yaml
-	void loadLevel( string levelName )
+	void loadLevel( string levelName, string gameMode )
 	{
 		// load the level from yaml
 		Node levelNode = loadYamlFile( Resources.Objects ~ "/Levels/" ~ levelName ~ ".yml" );
@@ -113,18 +113,26 @@ final class Controller
 		// setup variables
 		int[] gridSize;
 		bool fogOfWar;
+		Node gameModeNode;
 		Node unitsNode;
 		Node propsNode;
 
 		// get the variables from the yaml node
 		string name = levelNode[ "Name" ].as!string;
 		levelNode.tryFind( "Grid", gridSize );
-		levelNode.tryFind( "FogOfWar", fogOfWar );
-		levelNode.tryFind( "Units", unitsNode );
+		levelNode.tryFind( "GameModes", gameModeNode );
 		levelNode.tryFind( "Objects", propsNode );
 
 		// fill the grid
 		Game.grid.initTiles( gridSize[ 0 ], gridSize[ 1 ] );
+
+		// Load the game mode
+		Node currentGameMode;
+		gameModeNode.tryFind( gameMode, currentGameMode );
+
+		// get the fog of war and the units for the current game mode
+		currentGameMode.tryFind( "FogOfWar", fogOfWar );
+		currentGameMode.tryFind( "Units", unitsNode );
 
 		// add props to the scene
 		foreach( Node propNode; propsNode )

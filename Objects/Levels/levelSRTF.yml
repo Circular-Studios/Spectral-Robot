@@ -1,25 +1,49 @@
 ---
 Name: "The Only Level"
 Grid: [24, 24]
-FogOfWar: No
-Units:
-    - Name: TechWolf
-      Spawn: [17, 5]
-      Team: Wolf
 
-    - Name: PyroWolf
-      Spawn: [5, 5]
-      Team: Wolf
+GameModes:
+  Deathmatch:
+    FogOfWar: No
+    Units:
+        - Name: TechWolf
+          Spawn: [17, 5]
+          Team: Wolf
 
-    - Name: PyroRobot
-      Spawn: [12, 19]
-      Rotation: !Vector3 0 180 0
-      Team: Robot
+        - Name: PyroWolf
+          Spawn: [5, 5]
+          Team: Wolf
 
-    - Name: TechRobot
-      Spawn: [6, 18]
-      Rotation: !Vector3 0 180 0
-      Team: Robot
+        - Name: PyroRobot
+          Spawn: [12, 19]
+          Rotation: !Vector3 0 180 0
+          Team: Robot
+
+        - Name: TechRobot
+          Spawn: [6, 18]
+          Rotation: !Vector3 0 180 0
+          Team: Robot
+
+  CTF:
+    FogOfWar: No
+    Units:
+        - Name: TechWolf
+          Spawn: [12, 19]
+          Team: Wolf
+
+        - Name: PyroWolf
+          Spawn: [6, 18]
+          Team: Wolf
+
+        - Name: PyroRobot
+          Spawn: [17, 5]
+          Rotation: !Vector3 0 180 0
+          Team: Robot
+
+        - Name: TechRobot
+          Spawn: [5, 5]
+          Rotation: !Vector3 0 180 0
+          Team: Robot
 
 Objects:
     - Prefab: Wall_1x4
