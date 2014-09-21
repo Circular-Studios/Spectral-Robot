@@ -203,12 +203,24 @@ public:
 				if( range2 == 0 ) foundTiles ~= state.tile;
 				else if( state.depth > range && state.depth <= range2 + range ) foundTiles ~= state.tile;
 				
-				// find more tiles to search (get the 4 tiles nearby)
-				foreach( coord; [ 
+				// find more tiles to search (get the 6 tiles nearby)
+				auto nearbyTiles = ( state.tile.x % 2 == 0 ) ? 
+				[ // even tiles
+					point( state.tile.x + 1, state.tile.y ), 
+					point( state.tile.x + 1, state.tile.y - 1 ),
 					point( state.tile.x, state.tile.y - 1 ), 
-					point( state.tile.x, state.tile.y + 1 ), 
-					point( state.tile.x - 1, state.tile.y ), 
-					point( state.tile.x + 1, state.tile.y ) ] )
+					point( state.tile.x - 1, state.tile.y - 1 ),
+					point( state.tile.x - 1, state.tile.y ),
+					point( state.tile.x, state.tile.y + 1 ) ] :
+				[ // odd tiles
+					point( state.tile.x + 1, state.tile.y + 1 ), 
+					point( state.tile.x + 1, state.tile.y ),
+					point( state.tile.x, state.tile.y - 1 ), 
+					point( state.tile.x - 1, state.tile.y ),
+					point( state.tile.x - 1, state.tile.y + 1 ),
+					point( state.tile.x, state.tile.y + 1 ) ];
+
+				foreach( coord; nearbyTiles )
 					if( coord.x < gridX && coord.x >= 0 	// legal tile on x-axis
 						&& coord.y < gridY && coord.y >= 0 	// legal tile on y-axis
 						&& !visited[ coord.x ][ coord.y ] 	// the tile hasn't been visited
