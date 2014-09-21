@@ -42,7 +42,7 @@ public:
 			if( currentTeam == activeTeam )
 			{
 				// send the switch to the server
-				Game.turn.sendAction( Action( 9, 0, 0, true ) );
+				Game.turn.sendAction( Action( NetworkAction.switchTeam, 0, 0, true ) );
 				switchActiveTeam();
 			}
 		} );
@@ -53,7 +53,7 @@ public:
 	{
 		logInfo( "Action received ", action );
 
-		switch(action.actionID) {
+		switch( action.actionID ) {
 			// Move a unit
 			case NetworkAction.move:
 				Game.units[ action.originID ].move( action.targetID );
@@ -112,7 +112,7 @@ public:
 		}
 		if ( turnOver )
 		{
-			Game.turn.sendAction( Action( 9, 0, 0, true ) );
+			Game.turn.sendAction( Action( NetworkAction.switchTeam, 0, 0, true ) );
 			switchActiveTeam();
 		}
 	}

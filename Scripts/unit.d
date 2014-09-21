@@ -41,7 +41,7 @@ public:
 	mixin( Property!( _parent, AccessModifier.Public) );
 	@property int x() { return cast(int)position % Game.grid.gridX; }
 	@property int y() { return cast(int)position / Game.grid.gridX; }
-	@property float z() { return Game.grid.getTileByID(position).z; }
+	@property float z() { return Game.grid.getTileByID( position ).z; }
 	
 	this()
 	{
@@ -137,14 +137,14 @@ public:
 			// Right
 			else if( curTile.x < targetTile.x )
 				transform.rotation = quat.euler_rotation( 90.radians, 0, 0 );
-		
+
 			// scale the tile back down
 			//curTile.transform.scale = vec3( TILE_SIZE / 2 );
-			
+
 			// change the tile occupants
 			curTile.occupant = null;
 			targetTile.occupant = this;
-			
+
 			// move the unit to the new location
 			position = targetTileID;
 			updatePosition();
@@ -153,8 +153,11 @@ public:
 
 			// decrement remaining actions and distance
 			actionUsed();
-			_remainingRange -= abs( ( targetTile.x - curTile.x ) ) + abs ( ( targetTile.y - curTile.y ) );
-			
+			_remainingRange -= Game.grid.hexDistance( Game.grid.gridToCube( curTile.toID() ), Game.grid.gridToCube( targetTile.toID() ) );
+
+			logInfo( "Square: ", abs( ( targetTile.x - curTile.x ) ) + abs( ( targetTile.y - curTile.y ) ) );
+			logInfo( "Hex: ", Game.grid.hexDistance( Game.grid.gridToCube( curTile.toID() ), Game.grid.gridToCube( targetTile.toID() ) ) );
+
 			// update fog of war
 			Game.grid.updateFogOfWar();
 			
@@ -162,41 +165,42 @@ public:
 			Game.turn.checkTurnOver();
 		}
 	}
-	
+
 	/// Check if the move is allowed
 	bool checkMove( uint targetTileID )
 	{
-		auto tile = Game.grid.getTileByID( targetTileID );
-		
+		auto targetTile = Game.grid.getTileByID( targetTileID );
+		auto curTile = Game.grid.getTileByID( position );
+
 		// get the distance away from the unit's current position
-		uint distance = abs( ( tile.x - x ) ) + abs ( ( tile.y - y ) );
-		
+		uint distance = Game.grid.hexDistance( Game.grid.gridToCube( curTile.toID() ), Game.grid.gridToCube( targetTile.toID() ) );
+
 		// Check speed, actions, and tileType
-		return remainingRange >= distance && remainingActions > 0 && tile.type == TileType.Open;
+		return remainingRange >= distance && remainingActions > 0 && targetTile.type == TileType.Open;
 	}
-	
+
 	/// Highlight the tiles the unit can move to
 	void previewMove()
 	{
 		selectedTiles = Game.grid.getInRange( position, _remainingRange );
 
-		Game.ui.callJSFunction( "selectCharacter", [ID] ); 
-		
+		Game.ui.callJSFunction( "selectCharacter", [ ID ] ); 
+
 		// change the material of the tiles
 		foreach( tile; selectedTiles )
 		{
 			tile.selection = TileSelection.Blue;
-
-			// animate the tile
-			/*auto startTime = Time.totalTime;
-			auto dur = 100.msecs;
-			scheduleTimedTask( dur,
-			{
-				tile.transform.scale = 
-					interp( vec3( 0 ), vec3( TILE_SIZE / 2 ), 
-								 ( Time.totalTime - startTime ) / dur.toSeconds );
-			} );*/
 		}
+
+		// animate the tile
+		scheduleTimedTask( 500.msecs, ( elapsed, dur )
+		{
+			foreach( tile; selectedTiles )
+			{
+				tile.transform.position.y = 
+					interp( 5.0, 0, elapsed / dur );
+			}
+		} );
 
 		// only run this if a unit isn't already selected
 		if( !Game.grid.isUnitSelected )
@@ -209,7 +213,7 @@ public:
 			Game.grid.selectAbility( 0 );
 		}
 	}
-	
+
 	/// Remove focus from the unit and any highlighted tiles
 	void deselect()
 	{
@@ -218,14 +222,11 @@ public:
 		{
 			tile.resetSelection();
 		}
-		
-		// scale the tile back down
-		//Game.grid.getTileByID( position ).transform.scale = vec3( TILE_SIZE / 2 );
-		
+
 		// Modify grid variables
 		Game.grid.selectedUnit = null;
 		Game.grid.isUnitSelected = false;
-		
+
 		// deselect the ability if there was one
 		if ( Game.grid.isAbilitySelected )
 			Game.abilities[ Game.grid.selectedAbility ].unpreview();
@@ -244,7 +245,7 @@ public:
 		}
 		deselect();
 	}
-	
+
 	/// Prep the unit to begin a turn anew
 	void newTurn()
 	{
@@ -265,12 +266,12 @@ public:
 			Game.abilities[ ability ].decrementCooldown(); 
 		}
 	}
-	
+
 	/// Convert grid coordinates to 3D space
 	void updatePosition()
 	{
 		this.transform.position.x = this.x * HEX_WIDTH * HEX_WIDTH_MOD;
-		this.transform.position.z = ( this.x % 2 == 1 ) ? this.y * HEX_WIDTH : this.y * HEX_WIDTH + ( HEX_WIDTH / 2 );
+		this.transform.position.z = ( this.x % 2 == HEX_OFFSET ) ? this.y * HEX_WIDTH : this.y * HEX_WIDTH + ( HEX_WIDTH / 2 );
 		this.transform.position.y = this.z;
 	}
 
@@ -290,12 +291,12 @@ public:
 			}
 
 			// slice unit outside of game.units
-			Game.units = Game.units[ 0 .. idx ]~Game.units[ idx + 1 .. Game.units.length ];
+			Game.units = Game.units[ 0..idx ] ~ Game.units[ idx + 1..Game.units.length ];
 
 			// remove from level
 			Game.level.removeChild( _parent );
 
-			// set tile back to it's default state
+			// set tile back to its default state
 			Game.grid.getTileByID( position ).type( TileType.Open );
 			Game.grid.getTileByID( position ).selection( TileSelection.None );
 			Game.grid.getTileByID( position ).occupant = null;

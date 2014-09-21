@@ -41,7 +41,7 @@ public:
 		{
 			case TileSelection.None:
 				this.addComponent( Assets.get!Material( "BlackTile" ) );
-				stateFlags.drawMesh = false;
+				//stateFlags.drawMesh = false;
 				break;
 			case TileSelection.Blue:
 				this.addComponent( Assets.get!Material( "BlueTile" ) );
@@ -123,7 +123,7 @@ public:
 	@property void y( int Y )
 	{
 		gridY = Y;
-		this.transform.position.z = ( x % 2 == 1 ) ? Y * HEX_WIDTH : Y * HEX_WIDTH + ( HEX_WIDTH / 2 );
+		this.transform.position.z = ( x % 2 == HEX_OFFSET ) ? Y * HEX_WIDTH : Y * HEX_WIDTH + ( HEX_WIDTH / 2 );
 	}
 	
 	@property float z()

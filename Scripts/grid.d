@@ -1,12 +1,13 @@
 module grid;
 import game, controller, tile, unit, turn, action;
 import dash.core, dash.utility, dash.components;
-import gl3n.linalg;
+import gl3n.linalg, gl3n.math;
 import std.conv, std.algorithm, std.range, std.array;
 
 const int TILE_SIZE = 24;
 const int HEX_SIZE = 12;
 const int HEX_WIDTH = HEX_SIZE * 2;
+const int HEX_OFFSET = 1; // this corresponds to an odd-q grid
 const float HEX_WIDTH_MOD = 0.86;
 const float HEX_HEIGHT = sqrt( 3.0 ) / 2 * HEX_WIDTH;
 
@@ -50,7 +51,7 @@ public:
 		{ 
 			if( isUnitSelected && Game.turn.currentTeam == Game.turn.activeTeam )
 			{
-				Game.turn.sendAction( Action( 2, selectedUnit.ID, 0, false ) );
+				Game.turn.sendAction( Action( NetworkAction.deselect, selectedUnit.ID, 0, false ) );
 				selectedUnit.deselect();
 			}
 		} );
@@ -71,14 +72,14 @@ public:
 						if( isUnitSelected && selectedUnit.checkMove( tile.toID() ) )
 						{
 							// move the unit to the new location
-							Game.turn.sendAction( Action( 0, selectedUnit.ID, tile.toID(), true ) );
+							Game.turn.sendAction( Action( NetworkAction.move, selectedUnit.ID, tile.toID(), true ) );
 							selectedUnit.move( tile.toID() );
 						}
 						// select a unit if the tile has an occupying unit
 						else if( !isUnitSelected && tile.occupant !is null && tile.occupant.remainingActions > 0 && tile.occupant.team == Game.turn.currentTeam )
 						{
 							tile.occupant.previewMove();
-							Game.turn.sendAction( Action( 1, selectedUnit.ID, 0, false ) );
+							Game.turn.sendAction( Action( NetworkAction.select, selectedUnit.ID, 0, false ) );
 						}
 						// use the selected ability on the tile
 						else if( isAbilitySelected )
@@ -106,17 +107,17 @@ public:
 							{
 								if( selectedUnit )
 								{
-									Game.turn.sendAction( Action( 2, selectedUnit.ID, 0, false ) );
+									Game.turn.sendAction( Action( NetworkAction.select, selectedUnit.ID, 0, false ) );
 									selectedUnit.deselect();
 								}
-								Game.turn.sendAction( Action( 1, unit.ID, 0, false ) );
+								Game.turn.sendAction( Action( NetworkAction.preview, unit.ID, 0, false ) );
 								unit.previewMove();
 							}
 						}
 						// Deselect a unit if not a tile
 						else if( isUnitSelected )
 						{
-							Game.turn.sendAction( Action( 2, selectedUnit.ID, 0, false ) );
+							Game.turn.sendAction( Action( NetworkAction.deselect, selectedUnit.ID, 0, false ) );
 							selectedUnit.deselect();
 						}
 					}
@@ -129,7 +130,7 @@ public:
 		mixin( Unroll!(q{ 
 			Keyboard.addButtonDownEvent( mixin( keyboard ~ ( % + 1 ).to!string ), ( kc )
 			{
-				Game.turn.sendAction( Action( 3, %, 0, false ) );
+				Game.turn.sendAction( Action( NetworkAction.select, %, 0, false ) );
 				selectAbility( % );
 			} );}, 9, "" ));
 	}
@@ -152,11 +153,43 @@ public:
 				Game.abilities[ selectedAbility ].currentCooldown, " turn(s) to use." );
 		}
 	}
-	
+
 	/// Get a tile by ID
 	Tile getTileByID( uint tileID )
 	{
 		return tiles[ tileID % gridX ][ tileID / gridX ];
+	}
+
+	// Convert cube to odd-q offset
+	uint cubeToGrid( vec3 cube )
+	{
+		return cast(uint)( cube.x * gridX + cube.z + ( cube.x - ( cube.x % 2 ) ) / 2 );
+	}
+
+	// Convert odd-q offset to cube
+	vec3 gridToCube( uint tileID )
+	{
+		Tile tile = getTileByID( tileID );
+		vec3 cube;
+		cube.x = tile.x;
+		cube.z = tile.y - ( tile.x - ( tile.x % 2 ) ) / 2;
+		cube.y = -cube.x - cube.z;
+		return cube;
+	}
+
+	unittest
+	{
+		assert( cubeToGrid( gridToCube( 0 ) ) == 0 );
+		assert( cubeToGrid( gridToCube( 1 ) ) == 1 );
+		assert( cubeToGrid( gridToCube( 100 ) ) == 100 );
+	}
+
+	/// Get the distance between two tiles
+	uint hexDistance( vec3 orig, vec3 target )
+	{
+		logInfo( target.x, " - ", orig.x, " + ", target.z, " - ", orig.z );
+		logInfo( orig.x, " - ", target.x, ", ", orig.y, " - ", target.y, ", ", orig.z, " - ", target.z );
+		return cast(uint)max( abs( orig.x - target.x ), abs( orig.y - target.y ), abs( orig.z - target.z ) );
 	}
 	
 	/// Find all tiles in a range
@@ -204,15 +237,15 @@ public:
 				else if( state.depth > range && state.depth <= range2 + range ) foundTiles ~= state.tile;
 				
 				// find more tiles to search (get the 6 tiles nearby)
-				auto nearbyTiles = ( state.tile.x % 2 == 0 ) ? 
-				[ // even tiles
+				auto nearbyTiles = ( state.tile.x % 2 == HEX_OFFSET ) ? 
+				[ // odd tiles
 					point( state.tile.x + 1, state.tile.y ), 
 					point( state.tile.x + 1, state.tile.y - 1 ),
 					point( state.tile.x, state.tile.y - 1 ), 
 					point( state.tile.x - 1, state.tile.y - 1 ),
 					point( state.tile.x - 1, state.tile.y ),
 					point( state.tile.x, state.tile.y + 1 ) ] :
-				[ // odd tiles
+				[ // even tiles
 					point( state.tile.x + 1, state.tile.y + 1 ), 
 					point( state.tile.x + 1, state.tile.y ),
 					point( state.tile.x, state.tile.y - 1 ), 
