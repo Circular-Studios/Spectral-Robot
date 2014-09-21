@@ -7,7 +7,7 @@ import std.conv, std.algorithm, std.range, std.array;
 const int TILE_SIZE = 24;
 const int HEX_SIZE = 12;
 const int HEX_WIDTH = HEX_SIZE * 2;
-const float HEX_WIDTH_MOD = 0.85;
+const float HEX_WIDTH_MOD = 0.86;
 const float HEX_HEIGHT = sqrt( 3.0 ) / 2 * HEX_WIDTH;
 
 // taken from http://forum.dlang.org/post/vqfvihyezbmwcjkmpzin@forum.dlang.org
@@ -255,7 +255,7 @@ public:
 	/// Create an ( n x m ) grid of tiles
 	void initTiles( int n, int m )
 	{
-		logInfo("Grid size: ( ", n, ", ", m, " )" );
+		logInfo( "Grid size: ( ", n, ", ", m, " )" );
 		
 		//initialize tiles
 		_tiles = new Tile[][]( n, m );
@@ -274,7 +274,6 @@ public:
 			tile.x = x;
 			tile.y = y;
 			tile.z = 0;
-			//tile.transform.scale = vec3( TILE_SIZE / 2 );
 			
 			// hide the tile
 			//tile.stateFlags.drawMesh = false;

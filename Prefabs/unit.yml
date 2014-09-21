@@ -1,24 +1,20 @@
 ---
 Name: TechWolf
 Unit:
-    
 Mesh: wolf_idle
 Material: TechWolf
 ---
 Name: PyroWolf
 Unit:
-    
 Mesh: wolf_idle
 Material: PyroWolf
 ---
 Name: PyroRobot
 Unit:
-    
 Mesh: robot_idle
 Material: PyroRobot
 ---
 Name: TechRobot
 Unit:
-    
 Mesh: robot_idle
 Material: TechRobot

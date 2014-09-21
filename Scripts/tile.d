@@ -29,6 +29,7 @@ private:
 	TileType _type;
 	TileSelection _selection;
 	Unit _occupant;
+	int gridX, gridY;
 	
 public:
 	alias owner this;
@@ -105,21 +106,23 @@ public:
 	
 	@property int x()
 	{
-		return cast(int)(this.transform.position.x / HEX_WIDTH * 1.15);
+		return gridX;
 	}
-	
-	@property void x( float X )
+
+	@property void x( int X )
 	{
+		gridX = X;
 		this.transform.position.x = X * HEX_WIDTH * HEX_WIDTH_MOD;
 	}
 	
 	@property int y()
 	{
-		return cast(int)this.transform.position.z / HEX_WIDTH;
+		return gridY;
 	}
 	
-	@property void y( float Y )
+	@property void y( int Y )
 	{
+		gridY = Y;
 		this.transform.position.z = ( x % 2 == 1 ) ? Y * HEX_WIDTH : Y * HEX_WIDTH + ( HEX_WIDTH / 2 );
 	}
 	
@@ -130,7 +133,7 @@ public:
 	
 	@property void z( float Z )
 	{
-		this.transform.position.y = Z * TILE_SIZE / 6;
+		this.transform.position.y = Z * HEX_WIDTH / 6;
 	}
 	
 	this()
