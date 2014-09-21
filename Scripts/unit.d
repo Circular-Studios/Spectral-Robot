@@ -139,7 +139,7 @@ public:
 				transform.rotation = quat.euler_rotation( 90.radians, 0, 0 );
 		
 			// scale the tile back down
-			curTile.transform.scale = vec3( TILE_SIZE / 2 );
+			//curTile.transform.scale = vec3( TILE_SIZE / 2 );
 			
 			// change the tile occupants
 			curTile.occupant = null;
