@@ -1,5 +1,5 @@
-Game:
-    ServerIP: 127.0.0.1
+#Game:
+#    ServerIP: 127.0.0.1
 Display:
     Fullscreen: false
     Height: 1000
@@ -8,15 +8,17 @@ Graphics:
     BackfaceCulling: true
     VSync: false
 Physics:
-    Gravity: !Vector3 0.0 -10.0 0.0
+    Gravity: [ 0.0, -10.0, 0.0 ]
 UserInterface:
     FilePath: "ingameUI.html"
-    Scale: !Vector2 1.0 1.0
+    Scale: [ 1.0, 1.0 ]
 Logging:
     FilePath: "dash.log"
     Debug:
-        OutputVerbosity: !Verbosity High
-        LoggingVerbosity: !Verbosity High
+        OutputVerbosity: High
+        LoggingVerbosity: High
     Release:
-        OutputVerbosity: !Verbosity Medium
-        LoggingVerbosity: !Verbosity Medium
+        OutputVerbosity: Medium
+        LoggingVerbosity: Medium
+Editor:
+    Port: 8008

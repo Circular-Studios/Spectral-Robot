@@ -1,27 +1,32 @@
 ---
 Name: Camera
-AdvancedCamera:
+Transform:
+    Position: [ 300, 0, 560 ]
+    Rotation: [ -45, 0, 0 ]
+Components:
+  - Type: Camera
+    FOV: 59
+    Near: 1
+    Far: 1000
+  - Type: AdvancedCamera
     MoveSpeed: 150
     RotateTime: 400
     ZoomSpeed: 800
     EdgeDistance: 50
     MinHeight: 50
     MaxHeight: 300
-    MouseEdgeScroll: No
-Transform:
-    Position: !Vector3 300 0 560
-    Rotation: !Vector3 -45 0 0
-Camera: 
-    FOV: 59
-    Near: 1
-    Far: 1000
+    MouseEdgeScroll: false
+  - Type: Listener
+    Enabled: true
 ---
 Name: DirLight
-DirectionalLight:
-    Color: !Vector3 1.4 1.4 1.4
-    Direction: !Vector3 -1 -1 0
+Components:
+  - Type: DirectionalLight
+    Color: [ 1.4, 1.4, 1.4 ]
+    Direction: [ -1, -1, 0 ]
     CastShadows: Yes
 ---
 Name: AmbLight
-AmbientLight:
-    Color: !Vector3 .4 .4 .4
+Components:
+  - Type: AmbientLight
+    Color: [ .4, .4, .4 ]

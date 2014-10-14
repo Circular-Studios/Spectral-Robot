@@ -6,7 +6,6 @@ import std.algorithm;
 
 enum ACTIONS_RESET = 3;
 
-@yamlComponent()
 class Unit : Component
 {
 private:
@@ -42,13 +41,13 @@ public:
 	@property int x() { return cast(int)position % Game.grid.gridX; }
 	@property int y() { return cast(int)position / Game.grid.gridX; }
 	@property float z() { return Game.grid.getTileByID(position).z; }
-	
+
 	this()
 	{
 		ID = nextID++;
 		_remainingActions = ACTIONS_RESET;
 	}
-	
+
 	/// Initialize a unit
 	void init( uint position, Team team, int hp, int sp, int at, int df, uint[] abilities )
 	{
@@ -62,7 +61,7 @@ public:
 		_abilities = abilities;
 		updatePosition();
 	}
-	
+
 	/// Use an ability
 	bool useAbility( uint abilityID, uint targetID )
 	{
@@ -74,12 +73,12 @@ public:
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 
 	/// Apply an effect to the unit
-	/// 
+	///
 	/// Params:
 	///  prop = 	the variable you want to effect
 	///  diff = 	the amount to change prop by
@@ -103,7 +102,7 @@ public:
 	{
 		mixin( prop ) -= diff;
 		duration--;
-		
+
 		// check if the ability has run its course
 		if( duration <= 0 )
 		{
@@ -111,7 +110,7 @@ public:
 				mixin( prop ) = originalValue;
 		}
 	}
-	
+
 	/// Move the unit to a tile
 	void move( uint targetTileID )
 	{
@@ -120,7 +119,7 @@ public:
 			// easy names for the tiles
 			auto curTile = Game.grid.getTileByID( position );
 			auto targetTile = Game.grid.getTileByID( targetTileID );
-			
+
 			// change the tile types
 			curTile.type = TileType.Open;
 			targetTile.type = TileType.OccupantActive;
@@ -137,14 +136,14 @@ public:
 			// Right
 			else if( curTile.x < targetTile.x )
 				transform.rotation = quat.euler_rotation( 90.radians, 0, 0 );
-		
+
 			// scale the tile back down
 			curTile.transform.scale = vec3( TILE_SIZE / 2 );
-			
+
 			// change the tile occupants
 			curTile.occupant = null;
 			targetTile.occupant = this;
-			
+
 			// move the unit to the new location
 			position = targetTileID;
 			updatePosition();
@@ -154,34 +153,34 @@ public:
 			// decrement remaining actions and distance
 			actionUsed();
 			_remainingRange -= abs( ( targetTile.x - curTile.x ) ) + abs ( ( targetTile.y - curTile.y ) );
-			
+
 			// update fog of war
 			Game.grid.updateFogOfWar();
-			
+
 			// check if the turn is over
 			Game.turn.checkTurnOver();
 		}
 	}
-	
+
 	/// Check if the move is allowed
 	bool checkMove( uint targetTileID )
 	{
 		auto tile = Game.grid.getTileByID( targetTileID );
-		
+
 		// get the distance away from the unit's current position
 		uint distance = abs( ( tile.x - x ) ) + abs ( ( tile.y - y ) );
-		
+
 		// Check speed, actions, and tileType
 		return remainingRange >= distance && remainingActions > 0 && tile.type == TileType.Open;
 	}
-	
+
 	/// Highlight the tiles the unit can move to
 	void previewMove()
 	{
 		selectedTiles = Game.grid.getInRange( position, _remainingRange );
 
-		Game.ui.callJSFunction( "selectCharacter", [ID] ); 
-		
+		Game.ui.callJSFunction( "selectCharacter", [ID] );
+
 		// change the material of the tiles
 		foreach( tile; selectedTiles )
 		{
@@ -192,8 +191,8 @@ public:
 			auto dur = 100.msecs;
 			scheduleTimedTask( dur,
 			{
-				tile.transform.scale = 
-					interp( vec3( 0 ), vec3( TILE_SIZE / 2 ), 
+				tile.transform.scale =
+					interp( vec3( 0 ), vec3( TILE_SIZE / 2 ),
 								 ( Time.totalTime - startTime ) / dur.toSeconds );
 			} );*/
 		}
@@ -209,7 +208,7 @@ public:
 			Game.grid.selectAbility( 0 );
 		}
 	}
-	
+
 	/// Remove focus from the unit and any highlighted tiles
 	void deselect()
 	{
@@ -218,14 +217,14 @@ public:
 		{
 			tile.resetSelection();
 		}
-		
+
 		// scale the tile back down
 		Game.grid.getTileByID( position ).transform.scale = vec3( TILE_SIZE / 2 );
-		
+
 		// Modify grid variables
 		Game.grid.selectedUnit = null;
 		Game.grid.isUnitSelected = false;
-		
+
 		// deselect the ability if there was one
 		if ( Game.grid.isAbilitySelected )
 			Game.abilities[ Game.grid.selectedAbility ].unpreview();
@@ -233,7 +232,7 @@ public:
 		logInfo( "Deselected ", name, ", ", remainingActions, " action(s) remaining." );
 	}
 
-	/// Decrement remaining actions 
+	/// Decrement remaining actions
 	void actionUsed( int numActions = 1 )
 	{
 		_remainingActions -= numActions;
@@ -244,7 +243,7 @@ public:
 		}
 		deselect();
 	}
-	
+
 	/// Prep the unit to begin a turn anew
 	void newTurn()
 	{
@@ -262,10 +261,10 @@ public:
 		// decrement cooldown on abilities
 		foreach( ability; abilities )
 		{
-			Game.abilities[ ability ].decrementCooldown(); 
+			Game.abilities[ ability ].decrementCooldown();
 		}
 	}
-	
+
 	/// Convert grid coordinates to 3D space
 	void updatePosition()
 	{

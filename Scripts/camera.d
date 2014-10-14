@@ -5,30 +5,29 @@ import std.algorithm;
 import gl3n.linalg, gl3n.math, gl3n.interpolate;
 
 /// Camera movement around the scene
-@yamlComponent()
 class AdvancedCamera : Component
 {
 public:
 	alias owner this;
-	@field( "MoveSpeed" )
+	@rename( "MoveSpeed" )
 	float moveSpeed;
-	@field( "RotateTime" )
+	@rename( "RotateTime" )
 	uint rotateTimeMsecs;
 	Duration rotateTime;
-	@field( "ZoomSpeed" )
+	@rename( "ZoomSpeed" )
 	float zoomSpeed;
-	@field( "EdgeDistance" )
+	@rename( "EdgeDistance" )
 	float edgeDistance;
-	@field( "MinHeight" )
+	@rename( "MinHeight" )
 	float minHeight;
-	@field( "MaxHeight" )
+	@rename( "MaxHeight" )
 	float maxHeight;
 	float minX;
 	float maxX;
 	float minZ;
 	float maxZ;
 	bool clamped = false;
-	@field( "MouseEdgeScroll" )
+	@rename( "MouseEdgeScroll" )
 	bool mouseEdgeScroll;
 
 	override void initialize()

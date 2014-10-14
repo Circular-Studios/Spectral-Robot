@@ -14,7 +14,6 @@ template Unroll( alias CODE, alias N, alias SEP="" )
 }
 
 /// A grid that contains tiles
-@yamlComponent()
 class Grid : Component
 {
 private:
@@ -26,7 +25,7 @@ private:
 	uint _selectedAbility;
 	int _gridX, _gridY;
 	vec2i sel;
-	
+
 public:
 	alias owner this;
 	mixin( Property!( _tiles, AccessModifier.Public ) );
@@ -37,13 +36,13 @@ public:
 	mixin( Property!( _fogOfWar, AccessModifier.Public ) );
 	mixin( Property!( _gridX, AccessModifier.Public ) );
 	mixin( Property!( _gridY, AccessModifier.Public ) );
-	
+
 	// Setup key events
 	this()
 	{
 		// Deselect selected unit
-		Input.addButtonDownEvent( "Back", ( uint kc ) 
-		{ 
+		Input.addButtonDownEvent( "Back", ( uint kc )
+		{
 			if( isUnitSelected && Game.turn.currentTeam == Game.turn.activeTeam )
 			{
 				Game.turn.sendAction( Action( 2, selectedUnit.ID, 0, false ) );
@@ -119,17 +118,17 @@ public:
 				}
 			}
 		} );
-		
+
 		// ability hotkeys
 		enum keyboard = "Keyboard.Buttons.Keyboard";
-		mixin( Unroll!(q{ 
+		mixin( Unroll!(q{
 			Keyboard.addButtonDownEvent( mixin( keyboard ~ ( % + 1 ).to!string ), ( kc )
 			{
 				Game.turn.sendAction( Action( 3, %, 0, false ) );
 				selectAbility( % );
 			} );}, 9, "" ));
 	}
-	
+
 	/// Select an ability from a unit
 	void selectAbility( int ability )
 	{
@@ -148,15 +147,15 @@ public:
 				Game.abilities[ selectedAbility ].currentCooldown, " turn(s) to use." );
 		}
 	}
-	
+
 	/// Get a tile by ID
 	Tile getTileByID( uint tileID )
 	{
 		return tiles[ tileID % gridX ][ tileID / gridX ];
 	}
-	
+
 	/// Find all tiles in a range
-	/// 
+	///
 	/// Params:
 	/// originID =			the original tile ID
 	/// range =				how far away from the original tile to spread
@@ -169,27 +168,27 @@ public:
 		import std.typecons;
 		alias Tuple!( Tile, "tile", uint, "depth" ) searchState;
 		alias Tuple!( int, "x", int, "y" ) point;
-		
+
 		auto visited = new bool[][]( gridX, gridY ); // Keeps track of what tiles have been added already.
 		searchState[] states; // Queue of states to sort through.
 		Tile[] foundTiles; // Tiles inside the range.
-		
+
 		// Start with initial tile.
 		Tile startingTile = Game.grid.getTileByID( originID );
 		states ~= searchState( startingTile, 0 );
-		
+
 		while( states.length )
 		{
 			auto state = states[ 0 ];
 			states = states[ 1..$ ];
-			
+
 			if( visited[ state.tile.x ][ state.tile.y ] )
 				continue;
-			
+
 			visited[ state.tile.x ][ state.tile.y ] = true;
 
 			// check search depth and if this tile is legal
-			if( ( state.depth <= range 
+			if( ( state.depth <= range
 			 || ( state.depth > range && state.depth <= range2 + range ) ) && 	// tile must be in range
 				( state.tile.type == TileType.Open 								// and the tile is open
 			 || state.tile.toID == startingTile.toID 							// or this is the starting tile
@@ -198,12 +197,12 @@ public:
 				// reconfirm search depth and add to final tile set
 				if( range2 == 0 ) foundTiles ~= state.tile;
 				else if( state.depth > range && state.depth <= range2 + range ) foundTiles ~= state.tile;
-				
+
 				// find more tiles to search (get the 4 tiles nearby)
-				foreach( coord; [ 
-					point( state.tile.x, state.tile.y - 1 ), 
-					point( state.tile.x, state.tile.y + 1 ), 
-					point( state.tile.x - 1, state.tile.y ), 
+				foreach( coord; [
+					point( state.tile.x, state.tile.y - 1 ),
+					point( state.tile.x, state.tile.y + 1 ),
+					point( state.tile.x - 1, state.tile.y ),
 					point( state.tile.x + 1, state.tile.y ) ] )
 					if( coord.x < gridX && coord.x >= 0 	// legal tile on x-axis
 						&& coord.y < gridY && coord.y >= 0 	// legal tile on y-axis
@@ -213,17 +212,17 @@ public:
 						states ~= searchState( tiles[ coord.x ][ coord.y ], state.depth + 1 );
 			}
 		}
-		
+
 		return foundTiles;
 	}
-	
+
 	/// Update the fog of war
 	void updateFogOfWar()
 	{
 		if( fogOfWar )
 		{
 			Tile[] visibleTiles;
-			
+
 			// get the tiles visible to the current team
 			foreach( unit; Game.units )
 			{
@@ -235,7 +234,7 @@ public:
 				if( unit.team == Game.turn.currentTeam )
 					visibleTiles ~= getInRange( unit.position, unit.speed );
 			}
-			
+
 			// show all units on visible tiles
 			foreach( tile; visibleTiles )
 			{
@@ -247,58 +246,58 @@ public:
 			}
 		}
 	}
-	
+
 	/// Create an ( n x m ) grid of tiles
 	void initTiles( int n, int m )
 	{
 		logInfo("Grid size: ( ", n, ", ", m, " )" );
-		
+
 		//initialize tiles
 		_tiles = new Tile[][]( n, m );
 		gridX = n;
 		gridY = m;
-		
+
 		// Create tiles from a prefab and add them to the scene
 		for( int i = 0; i < n * m; i++ )
 		{
 			int x = i % n;
 			int y = i / n;
-			
+
 			auto t = Prefabs[ "SquareFilled" ].createInstance();
 			auto tile = t.getComponent!Tile;
-			
+
 			tile.x = x;
 			tile.y = y;
 			tile.z = 0;
 			tile.transform.scale = vec3( TILE_SIZE / 2 );
-			
+
 			// hide the tile
 			tile.stateFlags.drawMesh = false;
-			
+
 			// make the name unique for debugging
 			tile.name = "Tile ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )";
 
 			this.addChild( t );
 			tiles[ x ][ y ] = tile;
 		}
-		
+
 		// Create the floor from a prefab and add it to the scene
 		// TODO: Move floor creation to the map YAML.
 		for( int i = 0; i < 16; i++ )
 		{
 			int x = i % 4;
 			int y = i / 4;
-			
+
 			auto floor = Prefabs[ "MarbleFloor" ].createInstance();
-			
+
 			floor.transform.position.x = x * TILE_SIZE * 6 + ( TILE_SIZE * 2.5 );
 			floor.transform.position.y = -0.3;
 			floor.transform.position.z = y * TILE_SIZE * 6 + ( TILE_SIZE * 2.5 );
 			floor.transform.scale = vec3( TILE_SIZE * 3 );
-			
+
 			// make the name unique
 			floor.name = "Floor ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )";
-			
+
 			this.addChild( floor );
 		}
 	}

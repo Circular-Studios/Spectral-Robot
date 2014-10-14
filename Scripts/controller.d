@@ -25,15 +25,24 @@ final class Controller
 	{
 		uint[] abilityIDs;
 
-		// load the yaml
-		auto yaml = loadAllDocumentsInYamlFile( Resources.Objects ~ "/Abilities/" ~ abilitiesFile ~ ".yml" );
+		struct anAbility
+		{
+			string name;
+			TargetType targetType;
+			TargetArea targetArea;
+			int range;
+			int damage;
+		}
 
-		foreach( Node abilityNode; yaml )
+		// load the yaml
+		auto yaml = deserializeFileByName!anAbility( Resources.Objects ~ "/Abilities/" ~ abilitiesFile );
+
+		/*foreach( Node abilityNode; yaml )
 		{
 			auto ability = abilityNode.getObject!(Ability)();
 			Game.abilities[ ability.ID ] = ability;
 			abilityIDs ~= ability.ID;
-		}
+		}*/
 
 		return abilityIDs;
 	}
@@ -53,7 +62,7 @@ final class Controller
 			vec3 rotationVec;
 			quat rotation;
 
-			foreach( Node unitCheck; loadYamlDocuments( buildNormalizedPath( Resources.Objects, "Units" ) ) )
+			/*foreach( Node unitCheck; loadYamlDocuments( buildNormalizedPath( Resources.Objects, "Units" ) ) )
 			{
 				// check if we want to load this unit
 				if( unitNode[ "Name" ].as!string == unitCheck[ "Name" ].as!string )
@@ -94,7 +103,7 @@ final class Controller
 					Game.grid.tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].type = TileType.OccupantActive;
 					break;
 				}
-			}
+			}*/
 		}
 	}
 
@@ -108,7 +117,7 @@ final class Controller
 	void loadLevel( string levelName )
 	{
 		// load the level from yaml
-		Node levelNode = loadYamlFile( Resources.Objects ~ "/Levels/" ~ levelName ~ ".yml" );
+		/*auto levelNode = deserializeFileByName!auto( Resources.Objects ~ "/Levels/" ~ levelName );
 
 		// setup variables
 		int[] gridSize;
@@ -228,6 +237,6 @@ final class Controller
 
 		// do some fog of war
 		Game.grid.fogOfWar = fogOfWar;
-		Game.grid.updateFogOfWar();
+		Game.grid.updateFogOfWar();*/
 	}
 }

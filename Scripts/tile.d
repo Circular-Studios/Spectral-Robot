@@ -22,18 +22,17 @@ enum TileSelection
 	Black,
 }
 
-@yamlComponent()
 class Tile : Component
 {
 private:
 	TileType _type;
 	TileSelection _selection;
 	Unit _occupant;
-	
+
 public:
 	alias owner this;
 	mixin( Property!( _occupant, AccessModifier.Public) );
-	
+
 	@property void selection( TileSelection s )
 	{
 		final switch( s )
@@ -60,7 +59,7 @@ public:
 		}
 		_selection = s;
 	}
-	
+
 	@property void type( TileType t )
 	{
 		final switch( t )
@@ -86,48 +85,48 @@ public:
 		}
 		_type = t;
 	}
-	
+
 	@property TileType type()
 	{
 		return _type;
 	}
-	
+
 	@property TileSelection selection()
 	{
 		return _selection;
 	}
-	
+
 	/// Revert the selection material of the tile to its TileType
 	void resetSelection()
 	{
 		type( this.type );
 	}
-	
+
 	@property int x()
 	{
 		return cast(int)this.transform.position.x / TILE_SIZE;
 	}
-	
+
 	@property void x( int X )
 	{
 		this.transform.position.x = X * TILE_SIZE;
 	}
-	
+
 	@property int y()
 	{
 		return cast(int)this.transform.position.z / TILE_SIZE;
 	}
-	
+
 	@property void y( int Y )
 	{
 		this.transform.position.z = Y * TILE_SIZE;
 	}
-	
+
 	@property float z()
 	{
 		return this.transform.position.y;
 	}
-	
+
 	@property void z( int Z )
 	{
 		this.transform.position.y = Z * TILE_SIZE / 6;
@@ -138,7 +137,7 @@ public:
 		this._type = TileType.Open;
 		this._selection = TileSelection.None;
 	}
-	
+
 	uint toID()
 	{
 		return x + ( y * Game.grid.gridX );
