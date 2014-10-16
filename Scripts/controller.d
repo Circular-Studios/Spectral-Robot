@@ -11,9 +11,14 @@ final class Controller
 	{
 		string Name;
 		int[] Spawn;
+		string Abilities;
+		string Prefab;
 		@rename("Team")
 		Team team;
-		vec3 Rotation;
+		@rename("Rotation")
+		vec3 rotationVec;
+		quat rotation;
+		int hp, sp, at, df = 0;
 	}
 
 	struct propInfo
@@ -38,6 +43,15 @@ final class Controller
 		propInfo[] props;
 	}
 
+	struct abilityInfo
+	{
+		string name;
+		TargetType targetType;
+		TargetArea targetArea;
+		int range;
+		int damage;
+	}
+
 	this()
 	{
 		// first load all the objects
@@ -56,19 +70,10 @@ final class Controller
 	{
 		uint[] abilityIDs;
 
-		struct abilityInfo
-		{
-			string name;
-			TargetType targetType;
-			TargetArea targetArea;
-			int range;
-			int damage;
-		}
-
 		// load the yaml
-		abilityInfo[] ability = deserializeMultiFile!abilityInfo( Resources.Objects ~ "/Abilities/" ~ abilitiesFile )[0];
+		//abilityInfo[] abilities = deserializeMultiFile!abilityInfo( Resources.Objects ~ "/Abilities/" ~ abilitiesFile )[ 0 ];
 
-		/*foreach( Node abilityNode; yaml )
+		/*foreach( abilityInfo ability; abilities )
 		{
 			auto ability = abilityNode.getObject!(Ability)();
 			Game.abilities[ ability.ID ] = ability;
@@ -81,60 +86,35 @@ final class Controller
 	/// Load and create units from yaml
 	void loadUnits( unitInfo[] unitsToLoad )
 	{
-		// So we are going to parse the Units folder for the unit files
-		// For those, we'll get the Name of the node, which will be how we call into the gameObjects
-		foreach( Node unitNode; unitsToLoad )
+		foreach( unitInfo unitNode; unitsToLoad )
 		{
-			// setup variables
-			int hp, sp, at, df = 0;
-			Team team;
-			string abilities, teamName;
-			uint[] spawn;
-			vec3 rotationVec;
-			quat rotation;
+			// this might break depending on how structs override information
+			//unitNode = deserializeFileByName!unitInfo( Resources.Objects ~ "/Units/" ~ unitNode.Prefab );
 
-			/*foreach( Node unitCheck; loadYamlDocuments( buildNormalizedPath( Resources.Objects, "Units" ) ) )
+			if( unitNode.rotationVec )
+				unitNode.rotation = quat.euler_rotation( radians( unitNode.rotationVec.y ), radians( unitNode.rotationVec.z ), radians( unitNode.rotationVec.x ) );
+
+			// validate spawn position
+			if ( unitNode.Spawn[ 0 ] > Game.grid.gridX || unitNode.Spawn[ 1 ] > Game.grid.gridY )
 			{
-				// check if we want to load this unit
-				if( unitNode[ "Name" ].as!string == unitCheck[ "Name" ].as!string )
-				{
-					unitNode.tryFind( "Spawn", spawn );
-					if( unitNode.tryFind( "Team", teamName ) )
-						team = to!Team( teamName );
-						// validate team
-					if( unitNode.tryFind( "Rotation", rotationVec ) )
-						rotation = quat.euler_rotation( radians( rotationVec.y ), radians( rotationVec.z ), radians( rotationVec.x ) );
+				logInfo( "Unit '", unitNode.Name, "' is not within the grid. Fix its position." );
+				break;
+			}
 
-					// validate spawn position
-					if (spawn[0] > Game.grid.gridX || spawn[1] > Game.grid.gridY) {
-						logInfo("Unit '", unitNode["Name"].as!string, "' is not within the grid and therefore not built.");
-						break;
-					}
+			// instantiate the prefab of a unit
+			auto u = Prefabs[ unitNode.Prefab ].createInstance();
+			auto unit = u.getComponent!Unit;
 
-					// instantiate the prefab of a unit
-					auto u = Prefabs[ unitCheck[ "Prefab" ].as!string ].createInstance();
-					auto unit = u.getComponent!Unit;
+			// initialize the unit and add it to the active scene
+			unit.init( toTileID( unitNode.Spawn[ 0 ], unitNode.Spawn[ 1 ] ), unitNode.team, unitNode.hp, unitNode.sp, unitNode.at, unitNode.df, loadAbilities( unitNode.Abilities ) );
+			if ( unitNode.rotation )
+				unit.transform.rotation = unitNode.rotation;
+			Game.level.addChild( u );
+			Game.units ~= unit;
 
-					// get the variables from the node
-					unitCheck.tryFind( "HP", hp );
-					unitCheck.tryFind( "Speed", sp );
-					unitCheck.tryFind( "Attack", at );
-					unitCheck.tryFind( "Defense", df );
-					unitCheck.tryFind( "Abilities", abilities );
-
-					// initialize the unit and add it to the active scene
-					unit.init( toTileID( spawn [ 0 ], spawn[ 1 ] ), team, hp, sp, at, df, loadAbilities( abilities ) );
-					if ( rotation )
-						unit.transform.rotation = rotation;
-					Game.level.addChild( u );
-					Game.units ~= unit;
-
-					// block and occupy the spawn tile
-					Game.grid.tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].occupant = unit;
-					Game.grid.tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].type = TileType.OccupantActive;
-					break;
-				}
-			}*/
+			// block and occupy the spawn tile
+			Game.grid.tiles[ unitNode.Spawn[ 0 ] ][ unitNode.Spawn[ 1 ] ].occupant = unit;
+			Game.grid.tiles[ unitNode.Spawn[ 0 ] ][ unitNode.Spawn[ 1 ] ].type = TileType.OccupantActive;
 		}
 	}
 
@@ -148,7 +128,7 @@ final class Controller
 	void loadLevel( string levelName )
 	{
 		// load the level from yaml
-		levelInfo level = deserializeFileByName!levelInfo( Resources.Objects ~ "/Levels/" ~ levelName )[0];
+		levelInfo level = deserializeFileByName!levelInfo( Resources.Objects ~ "/Levels/" ~ levelName )[ 0 ];
 
 		// fill the grid
 		Game.grid.initTiles( level.gridSize[ 0 ], level.gridSize[ 1 ] );
@@ -206,7 +186,7 @@ final class Controller
 				if ( !p.tileSize )
 					p.tileSize = [ 1, 1 ];
 
-				// create a p on each tile it occupies
+				// create a prop on each tile it occupies
 				for( int x = p.Location[ 0 ]; x <= p.Location[ 2 ]; x += p.tileSize[ 0 ] )
 				{
 					for( int y = p.Location[ 1 ]; y <= p.Location[ 3 ]; y += p.tileSize[ 1 ] )
