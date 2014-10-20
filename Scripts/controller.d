@@ -7,6 +7,13 @@ import gl3n.linalg, gl3n.math;
 
 final class Controller
 {
+    // beginning camera values for the different teams
+    vec3 robotCamPos;
+    vec3 robotCamRot;
+    
+	vec3 wolfCamPos;
+	vec3 wolfCamRot;
+
 	this( string level, string gameMode )
 	{
 		// first load all the objects
@@ -133,6 +140,24 @@ final class Controller
 		// get the fog of war and the units for the current game mode
 		currentGameMode.tryFind( "FogOfWar", fogOfWar );
 		currentGameMode.tryFind( "Units", unitsNode );
+		
+		// get the values for the camera for each team for the current game mode
+		Node teamNode;
+		currentGameMode.tryFind("Team", teamNode);
+        // team robot
+        Node robotNode;
+        teamNode.tryFind("Robot", robotNode);
+        Node robotCamera;
+        robotNode.tryFind("Camera", robotCamera);
+        robotCamera.tryFind("Position", robotCamPos);
+        robotCamera.tryFind("Rotation", robotCamRot);
+		// team wolf
+		Node wolfNode;
+		teamNode.tryFind("Wolf", wolfNode);
+		Node wolfCamera;
+		wolfNode.tryFind("Camera", wolfCamera);
+		wolfCamera.tryFind("Position", wolfCamPos);
+		wolfCamera.tryFind("Rotation", wolfCamRot);
 
 		// add props to the scene
 		foreach( Node propNode; propsNode )

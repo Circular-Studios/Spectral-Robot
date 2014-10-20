@@ -5,6 +5,15 @@ Grid: [24, 24]
 GameModes:
   Deathmatch:
     FogOfWar: No
+    Team:
+        Robot:
+            Camera:
+                Position: !Vector3 300 150 0
+                Rotation: !Vector3 0 0 -45
+        Wolf:
+            Camera:
+                Position: !Vector3 300 150 0
+                Rotation: !Vector3 180 0 -45
     Units:
         - Name: TechWolf
           Spawn: [17, 5]

@@ -123,6 +123,12 @@ public:
 		if( teamNum == 1 )
 		{
 			currentTeam = Team.Robot;
+            
+            // set camera
+            Game.level.camera.owner.transform.position = Game.gc.robotCamPos;
+            
+            vec3 rot = Game.gc.robotCamRot;
+            Game.level.camera.owner.transform.rotation = quat.euler_rotation(radians(rot.x), radians(rot.y), radians(rot.z));
 		}
 		else
 		{
@@ -130,8 +136,14 @@ public:
 
 			// make the camera look nice
 			// TODO: This will break when we have multiple levels
-			Game.level.camera.owner.transform.position = vec3( 300, Game.level.camera.owner.transform.position.y, 0 );
-			Game.level.camera.owner.transform.rotation = quat.euler_rotation( radians( 180 ), 0, radians( -45 ) );
+			//Game.level.camera.owner.transform.position = vec3( 300, Game.level.camera.owner.transform.position.y, 0 );
+			//Game.level.camera.owner.transform.rotation = quat.euler_rotation( radians( 180 ), 0, radians( -45 ) );
+            
+            // set camera
+			Game.level.camera.owner.transform.position = Game.gc.wolfCamPos;
+            
+            vec3 rot = Game.gc.wolfCamRot;
+            Game.level.camera.owner.transform.rotation = quat.euler_rotation(radians(rot.x), radians(rot.y), radians(rot.z));
 		}
 
 		// update the units on the team
