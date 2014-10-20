@@ -31,6 +31,16 @@ private:
 	uint _selectedAbility;
 	int _gridX, _gridY;
 	vec2i sel;
+
+	vec3i cubeNeighbors = 
+		[
+			vec3i( state.tile.x + 1, state.tile.y - 1, state.tile.z     ),
+			vec3i( state.tile.x + 1, state.tile.y    , state.tile.z - 1 ),
+			vec3i( state.tile.x    , state.tile.y + 1, state.tile.z - 1 ),
+			vec3i( state.tile.x - 1, state.tile.y + 1, state.tile.z     ),
+			vec3i( state.tile.x - 1, state.tile.y    , state.tile.z + 1 ),
+			vec3i( state.tile.x    , state.tile.y - 1, state.tile.z + 1 )
+		];
 	
 public:
 	alias owner this;
@@ -161,20 +171,25 @@ public:
 	}
 
 	// Convert cube to odd-q offset
-	uint cubeToGrid( vec3 cube )
+	uint cubeToGrid( vec3i cube )
 	{
-		return cast(uint)( cube.x * gridX + cube.z + ( cube.x - ( cube.x % 2 ) ) / 2 );
+		return cube.x * gridX + cube.z + ( cube.x - ( cube.x % 2 ) ) / 2;
 	}
 
 	// Convert odd-q offset to cube
-	vec3 gridToCube( uint tileID )
+	vec3i gridToCube( uint tileID )
 	{
 		Tile tile = getTileByID( tileID );
-		vec3 cube;
+		vec3i cube;
 		cube.x = tile.x;
 		cube.z = tile.y - ( tile.x - ( tile.x % 2 ) ) / 2;
 		cube.y = -cube.x - cube.z;
 		return cube;
+	}
+
+	vec3i cubeDirection( uint dir )
+	{
+		return cubeNeighbors[ dir ];
 	}
 
 	unittest
@@ -185,11 +200,11 @@ public:
 	}
 
 	/// Get the distance between two tiles
-	uint hexDistance( vec3 orig, vec3 target )
+	uint hexDistance( vec3i orig, vec3i target )
 	{
 		logInfo( target.x, " - ", orig.x, " + ", target.z, " - ", orig.z );
 		logInfo( orig.x, " - ", target.x, ", ", orig.y, " - ", target.y, ", ", orig.z, " - ", target.z );
-		return cast(uint)max( abs( orig.x - target.x ), abs( orig.y - target.y ), abs( orig.z - target.z ) );
+		return max( abs( orig.x - target.x ), abs( orig.y - target.y ), abs( orig.z - target.z ) );
 	}
 	
 	/// Find all tiles in a range
@@ -204,16 +219,38 @@ public:
 	{
 		// Create temp tuples to store stuff in.
 		import std.typecons;
-		alias Tuple!( Tile, "tile", uint, "depth" ) searchState;
-		alias Tuple!( int, "x", int, "y" ) point;
+		//alias Tuple!( vec3i, "tile", uint, "depth" ) searchState;
 		
-		auto visited = new bool[][]( gridX, gridY ); // Keeps track of what tiles have been added already.
-		searchState[] states; // Queue of states to sort through.
-		Tile[] foundTiles; // Tiles inside the range.
+		auto visited = new vec3i[]( gridX * gridY ); // Keeps track of what cubes have been added already.
+		auto fringes new vec3i[]( gridX * gridY ); // Keeps track of what cubes have been added already.
+		//searchState[] states; // Queue of states to sort through.
+		//Tile[] foundTiles; // Tiles inside the range.
 		
 		// Start with initial tile.
-		Tile startingTile = Game.grid.getTileByID( originID );
-		states ~= searchState( startingTile, 0 );
+		vec3i start = gridToCube( originID );
+		visited ~= start;
+		fringes ~= start;
+
+		foreach( depth; 1..range + 1 )
+		{
+			fringes[ depth ] = [];
+
+			foreach( cube; fringes[ depth - 1 ] )
+			{
+				foreach( dir; 0..6 )
+				{
+					auto neighbor = cubeDirection( dir ) );
+
+					//	if neighbor not in visited, not blocked
+					if( visited[ neighbor ] == null )
+					{
+						//add neighbor to visited
+						visited ~= neighbor;
+						fringes[ depth ] ~= neighbor;
+					}
+				}
+			}
+		}
 		
 		while( states.length )
 		{
@@ -229,30 +266,38 @@ public:
 			if( ( state.depth <= range 
 			 || ( state.depth > range && state.depth <= range2 + range ) ) && 	// tile must be in range
 				( state.tile.type == TileType.Open 								// and the tile is open
-			 || state.tile.toID == startingTile.toID 							// or this is the starting tile
+			 || state.tile.toID == startingPoint.toID 							// or this is the starting tile
 			 || ( passThroughUnits && state.tile.occupant !is null ) ) )		// or there is a unit that we want to bypass
 			{
 				// reconfirm search depth and add to final tile set
-				if( range2 == 0 ) foundTiles ~= state.tile;
-				else if( state.depth > range && state.depth <= range2 + range ) foundTiles ~= state.tile;
-				
-				// find more tiles to search (get the 6 tiles nearby)
-				auto nearbyTiles = ( state.tile.x % 2 == HEX_OFFSET ) ? 
-				[ // odd tiles
-					point( state.tile.x + 1, state.tile.y ), 
-					point( state.tile.x + 1, state.tile.y - 1 ),
-					point( state.tile.x, state.tile.y - 1 ), 
-					point( state.tile.x - 1, state.tile.y - 1 ),
-					point( state.tile.x - 1, state.tile.y ),
-					point( state.tile.x, state.tile.y + 1 ) ] :
-				[ // even tiles
-					point( state.tile.x + 1, state.tile.y + 1 ), 
-					point( state.tile.x + 1, state.tile.y ),
-					point( state.tile.x, state.tile.y - 1 ), 
-					point( state.tile.x - 1, state.tile.y ),
-					point( state.tile.x - 1, state.tile.y + 1 ),
-					point( state.tile.x, state.tile.y + 1 ) ];
+				if( range2 == 0 ) foundTiles ~= getTileByID( cubeToGrid( state.tile ) );
+				else if( state.depth > range && state.depth <= range2 + range ) foundTiles ~= getTileByID( cubeToGrid( state.tile ) );
 
+				// find more tiles to search (get the 6 tiles nearby)
+				auto nearbyTiles = 
+				[
+					point( state.tile.x + 1, state.tile.y - 1, state.tile.z     ),
+					point( state.tile.x + 1, state.tile.y    , state.tile.z - 1 ),
+					point( state.tile.x    , state.tile.y + 1, state.tile.z - 1 ),
+					point( state.tile.x - 1, state.tile.y + 1, state.tile.z     ),
+					point( state.tile.x - 1, state.tile.y    , state.tile.z + 1 ),
+					point( state.tile.x    , state.tile.y - 1, state.tile.z + 1 )
+				];
+
+				// cube pseudo-code
+				//visited = set()
+				//add start to visited
+				//fringes = [[start]]
+				//for each 1 < k ≤ movement:
+				//	fringes[k] = []
+				//	for each cube in fringes[k-1]:
+				//		for each 0 ≤ dir < 6:
+				//			neighbor = cube.add(Cube.direction(dir))
+				//			if neighbor not in visited, not blocked:
+				//				add neighbor to visited
+				//				fringes[k].append(neighbor)
+
+				// this code is for a grid, not a cube
 				foreach( coord; nearbyTiles )
 					if( coord.x < gridX && coord.x >= 0 	// legal tile on x-axis
 						&& coord.y < gridY && coord.y >= 0 	// legal tile on y-axis
@@ -265,7 +310,7 @@ public:
 		
 		return foundTiles;
 	}
-	
+
 	/// Update the fog of war
 	void updateFogOfWar()
 	{
