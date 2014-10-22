@@ -32,8 +32,8 @@ public:
 		logInfo( "Initializing ", title, "..." );
 
 		// setup a couple helper keys
-		Input.addButtonDownEvent( "QuitToDesktop", ( uint kc ) { currentState = EngineState.Quit; } );
-		Input.addButtonDownEvent( "ResetGame", ( uint kc ) { currentState = EngineState.Reset; } );
+		Input.addButtonDownEvent( "QuitToDesktop", ( _ ) { currentState = EngineState.Quit; } );
+		Input.addButtonDownEvent( "ResetGame", ( _ ) { currentState = EngineState.Reset; } );
 
 		// initalize stuff
 		level = new Scene();

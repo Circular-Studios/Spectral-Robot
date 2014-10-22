@@ -4,6 +4,8 @@ import dash;
 import std.algorithm;
 import gl3n.linalg, gl3n.math, gl3n.interpolate;
 
+mixin( registerComponents!() );
+
 /// Camera movement around the scene
 class AdvancedCamera : Component
 {
@@ -13,6 +15,7 @@ public:
 	float moveSpeed;
 	@rename( "RotateTime" )
 	uint rotateTimeMsecs;
+	@ignore
 	Duration rotateTime;
 	@rename( "ZoomSpeed" )
 	float zoomSpeed;
@@ -22,11 +25,14 @@ public:
 	float minHeight;
 	@rename( "MaxHeight" )
 	float maxHeight;
-	float minX;
-	float maxX;
-	float minZ;
-	float maxZ;
-	bool clamped = false;
+	@ignore
+	{
+		float minX;
+		float maxX;
+		float minZ;
+		float maxZ;
+		bool clamped = false;
+	}
 	@rename( "MouseEdgeScroll" )
 	bool mouseEdgeScroll;
 
@@ -38,7 +44,7 @@ public:
 		startRot = transform.rotation;
 
 		auto obj = this;
-		Mouse.addAxisEvent( Mouse.Axes.ScrollWheel, ( ac, newVal )
+		Input.addAxisEvent( "Zoom", ( newVal )
 		{
 			static float prev = 0.0f;
 			if( newVal > prev )

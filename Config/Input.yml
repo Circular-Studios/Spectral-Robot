@@ -16,6 +16,10 @@ ConnectToServer:
     Keyboard: R
 EndTurn:
     Keyboard: T
+Select:
+    Mouse: Left
+Zoom:
+    MouseAxes: ScrollWheel
 Enter:
     Keyboard: Space
 Back:
@@ -24,3 +28,23 @@ ResetGame:
     Keyboard: F5
 ResetCamera:
     Keyboard: F9
+Action1:
+    Keyboard: "Keyboard1"
+Action2:
+    Keyboard: "Keyboard2"
+Action3:
+    Keyboard: "Keyboard3"
+Action4:
+    Keyboard: "Keyboard4"
+Action5:
+    Keyboard: "Keyboard5"
+Action6:
+    Keyboard: "Keyboard6"
+Action7:
+    Keyboard: "Keyboard7"
+Action8:
+    Keyboard: "Keyboard8"
+Action9:
+    Keyboard: "Keyboard9"
+Action0:
+    Keyboard: "Keyboard0"

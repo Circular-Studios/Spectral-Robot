@@ -6,13 +6,6 @@ import std.conv, std.algorithm, std.range, std.array;
 
 const int TILE_SIZE = 24;
 
-// taken from http://forum.dlang.org/post/vqfvihyezbmwcjkmpzin@forum.dlang.org
-template Unroll( alias CODE, alias N, alias SEP="" )
-{
-	enum t = replace( CODE, "%", "%1$d" );
-	enum Unroll = iota( N ).map!( i => format( t, i ) ).join( SEP );
-}
-
 /// A grid that contains tiles
 class Grid : Component
 {
@@ -41,7 +34,7 @@ public:
 	this()
 	{
 		// Deselect selected unit
-		Input.addButtonDownEvent( "Back", ( uint kc )
+		Input.addButtonDownEvent( "Back", ( kc )
 		{
 			if( isUnitSelected && Game.turn.currentTeam == Game.turn.activeTeam )
 			{
@@ -51,7 +44,7 @@ public:
 		} );
 
 		// Left mouse click
-		Mouse.addButtonDownEvent( Mouse.Buttons.Left, ( kc )
+		Input.addButtonDownEvent( "Select", ( kc )
 		{
 			if( auto obj = Input.mouseObject )
 			{
@@ -120,13 +113,14 @@ public:
 		} );
 
 		// ability hotkeys
-		enum keyboard = "Keyboard.Buttons.Keyboard";
-		mixin( Unroll!(q{
-			Keyboard.addButtonDownEvent( mixin( keyboard ~ ( % + 1 ).to!string ), ( kc )
+		foreach( action; 0..10 )
+		{
+			Input.addButtonDownEvent( "Action" ~ action.to!string, ( kc )
 			{
-				Game.turn.sendAction( Action( 3, %, 0, false ) );
-				selectAbility( % );
-			} );}, 9, "" ));
+				Game.turn.sendAction( Action( 3, action, 0, false ) );
+				selectAbility( action );
+			} );
+		}
 	}
 
 	/// Select an ability from a unit

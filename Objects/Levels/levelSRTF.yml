@@ -3,20 +3,20 @@ Name: "The Only Level"
 Grid: [24, 24]
 FogOfWar: No
 Units:
-    - Name: TechWolf
+    - Class: TechWolf
       Spawn: [17, 5]
       Team: Wolf
 
-    - Name: PyroWolf
+    - Class: PyroWolf
       Spawn: [5, 5]
       Team: Wolf
 
-    - Name: PyroRobot
+    - Class: PyroRobot
       Spawn: [12, 19]
       Rotation: [ 0, 180, 0 ]
       Team: Robot
 
-    - Name: TechRobot
+    - Class: TechRobot
       Spawn: [6, 18]
       Rotation: [ 0, 180, 0 ]
       Team: Robot
@@ -126,31 +126,31 @@ Objects:
     - Prefab: Wall_1x1
       Location: [5, 0, 5, 0]
       TileSize: [1, 1]
-      Rotation: [ 0 270 0
+      Rotation: [ 0, 270, 0 ]
       TileType: FullyBlocked
 
     - Prefab: Wall_1x2
       Location: [6, 0, 9, 0]
       TileSize: [2, 1]
-      Rotation: [ 0 270 0
+      Rotation: [ 0, 270, 0 ]
       TileType: FullyBlocked
 
     - Prefab: Wall_1x4
       Location: [10, 0, 17, 0]
       TileSize: [4, 1]
-      Rotation: [ 0 270 0
+      Rotation: [ 0, 270, 0 ]
       TileType: FullyBlocked
 
     - Prefab: Wall_1x2
       Location: [17, 0, 20, 0]
       TileSize: [2, 1]
-      Rotation: [ 0 270 0
+      Rotation: [ 0, 270, 0 ]
       TileType: FullyBlocked
 
     - Prefab: Wall_1x1
       Location: [21, 0, 22, 0]
       TileSize: [1, 1]
-      Rotation: [ 0 270 0
+      Rotation: [ 0, 270, 0 ]
       TileType: FullyBlocked
 
     - Prefab: Bookshelf
@@ -198,13 +198,13 @@ Objects:
     - Prefab: Bookshelf
       Location: [5, 21, 6, 21]
       TileSize: [2, 1]
-      Rotation: [ 0 270 0
+      Rotation: [ 0, 270, 0 ]
       TileType: FullyBlocked
 
     - Prefab: Bookshelf
       Location: [17, 21, 18, 21]
       TileSize: [2, 1]
-      Rotation: [ 0 270 0
+      Rotation: [ 0, 270, 0 ]
       TileType: FullyBlocked
 
     - Prefab: Bookshelf

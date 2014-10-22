@@ -7,21 +7,26 @@ import gl3n.linalg, gl3n.math;
 
 final class Controller
 {
-	struct unitInfo
+	struct UnitInfo
+	{
+		string Class;
+		int[] Spawn;
+		@rename("Team") @byName
+		Team team;
+		@rename("Rotation") @optional
+		vec3 rotationVec;
+	}
+
+	struct ClassInfo
 	{
 		string Name;
-		int[] Spawn;
 		string Abilities;
 		string Prefab;
-		@rename("Team")
-		Team team;
-		@rename("Rotation")
-		vec3 rotationVec;
 		quat rotation;
 		int hp, sp, at, df = 0;
 	}
 
-	struct propInfo
+	struct PropInfo
 	{
 		int[] Location;
 		int height;
@@ -33,17 +38,19 @@ final class Controller
 		quat rotation;
 	}
 
-	struct levelInfo
+	struct LevelInfo
 	{
 		string Name;
 		@rename("Grid")
 		int[] gridSize;
 		bool FogOfWar;
-		unitInfo[] units;
-		propInfo[] props;
+		@rename( "Units" )
+		UnitInfo[] units;
+		@rename( "Objects" )
+		PropInfo[] props;
 	}
 
-	struct abilityInfo
+	struct AbilityInfo
 	{
 		string name;
 		TargetType targetType;
@@ -71,9 +78,9 @@ final class Controller
 		uint[] abilityIDs;
 
 		// load the yaml
-		//abilityInfo[] abilities = deserializeMultiFile!abilityInfo( Resources.Objects ~ "/Abilities/" ~ abilitiesFile )[ 0 ];
+		//AbilityInfo[] abilities = deserializeMultiFile!AbilityInfo( Resources.Objects ~ "/Abilities/" ~ abilitiesFile )[ 0 ];
 
-		/*foreach( abilityInfo ability; abilities )
+		/*foreach( AbilityInfo ability; abilities )
 		{
 			auto ability = abilityNode.getObject!(Ability)();
 			Game.abilities[ ability.ID ] = ability;
@@ -84,31 +91,31 @@ final class Controller
 	}
 
 	/// Load and create units from yaml
-	void loadUnits( unitInfo[] unitsToLoad )
+	void loadUnits( UnitInfo[] unitsToLoad )
 	{
-		foreach( unitInfo unitNode; unitsToLoad )
+		foreach( UnitInfo unitNode; unitsToLoad )
 		{
 			// this might break depending on how structs override information
-			//unitNode = deserializeFileByName!unitInfo( Resources.Objects ~ "/Units/" ~ unitNode.Prefab );
+			ClassInfo classNode = deserializeFileByName!ClassInfo( Resources.Objects ~ "/Units/" ~ unitNode.Class )[ 0 ];
 
 			if( unitNode.rotationVec )
-				unitNode.rotation = quat.euler_rotation( radians( unitNode.rotationVec.y ), radians( unitNode.rotationVec.z ), radians( unitNode.rotationVec.x ) );
+				classNode.rotation = quat.euler_rotation( radians( unitNode.rotationVec.y ), radians( unitNode.rotationVec.z ), radians( unitNode.rotationVec.x ) );
 
 			// validate spawn position
 			if ( unitNode.Spawn[ 0 ] > Game.grid.gridX || unitNode.Spawn[ 1 ] > Game.grid.gridY )
 			{
-				logInfo( "Unit '", unitNode.Name, "' is not within the grid. Fix its position." );
+				logInfo( "Unit '", unitNode.Class, "' is not within the grid. Fix its position." );
 				break;
 			}
 
 			// instantiate the prefab of a unit
-			auto u = Prefabs[ unitNode.Prefab ].createInstance();
+			auto u = Prefabs[ classNode.Prefab ].createInstance();
 			auto unit = u.getComponent!Unit;
 
 			// initialize the unit and add it to the active scene
-			unit.init( toTileID( unitNode.Spawn[ 0 ], unitNode.Spawn[ 1 ] ), unitNode.team, unitNode.hp, unitNode.sp, unitNode.at, unitNode.df, loadAbilities( unitNode.Abilities ) );
-			if ( unitNode.rotation )
-				unit.transform.rotation = unitNode.rotation;
+			unit.init( toTileID( unitNode.Spawn[ 0 ], unitNode.Spawn[ 1 ] ), unitNode.team, classNode.hp, classNode.sp, classNode.at, classNode.df, loadAbilities( classNode.Abilities ) );
+			if ( classNode.rotation )
+				unit.transform.rotation = classNode.rotation;
 			Game.level.addChild( u );
 			Game.units ~= unit;
 
@@ -128,13 +135,13 @@ final class Controller
 	void loadLevel( string levelName )
 	{
 		// load the level from yaml
-		levelInfo level = deserializeFileByName!levelInfo( Resources.Objects ~ "/Levels/" ~ levelName )[ 0 ];
+		LevelInfo level = deserializeFileByName!LevelInfo( Resources.Objects ~ "/Levels/" ~ levelName )[ 0 ];
 
 		// fill the grid
 		Game.grid.initTiles( level.gridSize[ 0 ], level.gridSize[ 1 ] );
 
 		// add props to the scene
-		foreach( propInfo p; level.props )
+		foreach( PropInfo p; level.props )
 		{
 			// get the variables from the node
 			if ( !p.prefab )
