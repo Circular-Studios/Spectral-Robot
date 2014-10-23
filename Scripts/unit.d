@@ -6,66 +6,60 @@ import std.algorithm;
 
 enum ACTIONS_RESET = 3;
 
+mixin( registerComponents!() );
+
 class Unit : Component
 {
 private:
 	static uint nextID = 0;
-	int _hp;
-	int _speed;
-	int _attack;
-	int _defense;
-	uint _position;
-	Team _team;
-	int _remainingRange;
-	int _remainingActions;
-	uint[] _abilities;
-	Tile[] _selectedTiles;
-	IEffect[] _activeEffects;
-	GameObject _parent;
 
 public:
 	alias owner this;
-	immutable uint ID;
-	mixin( Property!( _position, AccessModifier.Public) );
-	mixin( Property!( _team, AccessModifier.Public) );
-	mixin( Property!( _remainingRange, AccessModifier.Public) );
-	mixin( Property!( _remainingActions, AccessModifier.Public) );
-	mixin( Property!( _selectedTiles, AccessModifier.Public) );
-	mixin( Property!( _activeEffects, AccessModifier.Public) );
-	mixin( Property!( _hp, AccessModifier.Public) );
-	mixin( Property!( _speed, AccessModifier.Public) );
-	mixin( Property!( _attack, AccessModifier.Public) );
-	mixin( Property!( _defense, AccessModifier.Public) );
-	mixin( Property!( _abilities, AccessModifier.Public) );
-	mixin( Property!( _parent, AccessModifier.Public) );
+	/*immutable*/ uint ID;
+	int hp;
+	int speed;
+	int attack;
+	int defense;
+	uint position;
+	Team team;
+	int remainingRange;
+	int remainingActions;
+	@ignore
+	uint[] abilities;
+	@ignore
+	Tile[] selectedTiles;
+	@ignore
+	IEffect[] activeEffects;
+	@ignore
+	GameObject parent;
 	@property int x() { return cast(int)position % Game.grid.gridX; }
 	@property int y() { return cast(int)position / Game.grid.gridX; }
-	@property float z() { return Game.grid.getTileByID(position).z; }
+	@property float z() { return Game.grid.getTileByID( position ).z; }
 
 	this()
 	{
 		ID = nextID++;
-		_remainingActions = ACTIONS_RESET;
+		remainingActions = ACTIONS_RESET;
 	}
 
 	/// Initialize a unit
 	void init( uint position, Team team, int hp, int sp, int at, int df, uint[] abilities )
 	{
-		_position = position;
-		_team = team;
-		_hp = hp;
-		_speed = sp;
-		_remainingRange = _speed;
-		_attack = at;
-		_defense = df;
-		_abilities = abilities;
+		this.position = position;
+		this.team = team;
+		this.hp = hp;
+		this.speed = sp;
+		this.remainingRange = this.speed;
+		this.attack = at;
+		this.defense = df;
+		this.abilities = abilities;
 		updatePosition();
 	}
 
 	/// Use an ability
 	bool useAbility( uint abilityID, uint targetID )
 	{
-		if( remainingActions > 0 && _abilities.countUntil( abilityID ) > -1 )
+		if( remainingActions > 0 && abilities.countUntil( abilityID ) > -1 )
 		{
 			if( Game.abilities[ abilityID ].use( position, targetID ) )
 			{
@@ -84,13 +78,14 @@ public:
 	///  diff = 	the amount to change prop by
 	///  duration = the number of turns the effect is applied
 	///  reset =	true if prop should return to its original value when the effect is over
+	@ignore
 	void applyEffect( string prop )( int diff, int duration = 0, bool reset = false )
 	{
 		// apply the effect for a number of turns
 		if( duration > 0 )
 		{
 			// add the ability to a list
-			_activeEffects ~= new Effect!prop( diff, duration, reset, mixin( prop ) );
+			activeEffects ~= new Effect!prop( diff, duration, reset, mixin( prop ) );
 		}
 
 		// apply the effect now
@@ -98,6 +93,7 @@ public:
 	}
 
 	/// Use an effect stored in the unit
+	@ignore
 	void reEffect( string prop )( int diff, int duration, bool reset, int originalValue )
 	{
 		mixin( prop ) -= diff;
@@ -152,7 +148,7 @@ public:
 
 			// decrement remaining actions and distance
 			actionUsed();
-			_remainingRange -= abs( ( targetTile.x - curTile.x ) ) + abs ( ( targetTile.y - curTile.y ) );
+			remainingRange -= abs( ( targetTile.x - curTile.x ) ) + abs ( ( targetTile.y - curTile.y ) );
 
 			// update fog of war
 			Game.grid.updateFogOfWar();
@@ -177,7 +173,7 @@ public:
 	/// Highlight the tiles the unit can move to
 	void previewMove()
 	{
-		selectedTiles = Game.grid.getInRange( position, _remainingRange );
+		selectedTiles = Game.grid.getInRange( position, remainingRange );
 
 		Game.ui.callJSFunction( "selectCharacter", [ID] );
 
@@ -235,7 +231,7 @@ public:
 	/// Decrement remaining actions
 	void actionUsed( int numActions = 1 )
 	{
-		_remainingActions -= numActions;
+		remainingActions -= numActions;
 		if( remainingActions <= 0 )
 		{
 			Game.grid.getTileByID( position ).type = TileType.OccupantInactive;
@@ -248,12 +244,12 @@ public:
 	void newTurn()
 	{
 		// reset action and range
-		_remainingActions = ACTIONS_RESET;
-		_remainingRange = speed;
+		remainingActions = ACTIONS_RESET;
+		remainingRange = speed;
 		Game.grid.getTileByID( position ).type = TileType.OccupantActive;
 
 		// apply active effects (reversed to allow for deletions)
-		foreach_reverse( effect; _activeEffects )
+		foreach_reverse( effect; activeEffects )
 		{
 			effect.use( this );
 		}
@@ -276,7 +272,7 @@ public:
 	override void update()
 	{
 		// on death
-		if( _hp <= 0 )
+		if( hp <= 0 )
 		{
 			// get index of unit in Game.units
 			int idx;
@@ -289,17 +285,17 @@ public:
 			}
 
 			// slice unit outside of game.units
-			Game.units = Game.units[0..idx]~Game.units[idx+1..Game.units.length];
+			Game.units = Game.units[ 0..idx ]~Game.units[ idx + 1..Game.units.length ];
 
 			// remove from level
-			Game.level.removeChild( _parent );
+			Game.level.removeChild( parent );
 
 			// set tile back to it's default state
 			Game.grid.getTileByID( position ).type( TileType.Open );
 			Game.grid.getTileByID( position ).selection( TileSelection.None );
 			Game.grid.getTileByID( position ).occupant = null;
 
-			_hp = 0;
+			hp = 0;
 		}
 	}
 }

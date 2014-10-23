@@ -22,6 +22,8 @@ enum TileSelection
 	Black,
 }
 
+mixin( registerComponents!() );
+
 class Tile : Component
 {
 private:
@@ -31,7 +33,7 @@ private:
 
 public:
 	alias owner this;
-	mixin( Property!( _occupant, AccessModifier.Public) );
+	mixin( Property!( _occupant, AccessModifier.Public ) );
 
 	@property void selection( TileSelection s )
 	{

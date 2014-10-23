@@ -1,22 +1,29 @@
 ---
 Name: GridSquare
-Tile:
-
+Components:
+    - Type: Tile
+    - Type: Mesh
+      Asset: grid_square
+    - Type: Material
+      Asset: BlackTile
 Transform:
     Rotation: [ 0, 0, 0 ]
-Mesh: grid_square
-Material: BlackTile
 ---
 Name: SquareFilled
-Tile:
-
+Components:
+    - Type: Tile
+    - Type: Mesh
+      Asset: unitsquare
+    - Type: Material
+      Asset: BlackTile
 Transform:
     Rotation: [ -90, 0, 0 ]
-Mesh: unitsquare
-Material: BlackTile
 ---
 Name: MarbleFloor
+Components:
+    - Type: Mesh
+      Asset: unitsquare
+    - Type: Material
+      Asset: MarbleFloor
 Transform:
     Rotation: [ -90, 0, 0 ]
-Mesh: unitsquare
-Material: MarbleFloor

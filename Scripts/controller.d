@@ -14,7 +14,7 @@ final class Controller
 		@rename("Team") @byName
 		Team team;
 		@rename("Rotation") @optional
-		vec3 rotationVec;
+		float[] rotationVec;
 	}
 
 	struct ClassInfo
@@ -22,6 +22,7 @@ final class Controller
 		string Name;
 		string Abilities;
 		string Prefab;
+		@ignore
 		quat rotation;
 		int hp, sp, at, df = 0;
 	}
@@ -29,12 +30,17 @@ final class Controller
 	struct PropInfo
 	{
 		int[] Location;
+		@rename( "Height" ) @optional
 		int height;
+		@rename( "TileSize" ) @optional
 		int[] tileSize;
+		@ignore
 		string name, prefab, ttype;
-		@rename("TileType")
+		@rename("TileType") @byName
 		TileType tileType;
-		vec3 rotationVec;
+		@rename( "Rotation" ) @optional
+		float[] rotationVec;
+		@ignore
 		quat rotation;
 	}
 
@@ -53,10 +59,13 @@ final class Controller
 	struct AbilityInfo
 	{
 		string name;
+		@byName
 		TargetType targetType;
+		@byName
 		TargetArea targetArea;
 		int range;
 		int damage;
+		int cooldown;
 	}
 
 	this()
@@ -78,7 +87,7 @@ final class Controller
 		uint[] abilityIDs;
 
 		// load the yaml
-		//AbilityInfo[] abilities = deserializeMultiFile!AbilityInfo( Resources.Objects ~ "/Abilities/" ~ abilitiesFile )[ 0 ];
+		//dub AbilityInfo[] abilities = deserializeMultiFile!AbilityInfo( Resources.Objects ~ "/Abilities/" ~ abilitiesFile )[ 0 ];
 
 		/*foreach( AbilityInfo ability; abilities )
 		{
@@ -99,7 +108,7 @@ final class Controller
 			ClassInfo classNode = deserializeFileByName!ClassInfo( Resources.Objects ~ "/Units/" ~ unitNode.Class )[ 0 ];
 
 			if( unitNode.rotationVec )
-				classNode.rotation = quat.euler_rotation( radians( unitNode.rotationVec.y ), radians( unitNode.rotationVec.z ), radians( unitNode.rotationVec.x ) );
+				classNode.rotation = fromEulerAngles( unitNode.rotationVec );
 
 			// validate spawn position
 			if ( unitNode.Spawn[ 0 ] > Game.grid.gridX || unitNode.Spawn[ 1 ] > Game.grid.gridY )
@@ -159,7 +168,7 @@ final class Controller
 			{
 				// make an object
 				if( p.rotationVec )
-					p.rotation = quat.euler_rotation( radians( p.rotationVec.y ), radians( p.rotationVec.z ), radians(p. rotationVec.x ) );
+					p.rotation = fromEulerAngles( p.rotationVec );
 
 				// check that the tile size and location are compatible
 				if( p.Location.length > 2 )
@@ -202,7 +211,7 @@ final class Controller
 						auto prop = Prefabs[ p.prefab ].createInstance();
 
 						// make the name unique
-						prop.name = p.prefab ~ " ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )";
+						prop.changeName( p.prefab ~ " ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )" );
 
 						// place the prop
 						if( p.tileSize[ 0 ] % 2 == 0 )

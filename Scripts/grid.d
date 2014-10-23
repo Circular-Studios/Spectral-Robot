@@ -269,7 +269,7 @@ public:
 			tile.stateFlags.drawMesh = false;
 
 			// make the name unique for debugging
-			tile.name = "Tile ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )";
+			tile.changeName( "Tile ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )" );
 
 			this.addChild( t );
 			tiles[ x ][ y ] = tile;
@@ -290,7 +290,7 @@ public:
 			floor.transform.scale = vec3( TILE_SIZE * 3 );
 
 			// make the name unique
-			floor.name = "Floor ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )";
+			floor.changeName( "Floor ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )" );
 
 			this.addChild( floor );
 		}

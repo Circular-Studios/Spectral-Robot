@@ -148,11 +148,11 @@ public:
 			final switch( damageType )
 			{
 				case DamageType.Normal:
-					targetTile.occupant.applyEffect!"_hp"( attack );
+					targetTile.occupant.applyEffect!"hp"( attack );
 					break;
 				case DamageType.Buff:
 					// TODO: Expand this to use the StatEffected enum
-					targetTile.occupant.applyEffect!"_attack"( damage, duration, true );
+					targetTile.occupant.applyEffect!"attack"( damage, duration, true );
 					break;
 				case DamageType.Debuff:
 					break;
@@ -160,16 +160,16 @@ public:
 					// call the straight line function
 					break;
 				case DamageType.DOT:
-					targetTile.occupant.applyEffect!"_hp"( attack, duration );
+					targetTile.occupant.applyEffect!"hp"( attack, duration );
 					break;
 				case DamageType.Healing:
-					targetTile.occupant.applyEffect!"_hp"( -attack, duration );
+					targetTile.occupant.applyEffect!"hp"( -attack, duration );
 					break;
 				case DamageType.Reduce:
 					break;
 				case DamageType.LifeSteal:
-					originTile.occupant.applyEffect!"_hp"( -attack, duration );
-					targetTile.occupant.applyEffect!"_hp"( attack, duration );
+					originTile.occupant.applyEffect!"hp"( -attack, duration );
+					targetTile.occupant.applyEffect!"hp"( attack, duration );
 					break;
 				case DamageType.Modifier:
 					break;

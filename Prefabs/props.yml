@@ -1,36 +1,56 @@
 ---
 Name: Table
-Mesh: GridSize
-Material: poopmat
+    - Type: Mesh
+      Asset: GridSize
+    - Type: Material
+      Asset: poopmat
 ---
 Name: Wall_1x1
-Mesh: RG_wall_1x1_01
-Material: Wall_1x1
+    - Type: Mesh
+      Asset: RG_wall_1x1_01
+    - Type: Material
+      Asset: Wall_1x1
 ---
 Name: Wall_1x2
-Mesh: RG_wall_1x2_01
-Material: Wall_1x2
+Components:
+    - Type: Mesh
+      Asset: RG_wall_1x2_01
+    - Type: Material
+      Asset: Wall_1x2
 ---
 Name: Wall_1x4
-Mesh: RG_wall_1x4_01
-Material: Wall_1x4
+Components:
+    - Type: Mesh
+      Asset: RG_wall_1x4_01
+    - Type: Material
+      Asset: Wall_1x4
 ---
 Name: Wall_Corner_In
-Mesh: RG_wall_corner_in_01
-Material: Wall_Corner_In
+    - Type: Mesh
+      Asset: RG_wall_corner_in_01
+    - Type: Material
+      Asset: Wall_Corner_In
 ---
 Name: Wall_Corner_Out
-Mesh: RG_wall_corner_out_01
-Material: Wall_Corner_Out
+    - Type: Mesh
+      Asset: RG_wall_corner_out_01
+    - Type: Material
+      Asset: Wall_Corner_Out
 ---
 Name: Pillar
-Mesh: RG_pillar_01
-Material: Pillar
+    - Type: Mesh
+      Asset: RG_pillar_01
+    - Type: Material
+      Asset: Pillar
 ---
 Name: Bookshelf
-Mesh: RG_Cover_Bookcase_Single_01
-Material: Bookshelf
+    - Type: Mesh
+      Asset: RG_Cover_Bookcase_Single_01
+    - Type: Material
+      Asset: Bookshelf
 ---
 Name: Desk
-Mesh: RG_desk_single_01
-Material: Desk
+    - Type: Mesh
+      Asset: RG_desk_single_01
+    - Type: Material
+      Asset: Desk

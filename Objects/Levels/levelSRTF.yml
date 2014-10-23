@@ -55,10 +55,12 @@ Objects:
     - Prefab: Wall_Corner_In
       Location: [23, 0]
       Rotation: [ 0, 180, 0 ]
+      TileType: FullyBlocked
 
     - Prefab: Wall_Corner_In
       Location: [23, 23]
       Rotation: [ 0, 90, 0 ]
+      TileType: FullyBlocked
 
     - Prefab: Wall_Corner_In
       Location: [0, 23]
@@ -85,7 +87,7 @@ Objects:
     - Prefab: Wall_1x2
       Location: [16, 23, 21, 23]
       TileSize: [2, 1]
-      Rotation: [ 0. 90, 0 ]
+      Rotation: [ 0, 90, 0 ]
       TileType: FullyBlocked
 
     - Prefab: Wall_1x1
