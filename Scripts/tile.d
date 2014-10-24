@@ -31,11 +31,12 @@ class Tile : Component
 private:
 	TileType _type;
 	TileSelection _selection;
-	Unit _occupant;
+	
 
 public:
 	alias owner this;
-	mixin( Property!( _occupant, AccessModifier.Public ) );
+	@ignore
+	Unit occupant;
 
 	@property void selection( TileSelection s )
 	{

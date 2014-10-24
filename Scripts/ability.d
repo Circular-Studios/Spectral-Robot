@@ -43,27 +43,11 @@ class Ability
 {
 private:
 	static uint nextID = 10;
-	string _name;
-	TargetType _targetType;
-	TargetArea _targetArea;
-	DamageType _damageType;
-	StatEffected _statEffected;
-	int _damage;
-	int _range;
-	int _unitRange;
-	int _cooldown;
-	int _duration;
-	int _accuracy;
-	int _currentCooldown;
-	
-	// only used in this class
-	//int _currentRange;
-	Tile[] _selectedTiles;
 	
 	/// Highlight the tiles that the ability can effect
 	Tile[] highlight( uint originID, uint range )
 	{
-		switch( _targetArea )
+		switch( targetArea )
 		{
 			default:
 				return null;
@@ -76,29 +60,34 @@ private:
 	
 public:
 	immutable uint ID;
-	mixin( Property!( _name, AccessModifier.Public ) );
-	mixin( Property!( _targetType, AccessModifier.Public ) );
-	mixin( Property!( _targetArea, AccessModifier.Public ) );
-	mixin( Property!( _damageType, AccessModifier.Public ) );
-	mixin( Property!( _statEffected, AccessModifier.Public ) );
-	mixin( Property!( _damage, AccessModifier.Public ) );
-	mixin( Property!( _range, AccessModifier.Public ) );
-	mixin( Property!( _cooldown, AccessModifier.Public ) );
-	mixin( Property!( _currentCooldown, AccessModifier.Public ) );
-	mixin( Property!( _duration, AccessModifier.Public ) );
-	mixin( Property!( _accuracy, AccessModifier.Public ) );
+	string name;
+	TargetType targetType;
+	TargetArea targetArea;
+	DamageType damageType;
+	StatEffected statEffected;
+	int damage;
+	int range;
+	int unitRange;
+	int cooldown;
+	int duration;
+	int accuracy;
+	int currentCooldown;
+
+	// only used in this class
+	//int _currentRange;
+	Tile[] selectedTiles;
 
 	/// Temporary function until we can modify properties as lvalue
 	void decrementCooldown()
 	{
-		//if( _currentCooldown > 0 )
-			//_currentCooldown--;
+		//if( currentCooldown > 0 )
+			//currentCooldown--;
 	}
 	
 	this()
 	{
 		ID = nextID++;
-		_currentCooldown = 0;
+		currentCooldown = 0;
 	}
 	
 	/// Use the ability
@@ -108,7 +97,7 @@ public:
 		{
 			// make sure the targetID is allowed
 			bool legalTile = false;
-			foreach( tile; _selectedTiles )
+			foreach( tile; selectedTiles )
 			{
 				if( tile.toID() == targetID )
 					legalTile = true;
@@ -116,14 +105,14 @@ public:
 
 			if( legalTile )
 			{
-				switch( _targetArea )
+				switch( targetArea )
 				{
 					default:
 						break;
 					case TargetArea.Single:
 							return applyAbility( originID, targetID );
 					case TargetArea.Radial:
-						foreach( tile; _selectedTiles )
+						foreach( tile; selectedTiles )
 						{
 							return applyAbility( originID, tile.toID() );
 						}
@@ -191,7 +180,7 @@ public:
 	{
 		auto origin = Game.grid.getTileByID( originID );
 		auto target = Game.grid.getTileByID( targetID );
-		return range + _unitRange >= abs( ( target.x - origin.x ) ) + abs( ( target.y - origin.y ) );
+		return range + unitRange >= abs( ( target.x - origin.x ) ) + abs( ( target.y - origin.y ) );
 	}
 
 	unittest
@@ -207,11 +196,11 @@ public:
 	void preview( uint originID, uint unitRange )
 	{
 		// get the tiles the ability can effect
-		_unitRange = unitRange;
-		_selectedTiles = highlight( originID, range + unitRange );
+		unitRange = unitRange;
+		selectedTiles = highlight( originID, range + unitRange );
 		
 		// change the material of the tiles
-		foreach( tile; _selectedTiles )
+		foreach( tile; selectedTiles )
 		{
 			if( tile.selection != TileSelection.Blue || 
 			( tile.occupant !is null && tile.occupant != Game.grid.selectedUnit ) )
@@ -223,7 +212,7 @@ public:
 	void unpreview()
 	{
 		// reset the tiles that were highlighted
-		foreach( tile; _selectedTiles )
+		foreach( tile; selectedTiles )
 		{
 			tile.resetSelection();
 		}
