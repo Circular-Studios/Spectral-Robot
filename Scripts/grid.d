@@ -4,31 +4,21 @@ import dash.core, dash.utility, dash.components;
 import gl3n.linalg;
 import std.conv, std.algorithm, std.range, std.array;
 
-const int TILE_SIZE = 24;
-
 /// A grid that contains tiles
 class Grid : Component
 {
 private:
-	Tile[][] _tiles;
-	bool _isUnitSelected = false;
-	bool _isAbilitySelected = false;
-	bool _fogOfWar;
-	Unit _selectedUnit;
-	uint _selectedAbility;
-	int _gridX, _gridY;
 	vec2i sel;
 
 public:
 	alias owner this;
-	mixin( Property!( _tiles, AccessModifier.Public ) );
-	mixin( Property!( _isUnitSelected, AccessModifier.Public ) );
-	mixin( Property!( _isAbilitySelected, AccessModifier.Public ) );
-	mixin( Property!( _selectedUnit, AccessModifier.Public ) );
-	mixin( Property!( _selectedAbility, AccessModifier.Public ) );
-	mixin( Property!( _fogOfWar, AccessModifier.Public ) );
-	mixin( Property!( _gridX, AccessModifier.Public ) );
-	mixin( Property!( _gridY, AccessModifier.Public ) );
+    Tile[][] tiles;
+	bool isUnitSelected = false;
+	bool isAbilitySelected = false;
+	bool fogOfWar;
+	Unit selectedUnit;
+	uint selectedAbility;
+	int gridX, gridY;
 
 	// Setup key events
 	this()
@@ -247,7 +237,7 @@ public:
 		logInfo("Grid size: ( ", n, ", ", m, " )" );
 
 		//initialize tiles
-		_tiles = new Tile[][]( n, m );
+		tiles = new Tile[][]( n, m );
 		gridX = n;
 		gridY = m;
 

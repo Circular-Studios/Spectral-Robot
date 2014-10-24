@@ -1,5 +1,5 @@
 ﻿module camera;
-import game, grid;
+import game, grid, tile;
 import dash;
 import std.algorithm;
 import gl3n.linalg, gl3n.math, gl3n.interpolate;

@@ -1,8 +1,10 @@
 ﻿module tile;
-import game, controller, grid, unit;
+import game, controller, unit;
 import dash.core, dash.utility, dash.components;
 import gl3n.linalg;
 import std.conv;
+
+enum TILE_SIZE = 24;
 
 enum TileType
 {
