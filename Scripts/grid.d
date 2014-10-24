@@ -31,16 +31,7 @@ private:
 	uint _selectedAbility;
 	int _gridX, _gridY;
 	vec2i sel;
-
-	vec3i cubeNeighbors = 
-		[
-			vec3i( state.tile.x + 1, state.tile.y - 1, state.tile.z     ),
-			vec3i( state.tile.x + 1, state.tile.y    , state.tile.z - 1 ),
-			vec3i( state.tile.x    , state.tile.y + 1, state.tile.z - 1 ),
-			vec3i( state.tile.x - 1, state.tile.y + 1, state.tile.z     ),
-			vec3i( state.tile.x - 1, state.tile.y    , state.tile.z + 1 ),
-			vec3i( state.tile.x    , state.tile.y - 1, state.tile.z + 1 )
-		];
+	vec3i[] cubeNeighbors;
 	
 public:
 	alias owner this;
@@ -221,15 +212,25 @@ public:
 		import std.typecons;
 		//alias Tuple!( vec3i, "tile", uint, "depth" ) searchState;
 		
-		auto visited = new vec3i[]( gridX * gridY ); // Keeps track of what cubes have been added already.
-		auto fringes new vec3i[]( gridX * gridY ); // Keeps track of what cubes have been added already.
+		vec3i[] visited = new vec3i[]( gridX * gridY ); // Keeps track of what cubes have been added already.
+		vec3i[][] fringes = new vec3i[][]( gridX * gridY, 6 ); // Keeps track of what cubes have been added already.
 		//searchState[] states; // Queue of states to sort through.
 		//Tile[] foundTiles; // Tiles inside the range.
 		
 		// Start with initial tile.
 		vec3i start = gridToCube( originID );
 		visited ~= start;
-		fringes ~= start;
+		fringes[ 0 ] ~= start;
+
+		cubeNeighbors = 
+		[
+			vec3i( start.x + 1, start.y - 1, start.z     ),
+			vec3i( start.x + 1, start.y    , start.z - 1 ),
+			vec3i( start.x    , start.y + 1, start.z - 1 ),
+			vec3i( start.x - 1, start.y + 1, start.z     ),
+			vec3i( start.x - 1, start.y    , start.z + 1 ),
+			vec3i( start.x    , start.y - 1, start.z + 1 )
+		];
 
 		foreach( depth; 1..range + 1 )
 		{
@@ -239,10 +240,10 @@ public:
 			{
 				foreach( dir; 0..6 )
 				{
-					auto neighbor = cubeDirection( dir ) );
+					auto neighbor = cubeDirection( dir );
 
 					//	if neighbor not in visited, not blocked
-					if( visited[ neighbor ] == null )
+					if( visited.countUntil( neighbor ) > -1 )
 					{
 						//add neighbor to visited
 						visited ~= neighbor;
@@ -251,8 +252,25 @@ public:
 				}
 			}
 		}
+
+		Tile[] foundTiles;
+
+		foreach( depth; fringes )
+		{
+			foreach( tile; depth )
+			{
+				if( tile != [ 0, 0, 0 ] )
+				{
+					foundTiles ~= getTileByID( cubeToGrid( tile ) );
+					logInfo(tile);
+					logInfo(getTileByID( cubeToGrid( tile ) ).toID);
+				}
+			}
+		}
+
+		logInfo(foundTiles);
 		
-		while( states.length )
+		/*while( states.length )
 		{
 			auto state = states[ 0 ];
 			states = states[ 1..$ ];
@@ -306,7 +324,7 @@ public:
 						|| ( stopOnUnits && state.tile.occupant !is null ) ) ) // or the tile has no unit in it
 						states ~= searchState( tiles[ coord.x ][ coord.y ], state.depth + 1 );
 			}
-		}
+		}*/
 		
 		return foundTiles;
 	}
