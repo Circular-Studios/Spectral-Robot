@@ -1,11 +1,13 @@
 ---
 Name: Table
+Components:
     - Type: Mesh
       Asset: GridSize
     - Type: Material
       Asset: poopmat
 ---
 Name: Wall_1x1
+Components:
     - Type: Mesh
       Asset: RG_wall_1x1_01
     - Type: Material
@@ -26,30 +28,35 @@ Components:
       Asset: Wall_1x4
 ---
 Name: Wall_Corner_In
+Components:
     - Type: Mesh
       Asset: RG_wall_corner_in_01
     - Type: Material
       Asset: Wall_Corner_In
 ---
 Name: Wall_Corner_Out
+Components:
     - Type: Mesh
       Asset: RG_wall_corner_out_01
     - Type: Material
       Asset: Wall_Corner_Out
 ---
 Name: Pillar
+Components:
     - Type: Mesh
       Asset: RG_pillar_01
     - Type: Material
       Asset: Pillar
 ---
 Name: Bookshelf
+Components:
     - Type: Mesh
       Asset: RG_Cover_Bookcase_Single_01
     - Type: Material
       Asset: Bookshelf
 ---
 Name: Desk
+Components:
     - Type: Mesh
       Asset: RG_desk_single_01
     - Type: Material

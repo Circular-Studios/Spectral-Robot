@@ -1,7 +1,6 @@
 ---
 Name: TechWolf
 Components:
-    - Type: Unit
     - Type: Mesh
       Asset: wolf_idle
     - Type: Material
@@ -9,7 +8,6 @@ Components:
 ---
 Name: PyroWolf
 Components:
-    - Type: Unit
     - Type: Mesh
       Asset: wolf_idle
     - Type: Material
@@ -17,7 +15,6 @@ Components:
 ---
 Name: PyroRobot
 Components:
-    - Type: Unit
     - Type: Mesh
       Asset: robot_idle
     - Type: Material
@@ -25,7 +22,6 @@ Components:
 ---
 Name: TechRobot
 Components:
-    - Type: Unit
     - Type: Mesh
       Asset: robot_idle
     - Type: Material

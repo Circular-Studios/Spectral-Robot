@@ -24,8 +24,6 @@ enum TileSelection
 	Black,
 }
 
-mixin( registerComponents!() );
-
 class Tile : Component
 {
 private:
@@ -40,28 +38,31 @@ public:
 
 	@property void selection( TileSelection s )
 	{
+		/*
 		final switch( s )
 		{
 			case TileSelection.None:
-				this.addComponent( Assets.get!Material( "BlackTile" ) );
+				this.material = Assets.get!Material( "BlackTile" );
 				stateFlags.drawMesh = false;
 				break;
 			case TileSelection.Blue:
-				this.addComponent( Assets.get!Material( "BlueTile" ) );
+				this.material = Assets.get!Material( "BlueTile" );
 				stateFlags.drawMesh = true;
 				break;
 			case TileSelection.Red:
-				this.addComponent( Assets.get!Material( "RedTile" ) );
+				this.material = Assets.get!Material( "RedTile" );
 				stateFlags.drawMesh = true;
 				break;
 			case TileSelection.Green:
-				this.addComponent( Assets.get!Material( "GreenTile" ) );
+				this.material = Assets.get!Material( "GreenTile" );
 				stateFlags.drawMesh = true;
 				break;
 			case TileSelection.Black:
-				this.addComponent( Assets.get!Material( "BlackTile" ) );
-				stateFlags.drawMesh = true;
+				this.material = Assets.get!Material( "BlackTile" );
+				stateFlags.drawMesh = true;		
 		}
+		*/
+
 		_selection = s;
 	}
 

@@ -18,7 +18,7 @@
 		"Liam Middlebrook"
 	],
 	"dependencies": {
-		"dash": "==0.11.0-beta7"
+		"dash": "==0.11.0-beta8"
 	},
 	"sourcePaths": [
 		"Config/",

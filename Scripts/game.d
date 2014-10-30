@@ -2,6 +2,10 @@ module game;
 import controller, grid, turn, action, ability, unit, camera, tile;
 import dash;
 
+mixin( registerComponents!("unit") );
+mixin( registerComponents!("tile") );
+mixin( registerComponents!("camera") );
+
 // An easier way to access the game instance
 @property RobotGhosts Game()
 {
@@ -34,6 +38,8 @@ public:
 		// setup a couple helper keys
 		Input.addButtonDownEvent( "QuitToDesktop", ( _ ) { currentState = EngineState.Quit; } );
 		Input.addButtonDownEvent( "ResetGame", ( _ ) { currentState = EngineState.Reset; } );
+
+		stateFlags.autoRefresh = false;
 
 		// initalize stuff
 		level = new Scene();

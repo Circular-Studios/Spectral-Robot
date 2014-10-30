@@ -4,8 +4,6 @@ import dash;
 import std.algorithm;
 import gl3n.linalg, gl3n.math, gl3n.interpolate;
 
-mixin( registerComponents!() );
-
 /// Camera movement around the scene
 class AdvancedCamera : Component
 {

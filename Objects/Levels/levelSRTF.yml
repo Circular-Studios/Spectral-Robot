@@ -5,11 +5,11 @@ FogOfWar: No
 Units:
     - Class: TechWolf
       Spawn: [17, 5]
-      Team: Wolf
+      Team: Criminal
 
     - Class: PyroWolf
       Spawn: [5, 5]
-      Team: Wolf
+      Team: Criminal
 
     - Class: PyroRobot
       Spawn: [12, 19]

@@ -6,8 +6,6 @@ import std.algorithm;
 
 enum ACTIONS_RESET = 3;
 
-mixin( registerComponents!() );
-
 class Unit : Component
 {
 private:
@@ -15,14 +13,23 @@ private:
 
 public:
 	alias owner this;
-	/*immutable*/ uint ID;
+	@ignore
+	immutable uint ID;
+	@optional
 	int hp;
+	@optional
 	int speed;
+	@optional
 	int attack;
+	@optional
 	int defense;
+	@optional
 	uint position;
+	@rename("Team") @byName
 	Team team;
+	@ignore
 	int remainingRange;
+	@ignore
 	int remainingActions;
 	@ignore
 	uint[] abilities;

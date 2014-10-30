@@ -24,7 +24,10 @@ final class Controller
 		string Prefab;
 		@ignore
 		quat rotation;
-		int hp, sp, at, df = 0;
+		int HP;
+		int Speed;
+		int Attack;
+		int Defense;
 	}
 
 	struct PropInfo
@@ -35,7 +38,9 @@ final class Controller
 		@rename( "TileSize" ) @optional
 		int[] tileSize;
 		@ignore
-		string name, prefab, ttype;
+		string name, ttype;
+		@rename("Prefab")
+		string prefab;
 		@rename("TileType") @byName
 		TileType tileType;
 		@rename( "Rotation" ) @optional
@@ -87,11 +92,11 @@ final class Controller
 		uint[] abilityIDs;
 
 		// load the yaml
-		//dub AbilityInfo[] abilities = deserializeMultiFile!AbilityInfo( Resources.Objects ~ "/Abilities/" ~ abilitiesFile )[ 0 ];
+		//AbilityInfo[] abilities = deserializeMultiFile!AbilityInfo( Resources.Objects ~ "/Abilities/" ~ abilitiesFile )[ 0 ];
 
 		/*foreach( AbilityInfo ability; abilities )
 		{
-			auto ability = abilityNode.getObject!(Ability)();
+			//auto ability = abilityNode.getObject!(Ability)();
 			Game.abilities[ ability.ID ] = ability;
 			abilityIDs ~= ability.ID;
 		}*/
@@ -105,24 +110,28 @@ final class Controller
 		foreach( UnitInfo unitNode; unitsToLoad )
 		{
 			// this might break depending on how structs override information
-			ClassInfo classNode = deserializeFileByName!ClassInfo( Resources.Objects ~ "/Units/" ~ unitNode.Class )[ 0 ];
+			ClassInfo classNode = deserializeFileByName!ClassInfo( Resources.Objects ~ "/Classes/" ~ unitNode.team.to!string ~ "/" ~ unitNode.Class )[ 0 ];
 
 			if( unitNode.rotationVec )
 				classNode.rotation = fromEulerAngles( unitNode.rotationVec );
 
 			// validate spawn position
-			if ( unitNode.Spawn[ 0 ] > Game.grid.gridX || unitNode.Spawn[ 1 ] > Game.grid.gridY )
+			if ( unitNode.Spawn[ 0 ] < 0 || 
+				 unitNode.Spawn[ 1 ] < 0 ||
+				 unitNode.Spawn[ 0 ] > Game.grid.gridX || 
+				 unitNode.Spawn[ 1 ] > Game.grid.gridY )
 			{
 				logInfo( "Unit '", unitNode.Class, "' is not within the grid. Fix its position." );
-				break;
+				continue;
 			}
 
 			// instantiate the prefab of a unit
 			auto u = Prefabs[ classNode.Prefab ].createInstance();
-			auto unit = u.getComponent!Unit;
+			auto unit = new Unit();
+			u.addComponent( unit );
 
 			// initialize the unit and add it to the active scene
-			unit.init( toTileID( unitNode.Spawn[ 0 ], unitNode.Spawn[ 1 ] ), unitNode.team, classNode.hp, classNode.sp, classNode.at, classNode.df, loadAbilities( classNode.Abilities ) );
+			unit.init( toTileID( unitNode.Spawn[ 0 ], unitNode.Spawn[ 1 ] ), unitNode.team, classNode.HP, classNode.Speed, classNode.Attack, classNode.Defense, loadAbilities( classNode.Abilities ) );
 			if ( classNode.rotation )
 				unit.transform.rotation = classNode.rotation;
 			Game.level.addChild( u );

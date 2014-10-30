@@ -5,7 +5,7 @@ import gl3n.linalg, gl3n.math;
 
 enum Team {
 	Robot,
-	Wolf,
+	Criminal,
 }
 
 enum NetworkAction {
@@ -126,7 +126,7 @@ public:
 		}
 		else
 		{
-			currentTeam = Team.Wolf;
+			currentTeam = Team.Criminal;
 
 			// make the camera look nice
 			// TODO: This will break when we have multiple levels
@@ -150,9 +150,9 @@ public:
 			default:
 				break;
 			case Team.Robot:
-				activeTeam = Team.Wolf;
+				activeTeam = Team.Criminal;
 				break;
-			case Team.Wolf:
+			case Team.Criminal:
 				activeTeam = Team.Robot;
 				break;
 		}
