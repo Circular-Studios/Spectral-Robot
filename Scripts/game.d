@@ -61,6 +61,7 @@ public:
 		auto cam = level[ "Camera" ].getComponent!AdvancedCamera;
 		cam.autoClamp();
 		level.camera = cam.camera;
+		turn.setCameraToRecord();
 		
 		// bind 'r' to server connect
 		Input.addButtonDownEvent( "ConnectToServer", kc => connect() );

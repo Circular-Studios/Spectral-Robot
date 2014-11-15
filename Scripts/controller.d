@@ -7,14 +7,7 @@ import gl3n.linalg, gl3n.math;
 
 final class Controller
 {
-    // beginning camera values for the different teams
-    vec3 robotCamPos;
-    vec3 robotCamRot;
-    
-	vec3 wolfCamPos;
-	vec3 wolfCamRot;
-
-	this( string level, string gameMode )
+    this( string level, string gameMode )
 	{
 		// first load all the objects
 		Game.level.loadObjects( "Base" );
@@ -145,6 +138,8 @@ final class Controller
 		Node teamNode;
 		currentGameMode.tryFind("Team", teamNode);
         // team robot
+		vec3 robotCamPos;
+		vec3 robotCamRot;
         Node robotNode;
         teamNode.tryFind("Robot", robotNode);
         Node robotCamera;
@@ -152,12 +147,16 @@ final class Controller
         robotCamera.tryFind("Position", robotCamPos);
         robotCamera.tryFind("Rotation", robotCamRot);
 		// team wolf
+		vec3 wolfCamPos;
+		vec3 wolfCamRot;
 		Node wolfNode;
 		teamNode.tryFind("Wolf", wolfNode);
 		Node wolfCamera;
 		wolfNode.tryFind("Camera", wolfCamera);
 		wolfCamera.tryFind("Position", wolfCamPos);
 		wolfCamera.tryFind("Rotation", wolfCamRot);
+		// pass the values to Turn
+		Game.turn.setInitCamPos(robotCamPos, robotCamRot, wolfCamPos, wolfCamRot);
 
 		// add props to the scene
 		foreach( Node propNode; propsNode )

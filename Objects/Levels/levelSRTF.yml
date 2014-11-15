@@ -8,11 +8,11 @@ GameModes:
     Team:
         Robot:
             Camera:
-                Position: !Vector3 300 150 0
+                Position: !Vector3 300 200 550
                 Rotation: !Vector3 0 0 -45
         Wolf:
             Camera:
-                Position: !Vector3 300 150 0
+                Position: !Vector3 300 200 50
                 Rotation: !Vector3 180 0 -45
     Units:
         - Name: TechWolf

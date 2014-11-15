@@ -24,6 +24,12 @@ public:
 	Team currentTeam; // the team this player controls
 	Team activeTeam; // the active team
 	
+	// the last recorded camera positions for the teams
+	vec3 lastCamPosRobot;
+	quat lastCamRotRobot;
+	vec3 lastCamPosWolf;
+	quat lastCamRotWolf;
+	
 	this()
 	{
 		// arbitrary starting team
@@ -123,27 +129,10 @@ public:
 		if( teamNum == 1 )
 		{
 			currentTeam = Team.Robot;
-            
-            // set camera
-            Game.level.camera.owner.transform.position = Game.gc.robotCamPos;
-            
-            vec3 rot = Game.gc.robotCamRot;
-            Game.level.camera.owner.transform.rotation = quat.euler_rotation(radians(rot.x), radians(rot.y), radians(rot.z));
 		}
 		else
 		{
 			currentTeam = Team.Wolf;
-
-			// make the camera look nice
-			// TODO: This will break when we have multiple levels
-			//Game.level.camera.owner.transform.position = vec3( 300, Game.level.camera.owner.transform.position.y, 0 );
-			//Game.level.camera.owner.transform.rotation = quat.euler_rotation( radians( 180 ), 0, radians( -45 ) );
-            
-            // set camera
-			Game.level.camera.owner.transform.position = Game.gc.wolfCamPos;
-            
-            vec3 rot = Game.gc.wolfCamRot;
-            Game.level.camera.owner.transform.rotation = quat.euler_rotation(radians(rot.x), radians(rot.y), radians(rot.z));
 		}
 
 		// update the units on the team
@@ -154,9 +143,56 @@ public:
 		}
 	}
 	
+	// set the initial camera positions of the teams
+	void setInitCamPos(vec3 robotPos, vec3 robotRot, vec3 wolfPos, vec3 wolfRot) {
+		lastCamPosRobot = robotPos;
+		lastCamRotRobot = quat.euler_rotation(robotRot.x.radians, robotRot.y.radians, robotRot.z.radians);
+		
+		lastCamPosWolf = wolfPos;
+		lastCamRotWolf = quat.euler_rotation(wolfRot.x.radians, wolfRot.y.radians, wolfRot.z.radians);
+	}
+	
+	// returns to the last recorded camera position for the active team
+	void setCameraToRecord() {
+		switch (activeTeam) {
+			case Team.Robot:
+				Game.level.camera.owner.transform.position = lastCamPosRobot;
+				Game.level.camera.owner.transform.rotation = lastCamRotRobot;
+				break;
+				
+			case Team.Wolf:
+				Game.level.camera.owner.transform.position = lastCamPosWolf;
+				Game.level.camera.owner.transform.rotation = lastCamRotWolf;
+				break;
+				
+			default:
+				break;
+		}
+	}
+	
+	// record the camera's current position for the active team
+	void recordCameraPos() {
+		switch (activeTeam) {
+			case Team.Robot:
+				lastCamPosRobot = Game.level.camera.owner.transform.position;
+				lastCamRotRobot = Game.level.camera.owner.transform.rotation;
+				break;
+				
+			case Team.Wolf:
+				lastCamPosWolf = Game.level.camera.owner.transform.position;
+				lastCamRotWolf = Game.level.camera.owner.transform.rotation;
+				break;
+				
+			default:
+				break;
+		}
+	}
+	
 	/// Switch the active team
 	void switchActiveTeam()
 	{
+		recordCameraPos();
+	
 		switch ( activeTeam )
 		{
 			default:
@@ -172,6 +208,7 @@ public:
 		// hotseat multiplayer
 		if( !Game.serverConn )
 			currentTeam = activeTeam;
+			setCameraToRecord();
 
 		logInfo( "Active team: ", activeTeam );
 		
