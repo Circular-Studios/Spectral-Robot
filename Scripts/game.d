@@ -1,5 +1,5 @@
 module game;
-import controller, grid, turn, action, ability, unit, camera, tile;
+import controller, grid, turn, action, ability, unit, camera, tile, gameMode;
 import dash;
 
 // magical sprinkles
@@ -27,6 +27,7 @@ public:
 	Unit[] units; // The units
 	shared Connection serverConn; // the server connection
 	UserInterface ui;
+	GameMode gameMode;
 
 	// Name that game
 	@property override string title()
@@ -56,6 +57,7 @@ public:
 		Game.level.addChild( g );
 		turn = new Turn();
 		gc = new Controller( "levelSRTF", "Deathmatch" );
+		gameMode = GameMode.Deathmatch;
 		
 		// create a camera
 		auto cam = level[ "Camera" ].getComponent!AdvancedCamera;
@@ -74,7 +76,7 @@ public:
 
 	}
 
-	void loadLevel( string levelName, string gameMode )
+	void loadLevel( string levelName, string gameModeName )
 	{
 		onShutdown();
 
@@ -85,7 +87,8 @@ public:
 		grid = g.getComponent!Grid;
 		Game.level.addChild( g );
 		turn = new Turn();
-		gc = new Controller( levelName, gameMode );
+		gc = new Controller( levelName, gameModeName );
+		gameMode = to!GameMode(gameModeName);
 		
 		// create a camera
 		auto cam = level[ "Camera" ].getComponent!AdvancedCamera;

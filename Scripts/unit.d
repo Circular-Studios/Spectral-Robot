@@ -1,5 +1,5 @@
 ﻿module unit;
-import game, ability, action, grid, effect, tile, turn;
+import game, ability, action, grid, effect, tile, turn, gameMode;
 import dash.core, dash.utility, dash.components;
 import gl3n.linalg, gl3n.math, gl3n.interpolate;
 import std.algorithm;
@@ -12,6 +12,7 @@ class Unit : Component
 private:
 	static uint nextID = 0;
 	int _hp;
+	int _maxHP;
 	int _speed;
 	int _attack;
 	int _defense;
@@ -23,6 +24,7 @@ private:
 	Tile[] _selectedTiles;
 	IEffect[] _activeEffects;
 	GameObject _parent;
+	uint spawnPoint;
 
 public:
 	alias owner this;
@@ -55,11 +57,13 @@ public:
 		_position = position;
 		_team = team;
 		_hp = hp;
+		_maxHP = hp;
 		_speed = sp;
 		_remainingRange = _speed;
 		_attack = at;
 		_defense = df;
 		_abilities = abilities;
+		spawnPoint = position;
 		updatePosition();
 	}
 	
@@ -279,28 +283,44 @@ public:
 		// on death
 		if( _hp <= 0 )
 		{
-			// get index of unit in Game.units
-			int idx;
-			for( int i = 0; i < Game.units.length; i++ )
-			{
-				if( Game.units[i] == this )
-				{
-					idx = i;
-				}
-			}
-
-			// slice unit outside of game.units
-			Game.units = Game.units[0..idx]~Game.units[idx+1..Game.units.length];
-
-			// remove from level
-			Game.level.removeChild( _parent );
-
-			// set tile back to it's default state
+			// set the current tile to default state
 			Game.grid.getTileByID( position ).type( TileType.Open );
 			Game.grid.getTileByID( position ).selection( TileSelection.None );
 			Game.grid.getTileByID( position ).occupant = null;
+			
+			// respawn
+			if (Game.gameMode == GameMode.Deathmatch) {
+				_position = spawnPoint;
+				updatePosition();
+				
+				Game.grid.getTileByID(position).type(TileType.OccupantInactive);
+				Game.grid.getTileByID(position).selection(TileSelection.Black);
+				Game.grid.getTileByID(position).occupant = this;
+				
+				_hp = _maxHP;
+				logInfo(_hp);
+			}
+			// die
+			else {
+				// get index of unit in Game.units
+				int idx;
+				for( int i = 0; i < Game.units.length; i++ )
+				{
+					if( Game.units[i] == this )
+					{
+						idx = i;
+					}
+				}
+				
+				// slice unit outside of game.units
+				Game.units = Game.units[0..idx]~Game.units[idx+1..Game.units.length];
 
-			_hp = 0;
+				// remove from level
+				Game.level.removeChild( _parent );
+				
+				_hp = 0;
+			}
+			
 		}
 	}
 }
