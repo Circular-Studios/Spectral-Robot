@@ -179,22 +179,22 @@ public:
 	{
 		if( lookatPos.x < minX )
 		{
-			logDebug( "Clamping at minX" );
+			trace( "Clamping at minX" );
 			transform.position.x += minX - lookatPos.x;
 		}
 		if( lookatPos.x > maxX )
 		{
-			logDebug( "Clamping at maxX" );
+			trace( "Clamping at maxX" );
 			transform.position.x -= lookatPos.x - maxX;
 		}
 		if( lookatPos.z < minZ )
 		{
-			logDebug( "Clamping at minZ" );
+			trace( "Clamping at minZ" );
 			transform.position.z += minZ - lookatPos.z;
 		}
 		if( lookatPos.z > maxZ )
 		{
-			logDebug( "Clamping at maxZ" );
+			trace( "Clamping at maxZ" );
 			transform.position.z -= lookatPos.z - maxZ;
 		}
 	}

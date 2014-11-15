@@ -81,7 +81,7 @@ final class Controller
 		// load the game
 		loadLevel( "levelSRTF" ); //TODO: Remove hardcoded value
 
-		logInfo( Game.units.length, " units loaded." );
+		info( Game.units.length, " units loaded." );
 	}
 
 	/// Load and create abilities from yaml
@@ -121,7 +121,7 @@ final class Controller
 				 unitNode.Spawn[ 0 ] > Game.grid.gridX || 
 				 unitNode.Spawn[ 1 ] > Game.grid.gridY )
 			{
-				logInfo( "Unit '", unitNode.Class, "' is not within the grid. Fix its position." );
+				info( "Unit '", unitNode.Class, "' is not within the grid. Fix its position." );
 				continue;
 			}
 
@@ -169,7 +169,7 @@ final class Controller
 					for( int y = p.Location[ 1 ]; y <= p.Location[ 3 ]; y++ )
 					{
 						Game.grid.getTileByID( toTileID( x, y ) ).z = p.height;
-						logInfo( x, ", ", y );
+						info( x, ", ", y );
 					}
 				}
 			}
@@ -186,7 +186,7 @@ final class Controller
 					{
 						if( ( p.Location[ 2 ] - p.Location[ 0 ] + 1 ) % ( p.tileSize[ 0 ] ) != 0 )
 						{
-							logInfo( "Object at location ", p.Location, " has improper location for tile size along the x-axis. Object building aborted." );
+							info( "Object at location ", p.Location, " has improper location for tile size along the x-axis. Object building aborted." );
 							break;
 						}
 					}
@@ -194,7 +194,7 @@ final class Controller
 					{
 						if( ( p.Location[ 3 ] - p.Location[ 1 ] + 1 ) % ( p.tileSize[ 1 ] ) != 0 )
 						{
-							logInfo( "Object at location ", p.Location, " has improper location for tile size along the y-axis. Object building aborted." );
+							info( "Object at location ", p.Location, " has improper location for tile size along the y-axis. Object building aborted." );
 							break;
 						}
 					}

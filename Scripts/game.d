@@ -33,7 +33,7 @@ public:
 
 	override void onInitialize()
 	{
-		logInfo( "Initializing ", title, "..." );
+		info( "Initializing ", title, "..." );
 
 		// setup a couple helper keys
 		Input.addButtonDownEvent( "QuitToDesktop", ( _ ) { currentState = EngineState.Quit; } );
@@ -70,7 +70,7 @@ public:
 		if( serverConn )
 			serverConn.close();
 		serverConn = Connection.open( "localhost", false, ConnectionType.TCP );
-		serverConn.onReceiveData!string ~= msg => logInfo( "Server Message: ", msg );
+		serverConn.onReceiveData!string ~= msg => info( "Server Message: ", msg );
 		serverConn.onReceiveData!uint ~= numPlayers => turn.setTeam( numPlayers );
 		serverConn.onReceiveData!Action ~= action => turn.doAction( action );
 		serverConn.send!string( "New connection.", ConnectionType.TCP );
@@ -86,7 +86,7 @@ public:
 		}
 		catch( Exception e )
 		{
-			logInfo( "Error: ", e.msg );
+			info( "Error: ", e.msg );
 		}
 	}
 
@@ -97,7 +97,7 @@ public:
 
 	override void onShutdown()
 	{
-		logInfo( "Shutting down..." );
+		info( "Shutting down..." );
 		if( serverConn )
 			serverConn.close();
 		level.destroy();
@@ -111,6 +111,6 @@ public:
 
 	override void onSaveState()
 	{
-		logInfo( "Resetting..." );
+		info( "Resetting..." );
 	}
 }

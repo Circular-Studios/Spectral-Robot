@@ -15,10 +15,10 @@ UserInterface:
 Logging:
     FilePath: "dash.log"
     Debug:
-        OutputVerbosity: High
-        LoggingVerbosity: High
+        OutputVerbosity: info
+        LoggingVerbosity: info
     Release:
-        OutputVerbosity: Medium
-        LoggingVerbosity: Medium
+        OutputVerbosity: error
+        LoggingVerbosity: error
 Editor:
     Port: 8008

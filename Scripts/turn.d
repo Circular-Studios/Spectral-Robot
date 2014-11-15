@@ -51,7 +51,7 @@ public:
 	/// Process an action
 	void doAction( Action action )
 	{
-		logInfo( "Action received ", action );
+		info( "Action received ", action );
 
 		switch(action.actionID) {
 			// Move a unit
@@ -92,7 +92,7 @@ public:
 		// only send if we are connected to the server
 		if( Game.serverConn )
 		{
-			logInfo( "Action being sent ", action );
+			info( "Action being sent ", action );
 			Game.serverConn.send!Action( action, ConnectionType.TCP );
 		}
 	}
@@ -161,7 +161,7 @@ public:
 		if( !Game.serverConn )
 			currentTeam = activeTeam;
 
-		logInfo( "Active team: ", activeTeam );
+		info( "Active team: ", activeTeam );
 		
 		// update the units on the team
 		foreach( unit; Game.units )

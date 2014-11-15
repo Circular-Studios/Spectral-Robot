@@ -38,7 +38,7 @@ public:
 		{
 			if( auto obj = Input.mouseObject )
 			{
-				logInfo( "Clicked on ", obj.name );
+				info( "Clicked on ", obj.name );
 
 				// only allow interaction on your turn
 				if( Game.turn.currentTeam == Game.turn.activeTeam )
@@ -127,7 +127,7 @@ public:
 			selectedUnit.previewMove();
 			Game.abilities[ selectedAbility ].preview( selectedUnit.position, selectedUnit.remainingRange );
 
-			logInfo( "Selected ability: ", Game.abilities[ selectedAbility ].name, ", ",
+			info( "Selected ability: ", Game.abilities[ selectedAbility ].name, ", ",
 				Game.abilities[ selectedAbility ].currentCooldown, " turn(s) to use." );
 		}
 	}
@@ -234,7 +234,7 @@ public:
 	/// Create an ( n x m ) grid of tiles
 	void initTiles( int n, int m )
 	{
-		logInfo("Grid size: ( ", n, ", ", m, " )" );
+		info("Grid size: ( ", n, ", ", m, " )" );
 
 		//initialize tiles
 		tiles = new Tile[][]( n, m );

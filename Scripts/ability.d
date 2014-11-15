@@ -119,7 +119,7 @@ public:
 				}
 			}
 		}
-		logInfo( "ability.use failed" );
+		info( "ability.use failed" );
 		return false;
 	}
 
@@ -168,10 +168,10 @@ public:
 
 			Game.ui.callJSFunction( "setHp", [targetTile.occupant.hp, targetTile.occupant.ID] );
 
-			logInfo( originTile.occupant.name, " used ", name, " on ", targetTile.occupant.name );
+			info( originTile.occupant.name, " used ", name, " on ", targetTile.occupant.name );
 			return true;
 		}
-		logInfo( "applyAbility failed" );
+		info( "applyAbility failed" );
 		return false;
 	}
 

@@ -232,7 +232,7 @@ public:
 		if ( Game.grid.isAbilitySelected )
 			Game.abilities[ Game.grid.selectedAbility ].unpreview();
 
-		logInfo( "Deselected ", name, ", ", remainingActions, " action(s) remaining." );
+		info( "Deselected ", name, ", ", remainingActions, " action(s) remaining." );
 	}
 
 	/// Decrement remaining actions
