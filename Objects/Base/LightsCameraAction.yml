@@ -24,7 +24,7 @@ Components:
   - Type: DirectionalLight
     Color: [ 1.4, 1.4, 1.4 ]
     Direction: [ -1, -1, 0 ]
-    CastShadows: Yes
+    CastShadows: False
 ---
 Name: AmbLight
 Components:

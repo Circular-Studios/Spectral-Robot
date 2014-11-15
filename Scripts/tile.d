@@ -38,7 +38,6 @@ public:
 
 	@property void selection( TileSelection s )
 	{
-		/*
 		final switch( s )
 		{
 			case TileSelection.None:
@@ -61,7 +60,6 @@ public:
 				this.material = Assets.get!Material( "BlackTile" );
 				stateFlags.drawMesh = true;		
 		}
-		*/
 
 		_selection = s;
 	}

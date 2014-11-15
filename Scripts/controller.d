@@ -1,6 +1,6 @@
 ﻿module controller;
 import unit, grid, ability, tile, game, turn;
-import dash.core, dash.utility;
+import dash.core, dash.utility, dash.components;
 import yaml;
 import std.path, std.conv;
 import gl3n.linalg, gl3n.math;
@@ -79,7 +79,7 @@ final class Controller
 		Game.level.loadObjects( "Base" );
 
 		// load the game
-		loadLevel( "levelSRTF" ); //TODO: Remove hardcoded value
+		loadLevel( "TestLevel" ); //TODO: Remove hardcoded value
 
 		info( Game.units.length, " units loaded." );
 	}
@@ -121,8 +121,7 @@ final class Controller
 				 unitNode.Spawn[ 0 ] > Game.grid.gridX || 
 				 unitNode.Spawn[ 1 ] > Game.grid.gridY )
 			{
-				info( "Unit '", unitNode.Class, "' is not within the grid. Fix its position." );
-				continue;
+				error( "Unit '", unitNode.Class, "' is not within the grid. Fix its position." );
 			}
 
 			// instantiate the prefab of a unit
@@ -216,11 +215,11 @@ final class Controller
 				{
 					for( int y = p.Location[ 1 ]; y <= p.Location[ 3 ]; y += p.tileSize[ 1 ] )
 					{
-						// instantiate the prefab of a prop
-						auto prop = Prefabs[ p.prefab ].createInstance();
-
-						// make the name unique
-						prop.changeName( p.prefab ~ " ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )" );
+                        // instantiate the prefab of a prop
+                        GameObject.Description desc;
+                        desc.prefab = Prefabs[ p.prefab ];
+                        desc.name = desc.prefab.name ~ " ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )";
+                        auto prop = GameObject.create( desc );
 
 						// place the prop
 						if( p.tileSize[ 0 ] % 2 == 0 )
