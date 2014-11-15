@@ -61,7 +61,7 @@ public:
 		// create the ui
 		uint w = config.display.width;
 		uint h = config.display.height;
-		ui = new UserInterface( w, h, config.userInterface.filePath );
+		level.ui = new UserInterface( w, h, config.userInterface.filePath );
 	}
 
 	/// Connect to the server
@@ -78,7 +78,6 @@ public:
 
 	override void onUpdate()
 	{
-		ui.update();
 		try
 		{
 			if( serverConn )
@@ -92,7 +91,6 @@ public:
 
 	override void onDraw()
 	{
-		ui.draw();
 	}
 
 	override void onShutdown()

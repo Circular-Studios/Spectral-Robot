@@ -79,7 +79,7 @@ final class Controller
 		Game.level.loadObjects( "Base" );
 
 		// load the game
-		loadLevel( "TestLevel" ); //TODO: Remove hardcoded value
+		loadLevel( "levelSRTF" ); //TODO: Remove hardcoded value
 
 		info( Game.units.length, " units loaded." );
 	}
