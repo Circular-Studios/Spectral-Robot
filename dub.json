@@ -1,64 +1,64 @@
 {
-	"name": "spectral-robot-task-force",
-	"description": "A turn-based strategy game built with the Dash engine.",
-	"copyright": "Copyright 2014, Circular Studios",
-	"authors": [
-		"Daniel Jost",
-		"Jayson Fitch",
-		"Shivam Rawal",
-		"Derrick Hunt",
-		"Brenna Coleman",
-		"Mclean Oshiokpekhai",
-		"Nicholas Cote",
-		"Tristan Meere",
-		"Tyler Wozniak",
-		"Sean Brennan",
-		"Colden Cullen",
-		"Gwendolyn Hart"
-	],
-	"dependencies": {
-		"dash": "==0.11.0"
-	},
-	"sourcePaths": [
-		"Config/",
-		"Materials/",
-		"Objects/",
-		"Prefabs/",
-		"Scripts/",
-		"UI"
-	],
-	"importPaths": [ "Scripts/" ],
-	"targetType": "executable",
-	"targetPath": "Binaries",
-	"workingDirectory": "Binaries",
-	"stringImportPaths": [ "./" ],
+  "name": "spectral-robot-task-force",
+  "description": "A turn-based strategy game built with the Dash engine.",
+  "copyright": "Copyright 2014, Circular Studios",
+  "authors": [
+    "Daniel Jost",
+    "Jayson Fitch",
+    "Shivam Rawal",
+    "Derrick Hunt",
+    "Brenna Coleman",
+    "Mclean Oshiokpekhai",
+    "Nicholas Cote",
+    "Tristan Meere",
+    "Tyler Wozniak",
+    "Sean Brennan",
+    "Colden Cullen",
+    "Gwendolyn Hart"
+  ],
+  "dependencies": {
+    "dash": "==0.11.0"
+  },
+  "sourcePaths": [
+    "Config/",
+    "Materials/",
+    "Objects/",
+    "Prefabs/",
+    "Scripts/",
+    "UI"
+  ],
+  "importPaths": [ "Scripts/" ],
+  "targetType": "executable",
+  "targetPath": "Binaries",
+  "workingDirectory": "Binaries",
+  "stringImportPaths": [ "./" ],
 
-	"versions": [ "DashUseSDL2" ],
+  "versions": [ "DashUseSDL2" ],
 
-	"lflags-linux" : [ "./libawesomium-1.6.5.so" ],
+  "lflags-linux" : [ "./libawesomium-1.6.5.so" ],
 
-	"libs-windows": [
-		"Awesomium",
-		"gdi32", "ole32", "kernel32",
-		"user32", "comctl32", "comdlg32"
-	],
-	"buildTypes": {
-		"release": {
-			"versions": [ "EmbedContent" ],
-			"buildOptions": [ "releaseMode", "optimize", "inline" ],
-			"lflags-windows": [ "/EXETYPE:NT", "/SUBSYSTEM:WINDOWS" ]
-		}
-	},
-	"subPackages": [
-		{
-			"name": "server",
-			"importPaths": [ "Scripts/" ],
-			"sourcePaths": [ "Scripts/network" ],
-			"mainSourceFile": "Scripts/network/server.d",
-			"targetType": "executable",
-			"targetPath": "Binaries",
-			"workingDirectory": "Binaries",
-			"versions": [ "Server", "VibeCustomMain" ]
-		}
-	]
+  "libs-windows": [
+    "Awesomium",
+    "gdi32", "ole32", "kernel32",
+    "user32", "comctl32", "comdlg32"
+  ],
+  "buildTypes": {
+    "release": {
+      "versions": [ "EmbedContent" ],
+      "buildOptions": [ "releaseMode", "optimize", "inline" ],
+      "lflags-windows": [ "/EXETYPE:NT", "/SUBSYSTEM:WINDOWS" ]
+    }
+  },
+  "subPackages": [
+    {
+      "name": "server",
+      "importPaths": [ "Scripts/" ],
+      "sourcePaths": [ "Scripts/network" ],
+      "mainSourceFile": "Scripts/network/server.d",
+      "targetType": "executable",
+      "targetPath": "Binaries",
+      "workingDirectory": "Binaries",
+      "versions": [ "Server", "VibeCustomMain" ]
+    }
+  ]
 }
