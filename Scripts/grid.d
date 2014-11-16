@@ -28,7 +28,7 @@ public:
 		{
 			if( isUnitSelected && Game.turn.currentTeam == Game.turn.activeTeam )
 			{
-				Game.turn.sendAction( Action( 2, selectedUnit.ID, 0, false ) );
+				Game.turn.sendAction( Action( NetworkAction.deselect, selectedUnit.ID, 0, false ) );
 				selectedUnit.deselect();
 			}
 		} );
@@ -49,14 +49,14 @@ public:
 						if( isUnitSelected && selectedUnit.checkMove( tile.toID() ) )
 						{
 							// move the unit to the new location
-							Game.turn.sendAction( Action( 0, selectedUnit.ID, tile.toID(), true ) );
+							Game.turn.sendAction( Action( NetworkAction.move, selectedUnit.ID, tile.toID(), true ) );
 							selectedUnit.move( tile.toID() );
 						}
 						// select a unit if the tile has an occupying unit
 						else if( !isUnitSelected && tile.occupant !is null && tile.occupant.remainingActions > 0 && tile.occupant.team == Game.turn.currentTeam )
 						{
 							tile.occupant.previewMove();
-							Game.turn.sendAction( Action( 1, selectedUnit.ID, 0, false ) );
+							Game.turn.sendAction( Action( NetworkAction.preview, selectedUnit.ID, 0, false ) );
 						}
 						// use the selected ability on the tile
 						else if( isAbilitySelected )
@@ -84,17 +84,17 @@ public:
 							{
 								if( selectedUnit )
 								{
-									Game.turn.sendAction( Action( 2, selectedUnit.ID, 0, false ) );
+									Game.turn.sendAction( Action( NetworkAction.deselect, selectedUnit.ID, 0, false ) );
 									selectedUnit.deselect();
 								}
-								Game.turn.sendAction( Action( 1, unit.ID, 0, false ) );
+								Game.turn.sendAction( Action( NetworkAction.preview, unit.ID, 0, false ) );
 								unit.previewMove();
 							}
 						}
 						// Deselect a unit if not a tile
 						else if( isUnitSelected )
 						{
-							Game.turn.sendAction( Action( 2, selectedUnit.ID, 0, false ) );
+							Game.turn.sendAction( Action( NetworkAction.deselect, selectedUnit.ID, 0, false ) );
 							selectedUnit.deselect();
 						}
 					}
@@ -107,7 +107,7 @@ public:
 		{
 			Input.addButtonDownEvent( "Action" ~ action.to!string, ( kc )
 			{
-				Game.turn.sendAction( Action( 3, action, 0, false ) );
+				Game.turn.sendAction( Action( NetworkAction.select, action, 0, false ) );
 				selectAbility( action );
 			} );
 		}

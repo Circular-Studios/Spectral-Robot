@@ -23,7 +23,7 @@ public:
 	Action[] currentTurn; // Gets populated as the user makes actions
 	Team currentTeam; // the team this player controls
 	Team activeTeam; // the active team
-	
+
 	this()
 	{
 		// arbitrary starting team
@@ -42,12 +42,12 @@ public:
 			if( currentTeam == activeTeam )
 			{
 				// send the switch to the server
-				Game.turn.sendAction( Action( 9, 0, 0, true ) );
+				Game.turn.sendAction( Action( NetworkAction.switchTeam, 0, 0, true ) );
 				switchActiveTeam();
 			}
 		} );
 	}
-	
+
 	/// Process an action
 	void doAction( Action action )
 	{
@@ -58,34 +58,34 @@ public:
 			case NetworkAction.move:
 				Game.units[ action.originID ].move( action.targetID );
 				break;
-				
+
 			// Preview move for a unit
 			case NetworkAction.preview:
 				Game.units[ action.originID ].previewMove();
 				break;
-				
+
 			// Deselect a unit
 			case NetworkAction.deselect:
 				Game.units[ action.originID ].deselect();
 				break;
-				
+
 			// Select ability
 			case NetworkAction.select:
 				Game.grid.selectAbility( action.originID );
 				break;
-				
+
 			// Switch active team
 			case NetworkAction.switchTeam:
 				switchActiveTeam();
 				break;
-				
+
 			// Use an ability
 			default:
 				Game.units[ action.originID ].useAbility( action.actionID, action.targetID );
 				break;
 		}
 	}
-	
+
 	/// Send an action to the server
 	void sendAction( Action action )
 	{
@@ -96,7 +96,7 @@ public:
 			Game.serverConn.send!Action( action, ConnectionType.TCP );
 		}
 	}
-	
+
 	/// Check all the units on the current team for no more actions available
 	void checkTurnOver()
 	{
@@ -112,7 +112,7 @@ public:
 		}
 		if ( turnOver )
 		{
-			Game.turn.sendAction( Action( 9, 0, 0, true ) );
+			Game.turn.sendAction( Action( NetworkAction.switchTeam, 0, 0, true ) );
 			switchActiveTeam();
 		}
 	}
@@ -141,7 +141,7 @@ public:
 				Game.grid.getTileByID( unit.position ).type = TileType.OccupantInactive;
 		}
 	}
-	
+
 	/// Switch the active team
 	void switchActiveTeam()
 	{
@@ -162,7 +162,7 @@ public:
 			currentTeam = activeTeam;
 
 		info( "Active team: ", activeTeam );
-		
+
 		// update the units on the team
 		foreach( unit; Game.units )
 		{
@@ -171,7 +171,7 @@ public:
 			else
 				Game.grid.getTileByID( unit.position ).type = TileType.OccupantInactive;
 		}
-		
+
 		Game.grid.updateFogOfWar();
 	}
 }
