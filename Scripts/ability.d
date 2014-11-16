@@ -43,7 +43,7 @@ class Ability
 {
 private:
 	static uint nextID = 10;
-	
+
 	/// Highlight the tiles that the ability can effect
 	Tile[] highlight( uint originID, uint range )
 	{
@@ -57,7 +57,7 @@ private:
 				return Game.grid.getInRange( originID, range );
 		}
 	}
-	
+
 public:
 	immutable uint ID;
 	string name;
@@ -83,13 +83,13 @@ public:
 		//if( currentCooldown > 0 )
 			//currentCooldown--;
 	}
-	
+
 	this()
 	{
 		ID = nextID++;
 		currentCooldown = 0;
 	}
-	
+
 	/// Use the ability
 	bool use( uint originID, uint targetID )
 	{
@@ -166,7 +166,7 @@ public:
 			// reset cooldown
 			currentCooldown = cooldown;
 
-			Game.ui.callJSFunction( "setHp", [targetTile.occupant.hp, targetTile.occupant.ID] );
+			Game.level.ui.callJSFunction( "setHp", [ targetTile.occupant.hp, targetTile.occupant.ID ] );
 
 			info( originTile.occupant.name, " used ", name, " on ", targetTile.occupant.name );
 			return true;
@@ -198,16 +198,16 @@ public:
 		// get the tiles the ability can effect
 		unitRange = unitRange;
 		selectedTiles = highlight( originID, range + unitRange );
-		
+
 		// change the material of the tiles
 		foreach( tile; selectedTiles )
 		{
-			if( tile.selection != TileSelection.Blue || 
+			if( tile.selection != TileSelection.Blue ||
 			( tile.occupant !is null && tile.occupant != Game.grid.selectedUnit ) )
 				tile.selection = TileSelection.Red;
 		}
 	}
-	
+
 	// Unpreview the ability
 	void unpreview()
 	{
@@ -216,7 +216,7 @@ public:
 		{
 			tile.resetSelection();
 		}
-		
+
 		// remove from grid
 		Game.grid.isAbilitySelected = false;
 		Game.grid.selectedAbility = 0;

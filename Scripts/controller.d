@@ -70,7 +70,8 @@ final class Controller
 		TargetArea targetArea;
 		int range;
 		int damage;
-		int cooldown;
+		@optional
+		int cooldown = 0;
 	}
 
 	this()
@@ -92,14 +93,22 @@ final class Controller
 		uint[] abilityIDs;
 
 		// load the yaml
-		//AbilityInfo[] abilities = deserializeMultiFile!AbilityInfo( Resources.Objects ~ "/Abilities/" ~ abilitiesFile )[ 0 ];
+		Resource file = Resource( Resources.Objects ~ "/Abilities/" ~ abilitiesFile ~ ".yml" );
+		AbilityInfo[] abilities = deserializeMultiFile!AbilityInfo( file );
 
-		/*foreach( AbilityInfo ability; abilities )
+		foreach( AbilityInfo abInfo; abilities )
 		{
-			//auto ability = abilityNode.getObject!(Ability)();
+			Ability ability = new Ability();
+			ability.name = abInfo.name;
+			ability.damage = abInfo.damage;
+			ability.range = abInfo.range;
+			ability.cooldown = abInfo.cooldown;
+			ability.targetType = abInfo.targetType;
+			ability.targetArea = abInfo.targetArea;
+			
 			Game.abilities[ ability.ID ] = ability;
 			abilityIDs ~= ability.ID;
-		}*/
+		}
 
 		return abilityIDs;
 	}
@@ -116,9 +125,9 @@ final class Controller
 				classNode.rotation = fromEulerAngles( unitNode.rotationVec );
 
 			// validate spawn position
-			if ( unitNode.Spawn[ 0 ] < 0 || 
+			if ( unitNode.Spawn[ 0 ] < 0 ||
 				 unitNode.Spawn[ 1 ] < 0 ||
-				 unitNode.Spawn[ 0 ] > Game.grid.gridX || 
+				 unitNode.Spawn[ 0 ] > Game.grid.gridX ||
 				 unitNode.Spawn[ 1 ] > Game.grid.gridY )
 			{
 				error( "Unit '", unitNode.Class, "' is not within the grid. Fix its position." );
@@ -215,11 +224,11 @@ final class Controller
 				{
 					for( int y = p.Location[ 1 ]; y <= p.Location[ 3 ]; y += p.tileSize[ 1 ] )
 					{
-                        // instantiate the prefab of a prop
-                        GameObject.Description desc;
-                        desc.prefab = Prefabs[ p.prefab ];
-                        desc.name = desc.prefab.name ~ " ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )";
-                        auto prop = GameObject.create( desc );
+						// instantiate the prefab of a prop
+						GameObject.Description desc;
+						desc.prefab = Prefabs[ p.prefab ];
+						desc.name = desc.prefab.name ~ " ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )";
+						auto prop = GameObject.create( desc );
 
 						// place the prop
 						if( p.tileSize[ 0 ] % 2 == 0 )

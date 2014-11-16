@@ -182,7 +182,7 @@ public:
 	{
 		selectedTiles = Game.grid.getInRange( position, remainingRange );
 
-		Game.ui.callJSFunction( "selectCharacter", [ID] );
+		Game.level.ui.callJSFunction( "selectCharacter", [ ID ] );
 
 		// change the material of the tiles
 		foreach( tile; selectedTiles )

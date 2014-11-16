@@ -2,9 +2,9 @@ module game;
 import controller, grid, turn, action, ability, unit, camera, tile;
 import dash;
 
-mixin( registerComponents!("unit") );
-mixin( registerComponents!("tile") );
-mixin( registerComponents!("camera") );
+mixin( registerComponents!( "unit" ) );
+mixin( registerComponents!( "tile" ) );
+mixin( registerComponents!( "camera" ) );
 
 // An easier way to access the game instance
 @property RobotGhosts Game()
@@ -104,7 +104,6 @@ public:
 		units.destroy();
 		abilities.destroy();
 		gc.destroy();
-		ui.shutdown();
 	}
 
 	override void onSaveState()
