@@ -12,6 +12,8 @@ dub.selections.json
 Content.yml
 game.zip
 *.lib
+Binaries/libeay32.dll
+Binaries/ssleay32.dll
 
 # Build results
 [Dd]ebug/

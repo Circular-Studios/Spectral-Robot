@@ -1,24 +1,28 @@
 ---
 Name: TechWolf
-Unit:
-    
-Mesh: wolf_idle
-Material: TechWolf
+Components:
+    - Type: Mesh
+      Asset: wolf_idle
+    - Type: Material
+      Asset: TechWolf
 ---
 Name: PyroWolf
-Unit:
-    
-Mesh: wolf_idle
-Material: PyroWolf
+Components:
+    - Type: Mesh
+      Asset: wolf_idle
+    - Type: Material
+      Asset: PyroWolf
 ---
 Name: PyroRobot
-Unit:
-    
-Mesh: robot_idle
-Material: PyroRobot
+Components:
+    - Type: Mesh
+      Asset: robot_idle
+    - Type: Material
+      Asset: PyroRobot
 ---
 Name: TechRobot
-Unit:
-    
-Mesh: robot_idle
-Material: TechRobot
+Components:
+    - Type: Mesh
+      Asset: robot_idle
+    - Type: Material
+      Asset: TechRobot

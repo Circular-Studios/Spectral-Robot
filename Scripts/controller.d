@@ -1,233 +1,268 @@
 ﻿module controller;
 import unit, grid, ability, tile, game, turn;
-import dash.core, dash.utility;
+import dash.core, dash.utility, dash.components;
 import yaml;
 import std.path, std.conv;
 import gl3n.linalg, gl3n.math;
 
 final class Controller
 {
-	this()
-	{
-		// first load all the objects
-		Game.level.loadObjects( "Base" );
+  struct UnitInfo
+  {
+    string Class;
+    int[] Spawn;
+    @rename("Team") @byName
+    Team team;
+    @rename("Rotation") @optional
+    float[] rotationVec;
+  }
 
-		// load the game
-		loadLevel( "levelSRTF" ); //TODO: Remove hardcoded value
+  struct ClassInfo
+  {
+    string Name;
+    string Abilities;
+    string Prefab;
+    @ignore
+    quat rotation;
+    int HP;
+    int Speed;
+    int Attack;
+    int Defense;
+  }
 
-		logInfo( Game.units.length, " units loaded." );
-	}
+  struct PropInfo
+  {
+    int[] Location;
+    @rename( "Height" ) @optional
+    int height;
+    @rename( "TileSize" ) @optional
+    int[] tileSize;
+    @ignore
+    string name, ttype;
+    @rename("Prefab")
+    string prefab;
+    @rename("TileType") @byName
+    TileType tileType;
+    @rename( "Rotation" ) @optional
+    float[] rotationVec;
+    @ignore
+    quat rotation;
+  }
 
-	/// Load and create abilities from yaml
-	///
-	/// Returns: a list of the IDs created
-	uint[] loadAbilities( string abilitiesFile )
-	{
-		uint[] abilityIDs;
+  struct LevelInfo
+  {
+    string Name;
+    @rename("Grid")
+    int[] gridSize;
+    bool FogOfWar;
+    @rename( "Units" )
+    UnitInfo[] units;
+    @rename( "Objects" )
+    PropInfo[] props;
+  }
 
-		// load the yaml
-		auto yaml = loadAllDocumentsInYamlFile( Resources.Objects ~ "/Abilities/" ~ abilitiesFile ~ ".yml" );
+  struct AbilityInfo
+  {
+    string name;
+    @byName
+    TargetType targetType;
+    @byName
+    TargetArea targetArea;
+    int range;
+    int damage;
+    @optional
+    int cooldown = 0;
+  }
 
-		foreach( Node abilityNode; yaml )
-		{
-			auto ability = abilityNode.getObject!(Ability)();
-			Game.abilities[ ability.ID ] = ability;
-			abilityIDs ~= ability.ID;
-		}
+  this()
+  {
+    // first load all the objects
+    Game.level.loadObjects( "Base" );
 
-		return abilityIDs;
-	}
+    // load the game
+    loadLevel( "levelSRTF" ); //TODO: Remove hardcoded value
 
-	/// Load and create units from yaml
-	void loadUnits( Node unitsToLoad )
-	{
-		// So we are going to parse the Units folder for the unit files
-		// For those, we'll get the Name of the node, which will be how we call into the gameObjects
-		foreach( Node unitNode; unitsToLoad )
-		{
-			// setup variables
-			int hp, sp, at, df = 0;
-			Team team;
-			string abilities, teamName;
-			uint[] spawn;
-			vec3 rotationVec;
-			quat rotation;
+    info( Game.units.length, " units loaded." );
+  }
 
-			foreach( Node unitCheck; loadYamlDocuments( buildNormalizedPath( Resources.Objects, "Units" ) ) )
-			{
-				// check if we want to load this unit
-				if( unitNode[ "Name" ].as!string == unitCheck[ "Name" ].as!string )
-				{
-					unitNode.tryFind( "Spawn", spawn );
-					if( unitNode.tryFind( "Team", teamName ) )
-						team = to!Team( teamName );
-						// validate team
-					if( unitNode.tryFind( "Rotation", rotationVec ) )
-						rotation = quat.euler_rotation( radians( rotationVec.y ), radians( rotationVec.z ), radians( rotationVec.x ) );
-						
-					// validate spawn position
-					if (spawn[0] > Game.grid.gridX || spawn[1] > Game.grid.gridY) {
-						logInfo("Unit '", unitNode["Name"].as!string, "' is not within the grid and therefore not built.");
-						break;
-					}
-					
-					// instantiate the prefab of a unit
-					auto u = Prefabs[ unitCheck[ "Prefab" ].as!string ].createInstance();
-					auto unit = u.getComponent!Unit;
+  /// Load and create abilities from yaml
+  ///
+  /// Returns: a list of the IDs created
+  uint[] loadAbilities( string abilitiesFile )
+  {
+    uint[] abilityIDs;
 
-					// get the variables from the node
-					unitCheck.tryFind( "HP", hp );
-					unitCheck.tryFind( "Speed", sp );
-					unitCheck.tryFind( "Attack", at );
-					unitCheck.tryFind( "Defense", df );
-					unitCheck.tryFind( "Abilities", abilities );
+    // load the yaml
+    Resource file = Resource( Resources.Objects ~ "/Abilities/" ~ abilitiesFile ~ ".yml" );
+    AbilityInfo[] abilities = deserializeMultiFile!AbilityInfo( file );
 
-					// initialize the unit and add it to the active scene
-					unit.init( toTileID( spawn [ 0 ], spawn[ 1 ] ), team, hp, sp, at, df, loadAbilities( abilities ) );
-					if ( rotation )
-						unit.transform.rotation = rotation;
-					Game.level.addChild( u );
-					Game.units ~= unit;
+    foreach( AbilityInfo abInfo; abilities )
+    {
+      Ability ability = new Ability();
+      ability.name = abInfo.name;
+      ability.damage = abInfo.damage;
+      ability.range = abInfo.range;
+      ability.cooldown = abInfo.cooldown;
+      ability.targetType = abInfo.targetType;
+      ability.targetArea = abInfo.targetArea;
 
-					// block and occupy the spawn tile
-					Game.grid.tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].occupant = unit;
-					Game.grid.tiles[ spawn[ 0 ] ][ spawn[ 1 ] ].type = TileType.OccupantActive;
-					break;
-				}
-			}
-		}
-	}
+      Game.abilities[ ability.ID ] = ability;
+      abilityIDs ~= ability.ID;
+    }
 
-	/// Convert ( x, y ) coordinates to an ID
-	uint toTileID( uint x, uint y )
-	{
-		return x + ( y * Game.grid.gridX );
-	}
+    return abilityIDs;
+  }
 
-	/// Load and create a level from yaml
-	void loadLevel( string levelName )
-	{
-		// load the level from yaml
-		Node levelNode = loadYamlFile( Resources.Objects ~ "/Levels/" ~ levelName ~ ".yml" );
+  /// Load and create units from yaml
+  void loadUnits( UnitInfo[] unitsToLoad )
+  {
+    foreach( UnitInfo unitNode; unitsToLoad )
+    {
+      // this might break depending on how structs override information
+      ClassInfo classNode = deserializeFileByName!ClassInfo( Resources.Objects ~ "/Classes/" ~ unitNode.team.to!string ~ "/" ~ unitNode.Class )[ 0 ];
 
-		// setup variables
-		int[] gridSize;
-		bool fogOfWar;
-		Node unitsNode;
-		Node propsNode;
+      if( unitNode.rotationVec )
+        classNode.rotation = fromEulerAngles( unitNode.rotationVec );
 
-		// get the variables from the yaml node
-		string name = levelNode[ "Name" ].as!string;
-		levelNode.tryFind( "Grid", gridSize );
-		levelNode.tryFind( "FogOfWar", fogOfWar );
-		levelNode.tryFind( "Units", unitsNode );
-		levelNode.tryFind( "Objects", propsNode );
+      // validate spawn position
+      if ( unitNode.Spawn[ 0 ] < 0 ||
+         unitNode.Spawn[ 1 ] < 0 ||
+         unitNode.Spawn[ 0 ] > Game.grid.gridX ||
+         unitNode.Spawn[ 1 ] > Game.grid.gridY )
+      {
+        error( "Unit '", unitNode.Class, "' is not within the grid. Fix its position." );
+      }
 
-		// fill the grid
-		Game.grid.initTiles( gridSize[ 0 ], gridSize[ 1 ] );
+      // instantiate the prefab of a unit
+      auto u = Prefabs[ classNode.Prefab ].createInstance();
+      auto unit = new Unit();
+      u.addComponent( unit );
 
-		// add props to the scene
-		foreach( Node propNode; propsNode )
-		{
-			// setup variables
-			int[] loc;
-			int height;
-			int[] tileSize;
-			string name, prefab, ttype;
-			TileType tileType;
-			vec3 rotationVec;
-			quat rotation;
+      // initialize the unit and add it to the active scene
+      unit.init( toTileID( unitNode.Spawn[ 0 ], unitNode.Spawn[ 1 ] ), unitNode.team, classNode.HP, classNode.Speed, classNode.Attack, classNode.Defense, loadAbilities( classNode.Abilities ) );
+      if ( classNode.rotation )
+        unit.transform.rotation = classNode.rotation;
+      Game.level.addChild( u );
+      Game.units ~= unit;
 
-			// get the variables from the node
-			propNode.tryFind( "Location", loc );
-			if (!propNode.tryFind( "Prefab", prefab )) {
-				// define the height of some tiles
-				propNode.tryFind("Height", height);
-				
-				for (int x = loc[0]; x <= loc[2]; x++) {
-					for (int y = loc[1]; y <= loc[3]; y++) {
-						Game.grid.getTileByID(toTileID(x, y)).z = height;
-						logInfo(x, ", ", y);
-					}
-				}
-			} else {
-				// make an object
-				propNode.tryFind( "TileSize", tileSize );
-				if( propNode.tryFind( "TileType", ttype ) )
-					tileType = to!TileType( ttype );
-				if( propNode.tryFind( "Rotation", rotationVec ) )
-					rotation = quat.euler_rotation( radians( rotationVec.y ), radians( rotationVec.z ), radians( rotationVec.x ) );
-					
-				// check that the tile size and location are compatible
-				if (loc.length > 2) {
-					if (tileSize[0] > 1) {
-						if ((loc[2] - loc[0] + 1) % (tileSize[0]) != 0) {
-							logInfo("Object at location ", loc, " has improper location for tile size along the x-axis.  Object building aborted.");
-							break;
-						}
-					} else if (tileSize[1] > 1) {
-						if ((loc[3] - loc[1] + 1) % (tileSize[1]) != 0) {
-							logInfo("Object at location ", loc, " has improper location for tile size along the y-axis.  Object building aborted.");
-							break;
-						}
-					}
-				}
+      // block and occupy the spawn tile
+      Game.grid.tiles[ unitNode.Spawn[ 0 ] ][ unitNode.Spawn[ 1 ] ].occupant = unit;
+      Game.grid.tiles[ unitNode.Spawn[ 0 ] ][ unitNode.Spawn[ 1 ] ].type = TileType.OccupantActive;
+    }
+  }
 
-				// fix up single-tile props for the double for-loop
-				if ( loc.length == 2 )
-				{
-					loc ~= loc[ 0 ];
-					loc ~= loc[ 1 ];
-				}
+  /// Convert ( x, y ) coordinates to an ID
+  uint toTileID( uint x, uint y )
+  {
+    return x + ( y * Game.grid.gridX );
+  }
 
-				// default values for tileSize if not in the yaml
-				if ( !tileSize )
-					tileSize = [ 1, 1 ];
+  /// Load and create a level from yaml
+  void loadLevel( string levelName )
+  {
+    // load the level from yaml
+    LevelInfo level = deserializeFileByName!LevelInfo( Resources.Objects ~ "/Levels/" ~ levelName )[ 0 ];
 
-				// create a prop on each tile it occupies
-				for( int x = loc[ 0 ]; x <= loc[ 2 ]; x += tileSize[ 0 ] )
-				{
-					for( int y = loc[ 1 ]; y <= loc[ 3 ]; y += tileSize[ 1 ] )
-					{
-						// instantiate the prefab of a prop
-						auto prop = Prefabs[ prefab ].createInstance();
+    // fill the grid
+    Game.grid.initTiles( level.gridSize[ 0 ], level.gridSize[ 1 ] );
 
-						// make the name unique
-						prop.name = prefab ~ " ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )";
+    // add props to the scene
+    foreach( PropInfo p; level.props )
+    {
+      // get the variables from the node
+      if ( !p.prefab )
+      {
+        for( int x = p.Location[ 0 ]; x <= p.Location[ 2 ]; x++ )
+        {
+          for( int y = p.Location[ 1 ]; y <= p.Location[ 3 ]; y++ )
+          {
+            Game.grid.getTileByID( toTileID( x, y ) ).z = p.height;
+            info( x, ", ", y );
+          }
+        }
+      }
+      else
+      {
+        // make an object
+        if( p.rotationVec )
+          p.rotation = fromEulerAngles( p.rotationVec );
 
-						// place the prop
-						if( tileSize[ 0 ] % 2 == 0 )
-							prop.transform.position.x = x * TILE_SIZE + ( tileSize[ 0 ] / 2 * TILE_SIZE / 2 );
-						else
-							prop.transform.position.x = x * TILE_SIZE + ( tileSize[ 0 ] / 2 * TILE_SIZE );
+        // check that the tile size and location are compatible
+        if( p.Location.length > 2 )
+        {
+          if( p.tileSize[ 0 ] > 1 )
+          {
+            if( ( p.Location[ 2 ] - p.Location[ 0 ] + 1 ) % ( p.tileSize[ 0 ] ) != 0 )
+            {
+              info( "Object at location ", p.Location, " has improper location for tile size along the x-axis. Object building aborted." );
+              break;
+            }
+          }
+          else if( p.tileSize[ 1 ] > 1 )
+          {
+            if( ( p.Location[ 3 ] - p.Location[ 1 ] + 1 ) % ( p.tileSize[ 1 ] ) != 0 )
+            {
+              info( "Object at location ", p.Location, " has improper location for tile size along the y-axis. Object building aborted." );
+              break;
+            }
+          }
+        }
 
-						if( tileSize[ 1 ] % 2 == 0 )
-							prop.transform.position.z = y * TILE_SIZE + ( tileSize[ 1 ] / 2 * TILE_SIZE / 2 );
-						else
-							prop.transform.position.z = y * TILE_SIZE + ( tileSize[ 1 ] / 2 * TILE_SIZE );
-							
-						prop.transform.position.y = Game.grid.getTileByID(toTileID(x, y)).z;
+        // fix up single-tile props for the double for-loop
+        if ( p.Location.length == 2 )
+        {
+          p.Location ~= p.Location[ 0 ];
+          p.Location ~= p.Location[ 1 ];
+        }
 
-						if( rotation )
-							prop.transform.rotation = rotation;
+        // default values for tileSize if not in the yaml
+        if ( !p.tileSize )
+          p.tileSize = [ 1, 1 ];
 
-						// add the prop to the scene
-						Game.level.addChild( prop );
+        // create a prop on each tile it occupies
+        for( int x = p.Location[ 0 ]; x <= p.Location[ 2 ]; x += p.tileSize[ 0 ] )
+        {
+          for( int y = p.Location[ 1 ]; y <= p.Location[ 3 ]; y += p.tileSize[ 1 ] )
+          {
+            // instantiate the prefab of a prop
+            GameObject.Description desc;
+            desc.prefab = Prefabs[ p.prefab ];
+            desc.name = desc.prefab.name ~ " ( " ~ x.to!string ~ ", " ~ y.to!string ~ " )";
+            auto prop = GameObject.create( desc );
 
-						// change the TileType of occupying tiles
-						for ( int xx = x; xx < x + tileSize[ 0 ]; xx++ )
-							for ( int yy = y; yy < y + tileSize[ 1 ]; yy++ )
-								Game.grid.tiles[ xx ][ yy ].type = tileType;
-					}
-				}
-			}
-		}
-		
-		// create the units
-		loadUnits( unitsNode );
+            // place the prop
+            if( p.tileSize[ 0 ] % 2 == 0 )
+              prop.transform.position.x = x * TILE_SIZE + ( p.tileSize[ 0 ] / 2 * TILE_SIZE / 2 );
+            else
+              prop.transform.position.x = x * TILE_SIZE + ( p.tileSize[ 0 ] / 2 * TILE_SIZE );
 
-		// do some fog of war
-		Game.grid.fogOfWar = fogOfWar;
-		Game.grid.updateFogOfWar();
-	}
+            if( p.tileSize[ 1 ] % 2 == 0 )
+              prop.transform.position.z = y * TILE_SIZE + ( p.tileSize[ 1 ] / 2 * TILE_SIZE / 2 );
+            else
+              prop.transform.position.z = y * TILE_SIZE + ( p.tileSize[ 1 ] / 2 * TILE_SIZE );
+
+            prop.transform.position.y = Game.grid.getTileByID( toTileID( x, y ) ).z;
+
+            if( p.rotation )
+              prop.transform.rotation = p.rotation;
+
+            // add the prop to the scene
+            Game.level.addChild( prop );
+
+            // change the TileType of occupying tiles
+            for ( int xx = x; xx < x + p.tileSize[ 0 ]; xx++ )
+              for ( int yy = y; yy < y + p.tileSize[ 1 ]; yy++ )
+                Game.grid.tiles[ xx ][ yy ].type = p.tileType;
+          }
+        }
+      }
+    }
+
+    // create the units
+    loadUnits( level.units );
+
+    // do some fog of war
+    Game.grid.fogOfWar = level.FogOfWar;
+    Game.grid.updateFogOfWar();
+  }
 }
