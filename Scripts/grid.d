@@ -4,6 +4,13 @@ import dash.core, dash.utility, dash.components;
 import gl3n.linalg;
 import std.conv, std.algorithm, std.range, std.array;
 
+// taken from http://forum.dlang.org/post/vqfvihyezbmwcjkmpzin@forum.dlang.org
+template Unroll( alias CODE, alias N, alias SEP="" )
+{
+	enum t = replace( CODE, "%", "%1$d" );
+	enum Unroll = iota( N ).map!( i => format( t, i ) ).join( SEP );
+}
+
 /// A grid that contains tiles
 class Grid : Component
 {
@@ -12,7 +19,7 @@ private:
 
 public:
 	alias owner this;
-    Tile[][] tiles;
+	Tile[][] tiles;
 	bool isUnitSelected = false;
 	bool isAbilitySelected = false;
 	bool fogOfWar;
@@ -103,14 +110,12 @@ public:
 		} );
 
 		// ability hotkeys
-		foreach( action; 0..10 )
-		{
-			Input.addButtonDownEvent( "Action" ~ action.to!string, ( kc )
+		mixin( Unroll!( q{
+			Input.addButtonDownEvent( "Action" ~ ( % + 1 ).to!string, ( kc )
 			{
-				Game.turn.sendAction( Action( NetworkAction.select, action, 0, false ) );
-				selectAbility( action );
-			} );
-		}
+				Game.turn.sendAction( Action( NetworkAction.select, %, 0, false ) );
+				selectAbility( % );
+			} );}, 10, "" ));
 	}
 
 	/// Select an ability from a unit
