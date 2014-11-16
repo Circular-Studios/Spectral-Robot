@@ -31,6 +31,8 @@ public:
 		float maxZ;
 		bool clamped = false;
 	}
+	@rename( "RotateDegrees" )
+	float rotateDegrees;
 	@rename( "MouseEdgeScroll" )
 	bool mouseEdgeScroll;
 
@@ -69,9 +71,9 @@ public:
 			prevFace *= -transform.position.y / prevFace.y;
 
 			auto lookPos = transform.position + prevFace;
-			auto nextFace = prevFace * quat.identity.rotatey( -90.radians );
+			auto nextFace = prevFace * quat.identity.rotatey( -rotateDegrees.radians );
 			auto prevRot = transform.rotation;
-			auto nextRot = prevRot.rotatey( -90.radians );
+			auto nextRot = prevRot.rotatey( -rotateDegrees.radians );
 			prevRot = transform.rotation;
 
 			scheduleTimedTask( rotateTime,
@@ -95,9 +97,9 @@ public:
 			prevFace *= -transform.position.y / prevFace.y;
 
 			auto lookPos = transform.position + prevFace;
-			auto nextFace = prevFace * quat.identity.rotatey( 90.radians );
+			auto nextFace = prevFace * quat.identity.rotatey( rotateDegrees.radians );
 			auto prevRot = transform.rotation;
-			auto nextRot = prevRot.rotatey( 90.radians );
+			auto nextRot = prevRot.rotatey( rotateDegrees.radians );
 			prevRot = transform.rotation;
 			scheduleTimedTask( rotateTime,
 			{

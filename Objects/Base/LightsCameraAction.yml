@@ -15,6 +15,7 @@ Components:
     EdgeDistance: 50
     MinHeight: 50
     MaxHeight: 300
+    RotateDegrees: 90
     MouseEdgeScroll: false
   - Type: Listener
     Enabled: true

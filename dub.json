@@ -31,9 +31,9 @@
 	"targetType": "executable",
 	"targetPath": "Binaries",
 	"workingDirectory": "Binaries",
-    "stringImportPaths": [ "./" ],
+	"stringImportPaths": [ "./" ],
 
-    "versions": [ "DashUseSDL2" ],
+	"versions": [ "DashUseSDL2" ],
 
 	"lflags-linux" : [ "./libawesomium-1.6.5.so" ],
 
