@@ -1,110 +1,110 @@
 ---
 Name: poopmat
-Diffuse: Poop
-Normal: blank_n
-Specular: flat_s
+Diffuse: [ "Poop" ]
+Normal: [ "blank_n" ]
+Specular: [ "flat_s" ]
 ---
 Name: MarbleFloor
-Diffuse: marble_d
-Normal: marble_n
-Specular: marble_s
+Diffuse: [ "marble_d" ]
+Normal: [ "marble_n" ]
+Specular: [ "marble_s" ]
 ---
 Name: Wall_1x1
-Diffuse: wall_1x1_d
-Normal: wall_1x1_n
-Specular: wall_1x1_s
+Diffuse: [ "wall_1x1_d" ]
+Normal: [ "wall_1x1_n" ]
+Specular: [ "wall_1x1_s" ]
 ---
 Name: Wall_1x2
-Diffuse: wall_1x2_d
-Normal: wall_1x2_n
-Specular: wall_1x2_s
+Diffuse: [ "wall_1x2_d" ]
+Normal: [ "wall_1x2_n" ]
+Specular: [ "wall_1x2_s" ]
 ---
 Name: Wall_1x4
-Diffuse: wall_1x4_d
-Normal: wall_1x4_n
-Specular: wall_1x4_s
+Diffuse: [ "wall_1x4_d" ]
+Normal: [ "wall_1x4_n" ]
+Specular: [ "wall_1x4_s" ]
 ---
 Name: Wall_Corner_In
-Diffuse: corner_in_d
-Normal: corner_in_n
-Specular: corner_in_s
+Diffuse: [ "corner_in_d" ]
+Normal: [ "corner_in_n" ]
+Specular: [ "corner_in_s" ]
 ---
 Name: Wall_Corner_Out
-Diffuse: corner_out_d
-Normal: corner_out_n
-Specular: corner_out_s
+Diffuse: [ "corner_out_d" ]
+Normal: [ "corner_out_n" ]
+Specular: [ "corner_out_s" ]
 ---
 Name: Bookshelf
-Diffuse: bookcase_d
-Normal: bookcase_n
-Specular: bookcase_s
+Diffuse: [ "bookcase_d" ]
+Normal: [ "bookcase_n" ]
+Specular: [ "bookcase_s" ]
 ---
 Name: Desk
-Diffuse: desk_single_d
-Normal: desk_single_n
-Specular: desk_single_s
+Diffuse: [ "desk_single_d" ]
+Normal: [ "desk_single_n" ]
+Specular: [ "desk_single_s" ]
 ---
 Name: Pillar
-Diffuse: pillar_d
-Normal: pillar_n
-Specular: pillar_s
+Diffuse: [ "pillar_d" ]
+Normal: [ "pillar_n" ]
+Specular: [ "pillar_s" ]
 ---
 Name: BlueTile
-Diffuse: grid_blue_d
-Normal: flat_n
-Specular: grid_s
+Diffuse: [ "grid_blue_d" ]
+Normal: [ "flat_n" ]
+Specular: [ "grid_s" ]
 ---
 Name: RedTile
-Diffuse: grid_red_d
-Normal: flat_n
-Specular: grid_s
+Diffuse: [ "grid_red_d" ]
+Normal: [ "flat_n" ]
+Specular: [ "grid_s" ]
 ---
 Name: GreenTile
-Diffuse: grid_green_d
-Normal: flat_n
-Specular: grid_s
+Diffuse: [ "grid_green_d" ]
+Normal: [ "flat_n" ]
+Specular: [ "grid_s" ]
 ---
 Name: BlackTile
-Diffuse: grid_s
-Normal: flat_n
-Specular: grid_s
+Diffuse: [ "grid_s" ]
+Normal: [ "flat_n" ]
+Specular: [ "grid_s" ]
 ---
 Name: PyroWolf
-Diffuse: w_pyro_d
-Normal: wolf_n
-Specular: w_pyro_s
+Diffuse: [ "w_pyro_d" ]
+Normal: [ "wolf_n" ]
+Specular: [ "w_pyro_s" ]
 ---
 Name: NecroWolf
-Diffuse: w_necro_d
-Normal: wolf_n
-Specular: w_necro_s
+Diffuse: [ "w_necro_d" ]
+Normal: [ "wolf_n" ]
+Specular: [ "w_necro_s" ]
 ---
 Name: BulletWolf
-Diffuse: w_bullet_d
-Normal: wolf_n
-Specular: w_bullet_s
+Diffuse: [ "w_bullet_d" ]
+Normal: [ "wolf_n" ]
+Specular: [ "w_bullet_s" ]
 ---
 Name: TechWolf
-Diffuse: w_tech_d
-Normal: wolf_n
-Specular: w_tech_s
+Diffuse: [ "w_tech_d" ]
+Normal: [ "wolf_n" ]
+Specular: [ "w_tech_s" ]
 ---
 Name: PyroRobot
-Diffuse: r_pyro_d
-Normal: robot_n
-Specular: r_pyro_necro_bullet_s
+Diffuse: [ "r_pyro_d" ]
+Normal: [ "robot_n" ]
+Specular: [ "r_pyro_necro_bullet_s" ]
 ---
 Name: NecroRobot
-Diffuse: r_necro_d
-Normal: robot_n
-Specular: r_pyro_necro_bullet_s
+Diffuse: [ "r_necro_d" ]
+Normal: [ "robot_n" ]
+Specular: [ "r_pyro_necro_bullet_s" ]
 ---
 Name: BulletRobot
-Diffuse: r_bullet_d
-Normal: robot_n
-Specular: r_pyro_necro_bullet_s
+Diffuse: [ "r_bullet_d" ]
+Normal: [ "robot_n" ]
+Specular: [ "r_pyro_necro_bullet_s" ]
 ---
 Name: TechRobot
-Diffuse: r_tech_d
-Normal: robot_n
-Specular: r_tech_s
+Diffuse: [ "r_tech_d" ]
+Normal: [ "robot_n" ]
+Specular: [ "r_tech_s" ]
