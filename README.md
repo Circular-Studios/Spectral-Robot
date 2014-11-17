@@ -2,10 +2,12 @@
 
 ![Spectral banner](https://cloud.githubusercontent.com/assets/512416/2869601/e68b30ca-d27b-11e3-8834-66cd12440707.png)
 
+Created by [Circular Studios](http://circularstudios.com/).
+
 ## Compiling
 
-1. Install [dmd](http://dlang.org/download.html) and [dub](http://code.dlang.org/download).
-2. Clone this repository ([SourceTree](http://sourcetreeapp.com/) or command line [git](http://git-scm.com/) are good options.)
+1. Install [dmd](http://dlang.org/download.html) and [dub](http://code.dlang.org/download). You can use [chocolatey](https://chocolatey.org/) if you are on Windows.
+2. Clone this repository ([SourceTree](http://sourcetreeapp.com/) or command line [git](http://git-scm.com/) are good options).
 3. Open a command prompt and `cd` into the directory containing Spectral.
 4. Type `dub` to build and run the game.
   * If you get an error that dub is not a known command, follow [these instructions](https://github.com/Circular-Studios/Dash/wiki/Setting-Up-Your-Environment#setting-up-environment-variables--not-rit-igm-labs-)
