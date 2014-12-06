@@ -50,7 +50,7 @@ public:
   }
 
   /// Initialize a unit
-  void init( uint position, Team team, int hp, int sp, int at, int df, uint[] abilities )
+  void initialize( uint position, Team team, int hp, int sp, int at, int df, uint[] abilities )
   {
     this.position = position;
     this.team = team;

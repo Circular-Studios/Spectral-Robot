@@ -139,7 +139,7 @@ final class Controller
       u.addComponent( unit );
 
       // initialize the unit and add it to the active scene
-      unit.init( toTileID( unitNode.Spawn[ 0 ], unitNode.Spawn[ 1 ] ), unitNode.team, classNode.HP, classNode.Speed, classNode.Attack, classNode.Defense, loadAbilities( classNode.Abilities ) );
+      unit.initialize( toTileID( unitNode.Spawn[ 0 ], unitNode.Spawn[ 1 ] ), unitNode.team, classNode.HP, classNode.Speed, classNode.Attack, classNode.Defense, loadAbilities( classNode.Abilities ) );
       if ( classNode.rotation )
         unit.transform.rotation = classNode.rotation;
       Game.level.addChild( u );
