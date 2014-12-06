@@ -25,7 +25,7 @@ public:
   Unit[] units;
   shared Connection serverConn;
   GameMode gameMode;
-
+  int numGameModes;
   // Name that game
   @property override string title()
   {
@@ -36,14 +36,15 @@ public:
   {
     info( "Initializing ", title, "..." );
 
+    
     // setup a couple helper keys
     Input.addButtonDownEvent( "QuitToDesktop", ( _ ) { currentState = EngineState.Quit; } );
     Input.addButtonDownEvent( "ResetGame", ( _ ) { currentState = EngineState.Reset; } );
-
+    numGameModes = 1;
     // setup some gamemode test keys
-    Input.addButtonDownEvent( "LoadCTF", ( kc ) { loadLevel( "levelSRTF", "CTF" ); } );
-    Input.addButtonDownEvent( "LoadDeathmatch", ( kc ) { loadLevel( "levelSRTF", "Deathmatch" ); } );
-
+    Input.addButtonDownEvent( "LoadCTF", ( kc ) { loadLevel( "levelSRTF", "CTF" ); numGameModes++;} );
+    Input.addButtonDownEvent( "LoadDeathmatch", ( kc ) { loadLevel( "levelSRTF", "Deathmatch" ); numGameModes++; } );
+    
     stateFlags.autoRefresh = false;
 
     // initalize stuff
@@ -94,6 +95,8 @@ public:
     uint w = config.display.width;
     uint h = config.display.height;
     level.ui = new UserInterface( w, h, config.userInterface.filePath );
+
+    logInfo( numGameModes, "ah ah ah...");
   }
 
   /// Connect to the server
