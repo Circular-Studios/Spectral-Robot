@@ -63,6 +63,11 @@ public:
     uint w = config.display.width;
     uint h = config.display.height;
     level.ui = new UserInterface( w, h, config.userInterface.filePath );
+
+    level.ui.view.registerCallback( "selectAbility", ( int id ) {
+        info( "Ability called: ", id );
+        //grid.selectAbility( id );
+    } );
   }
 
   /// Connect to the server
