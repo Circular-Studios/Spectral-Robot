@@ -25,6 +25,7 @@ public:
   Unit[] units;
   shared Connection serverConn;
   GameMode gameMode;
+  TurnCounter turnCounter; // replace this with GameMode class later
   int numGameModes;
   // Name that game
   @property override string title()
@@ -56,6 +57,7 @@ public:
     turn = new Turn();
     gc = new Controller( "levelSRTF", "Deathmatch" );
     gameMode = GameMode.Deathmatch;
+	turnCounter = new TurnCounter(gameMode);
 
     // create a camera
     auto cam = level[ "Camera" ].getComponent!AdvancedCamera;
@@ -85,6 +87,7 @@ public:
     turn = new Turn();
     gc = new Controller( levelName, gameModeName );
     gameMode = to!GameMode( gameModeName );
+	turnCounter = new TurnCounter(gameMode);
 
     // create a camera
     auto cam = level[ "Camera" ].getComponent!AdvancedCamera;

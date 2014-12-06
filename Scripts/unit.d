@@ -59,11 +59,13 @@ public:
     this.position = position;
     this.team = team;
     this.hp = hp;
+	this.maxHP = hp;
     this.speed = sp;
     this.remainingRange = this.speed;
     this.attack = at;
     this.defense = df;
     this.abilities = abilities;
+	spawnPoint = position;
     updatePosition();
   }
 
@@ -287,6 +289,15 @@ public:
     // on death
     if( hp <= 0 )
     {
+      // tell the turn counter to give the other team a point
+	  if (team == Team.Robot) {
+	    Game.turnCounter.wolfKills++;
+		info("Team Wolf Kills Now: ", Game.turnCounter.wolfKills);
+	  } else {
+	    Game.turnCounter.robotKills++;
+		info("Team Robot Kills Now: ", Game.turnCounter.robotKills);
+	  }
+	
       // set the current tile to default state
       Tile curTile = Game.grid.getTileByID( position );
       curTile.type( TileType.Open );
@@ -298,7 +309,8 @@ public:
       {
         position = spawnPoint;
         updatePosition();
-
+		
+		curTile = Game.grid.getTileByID(position);
         curTile.type( TileType.OccupantInactive );
         curTile.selection( TileSelection.Black );
         curTile.occupant = this;
