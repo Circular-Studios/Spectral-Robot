@@ -79,7 +79,7 @@ public:
             if( auto unit = obj.getComponent!Unit )
             {
               // Use the selected ability on the unit if in range
-              if( isAbilitySelected && Game.abilities[ selectedAbility ].checkRange( selectedUnit.position, unit.position ) )
+              if( isAbilitySelected )
               {
                 uint originID = selectedUnit.ID;
                 uint abilityID = selectedAbility;

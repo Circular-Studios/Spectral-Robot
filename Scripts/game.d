@@ -2,6 +2,7 @@ module game;
 import controller, grid, turn, action, ability, unit, camera, tile, gameMode;
 import dash;
 
+mixin( registerComponents!( "grid" ) );
 mixin( registerComponents!( "unit" ) );
 mixin( registerComponents!( "tile" ) );
 mixin( registerComponents!( "camera" ) );

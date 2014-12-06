@@ -47,6 +47,13 @@ public:
     {
       if( currentTeam == activeTeam )
       {
+        // deselect the active unit, if any
+        if( Game.grid.selectedUnit )
+        {
+          Game.turn.sendAction( Action( NetworkAction.deselect, Game.grid.selectedUnit.ID, 0, false ) );
+          Game.grid.selectedUnit.deselect();
+        }
+
         // send the switch to the server
         Game.turn.sendAction( Action( NetworkAction.switchTeam, 0, 0, true ) );
         switchActiveTeam();

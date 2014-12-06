@@ -54,7 +54,7 @@ public:
   }
 
   /// Initialize a unit
-  void init( uint position, Team team, int hp, int sp, int at, int df, uint[] abilities )
+  void initialize( uint position, Team team, int hp, int sp, int at, int df, uint[] abilities )
   {
     this.position = position;
     this.team = team;
@@ -70,12 +70,13 @@ public:
   /// Use an ability
   bool useAbility( uint abilityID, uint targetID )
   {
-    if( remainingActions > 0 && abilities.countUntil( abilityID ) > -1 )
+    if( remainingActions > 0 &&
+        abilities.countUntil( abilityID ) > -1 &&
+        Game.abilities[ abilityID ].checkRange( this.position, targetID ) )
     {
       if( Game.abilities[ abilityID ].use( position, targetID ) )
       {
-        actionUsed();
-        return true;
+        return actionUsed();
       }
     }
 
@@ -240,7 +241,7 @@ public:
   }
 
   /// Decrement remaining actions
-  void actionUsed( int numActions = 1 )
+  bool actionUsed( int numActions = 1 )
   {
     remainingActions -= numActions;
     if( remainingActions <= 0 )
@@ -249,6 +250,7 @@ public:
       Game.turn.checkTurnOver();
     }
     deselect();
+    return true;
   }
 
   /// Prep the unit to begin a turn anew
