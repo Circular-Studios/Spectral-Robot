@@ -60,7 +60,7 @@ public:
   {
     info( "Action received ", action );
 
-    switch(action.actionID) {
+    switch( action.actionID ) {
       // Move a unit
       case NetworkAction.move:
         Game.units[ action.originID ].move( action.targetID );

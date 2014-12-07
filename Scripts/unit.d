@@ -158,6 +158,8 @@ public:
       actionUsed();
       remainingRange -= abs( ( targetTile.x - curTile.x ) ) + abs ( ( targetTile.y - curTile.y ) );
 
+      Game.statsConn.store( "Location", position );
+
       // update fog of war
       Game.grid.updateFogOfWar();
 

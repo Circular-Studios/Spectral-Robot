@@ -3,6 +3,7 @@ import game, controller, tile, unit, turn, action;
 import dash.core, dash.utility, dash.components;
 import gl3n.linalg;
 import std.conv, std.algorithm, std.range, std.array;
+import a4g;
 
 // taken from http://forum.dlang.org/post/vqfvihyezbmwcjkmpzin@forum.dlang.org
 template Unroll( alias CODE, alias N, alias SEP="" )
@@ -22,6 +23,7 @@ public:
   Tile[][] tiles;
   bool isUnitSelected = false;
   bool isAbilitySelected = false;
+  bool isHeatmapActive = false;
   bool fogOfWar;
   Unit selectedUnit;
   uint selectedAbility;
@@ -31,7 +33,7 @@ public:
   this()
   {
     // Deselect selected unit
-    Input.addButtonDownEvent( "Back", ( kc )
+    Input.addButtonDownEvent( "Back", ( _ )
     {
       if( isUnitSelected && Game.turn.currentTeam == Game.turn.activeTeam )
       {
@@ -41,7 +43,7 @@ public:
     } );
 
     // Left mouse click
-    Input.addButtonDownEvent( "Select", ( kc )
+    Input.addButtonDownEvent( "Select", ( _ )
     {
       if( auto obj = Input.mouseObject )
       {
@@ -107,6 +109,12 @@ public:
           }
         }
       }
+    } );
+
+    // Toggle heat map
+    Input.addButtonDownEvent( "ToggleHeatmap", ( _ )
+    {
+        toggleHeatmap();
     } );
 
     // ability hotkeys
@@ -179,9 +187,9 @@ public:
       // check search depth and if this tile is legal
       if( ( state.depth <= range
        || ( state.depth > range && state.depth <= range2 + range ) ) &&   // tile must be in range
-        ( state.tile.type == TileType.Open                 // and the tile is open
-       || state.tile.toID == startingTile.toID               // or this is the starting tile
-       || ( passThroughUnits && state.tile.occupant !is null ) ) )    // or there is a unit that we want to bypass
+        ( state.tile.type == TileType.Open                                // and the tile is open
+       || state.tile.toID == startingTile.toID                            // or this is the starting tile
+       || ( passThroughUnits && state.tile.occupant !is null ) ) )        // or there is a unit that we want to bypass
       {
         // reconfirm search depth and add to final tile set
         if( range2 == 0 ) foundTiles ~= state.tile;
@@ -193,10 +201,10 @@ public:
           point( state.tile.x, state.tile.y + 1 ),
           point( state.tile.x - 1, state.tile.y ),
           point( state.tile.x + 1, state.tile.y ) ] )
-          if( coord.x < gridX && coord.x >= 0   // legal tile on x-axis
-            && coord.y < gridY && coord.y >= 0   // legal tile on y-axis
-            && !visited[ coord.x ][ coord.y ]   // the tile hasn't been visited
-            && ( !stopOnUnits           // and don't stop on units
+          if( coord.x < gridX && coord.x >= 0                      // legal tile on x-axis
+            && coord.y < gridY && coord.y >= 0                     // legal tile on y-axis
+            && !visited[ coord.x ][ coord.y ]                      // the tile hasn't been visited
+            && ( !stopOnUnits                                      // and don't stop on units
             || ( stopOnUnits && state.tile.occupant !is null ) ) ) // or the tile has no unit in it
             states ~= searchState( tiles[ coord.x ][ coord.y ], state.depth + 1 );
       }
@@ -236,10 +244,67 @@ public:
     }
   }
 
+  /// Toggles a heat map using data from A4G
+  void toggleHeatmap() 
+  {
+    // toggle the bool
+    isHeatmapActive = !isHeatmapActive;
+
+    // query for data from A4G
+    foreach( loc; Game.statsConn.retrieve!uint( "Location" ) )
+    {
+
+    }
+
+    // toggle characters to stop drawing
+    if( selectedUnit )
+      selectedUnit.deselect();
+
+    foreach( unit; Game.units )
+    {
+      unit.stateFlags.drawMesh = !isHeatmapActive;
+
+      if( isHeatmapActive )
+      {
+        
+      }
+      else
+      {
+
+      }
+    }
+
+    // loop through the tiles
+    for( int i = 0; i < gridX * gridY; i++ )
+    {
+      int x = i % gridX;
+      int y = i / gridX;
+      Tile tile = tiles[ x ][ y ];
+
+      if( isHeatmapActive )
+      {
+        // using some number y as a max, assign a value to a tile based on number of hits
+          // can we easily find the most landed-on tile, or do we need to loop once to find it?
+
+        // replace tile mesh with rectangle mesh
+        tile.mesh = Assets.get!Mesh( "cube" );
+
+        // toggle tiles to start drawing
+        if( tile.type == TileType.Open )
+          tile.stateFlags.drawMesh = true;
+      }
+      else
+      {
+        tile.mesh = Assets.get!Mesh( "unitsquare" );
+        tile.z = 0;
+      }
+    }
+  }
+
   /// Create an ( n x m ) grid of tiles
   void initTiles( int n, int m )
   {
-    info("Grid size: ( ", n, ", ", m, " )" );
+    info( "Grid size: ( ", n, ", ", m, " )" );
 
     //initialize tiles
     tiles = new Tile[][]( n, m );

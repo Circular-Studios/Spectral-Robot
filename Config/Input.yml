@@ -12,6 +12,8 @@ LookRight:
     Keyboard: E
 QuitToDesktop:
     Keyboard: Delete
+ToggleHeatmap:
+    Keyboard: H
 ConnectToServer:
     Keyboard: R
 EndTurn:

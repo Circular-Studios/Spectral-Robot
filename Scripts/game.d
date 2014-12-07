@@ -1,6 +1,7 @@
 module game;
 import controller, grid, turn, action, ability, unit, camera, tile;
 import dash;
+import a4g;
 
 mixin( registerComponents!( "grid" ) );
 mixin( registerComponents!( "unit" ) );
@@ -25,11 +26,18 @@ public:
   Unit[] units; // The units
   shared Connection serverConn; // the server connection
   UserInterface ui;
+  A4GConnection statsConn;
 
   // Name that game
   @property override string title()
   {
     return "Spectral Robot Task Force";
+  }
+
+  this()
+  {
+    // connect to the stats server
+    statsConn = A4GConnection( "http://localhost:8080/" );
   }
 
   override void onInitialize()
@@ -57,7 +65,7 @@ public:
     level.camera = cam.camera;
 
     // bind 'r' to server connect
-    Input.addButtonDownEvent( "ConnectToServer", kc => connect() );
+    Input.addButtonDownEvent( "ConnectToServer", _ => connect() );
 
     // create the ui
     uint w = config.display.width;
