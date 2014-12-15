@@ -14,7 +14,8 @@
     "Tyler Wozniak",
     "Sean Brennan",
     "Colden Cullen",
-    "Gwendolyn Hart"
+    "Gwendolyn Hart",
+    "Jimmy Detwiler"
   ],
   "dependencies": {
     "dash": "==0.12.0-beta1"
