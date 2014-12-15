@@ -172,7 +172,8 @@ body{
 }
 
 .abilityBox.basicRanged {
-	background-image: url( 'iconset/ranged.png' );
+	/*background-image: url( 'iconset/ranged.png' );*/
+	background-image: url( 'iconset/fireball.png' );
 }
 
 .abilityBox.basicMelee {
