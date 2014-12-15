@@ -18,7 +18,7 @@
   ],
   "dependencies": {
     "dash": "==0.11.1",
-    "a4g:client": "0.1.0"
+    "a4g:client": "~master"
   },
   "sourcePaths": [
     "Config/",

@@ -4,6 +4,11 @@ Diffuse: [ "Poop" ]
 Normal: [ "blank_n" ]
 Specular: [ "flat_s" ]
 ---
+Name: cube
+Diffuse: [ "pattern_1" ]
+Normal: [ "blank_n" ]
+Specular: [ "flat_s" ]
+---
 Name: MarbleFloor
 Diffuse: [ "marble_d" ]
 Normal: [ "marble_n" ]

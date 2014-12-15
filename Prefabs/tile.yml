@@ -19,6 +19,16 @@ Components:
 Transform:
     Rotation: [ -90, 0, 0 ]
 ---
+Name: Cube
+Components:
+    - Type: Tile
+    - Type: Mesh
+      Asset: unitsquare
+    - Type: Material
+      Asset: cube
+Transform:
+    Rotation: [ 0, 0, 0 ]
+---
 Name: MarbleFloor
 Components:
     - Type: Mesh

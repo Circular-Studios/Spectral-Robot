@@ -245,7 +245,7 @@ public:
   }
 
   /// Toggles a heat map using data from A4G
-  void toggleHeatmap() 
+  void toggleHeatmap()
   {
     uint[][] rawHeatmap = new uint[][]( gridX, gridY );
     uint highestHeat = 1;
@@ -256,7 +256,6 @@ public:
     // query for data from A4G
     foreach( loc; Game.statsConn.retrieve!uint( "Location" ) )
     {
-      info( loc );
       uint x = loc % gridX;
       uint y = loc / gridX;
 
@@ -265,6 +264,8 @@ public:
         highestHeat = rawHeatmap[ x ][ y ];
     }
 
+    info( "Highest heat: ", highestHeat );
+
     // toggle characters to stop drawing
     if( selectedUnit )
       selectedUnit.deselect();
@@ -272,15 +273,6 @@ public:
     foreach( unit; Game.units )
     {
       unit.stateFlags.drawMesh = !isHeatmapActive;
-
-      if( isHeatmapActive )
-      {
-
-      }
-      else
-      {
-
-      }
     }
 
     // loop through the tiles
@@ -292,18 +284,39 @@ public:
 
       if( isHeatmapActive )
       {
-        tile.y = 10 - rawHeatmap[ x ][ y ] / highestHeat;
+        tile.z = ( 3.0f * ( rawHeatmap[ x ][ y ].to!float / highestHeat ) ).to!int;
 
-        // replace tile mesh with rectangle mesh
-        tile.mesh = Assets.get!Mesh( "cube" );
+        // switch tile type so tiles with units show up
+        if( tile.type == TileType.OccupantActive )
+          tile.type = TileType.Open;
 
         // toggle tiles to start drawing
         if( tile.type == TileType.Open )
           tile.stateFlags.drawMesh = true;
+
+        // replace tile mesh with rectangle mesh
+        if( rawHeatmap[ x ][ y ] > 0 )
+        {
+          tile.mesh = Assets.get!Mesh( "cube" );
+          tile.material = Assets.get!Material( "cube" );
+        }
       }
       else
       {
         tile.mesh = Assets.get!Mesh( "unitsquare" );
+        tile.material = Assets.get!Material( "BlackTile" );
+
+        // switch tile type back for tiles with units
+        if( tile.occupant !is null && tile.occupant.team == Game.turn.activeTeam )
+          tile.type = TileType.OccupantActive;
+
+        if( tile.occupant !is null && tile.occupant.team != Game.turn.activeTeam )
+          tile.type = TileType.OccupantInactive;
+
+        // toggle tiles to stop drawing
+        if( tile.type == TileType.Open )
+          tile.stateFlags.drawMesh = false;
+
         tile.z = 0;
       }
     }
