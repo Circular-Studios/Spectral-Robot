@@ -247,13 +247,22 @@ public:
   /// Toggles a heat map using data from A4G
   void toggleHeatmap() 
   {
+    uint[][] rawHeatmap = new uint[][]( gridX, gridY );
+    uint highestHeat = 1;
+
     // toggle the bool
     isHeatmapActive = !isHeatmapActive;
 
     // query for data from A4G
     foreach( loc; Game.statsConn.retrieve!uint( "Location" ) )
     {
+      info( loc );
+      uint x = loc % gridX;
+      uint y = loc / gridX;
 
+      rawHeatmap[ x ][ y ]++;
+      if ( rawHeatmap[ x ][ y ] > highestHeat )
+        highestHeat = rawHeatmap[ x ][ y ];
     }
 
     // toggle characters to stop drawing
@@ -266,7 +275,7 @@ public:
 
       if( isHeatmapActive )
       {
-        
+
       }
       else
       {
@@ -283,8 +292,7 @@ public:
 
       if( isHeatmapActive )
       {
-        // using some number y as a max, assign a value to a tile based on number of hits
-          // can we easily find the most landed-on tile, or do we need to loop once to find it?
+        tile.y = 10 - rawHeatmap[ x ][ y ] / highestHeat;
 
         // replace tile mesh with rectangle mesh
         tile.mesh = Assets.get!Mesh( "cube" );

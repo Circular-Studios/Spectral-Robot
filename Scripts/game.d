@@ -1,7 +1,8 @@
 module game;
 import controller, grid, turn, action, ability, unit, camera, tile;
 import dash;
-import a4g;
+import a4g.common;
+import a4g.connection;
 
 mixin( registerComponents!( "grid" ) );
 mixin( registerComponents!( "unit" ) );
@@ -37,7 +38,7 @@ public:
   this()
   {
     // connect to the stats server
-    statsConn = A4GConnection( "http://localhost:8080/" );
+    statsConn = A4GConnection( "http://localhost:8080/" );//a4g.coldencullen.com:8080/" );
   }
 
   override void onInitialize()
