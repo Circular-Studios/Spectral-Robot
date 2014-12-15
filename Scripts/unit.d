@@ -29,6 +29,8 @@ public:
   uint position;
 	@optional
 	uint spawnPoint;
+  @optional
+  Animation animation;
   @rename("Team") @byName
   Team team;
   @ignore
@@ -59,14 +61,18 @@ public:
     this.position = position;
     this.team = team;
     this.hp = hp;
-	this.maxHP = hp;
+    this.maxHP = hp;
     this.speed = sp;
     this.remainingRange = this.speed;
     this.attack = at;
     this.defense = df;
     this.abilities = abilities;
-	spawnPoint = position;
+    spawnPoint = position;
     updatePosition();
+    this.animation = this.getComponent!Animation;
+	
+    // begin idle animation
+    if (team == Team.Robot) animation.changeAnimation("robot_idle", 0);
   }
 
   /// Use an ability
@@ -76,6 +82,14 @@ public:
         abilities.countUntil( abilityID ) > -1 &&
         Game.abilities[ abilityID ].checkRange( this.position, targetID ) )
     {
+      // animation
+      int range = Game.abilities[abilityID].range;
+      if (range == 1) {
+        if (team == Team.Robot) animation.runAnimationOnce("Robot_Anim_Melee");
+      } else if (range > 1) {
+        if (team == Team.Robot) animation.runAnimationOnce("Robot_Anim_Range");
+      }
+    
       if( Game.abilities[ abilityID ].use( position, targetID ) )
       {
         return actionUsed();
@@ -281,7 +295,7 @@ public:
   {
     this.transform.position.x = this.x * TILE_SIZE;
     this.transform.position.z = this.y * TILE_SIZE;
-    this.transform.position.y = this.z;
+    if (hp > 0) this.transform.position.y = this.z;
   }
 
   override void update()
@@ -289,55 +303,82 @@ public:
     // on death
     if( hp <= 0 )
     {
-      // tell the turn counter to give the other team a point
-	  if (team == Team.Robot) {
-	    Game.turnCounter.wolfKills++;
-		info("Team Wolf Kills Now: ", Game.turnCounter.wolfKills);
-	  } else {
-	    Game.turnCounter.robotKills++;
-		info("Team Robot Kills Now: ", Game.turnCounter.robotKills);
-	  }
-	
+      hp = maxHP;
+    
       // set the current tile to default state
       Tile curTile = Game.grid.getTileByID( position );
       curTile.type( TileType.Open );
       curTile.selection( TileSelection.None );
       curTile.occupant = null;
-
-      // respawn
-      if( Game.gameMode == GameMode.Deathmatch )
+      
+      // fall through the floor animation
+      auto startTime = Time.totalTime;
+      auto dur = 500.msecs;
+      float initZ = this.transform.position.y; float finalZ = initZ - 40;
+      scheduleTimedTask( dur,
       {
-        position = spawnPoint;
-        updatePosition();
-		
-		curTile = Game.grid.getTileByID(position);
-        curTile.type( TileType.OccupantInactive );
-        curTile.selection( TileSelection.Black );
-        curTile.occupant = this;
+        this.transform.position.y =
+          interp( initZ, finalZ,
+                 ( Time.totalTime - startTime ) / dur.toSeconds );
+      } );
 
-        hp = maxHP;
-      }
-      // die
-      else
+      // wait till the fall animation is over
+      scheduleDelayedTask( dur,
       {
-        // get index of unit in Game.units
-        int idx;
-        for( int i = 0; i < Game.units.length; i++ )
-        {
-          if( Game.units[ i ] == this )
-          {
-            idx = i;
-          }
+        // tell the turn counter to give the other team a point
+        if (team == Team.Robot) {
+          Game.turnCounter.wolfKills++;
+          info("Team Wolf Kills Now: ", Game.turnCounter.wolfKills);
+        } else {
+          Game.turnCounter.robotKills++;
+          info("Team Robot Kills Now: ", Game.turnCounter.robotKills);
         }
+      
+        // respawn
+        if( Game.gameMode == GameMode.Deathmatch )
+        {
+          position = spawnPoint;
+          updatePosition();
+          //this.transform.position.y = finalZ;
+          
+          curTile = Game.grid.getTileByID(position);
+          curTile.type( TileType.OccupantInactive );
+          curTile.selection( TileSelection.Black );
+          curTile.occupant = this;
+          
+          // rise like Jesus
+          auto newStartTime = Time.totalTime;
+          scheduleTimedTask( dur,
+          {
+            this.transform.position.y =
+              interp( finalZ, initZ,
+                     ( Time.totalTime - newStartTime ) / dur.toSeconds );
+          } );
+        }
+        
+        // die
+        else
+        {
+          // get index of unit in Game.units
+          int idx;
+          for( int i = 0; i < Game.units.length; i++ )
+          {
+            if( Game.units[ i ] == this )
+            {
+              idx = i;
+            }
+          }
 
-        // slice unit outside of game.units
-        Game.units = Game.units[ 0..idx ]~Game.units[ idx+1..Game.units.length ];
+          // slice unit outside of game.units
+          Game.units = Game.units[ 0..idx ]~Game.units[ idx+1..Game.units.length ];
 
-        // remove from level
-        Game.level.removeChild( this.parent );
+          // remove from level
+          Game.level.removeChild( this.parent );
 
-        hp = 0;
-      }
+          hp = 0;
+        }
+      } );
+      
     }
 
   }
