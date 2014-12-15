@@ -1,25 +1,60 @@
 ---
 Name: "The Only Level"
 Grid: [24, 24]
-FogOfWar: No
-Units:
-    - Class: TechWolf
-      Spawn: [17, 5]
-      Team: Criminal
+GameModes:
+    - Name: "Deathmatch"
+      FogOfWar: False
+      RobotCamera:
+          Position: [300, 200, 550]
+          Rotation: [0, 0, -45]
+      CriminalCamera:
+          Position: [300, 200, 50]
+          Rotation: [180, 0, -45]
+      Units:
+          - Class: TechWolf
+            Spawn: [17, 5]
+            Team: Criminal
 
-    - Class: PyroWolf
-      Spawn: [5, 5]
-      Team: Criminal
+          - Class: PyroWolf
+            Spawn: [5, 5]
+            Team: Criminal
 
-    - Class: PyroRobot
-      Spawn: [12, 19]
-      Rotation: [ 0, 180, 0 ]
-      Team: Robot
+          - Class: PyroRobot
+            Spawn: [12, 19]
+            Rotation: [0, 180, 0]
+            Team: Robot
 
-    - Class: TechRobot
-      Spawn: [6, 18]
-      Rotation: [ 0, 180, 0 ]
-      Team: Robot
+          - Class: TechRobot
+            Spawn: [6, 18]
+            Rotation: [0, 180, 0]
+            Team: Robot
+
+    - Name: "CTF"
+      FogOfWar: False
+      RobotCamera:
+          Position: [300, 200, 550]
+          Rotation: [0, 0, -45]
+      CriminalCamera:
+          Position: [300, 200, 50]
+          Rotation: [180, 0, -45]
+      Units:
+          - Class: TechWolf
+            Spawn: [17, 5]
+            Team: Criminal
+
+          - Class: PyroWolf
+            Spawn: [5, 5]
+            Team: Criminal
+
+          - Class: PyroRobot
+            Spawn: [12, 19]
+            Rotation: [0, 180, 0]
+            Team: Robot
+
+          - Class: TechRobot
+            Spawn: [6, 18]
+            Rotation: [0, 180, 0]
+            Team: Robot
 
 Objects:
     - Prefab: Wall_1x4
