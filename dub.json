@@ -17,7 +17,7 @@
     "Gwendolyn Hart"
   ],
   "dependencies": {
-    "dash": "==0.11.1"
+    "dash": "==0.12.0-beta1"
   },
   "sourcePaths": [
     "Config/",
