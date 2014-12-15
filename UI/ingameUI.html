@@ -1,18 +1,17 @@
+<!doctype html>
 <html>
 	<head>
 		<title>In-game UI</title>
 
-		<link rel="stylesheet" type="text/css" href="normalize.css" />
+		<link rel="stylesheet" type="text/css" href="normalize.css">
 		<link rel="stylesheet" type="text/css" href="ingame_style.css">
 
 		<script src="jquery-2.1.0.min.js"></script>
 		<script src="jquery-ui-1.10.4.custom.min.js"></script>
-
-		
 	</head>
 	<body>
-	
-	<div style="color:white;position:absolute;right:10px;top:10px">Alpha 0.11</div>
+
+	<div style="color:white;position:absolute;right:10px;top:10px">Alpha 0.10</div>
 
 	<!-- Turn counter -->
 	<div class="topContainer">
@@ -37,27 +36,19 @@
 				</div>
 			</div>
 			<div class="playerCharacter" onclick="selectCharacter( 1 )">
-				<div class="charName"><h3>Stan</h3></div>
-				<div class="abilityCounter"><span>Actions left: <span id="actions1">3</span></span></div>
+				<div class="charName"><h3>BroBot</h3></div>
+				<div class="abilityCounter"><h4>Actions left: <span id="actions1">3</span></span></div>
 				<div class="healthContainer">
 					<div class="healthbar" style="width:100%" id="char1"></div>
 					<div class="health"><span><span id="hp1">35</span>/35</span></div>
 				</div>
 			</div>
 			<div class="playerCharacter" onclick="selectCharacter( 2 )">
-				<div class="charName"><h3>BroBot</h3></div>
-				<div class="charName"><h4>Actions left: <span id="actions2">3</span></span></div>
+				<div class="charName"><h3>iRobot</h3></div>
+				<div class="abilityCounter"><span>Actions left: <span id="actions2">3</span></span></div>
 				<div class="healthContainer">
 					<div class="healthbar" style="width:100%" id="char2"></div>
 					<div class="health"><span><span id="hp2">35</span>/35</span></div>
-				</div>
-			</div>
-			<div class="playerCharacter" onclick="selectCharacter( 3 )">
-				<div class="charName"><h3>iRobot</h3></div>
-				<div class="abilityCounter"><span>Actions left: <span id="actions3">3</span></span></div>
-				<div class="healthContainer">
-					<div class="healthbar" style="width:100%" id="char3"></div>
-					<div class="health"><span><span id="hp3">35</span>/35</span></div>
 				</div>
 			</div>
 		</div>
@@ -66,42 +57,33 @@
 				<div class="charName">Werewolves</div>
 				<div class=""></div>
 			</div>
-			<div class="enemyCharacter" onclick="selectCharacter( 4 )">
+			<div class="enemyCharacter" onclick="selectCharacter( 3 )">
 				<div class="charName"><h3>Walter</h3></div>
+				<div class="abilityCounter"><span>Actions left: <span id="actions3">3</span></span></div>
+				<div class="healthContainer">
+					<div class="healthbar" style="width:100%" id="char3"></div>
+					<div class="health"><span><span id="hp3">35</span>/35</span></div>
+				</div>
+
+			</div>
+			<div class="enemyCharacter" onclick="selectCharacter( 4 )">
+				<div class="charName"><h3>Mark</h3></div>
 				<div class="abilityCounter"><span>Actions left: <span id="actions4">3</span></span></div>
 				<div class="healthContainer">
 					<div class="healthbar" style="width:100%" id="char4"></div>
 					<div class="health"><span><span id="hp4">35</span>/35</span></div>
 				</div>
-
 			</div>
 			<div class="enemyCharacter" onclick="selectCharacter( 5 )">
-				<div class="charName"><h3>Big Bad</h3></div>
+				<div class="charName"><h3>Jimothy</h3></div>
 				<div class="abilityCounter"><span>Actions left: <span id="actions5">3</span></span></div>
 				<div class="healthContainer">
 					<div class="healthbar" style="width:100%" id="char5"></div>
 					<div class="health"><span><span id="hp5">35</span>/35</span></div>
 				</div>
 			</div>
-			<div class="enemyCharacter" onclick="selectCharacter( 6 )">
-				<div class="charName"><h3>Mark</h3></div>
-				<div class="abilityCounter"><span>Actions left: <span id="actions6">3</span></span></div>
-				<div class="healthContainer">
-					<div class="healthbar" style="width:100%" id="char6"></div>
-					<div class="health"><span><span id="hp6">35</span>/35</span></div>
-				</div>
-
-			</div>
-			<div class="enemyCharacter" onclick="selectCharacter( 7 )">
-				<div class="charName"><h3>Jimothy</h3></div>
-				<div class="abilityCounter"><span>Actions left: <span id="actions7">3</span></span></div>
-				<div class="healthContainer">
-					<div class="healthbar" style="width:100%" id="char7"></div>
-					<div class="health"><span><span id="hp7">35</span>/35</span></div>
-				</div>
-			</div>
 		</div>
-		
+
 	</div>
 
 	<!-- Abilities at the bottom of the screen -->
@@ -130,8 +112,9 @@
 	<script type="text/javascript">
 		var selectedChar = 0;
 
-		function setHp( hp, charNum ) {
-			var percentHp = (hp / 35) * 100;
+		function setHp( hp, charNum )
+		{
+			var percentHp = ( hp / 35 ) * 100;
 			var character = "char" + charNum;
 			var health = "hp" + charNum;
 			var currentHp = document.getElementById( health ).innerHTML;
@@ -140,13 +123,13 @@
 			{
 				takeDamage( hp, currentHp, charNum );
 			}
-			else 
+			else
 			{
 				document.getElementById( character ).style.width = percentHp + "%";
 				document.getElementById( health ).innerHTML = ''+hp;
-				var red = (1 - (hp / 35) ) * 255;
-				var green = (hp / 35 ) * 255;
-				document.getElementById( character ).style.backgroundColor = "rgb(" + red + ", " + green + ",0)"
+				var red = (1 - ( hp / 35 ) ) * 255;
+				var green = ( hp / 35 ) * 255;
+				document.getElementById( character ).style.backgroundColor = "rgb(" + red + ", " + green + ", 0)"
 			}
 			//console.log(document.getElementById( health ).innerHTML)
 		}
@@ -155,14 +138,15 @@
 		{
 			var difference = currentHp - hp;
 			var character = "char" + charNum;
-			var percentHp = (currentHp / 35) * 100;
+			var percentHp = ( currentHp / 35 ) * 100;
 			var health = "hp" + charNum;
 			var delay = 0;
-			for( i = 0; i < difference; i++ ) 
+			for( i = 0; i < difference; i++ )
 			{
 				delay += 50;
-				//console.log( "currentHp: " + currentHp)
-				setTimeout( function() {
+				//console.log( "currentHp: " + currentHp )
+				setTimeout( function()
+				{
 					reduceHealth( charNum );
 				}, delay );
 			}
@@ -172,33 +156,35 @@
 		{
 			var character = "char" + charNum;
 			var health = "hp" + charNum;
-			
+
 			var currentHp = document.getElementById( health ).innerHTML;
 			currentHp--;
-			
-			var percentHp = (currentHp / 35) * 100;
 
-			var red = (1 - (currentHp / 35) ) * 255;
-			var green = (currentHp / 35 ) * 255;
+			var percentHp = ( currentHp / 35 ) * 100;
+
+			var red = ( 1 - ( currentHp / 35 ) ) * 255;
+			var green = ( currentHp / 35 ) * 255;
 
 			document.getElementById( character ).style.width = percentHp + "%";
-			document.getElementById( health ).innerHTML = ''+currentHp;
-			document.getElementById( character ).style.backgroundColor = "rgb(" + red + ", " + green + ",0)"
+			document.getElementById( health ).innerHTML = '' + currentHp;
+			document.getElementById( character ).style.backgroundColor = "rgb(" + red + ", " + green + ", 0)"
 		}
 
-		function selectCharacter( i ) { 
+		function selectCharacter( i ) {
 			selectedChar = i;
 			if( selectedChar == -1 )
 			{
 				document.getElementById( "abilities" ).style.display = "none";
-			} else {
+			}
+			else
+			{
 				document.getElementById( "abilities" ).style.display = "table";
 				dash.callFunction( "selectCharacter", i );
 			}
 		}
 
 		function selectAbility( i ) {
-			console.log("ability " + i )
+			console.log( "ability " + i );
 			dash.callFunction( "selectAbility", i );
 		}
 
