@@ -28,6 +28,10 @@ ResetGame:
     Keyboard: F5
 ResetCamera:
     Keyboard: F9
+LoadCTF:
+    Keyboard: C
+LoadDeathmatch:
+    Keyboard: V
 Action1:
     Keyboard: "Keyboard1"
 Action2:

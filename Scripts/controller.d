@@ -1,8 +1,6 @@
 ﻿module controller;
 import unit, grid, ability, tile, game, turn;
 import dash.core, dash.utility, dash.components;
-import yaml;
-import std.path, std.conv;
 import gl3n.linalg, gl3n.math;
 
 final class Controller
@@ -11,9 +9,9 @@ final class Controller
   {
     string Class;
     int[] Spawn;
-    @rename("Team") @byName
+    @rename( "Team" ) @byName
     Team team;
-    @rename("Rotation") @optional
+    @rename( "Rotation" ) @optional
     float[] rotationVec;
   }
 
@@ -39,9 +37,9 @@ final class Controller
     int[] tileSize;
     @ignore
     string name, ttype;
-    @rename("Prefab")
+    @rename( "Prefab" )
     string prefab;
-    @rename("TileType") @byName
+    @rename( "TileType" ) @byName
     TileType tileType;
     @rename( "Rotation" ) @optional
     float[] rotationVec;
@@ -51,14 +49,14 @@ final class Controller
 
   struct LevelInfo
   {
-    string Name;
+    @rename( "Name" )
+    string name;
     @rename("Grid")
     int[] gridSize;
-    bool FogOfWar;
-    @rename( "Units" )
-    UnitInfo[] units;
     @rename( "Objects" )
     PropInfo[] props;
+    @rename( "GameModes" )
+    GameModeInfo[] gameModes;
   }
 
   struct AbilityInfo
@@ -74,13 +72,35 @@ final class Controller
     int cooldown = 0;
   }
 
-  this()
+  struct GameModeInfo
+  {
+    @rename( "Name" )
+    string name;
+    @rename( "FogOfWar" ) @optional
+    bool fogOfWar;
+    @rename( "Units" )
+    UnitInfo[] units;
+    @rename( "RobotCamera" )
+    CameraInfo robotCamera;
+    @rename( "CriminalCamera" )
+    CameraInfo criminalCamera;
+  }
+
+  struct CameraInfo
+  {
+    @rename( "Position" )
+    float[] position;
+    @rename( "Rotation" )
+    float[] rotation;
+  }
+
+  this( string level, string gameMode )
   {
     // first load all the objects
     Game.level.loadObjects( "Base" );
 
     // load the game
-    loadLevel( "levelSRTF" ); //TODO: Remove hardcoded value
+    loadLevel( level, gameMode );
 
     info( Game.units.length, " units loaded." );
   }
@@ -158,13 +178,33 @@ final class Controller
   }
 
   /// Load and create a level from yaml
-  void loadLevel( string levelName )
+  void loadLevel( string levelName, string gameMode )
   {
     // load the level from yaml
     LevelInfo level = deserializeFileByName!LevelInfo( Resources.Objects ~ "/Levels/" ~ levelName )[ 0 ];
 
     // fill the grid
     Game.grid.initTiles( level.gridSize[ 0 ], level.gridSize[ 1 ] );
+
+    // set up the gamemode
+    int activeMode = -1;
+    foreach( int i, GameModeInfo gm; level.gameModes )
+    {
+      if ( gm.name == gameMode )
+      {
+        activeMode = i;
+        break;
+      }
+    }
+    if( activeMode == -1 )
+      error( "Gamemode ", gameMode, " is not defined in the level ", level.name );
+
+    // set starting camera positions
+    Game.turn.setInitCamPos(
+      level.gameModes[ activeMode ].robotCamera.position,
+      level.gameModes[ activeMode ].robotCamera.rotation,
+      level.gameModes[ activeMode ].criminalCamera.position,
+      level.gameModes[ activeMode ].criminalCamera.rotation );
 
     // add props to the scene
     foreach( PropInfo p; level.props )
@@ -259,10 +299,10 @@ final class Controller
     }
 
     // create the units
-    loadUnits( level.units );
+    loadUnits( level.gameModes[ activeMode ].units );
 
     // do some fog of war
-    Game.grid.fogOfWar = level.FogOfWar;
+    Game.grid.fogOfWar = level.gameModes[ activeMode ].fogOfWar;
     Game.grid.updateFogOfWar();
   }
 }

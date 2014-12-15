@@ -1,5 +1,5 @@
 ﻿module unit;
-import game, ability, action, effect, tile, turn;
+import game, ability, action, grid, effect, tile, turn, gameMode;
 import dash.core, dash.utility, dash.components;
 import gl3n.linalg, gl3n.math, gl3n.interpolate;
 import std.algorithm;
@@ -18,6 +18,8 @@ public:
   @optional
   int hp;
   @optional
+  int maxHP;
+  @optional
   int speed;
   @optional
   int attack;
@@ -25,6 +27,8 @@ public:
   int defense;
   @optional
   uint position;
+	@optional
+	uint spawnPoint;
   @rename("Team") @byName
   Team team;
   @ignore
@@ -55,11 +59,13 @@ public:
     this.position = position;
     this.team = team;
     this.hp = hp;
+	this.maxHP = hp;
     this.speed = sp;
     this.remainingRange = this.speed;
     this.attack = at;
     this.defense = df;
     this.abilities = abilities;
+	spawnPoint = position;
     updatePosition();
   }
 
@@ -283,28 +289,56 @@ public:
     // on death
     if( hp <= 0 )
     {
-      // get index of unit in Game.units
-      int idx;
-      for( int i = 0; i < Game.units.length; i++ )
+      // tell the turn counter to give the other team a point
+	  if (team == Team.Robot) {
+	    Game.turnCounter.wolfKills++;
+		info("Team Wolf Kills Now: ", Game.turnCounter.wolfKills);
+	  } else {
+	    Game.turnCounter.robotKills++;
+		info("Team Robot Kills Now: ", Game.turnCounter.robotKills);
+	  }
+	
+      // set the current tile to default state
+      Tile curTile = Game.grid.getTileByID( position );
+      curTile.type( TileType.Open );
+      curTile.selection( TileSelection.None );
+      curTile.occupant = null;
+
+      // respawn
+      if( Game.gameMode == GameMode.Deathmatch )
       {
-        if( Game.units[i] == this )
-        {
-          idx = i;
-        }
+        position = spawnPoint;
+        updatePosition();
+		
+		curTile = Game.grid.getTileByID(position);
+        curTile.type( TileType.OccupantInactive );
+        curTile.selection( TileSelection.Black );
+        curTile.occupant = this;
+
+        hp = maxHP;
       }
+      // die
+      else
+      {
+        // get index of unit in Game.units
+        int idx;
+        for( int i = 0; i < Game.units.length; i++ )
+        {
+          if( Game.units[ i ] == this )
+          {
+            idx = i;
+          }
+        }
 
-      // slice unit outside of game.units
-      Game.units = Game.units[ 0..idx ]~Game.units[ idx + 1..Game.units.length ];
+        // slice unit outside of game.units
+        Game.units = Game.units[ 0..idx ]~Game.units[ idx+1..Game.units.length ];
 
-      // remove from level
-      Game.level.removeChild( parent );
+        // remove from level
+        Game.level.removeChild( this.parent );
 
-      // set tile back to it's default state
-      Game.grid.getTileByID( position ).type( TileType.Open );
-      Game.grid.getTileByID( position ).selection( TileSelection.None );
-      Game.grid.getTileByID( position ).occupant = null;
-
-      hp = 0;
+        hp = 0;
+      }
     }
+
   }
 }

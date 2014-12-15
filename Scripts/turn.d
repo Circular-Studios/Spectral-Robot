@@ -24,6 +24,12 @@ public:
   Team currentTeam; // the team this player controls
   Team activeTeam; // the active team
 
+  // the last recorded camera positions for the teams
+  vec3 lastCamPosRobot;
+  quat lastCamRotRobot;
+  vec3 lastCamPosCriminal;
+  quat lastCamRotCriminal;
+
   this()
   {
     // arbitrary starting team
@@ -134,11 +140,6 @@ public:
     else
     {
       currentTeam = Team.Criminal;
-
-      // make the camera look nice
-      // TODO: This will break when we have multiple levels
-      Game.level.camera.owner.transform.position = vec3( 300, Game.level.camera.owner.transform.position.y, 0 );
-      Game.level.camera.owner.transform.rotation = quat.euler_rotation( radians( 180 ), 0, radians( -45 ) );
     }
 
     // update the units on the team
@@ -149,13 +150,59 @@ public:
     }
   }
 
+    // set the initial camera positions of the teams
+  void setInitCamPos( float[] robotPos, float[] robotRot, float[] criminalPos, float[] criminalRot )
+  {
+    lastCamPosRobot = vec3( robotPos[ 0 ], robotPos[ 1 ], robotPos[ 2 ] );
+    lastCamRotRobot = quat.euler_rotation( robotRot[ 0 ].radians, robotRot[ 1 ].radians, robotRot[ 2 ].radians );
+
+    lastCamPosCriminal = vec3( criminalPos[ 0 ], criminalPos[ 1 ], criminalPos[ 2 ] );
+    lastCamRotCriminal = quat.euler_rotation( criminalRot[ 0 ].radians, criminalRot[ 1 ].radians, criminalRot[ 2 ].radians );
+  }
+
+  // returns to the last recorded camera position for the active team
+  void setCameraToRecord()
+  {
+    final switch ( activeTeam )
+    {
+      case Team.Robot:
+        Game.level.camera.owner.transform.position = lastCamPosRobot;
+        Game.level.camera.owner.transform.rotation = lastCamRotRobot;
+        break;
+
+      case Team.Criminal:
+        Game.level.camera.owner.transform.position = lastCamPosCriminal;
+        Game.level.camera.owner.transform.rotation = lastCamRotCriminal;
+        break;
+    }
+  }
+
+  // record the camera's current position for the active team
+  void recordCameraPos()
+  {
+    final switch ( activeTeam )
+    {
+      case Team.Robot:
+        lastCamPosRobot = Game.level.camera.owner.transform.position;
+        lastCamRotRobot = Game.level.camera.owner.transform.rotation;
+        break;
+
+      case Team.Criminal:
+        lastCamPosCriminal = Game.level.camera.owner.transform.position;
+        lastCamRotCriminal = Game.level.camera.owner.transform.rotation;
+        break;
+    }
+  }
+
   /// Switch the active team
   void switchActiveTeam()
   {
-    switch ( activeTeam )
+    recordCameraPos();
+	
+	Game.turnCounter.Iterate();
+
+    final switch ( activeTeam )
     {
-      default:
-        break;
       case Team.Robot:
         activeTeam = Team.Criminal;
         break;
@@ -167,7 +214,8 @@ public:
     // hotseat multiplayer
     if( !Game.serverConn )
       currentTeam = activeTeam;
-
+	  setCameraToRecord();
+	  
     info( "Active team: ", activeTeam );
 
     // update the units on the team
