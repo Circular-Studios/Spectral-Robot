@@ -1,0 +1,6 @@
+---
+Name: Wolf3
+Prefab: PyroWolf
+HP: 35
+Speed: 3
+Abilities: BasicSet

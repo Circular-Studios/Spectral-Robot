@@ -22,10 +22,6 @@ public:
   @optional
   int speed;
   @optional
-  int attack;
-  @optional
-  int defense;
-  @optional
   uint position;
 	@optional
 	uint spawnPoint;
@@ -56,7 +52,7 @@ public:
   }
 
   /// Initialize a unit
-  void initialize( uint position, Team team, int hp, int sp, int at, int df, uint[] abilities )
+  void initialize( uint position, Team team, int hp, int sp, uint[] abilities )
   {
     this.position = position;
     this.team = team;
@@ -64,13 +60,11 @@ public:
     this.maxHP = hp;
     this.speed = sp;
     this.remainingRange = this.speed;
-    this.attack = at;
-    this.defense = df;
     this.abilities = abilities;
     spawnPoint = position;
     updatePosition();
     this.animation = this.getComponent!Animation;
-	
+
     // begin idle animation
     if (team == Team.Robot) animation.changeAnimation("robot_idle", 0);
   }
@@ -89,7 +83,7 @@ public:
       } else if (range > 1) {
         if (team == Team.Robot) animation.runAnimationOnce("Robot_Anim_Range");
       }
-    
+
       if( Game.abilities[ abilityID ].use( position, targetID ) )
       {
         return actionUsed();
@@ -304,13 +298,13 @@ public:
     if( hp <= 0 )
     {
       hp = maxHP;
-    
+
       // set the current tile to default state
       Tile curTile = Game.grid.getTileByID( position );
       curTile.type( TileType.Open );
       curTile.selection( TileSelection.None );
       curTile.occupant = null;
-      
+
       // fall through the floor animation
       auto startTime = Time.totalTime;
       auto dur = 500.msecs;
@@ -333,19 +327,19 @@ public:
           Game.turnCounter.robotKills++;
           info("Team Robot Kills Now: ", Game.turnCounter.robotKills);
         }
-      
+
         // respawn
         if( Game.gameMode == GameMode.Deathmatch )
         {
           position = spawnPoint;
           updatePosition();
           //this.transform.position.y = finalZ;
-          
+
           curTile = Game.grid.getTileByID(position);
           curTile.type( TileType.OccupantInactive );
           curTile.selection( TileSelection.Black );
           curTile.occupant = this;
-          
+
           // rise like Jesus
           auto newStartTime = Time.totalTime;
           scheduleTimedTask( dur,
@@ -355,7 +349,7 @@ public:
                      ( Time.totalTime - newStartTime ) / dur.toSeconds );
           } );
         }
-        
+
         // die
         else
         {
@@ -378,7 +372,7 @@ public:
           hp = 0;
         }
       } );
-      
+
     }
 
   }

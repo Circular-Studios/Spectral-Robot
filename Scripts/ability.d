@@ -133,15 +133,14 @@ public:
       ( targetType == TargetType.EnemyUnit && targetTile.occupant.team != originTile.occupant.team ) ||
       ( targetType == TargetType.AlliedUnit && targetTile.occupant.team == originTile.occupant.team ) ) )
     {
-      int attack = originTile.occupant.attack + damage;
       final switch( damageType )
       {
         case DamageType.Normal:
-          targetTile.occupant.applyEffect!"hp"( attack );
+          targetTile.occupant.applyEffect!"hp"( damage );
           break;
         case DamageType.Buff:
           // TODO: Expand this to use the StatEffected enum
-          targetTile.occupant.applyEffect!"attack"( damage, duration, true );
+          //targetTile.occupant.applyEffect!"attack"( damage, duration, true );
           break;
         case DamageType.Debuff:
           break;
@@ -149,16 +148,16 @@ public:
           // call the straight line function
           break;
         case DamageType.DOT:
-          targetTile.occupant.applyEffect!"hp"( attack, duration );
+          targetTile.occupant.applyEffect!"hp"( damage, duration );
           break;
         case DamageType.Healing:
-          targetTile.occupant.applyEffect!"hp"( -attack, duration );
+          targetTile.occupant.applyEffect!"hp"( -damage, duration );
           break;
         case DamageType.Reduce:
           break;
         case DamageType.LifeSteal:
-          originTile.occupant.applyEffect!"hp"( -attack, duration );
-          targetTile.occupant.applyEffect!"hp"( attack, duration );
+          originTile.occupant.applyEffect!"hp"( -damage, duration );
+          targetTile.occupant.applyEffect!"hp"( damage, duration );
           break;
         case DamageType.Modifier:
           break;

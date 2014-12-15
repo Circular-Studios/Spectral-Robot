@@ -11,20 +11,29 @@ GameModes:
           Position: [300, 200, 50]
           Rotation: [180, 0, -45]
       Units:
-          - Class: TechWolf
+          - Class: Wolf1
             Spawn: [17, 5]
             Team: Criminal
 
-          - Class: PyroWolf
+          - Class: Wolf2
+            Spawn: [16, 5]
+            Team: Criminal
+
+          - Class: Wolf3
             Spawn: [5, 5]
             Team: Criminal
 
-          - Class: PyroRobot
+          - Class: Robot1
             Spawn: [12, 19]
             Rotation: [0, 180, 0]
             Team: Robot
 
-          - Class: TechRobot
+          - Class: Robot2
+            Spawn: [13, 19]
+            Rotation: [0, 180, 0]
+            Team: Robot
+
+          - Class: Robot3
             Spawn: [6, 18]
             Rotation: [0, 180, 0]
             Team: Robot
@@ -38,20 +47,29 @@ GameModes:
           Position: [300, 200, 50]
           Rotation: [180, 0, -45]
       Units:
-          - Class: TechWolf
+          - Class: Wolf1
             Spawn: [17, 5]
             Team: Criminal
 
-          - Class: PyroWolf
+          - Class: Wolf2
+            Spawn: [16, 5]
+            Team: Criminal
+
+          - Class: Wolf3
             Spawn: [5, 5]
             Team: Criminal
 
-          - Class: PyroRobot
+          - Class: Robot1
             Spawn: [12, 19]
             Rotation: [0, 180, 0]
             Team: Robot
 
-          - Class: TechRobot
+          - Class: Robot2
+            Spawn: [13, 19]
+            Rotation: [0, 180, 0]
+            Team: Robot
+
+          - Class: Robot3
             Spawn: [6, 18]
             Rotation: [0, 180, 0]
             Team: Robot

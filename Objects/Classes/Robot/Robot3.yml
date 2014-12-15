@@ -1,0 +1,6 @@
+---
+Name: Robot3
+Prefab: PyroRobot
+HP: 35
+Speed: 3
+Abilities: BasicSet
