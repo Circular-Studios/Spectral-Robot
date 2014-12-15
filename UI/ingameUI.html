@@ -12,239 +12,118 @@
 	</head>
 	<body>
 	
-	<div style="color:white;position:absolute;right:10px;top:10px">Alpha-1</div>
-	<!-- Player container -->
+	<div style="color:white;position:absolute;right:10px;top:10px">Alpha 0.11</div>
+
+	<!-- Turn counter -->
+	<div class="topContainer">
+		<div class="turnCounter">
+			<p>Turn: <span id="turnCount">1</span>/10</p>
+			<p><span id="team">Robots'</span> turn</p>
+		</div>
+	</div>
+
+	<!-- Character container -->
 	<div class="characters">
 		<div class="players">
 			<div class="playerCharacter">
 				<div class="charName">Robots</div>
 			</div>
-			<div class="playerCharacter" onclick="selectCharacter( 2 )">
-				<div class="charName"><h3>Fire Bot</h3></div>
-				<div class="charName"><h4>Class: Firestarter</h4></div>
+			<div class="playerCharacter" onclick="selectCharacter( 0 )">
+				<div class="charName"><h3>Harold</h3></div>
+				<div class="abilityCounter"><span>Actions left: <span id="actions0">3</span></span></div>
 				<div class="healthContainer">
-					<div class="healthbar" style="width:100%" id="char4"></div>
-					<div class="health"><span><span id="hp4">40</span>/40</span></div>
+					<div class="healthbar" style="width:100%" id="char0"></div>
+					<div class="health"><span><span id="hp0">35</span>/35</span></div>
+				</div>
+			</div>
+			<div class="playerCharacter" onclick="selectCharacter( 1 )">
+				<div class="charName"><h3>Stan</h3></div>
+				<div class="abilityCounter"><span>Actions left: <span id="actions1">3</span></span></div>
+				<div class="healthContainer">
+					<div class="healthbar" style="width:100%" id="char1"></div>
+					<div class="health"><span><span id="hp1">35</span>/35</span></div>
+				</div>
+			</div>
+			<div class="playerCharacter" onclick="selectCharacter( 2 )">
+				<div class="charName"><h3>BroBot</h3></div>
+				<div class="charName"><h4>Actions left: <span id="actions2">3</span></span></div>
+				<div class="healthContainer">
+					<div class="healthbar" style="width:100%" id="char2"></div>
+					<div class="health"><span><span id="hp2">35</span>/35</span></div>
 				</div>
 			</div>
 			<div class="playerCharacter" onclick="selectCharacter( 3 )">
-				<div class="charName"><h3>Tech Bot</h3></div>
-				<div class="charName"><h4>Class: Tech Monkey</h4></div>
+				<div class="charName"><h3>iRobot</h3></div>
+				<div class="abilityCounter"><span>Actions left: <span id="actions3">3</span></span></div>
 				<div class="healthContainer">
 					<div class="healthbar" style="width:100%" id="char3"></div>
-					<div class="health"><span><span id="hp3">40</span>/40</span></div>
+					<div class="health"><span><span id="hp3">35</span>/35</span></div>
 				</div>
 			</div>
 		</div>
 		<div class="enemies">
 			<div class="enemyCharacter">
 				<div class="charName">Werewolves</div>
+				<div class=""></div>
 			</div>
-			<div class="enemyCharacter" onclick="selectCharacter( 1 )">
-				<div class="charName"><h3>Fire Wolf</h3></div>
-				<div class="charName"><h4>Class: Firestarter</h4></div>
+			<div class="enemyCharacter" onclick="selectCharacter( 4 )">
+				<div class="charName"><h3>Walter</h3></div>
+				<div class="abilityCounter"><span>Actions left: <span id="actions4">3</span></span></div>
 				<div class="healthContainer">
-					<div class="healthbar" style="width:100%" id="char1"></div>
-					<div class="health"><span><span id="hp1">40</span>/40</span></div>
+					<div class="healthbar" style="width:100%" id="char4"></div>
+					<div class="health"><span><span id="hp4">35</span>/35</span></div>
 				</div>
 
 			</div>
-			<div class="enemyCharacter" onclick="selectCharacter( 0 )">
-				<div class="charName"><h3>Tech Wolf</h3></div>
-				<div class="charName"><h4>Class: Tech Monkey</h4></div>
+			<div class="enemyCharacter" onclick="selectCharacter( 5 )">
+				<div class="charName"><h3>Big Bad</h3></div>
+				<div class="abilityCounter"><span>Actions left: <span id="actions5">3</span></span></div>
 				<div class="healthContainer">
-					<div class="healthbar" style="width:100%" id="char2"></div>
-					<div class="health"><span><span id="hp2">40</span>/40</span></div>
+					<div class="healthbar" style="width:100%" id="char5"></div>
+					<div class="health"><span><span id="hp5">35</span>/35</span></div>
+				</div>
+			</div>
+			<div class="enemyCharacter" onclick="selectCharacter( 6 )">
+				<div class="charName"><h3>Mark</h3></div>
+				<div class="abilityCounter"><span>Actions left: <span id="actions6">3</span></span></div>
+				<div class="healthContainer">
+					<div class="healthbar" style="width:100%" id="char6"></div>
+					<div class="health"><span><span id="hp6">35</span>/35</span></div>
+				</div>
+
+			</div>
+			<div class="enemyCharacter" onclick="selectCharacter( 7 )">
+				<div class="charName"><h3>Jimothy</h3></div>
+				<div class="abilityCounter"><span>Actions left: <span id="actions7">3</span></span></div>
+				<div class="healthContainer">
+					<div class="healthbar" style="width:100%" id="char7"></div>
+					<div class="health"><span><span id="hp7">35</span>/35</span></div>
 				</div>
 			</div>
 		</div>
+		
 	</div>
 
 	<!-- Abilities at the bottom of the screen -->
 
-	<!-- Firestarter -->
+	<!-- Unit -->
 	<div class="fullWidthContainer">
-		<div class="abilities firestarter" id="one">
-			<div class="abilityBox basicRanged" onclick="selectAbility(1)">
+		<div class="abilities firestarter" id="abilities">
+			<div class="abilityBox basicRanged" onclick="selectAbility(0)">
 				<div class="tooltipBox basicRanged">
 					<h4 class="abilityName">Basic Ranged Attack</h4>
-					<p class="abilityDescription">Range: 5 spaces<br>
-												  Accuracy: 12<br>
-												  DMG: 5</p>
-				</div>
-			</div>
-			<div class="abilityBox basicMelee" onclick="selectAbility(1)">
-				<div class="tooltipBox basicMelee">
-					<h4 class="abilityName">Basic Melee Attack</h4>
-					<p class="abilityDescription">Range: 1 space<br>
-												  Accuracy: 14<br>
-												  DMG: 6</p>
-				</div>
-			</div>
-			<div class="abilityBox fireball" onclick="selectAbility(1)">
-				<div class="tooltipBox fireball">
-					<h4 class="abilityName">Fireball</h5>
-					<p class="abilityDescription">Launches a fireball at an enemy<br>
-												  Range: 2 Spaces<br>
-												  Damage: 6<br>
-												  Accuracy: 12<br>
-												  Classification: Single Target, Ranged</p>
-				</div>
-			</div>
-			<div class="abilityBox incinerate" onclick="selectAbility(1)">
-					<div class="tooltipBox incinerate">
-						<h4 class="abilityName">Incincerate</h5>
-						<p class="abilityDescription">Lights an enemy on fire, doing damage over 2-4 turns. Damage is applied at the beginning of each turn<br>
-													  Range: 3 Spaces. Target cannot be adjacent to the user.<br>
-													  Damage: 2/turn<br>
-													  Accuracy: 10. This ability cannot crit.<br>
-													  Classification: Single Target, Ranged, DOT</p>
-					</div>
-				</div>
-				<div class="abilityNumbers">
-					<div class="abilityNum">1</div>
-					<div class="abilityNum">2</div>
-					<div class="abilityNum">3</div>
-					<div class="abilityNum">4</div>
-				</div>
-			</div>
-		</div>
-	</div>
+					<p class="abilityDescription">Range: 3 spaces<br>
+												  DMG: 7</p>
 
-	<!-- DeadBringer -->
-	<div class="fullWidthContainer">
-		<div class="abilities deadbringer" id="two">
-			<div class="abilityBox basicRanged" onclick="selectAbility(1)">
-				<div class="tooltipBox basicRanged">
-					<h4 class="abilityName">Basic Ranged Attack</h4>
-					<p class="abilityDescription">Range: 5 spaces<br>
-												  Accuracy: 12<br>
-												  DMG: 5</p>
 				</div>
 			</div>
 			<div class="abilityBox basicMelee" onclick="selectAbility(1)">
 				<div class="tooltipBox basicMelee">
 					<h4 class="abilityName">Basic Melee Attack</h4>
 					<p class="abilityDescription">Range: 1 space<br>
-												  Accuracy: 14<br>
-												  DMG: 6</p>
+												  DMG: 10</p>
 				</div>
 			</div>
-			<div class="abilityBox fromTheGrave" onclick="selectAbility(1)">
-				<div class="tooltipBox fromTheGrave">
-					<h4 class="abilityName">From the Grave</h5>
-					<p class="abilityDescription">Place a 2x2 boon in an target location. Units within this area are slowed and take damage. Damage is only applied once, but the slow is applied constantly. Reduces Enemy Movement by 2 spaces (minimum 1 space movement).<br>
-												  Range: 6 spaces<br>
-												  Damage: 2<br>
-												  Duration: 3 turns<br>
-												  Cooldown: 4 turns<br>
-												  Classification: Ranged, AOE, Debuff, Boon</p>
-				</div>
-			</div>
-			<div class="abilityBox consume" onclick="selectAbility(1)">
-				<div class="tooltipBox consume">
-					<h4 class="abilityName">Consume</h5>
-					<p class="abilityDescription">Gnaw at an enemy. You gain health equal to a third (1/3) of the enemy’s current health, rounded up.<br>
-												  Range: 1 space<br>
-												  Damage: 33% enemys' hp<br>
-												  Accuracy: 10<br>
-												  Cooldown: 5 turns<br>
-												  Classification: Single Target, Effect</p>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<!-- BulletMancer -->
-	<div class="fullWidthContainer">
-		<div class="abilities bulletmancer" id="three">
-			<div class="abilityBox basicRanged" onclick="selectAbility(1)">
-				<div class="tooltipBox basicRanged">
-					<h4 class="abilityName">Basic Ranged Attack</h4>
-					<p class="abilityDescription">Range: 5 spaces<br>
-												  Accuracy: 12<br>
-												  DMG: 5</p>
-				</div>
-			</div>
-			<div class="abilityBox basicMelee" onclick="selectAbility(1)">
-				<div class="tooltipBox basicMelee">
-					<h4 class="abilityName">Basic Melee Attack</h4>
-					<p class="abilityDescription">Range: 1 space<br>
-												  Accuracy: 14<br>
-												  DMG: 6</p>
-				</div>
-			</div>
-			<div class="abilityBox healingBarrage" onclick="selectAbility(1)">
-				<div class="tooltipBox healingBarrage">
-					<h4 class="abilityName">Healing Barrage</h5>
-					<p class="abilityDescription">Fire a barrage of bullets at an allied unit. You heal them for a specific amount. This ability can crit, and can miss.<br>
-												  Range: 4 Spaces<br>
-												  Healing: 3<br>
-												  Cooldown: 2 turns<br>
-												  Accuracy: 8<br>
-												  NOTE: If you critically miss, you deal damage to the unit you are trying to heal.<br>
-												  Classification: Single Allied Target, Ranged, Stat Effect</p>
-				</div>
-			</div>
-			<div class="abilityBox cannonShot" onclick="selectAbility(1)">
-				<div class="tooltipBox cannonShot">
-					<h4 class="abilityName">Cannon Shot</h5>
-					<p class="abilityDescription">Fire a cannon ball at a unit. This attack does AOE damage a radius of 2 around the target unit.<br>
-												  Range: 5 Spaces<br>
-												  Damage: 6 AOE. 9 to unit in target zone<br>
-												  Accuracy: 14<br>
-												  Classification: Single Target, Ranged, AOE</p>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<!-- TechMonkey -->
-	<div class="fullWidthContainer">
-		<div class="abilities techmonkey" id="four">
-			<div class="abilityBox basicRanged" onclick="selectAbility(1)">
-				<div class="tooltipBox basicRanged">
-					<h4 class="abilityName">Basic Ranged Attack</h4>
-					<p class="abilityDescription">Range: 5 spaces<br>
-												  Accuracy: 12<br>
-												  DMG: 5</p>
-				</div>
-			</div>
-			<div class="abilityBox basicMelee" onclick="selectAbility(1)">
-				<div class="tooltipBox basicMelee">
-					<h4 class="abilityName">Basic Melee Attack</h4>
-					<p class="abilityDescription">Range: 1 space<br>
-												  Accuracy: 14<br>
-												  DMG: 6</p>
-				</div>
-			</div>
-			<div class="abilityBox dischargeGrenade" onclick="selectAbility(1)">
-				<div class="tooltipBox dischargeGrenade">
-					<h4 class="abilityName">Discharge Grenade</h5>
-					<p class="abilityDescription">Release a small AOE lightning burst. Area of Effect is one space away from the grenade landing point in each direction. Each enemy caught in the AOE has a chance to escape said damage, by rolling against the accuracy rating the user makes (you cannot escape Natural Crit (a roll of 20)).<br>
-												  Range: 6 Spaces<br>
-												  Damage: 5<br>
-												  Cooldown: 2 turns<br>
-												  Accuracy: 12<br>
-												  Classification: Single Target, Ranged, AOE</p>
-				</div>
-			</div>
-			<div class="abilityBox overload" onclick="selectAbility(1)">
-				<div class="tooltipBox overload">
-					<h4 class="abilityName">Overload</h5>
-					<p class="abilityDescription">Invokes an advanced damage calculation algorithm, increasing the damage of the next attack made. This algorithm is privy though, and if it fails, can decrease the total damage of the next attack made.<br>
-												  Range: 3 Spaces. Target cannot be adjacent to the user.<br>
-												  Effect: If success, the total calculated damage of the net attack made is increased by a flat amount of six(6). If failed, the total damage of the next attack made is decreased by a flat amount of five(5).<br>
-												  Cooldown: 4 turns<br>
-												  Classification: Self Target, Buff</p>
-				</div>
-			</div>
-				<div class="abilityNumbers">
-					<div class="abilityNum">1</div>
-					<div class="abilityNum">2</div>
-					<div class="abilityNum">3</div>
-					<div class="abilityNum">4</div>
-				</div>	
 		</div>
 	</div>
 
@@ -252,67 +131,87 @@
 		var selectedChar = 0;
 
 		function setHp( hp, charNum ) {
-				var percentHp = (hp / 40) * 100;
-			if( charNum == 0 ) {
-				document.getElementById( "char2" ).style.width = percentHp + "%";
-				document.getElementById( "hp2" ).innerHTML = ''+hp;
+			var percentHp = (hp / 35) * 100;
+			var character = "char" + charNum;
+			var health = "hp" + charNum;
+			var currentHp = document.getElementById( health ).innerHTML;
+
+			if( currentHp > hp )
+			{
+				takeDamage( hp, currentHp, charNum );
 			}
-			if( charNum == 1 ) {
-				document.getElementById( "char1" ).style.width = percentHp + "%";
-				document.getElementById( "hp1" ).innerHTML = ''+hp;
+			else 
+			{
+				document.getElementById( character ).style.width = percentHp + "%";
+				document.getElementById( health ).innerHTML = ''+hp;
+				var red = (1 - (hp / 35) ) * 255;
+				var green = (hp / 35 ) * 255;
+				document.getElementById( character ).style.backgroundColor = "rgb(" + red + ", " + green + ",0)"
 			}
-			if( charNum == 2 ) {
-				document.getElementById( "char4" ).style.width = percentHp + "%";
-				document.getElementById( "hp4" ).innerHTML = ''+hp;
+			//console.log(document.getElementById( health ).innerHTML)
+		}
+
+		function takeDamage( hp, currentHp, charNum )
+		{
+			var difference = currentHp - hp;
+			var character = "char" + charNum;
+			var percentHp = (currentHp / 35) * 100;
+			var health = "hp" + charNum;
+			var delay = 0;
+			for( i = 0; i < difference; i++ ) 
+			{
+				delay += 50;
+				//console.log( "currentHp: " + currentHp)
+				setTimeout( function() {
+					reduceHealth( charNum );
+				}, delay );
 			}
-			if( charNum == 3 ) {
-				document.getElementById( "char3" ).style.width = percentHp + "%";
-				document.getElementById( "hp3" ).innerHTML = ''+hp;
-			}
+		}
+
+		function reduceHealth(  charNum )
+		{
+			var character = "char" + charNum;
+			var health = "hp" + charNum;
+			
+			var currentHp = document.getElementById( health ).innerHTML;
+			currentHp--;
+			
+			var percentHp = (currentHp / 35) * 100;
+
+			var red = (1 - (currentHp / 35) ) * 255;
+			var green = (currentHp / 35 ) * 255;
+
+			document.getElementById( character ).style.width = percentHp + "%";
+			document.getElementById( health ).innerHTML = ''+currentHp;
+			document.getElementById( character ).style.backgroundColor = "rgb(" + red + ", " + green + ",0)"
 		}
 
 		function selectCharacter( i ) { 
 			selectedChar = i;
-			if( selectedChar == 0 )
+			if( selectedChar == -1 )
 			{
-				document.getElementById( "four" ).style.display = "table";
-
-				document.getElementById( "two" ).style.display = "none";
-				document.getElementById( "three" ).style.display = "none";
-				document.getElementById( "one" ).style.display = "none";
-			}
-
-			if( selectedChar == 1 )
-			{
-				document.getElementById( "one" ).style.display = "table";
-
-				document.getElementById( "four" ).style.display = "none";
-				document.getElementById( "three" ).style.display = "none";
-				document.getElementById( "two" ).style.display = "none";
-			}
-
-			if( selectedChar == 2 )
-			{
-				document.getElementById( "one" ).style.display = "table";
-
-				document.getElementById( "three" ).style.display = "none";
-				document.getElementById( "two" ).style.display = "none";
-				document.getElementById( "four" ).style.display = "none";
-			}
-
-			if( selectedChar == 3 )
-			{
-				document.getElementById( "four" ).style.display = "table";
-
-				document.getElementById( "one" ).style.display = "none";
-				document.getElementById( "two" ).style.display = "none";
-				document.getElementById( "three" ).style.display = "none";
+				document.getElementById( "abilities" ).style.display = "none";
+			} else {
+				document.getElementById( "abilities" ).style.display = "table";
+				dash.callFunction( "selectCharacter", i );
 			}
 		}
 
 		function selectAbility( i ) {
 			console.log("ability " + i )
 			dash.callFunction( "selectAbility", i );
+		}
+
+		function setTurn( turnCount, team )
+		{
+			document.getElementById( "turnCount" ).innerHTML = '' + turnCount;
+			if( team = 0 ) document.getElementById( "team" ).innerHTML = "Robots'";
+			else document.getElementById( "team" ).innerHTML = "Werewolves'"
+		}
+
+		function setActionCount( count, unit )
+		{
+			document.getElementById( "actions" + unit ).innerHTML = '' + count;
 		}
 
 		</script>
