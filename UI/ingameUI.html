@@ -105,7 +105,7 @@
 
 				</div>
 			</div>
-			
+
 		</div>
 	</div>
 
@@ -126,15 +126,18 @@
 			{
 				if( hp == 35 )
 				{
-					setTimeout( function(){
+					// When a unit dies, their hp jumps up to 35 and then keeps ticking down becuase of the timeout in takeDamage().
+					// So instead this function just waits a second to reset their hp.
+					setTimeout( function()
+					{
 						document.getElementById( health ).innerHTML = ''+hp;
-					
+
 						document.getElementById( character ).style.width = percentHp + "%";
-						document.getElementById( health ).innerHTML = ''+hp;
+						document.getElementById( health ).innerHTML = '' + hp;
 						var red = ( 1 - ( hp / 35 ) ) * 180;
 						var green = ( hp / 35 ) * 180;
 						document.getElementById( character ).style.backgroundColor = "rgb(" + red + "," + green + ",0)";
-					}, 1000);
+					}, 1000 );
 				}
 			}
 			//console.log(document.getElementById( health ).innerHTML)
@@ -178,8 +181,8 @@
 		// if this function is called from dash, send in 1 for dashCall
 		function selectCharacter( i, dashCall ) {
 			selectedChar = i;
-			if( (selectedChar < 3 && document.getElementById( "team" ).innerHTML == "Robots'") ||  selectedChar >= 3 && document.getElementById( "team" ).innerHTML == "Werewolves'")
-			{
+			//if( (selectedChar < 3 && document.getElementById( "team" ).innerHTML == "Robots'") || selectedChar >= 3 && document.getElementById( "team" ).innerHTML == "Werewolves'")
+			//{
 				if( selectedChar == -1 || document.getElementById( "actions" + i ).innerHTML <= 0 )
 				{
 					document.getElementById( "abilities" ).style.display = "none";
@@ -189,7 +192,7 @@
 						document.getElementById( "unit" + x ).style.border = "1px solid #fff";
 					}
 				}
-				else
+				else if( (selectedChar < 3 && document.getElementById( "team" ).innerHTML == "Robots'") || selectedChar >= 3 && document.getElementById( "team" ).innerHTML == "Werewolves'")
 				{
 					document.getElementById( "abilities" ).style.display = "table";
 					for( x = 0; x < 6; x++ )
@@ -207,7 +210,7 @@
 					}
 					if( dashCall != 1 ) dash.callFunction( "selectCharacter", i, dashCall );
 				}
-			}
+			//}
 		}
 
 		function selectAbility( i, dashcall )
@@ -234,6 +237,7 @@
 		function setTurn( turnCount, team )
 		{
 			document.getElementById( "turnCount" ).innerHTML = '' + turnCount;
+			selectCharacter( -1, 0 );
 			if( team == 0 )
 			{
 				document.getElementById( "team" ).innerHTML = "Robots'";

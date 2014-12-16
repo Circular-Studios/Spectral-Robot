@@ -198,10 +198,10 @@ public:
   void switchActiveTeam()
   {
     recordCameraPos();
-	
+
 	Game.turnCounter.Iterate();
 
-    final switch ( activeTeam )
+    final switch( activeTeam )
     {
       case Team.Robot:
         activeTeam = Team.Criminal;
@@ -217,7 +217,7 @@ public:
     if( !Game.serverConn )
       currentTeam = activeTeam;
 	  setCameraToRecord();
-	  
+
     info( "Active team: ", activeTeam );
 
     // update the units on the team
