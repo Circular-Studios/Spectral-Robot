@@ -77,6 +77,8 @@ public:
         abilities.countUntil( abilityID ) > -1 &&
         Game.abilities[ abilityID ].use( position, targetID ) )
     {
+      faceDirection( targetID );
+
       // animation
       int range = Game.abilities[ abilityID ].range;
       if( range == 1 )
@@ -146,17 +148,7 @@ public:
       targetTile.type = TileType.OccupantActive;
 
       // Rotate the unit to face the direction he moved
-      //Down
-      transform.rotation = quat.euler_rotation( 0, 0, 0 );
-      // Up
-      if( curTile.y > targetTile.y )
-        transform.rotation = quat.euler_rotation( 180.radians, 0, 0 );
-      // Left
-      else if( curTile.x > targetTile.x )
-        transform.rotation = quat.euler_rotation( 270.radians, 0, 0 );
-      // Right
-      else if( curTile.x < targetTile.x )
-        transform.rotation = quat.euler_rotation( 90.radians, 0, 0 );
+      faceDirection( targetTileID );
 
       // scale the tile back down
       curTile.transform.scale = vec3( TILE_SIZE / 2 );
@@ -181,6 +173,25 @@ public:
       // check if the turn is over
       Game.turn.checkTurnOver();
     }
+  }
+
+  void faceDirection( uint targetTileID )
+  {
+    auto curTile = Game.grid.getTileByID( position );
+    auto targetTile = Game.grid.getTileByID( targetTileID );
+
+    // Rotate the unit to face the direction
+    //Down
+    transform.rotation = quat.euler_rotation( 0, 0, 0 );
+    // Up
+    if( curTile.y > targetTile.y )
+      transform.rotation = quat.euler_rotation( 180.radians, 0, 0 );
+    // Left
+    else if( curTile.x > targetTile.x )
+      transform.rotation = quat.euler_rotation( 270.radians, 0, 0 );
+    // Right
+    else if( curTile.x < targetTile.x )
+      transform.rotation = quat.euler_rotation( 90.radians, 0, 0 );
   }
 
   /// Check if the move is allowed
