@@ -168,7 +168,7 @@
 
 			var currentHp = document.getElementById( health ).innerHTML;
 			currentHp--;
-
+			if( currentHp < 0 ) currentHp = 0;
 			var percentHp = ( currentHp / 35 ) * 100;
 
 			var red = ( 1 - ( currentHp / 35 ) ) * 180;
