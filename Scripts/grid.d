@@ -121,6 +121,7 @@ public:
   /// Select an ability from a unit
   void selectAbility( int ability )
   {
+    Game.level.ui.callJSFunction( "selectAbility" , [ ability, 1 ] );
     // deselect current ability
     if( isAbilitySelected )
       Game.abilities[ selectedAbility ].unpreview();

@@ -205,9 +205,11 @@ public:
     {
       case Team.Robot:
         activeTeam = Team.Criminal;
+        Game.level.ui.callJSFunction( "setTurn", [ Game.turnCounter.turnCounter, 1 ] );
         break;
       case Team.Criminal:
         activeTeam = Team.Robot;
+        Game.level.ui.callJSFunction( "setTurn", [ Game.turnCounter.turnCounter, 0 ] );
         break;
     }
 

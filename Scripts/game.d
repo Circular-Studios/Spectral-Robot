@@ -74,9 +74,22 @@ public:
     level.ui = new UserInterface( w, h, config.userInterface.filePath );
 
     level.ui.view.registerCallback( "selectAbility", ( int id ) {
-        info( "Ability called: ", id );
-        //grid.selectAbility( id );
+        //info( "Ability called: ", id );
+        grid.selectAbility( id );
     } );
+
+    // dashcall should always come in as 0, which will tell selectAbility not to send an ability to the UI
+    level.ui.view.registerCallback( "selectCharacter", (int id, int dashCall) {
+        //info( "unit selected: ", id );
+        for( int i = 0; i < units.length; i++)
+        {
+          if (id != i)
+          {
+            units[i].deselect();
+          }
+        }
+        units[id].previewMove();
+      });
   }
 
   void loadLevel( string levelName, string gameModeName )
@@ -92,7 +105,7 @@ public:
     turn = new Turn();
     gc = new Controller( levelName, gameModeName );
     gameMode = to!GameMode( gameModeName );
-	turnCounter = new TurnCounter(gameMode);
+    turnCounter = new TurnCounter(gameMode);
 
     // create a camera
     auto cam = level[ "Camera" ].getComponent!AdvancedCamera;

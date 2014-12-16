@@ -211,7 +211,7 @@ public:
   {
     selectedTiles = Game.grid.getInRange( position, remainingRange );
 
-    Game.level.ui.callJSFunction( "selectCharacter", [ ID ] );
+    Game.level.ui.callJSFunction( "selectCharacter", [ ID , 1 ] );
 
     // change the material of the tiles
     foreach( tile; selectedTiles )
@@ -244,6 +244,7 @@ public:
   /// Remove focus from the unit and any highlighted tiles
   void deselect()
   {
+    Game.level.ui.callJSFunction( "selectCharacter", [ -1 , 1 ] );
     // change the material of the tiles
     foreach( tile; selectedTiles )
     {
@@ -268,6 +269,7 @@ public:
   bool actionUsed( int numActions = 1 )
   {
     remainingActions -= numActions;
+    Game.level.ui.callJSFunction( "setActionCount", [ remainingActions, ID ] );
     if( remainingActions <= 0 )
     {
       Game.grid.getTileByID( position ).type = TileType.OccupantInactive;
@@ -313,6 +315,8 @@ public:
     {
       hp = maxHP;
 
+      Game.level.ui.callJSFunction( "setHp", [ 35, ID ] );
+
       // set the current tile to default state
       Tile curTile = Game.grid.getTileByID( position );
       curTile.type( TileType.Open );
@@ -338,11 +342,13 @@ public:
         {
           Game.turnCounter.wolfKills++;
           info( "Criminal Kills: ", Game.turnCounter.wolfKills );
+          Game.level.ui.callJSFunction( "givePoint", [ 1 ] );
         }
         else
         {
           Game.turnCounter.robotKills++;
           info( "Robot Kills: ", Game.turnCounter.robotKills );
+          Game.level.ui.callJSFunction( "givePoint", [ 0 ] );
         }
 
         // respawn
