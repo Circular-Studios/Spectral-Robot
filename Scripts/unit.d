@@ -4,7 +4,7 @@ import dash.core, dash.utility, dash.components;
 import gl3n.linalg, gl3n.math, gl3n.interpolate;
 import std.algorithm;
 
-enum ACTIONS_RESET = 3;
+enum ACTIONS_RESET = 2;
 
 class Unit : Component
 {
