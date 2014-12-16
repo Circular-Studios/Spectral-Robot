@@ -23,8 +23,8 @@ public:
   int speed;
   @optional
   uint position;
-	@optional
-	uint spawnPoint;
+  @optional
+  uint spawnPoint;
   @optional
   Animation animation;
   @rename("Team") @byName
@@ -66,7 +66,8 @@ public:
     this.animation = this.getComponent!Animation;
 
     // begin idle animation
-    if (team == Team.Robot) animation.changeAnimation("robot_idle", 0);
+    if ( team == Team.Robot ) animation.changeAnimation( "Robot_Anim_Idle", 0 );
+    else animation.changeAnimation( "wolf_idle", 0 );
   }
 
   /// Use an ability
@@ -77,11 +78,16 @@ public:
         Game.abilities[ abilityID ].checkRange( this.position, targetID ) )
     {
       // animation
-      int range = Game.abilities[abilityID].range;
-      if (range == 1) {
-        if (team == Team.Robot) animation.runAnimationOnce("Robot_Anim_Melee");
-      } else if (range > 1) {
-        if (team == Team.Robot) animation.runAnimationOnce("Robot_Anim_Range");
+      int range = Game.abilities[ abilityID ].range;
+      if( range == 1 )
+      {
+        if ( team == Team.Robot ) animation.runAnimationOnce( "Robot_Anim_Melee" );
+        else animation.runAnimationOnce( "Wolf_Anim_Melee" );
+      }
+      else if( range > 1 )
+      {
+        if ( team == Team.Robot ) animation.runAnimationOnce( "Robot_Anim_Range" );
+        else animation.runAnimationOnce( "Wolf_Anim_Range" );
       }
 
       if( Game.abilities[ abilityID ].use( position, targetID ) )
@@ -289,7 +295,7 @@ public:
   {
     this.transform.position.x = this.x * TILE_SIZE;
     this.transform.position.z = this.y * TILE_SIZE;
-    if (hp > 0) this.transform.position.y = this.z;
+    if ( hp > 0 ) this.transform.position.y = this.z;
   }
 
   override void update()
@@ -320,12 +326,15 @@ public:
       scheduleDelayedTask( dur,
       {
         // tell the turn counter to give the other team a point
-        if (team == Team.Robot) {
+        if( team == Team.Robot )
+        {
           Game.turnCounter.wolfKills++;
-          info("Team Wolf Kills Now: ", Game.turnCounter.wolfKills);
-        } else {
+          info( "Criminal Kills: ", Game.turnCounter.wolfKills );
+        }
+        else
+        {
           Game.turnCounter.robotKills++;
-          info("Team Robot Kills Now: ", Game.turnCounter.robotKills);
+          info( "Robot Kills: ", Game.turnCounter.robotKills );
         }
 
         // respawn
@@ -335,7 +344,7 @@ public:
           updatePosition();
           //this.transform.position.y = finalZ;
 
-          curTile = Game.grid.getTileByID(position);
+          curTile = Game.grid.getTileByID( position );
           curTile.type( TileType.OccupantInactive );
           curTile.selection( TileSelection.Black );
           curTile.occupant = this;

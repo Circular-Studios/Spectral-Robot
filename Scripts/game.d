@@ -37,7 +37,7 @@ public:
   {
     info( "Initializing ", title, "..." );
 
-    
+
     // setup a couple helper keys
     Input.addButtonDownEvent( "QuitToDesktop", ( _ ) { currentState = EngineState.Quit; } );
     Input.addButtonDownEvent( "ResetGame", ( _ ) { currentState = EngineState.Reset; } );
@@ -45,7 +45,7 @@ public:
     // setup some gamemode test keys
     Input.addButtonDownEvent( "LoadCTF", ( kc ) { loadLevel( "levelSRTF", "CTF" ); numGameModes++;} );
     Input.addButtonDownEvent( "LoadDeathmatch", ( kc ) { loadLevel( "levelSRTF", "Deathmatch" ); numGameModes++; } );
-    
+
     stateFlags.autoRefresh = false;
 
     // initalize stuff
@@ -57,7 +57,7 @@ public:
     turn = new Turn();
     gc = new Controller( "levelSRTF", "Deathmatch" );
     gameMode = GameMode.Deathmatch;
-	turnCounter = new TurnCounter(gameMode);
+    turnCounter = new TurnCounter( gameMode );
 
     // create a camera
     auto cam = level[ "Camera" ].getComponent!AdvancedCamera;
@@ -103,8 +103,6 @@ public:
     uint w = config.display.width;
     uint h = config.display.height;
     level.ui = new UserInterface( w, h, config.userInterface.filePath );
-
-    logInfo( numGameModes, "ah ah ah...");
   }
 
   /// Connect to the server
