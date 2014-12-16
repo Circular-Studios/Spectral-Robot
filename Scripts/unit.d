@@ -75,25 +75,22 @@ public:
   {
     if( remainingActions > 0 &&
         abilities.countUntil( abilityID ) > -1 &&
-        Game.abilities[ abilityID ].checkRange( this.position, targetID ) )
+        Game.abilities[ abilityID ].use( position, targetID ) )
     {
       // animation
       int range = Game.abilities[ abilityID ].range;
       if( range == 1 )
       {
-        if ( team == Team.Robot ) animation.runAnimationOnce( "Robot_Anim_Melee" );
-        else animation.runAnimationOnce( "Wolf_Anim_Melee" );
+          if ( team == Team.Robot ) animation.runAnimationOnce( "Robot_Anim_Melee" );
+          else animation.runAnimationOnce( "Wolf_Anim_Melee" );
       }
       else if( range > 1 )
       {
-        if ( team == Team.Robot ) animation.runAnimationOnce( "Robot_Anim_Range" );
-        else animation.runAnimationOnce( "Wolf_Anim_Range" );
+          if ( team == Team.Robot ) animation.runAnimationOnce( "Robot_Anim_Range" );
+          else animation.runAnimationOnce( "Wolf_Anim_Range" );
       }
 
-      if( Game.abilities[ abilityID ].use( position, targetID ) )
-      {
-        return actionUsed();
-      }
+      return actionUsed();
     }
 
     return false;

@@ -93,7 +93,7 @@ public:
   /// Use the ability
   bool use( uint originID, uint targetID )
   {
-    if( currentCooldown <= 0 )
+    if( currentCooldown <= 0 && checkRange( originID, targetID ) == true )
     {
       // make sure the targetID is allowed
       bool legalTile = false;
