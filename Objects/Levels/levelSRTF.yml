@@ -12,29 +12,29 @@ GameModes:
           Rotation: [180, 0, -45]
       Units:
           - Class: Wolf1
-            Spawn: [17, 5]
+            Spawn: [18, 4]
             Team: Criminal
 
           - Class: Wolf2
-            Spawn: [16, 5]
+            Spawn: [12, 6]
             Team: Criminal
 
           - Class: Wolf3
-            Spawn: [5, 5]
+            Spawn: [3, 3]
             Team: Criminal
 
           - Class: Robot1
-            Spawn: [12, 19]
+            Spawn: [3, 17]
             Rotation: [0, 180, 0]
             Team: Robot
 
           - Class: Robot2
-            Spawn: [13, 19]
+            Spawn: [12, 18]
             Rotation: [0, 180, 0]
             Team: Robot
 
           - Class: Robot3
-            Spawn: [6, 18]
+            Spawn: [21, 21]
             Rotation: [0, 180, 0]
             Team: Robot
 
