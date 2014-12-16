@@ -1,4 +1,5 @@
 ﻿module ability;
+import std.random;
 import dash.core, dash.utility;
 import game, grid, tile;
 import gl3n.math;
@@ -93,7 +94,7 @@ public:
   /// Use the ability
   bool use( uint originID, uint targetID )
   {
-    if( currentCooldown <= 0 && checkRange( originID, targetID ) == true )
+    if( currentCooldown <= 0 && checkAccuracy() && checkRange( originID, targetID ) == true )
     {
       // make sure the targetID is allowed
       bool legalTile = false;
@@ -180,6 +181,11 @@ public:
     auto origin = Game.grid.getTileByID( originID );
     auto target = Game.grid.getTileByID( targetID );
     return range + unitRange >= abs( ( target.x - origin.x ) ) + abs( ( target.y - origin.y ) );
+  }
+
+  bool checkAccuracy()
+  {
+    return uniform( 0, 100 ) < accuracy;
   }
 
   unittest
