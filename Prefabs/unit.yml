@@ -13,6 +13,13 @@ Components:
     - Type: Material
       Asset: PyroWolf
 ---
+Name: NecroWolf
+Components:
+    - Type: Mesh
+      Asset: wolf_idle
+    - Type: Material
+      Asset: NecroWolf
+---
 Name: PyroRobot
 Components:
     - Type: Mesh
@@ -26,3 +33,10 @@ Components:
       Asset: robot_idle
     - Type: Material
       Asset: TechRobot
+---
+Name: NecroRobot
+Components:
+    - Type: Mesh
+      Asset: robot_idle
+    - Type: Material
+      Asset: NecroRobot

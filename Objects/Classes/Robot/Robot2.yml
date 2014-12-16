@@ -1,6 +1,6 @@
 ---
 Name: Robot2
-Prefab: PyroRobot
+Prefab: TechRobot
 HP: 35
 Speed: 4
 Abilities: BasicSet

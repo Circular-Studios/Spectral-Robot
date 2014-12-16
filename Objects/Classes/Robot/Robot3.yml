@@ -1,6 +1,6 @@
 ---
 Name: Robot3
-Prefab: PyroRobot
+Prefab: NecroRobot
 HP: 35
 Speed: 4
 Abilities: BasicSet
