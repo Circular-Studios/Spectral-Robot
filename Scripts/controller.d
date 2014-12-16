@@ -68,6 +68,7 @@ final class Controller
     int damage;
     @optional
     int cooldown = 0;
+    int accuracy;
   }
 
   struct GameModeInfo
@@ -121,6 +122,7 @@ final class Controller
       ability.damage = abInfo.damage;
       ability.range = abInfo.range;
       ability.cooldown = abInfo.cooldown;
+      ability.accuracy = abInfo.accuracy;
       ability.targetType = abInfo.targetType;
       ability.targetArea = abInfo.targetArea;
 
