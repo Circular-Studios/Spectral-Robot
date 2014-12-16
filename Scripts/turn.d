@@ -199,7 +199,7 @@ public:
   {
     recordCameraPos();
 
-	Game.turnCounter.Iterate();
+    Game.turnCounter.Iterate();
 
     final switch( activeTeam )
     {
@@ -216,7 +216,8 @@ public:
     // hotseat multiplayer
     if( !Game.serverConn )
       currentTeam = activeTeam;
-	  setCameraToRecord();
+
+    setCameraToRecord();
 
     info( "Active team: ", activeTeam );
 
