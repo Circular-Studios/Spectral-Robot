@@ -13,7 +13,7 @@ LookRight:
 QuitToDesktop:
     Keyboard: Delete
 ConnectToServer:
-    Keyboard: R
+    Keyboard: P
 EndTurn:
     Keyboard: T
 Select:

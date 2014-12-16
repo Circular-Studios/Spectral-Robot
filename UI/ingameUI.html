@@ -16,7 +16,7 @@
 	<!-- Turn counter -->
 	<div class="topContainer">
 		<div class="turnCounter">
-			<p>Turn: <span id="turnCount">1</span>/10</p>
+			<p>Turns remaining: <span id="turnCount">20</span></p>
 			<p><span id="team">Robots'</span> turn</p>
 		</div>
 	</div>
@@ -26,29 +26,29 @@
 		<div class="players">
 			<div class="playerCharacter">
 				<div class="charName">Robots</div>
-				<div class="robotPoints"><h4>Points: <span id="points0">0</span></h4></div>
+				<div class="robotPoints"><p>Kills: <span id="points0">0</span></p></div>
 			</div>
 			<div class="playerCharacter" id="unit0" onclick="selectCharacter( 0, 0 )">
 				<div class="charName"><h3>Harold</h3></div>
-				<div class="abilityCounter"><span>Actions left: <span id="actions0">3</span></span></div>
+				<div class="abilityCounter"><span>Actions left: <span id="actions0">2</span></span></div>
 				<div class="healthContainer">
-					<div class="healthbar" style="width:100%" id="char0"></div>
+					<div class="healthBar" style="width:100%" id="char0"></div>
 					<div class="health"><span><span id="hp0">35</span>/35</span></div>
 				</div>
 			</div>
 			<div class="playerCharacter" id="unit1" onclick="selectCharacter( 1, 0 )">
 				<div class="charName"><h3>BroBot</h3></div>
-				<div class="abilityCounter"><span>Actions left: <span id="actions1">3</span></span></div>
+				<div class="abilityCounter"><span>Actions left: <span id="actions1">2</span></span></div>
 				<div class="healthContainer">
-					<div class="healthbar" style="width:100%" id="char1"></div>
+					<div class="healthBar" style="width:100%" id="char1"></div>
 					<div class="health"><span><span id="hp1">35</span>/35</span></div>
 				</div>
 			</div>
 			<div class="playerCharacter" id="unit2" onclick="selectCharacter( 2, 0 )">
 				<div class="charName"><h3>iRobot</h3></div>
-				<div class="abilityCounter"><span>Actions left: <span id="actions2">3</span></span></div>
+				<div class="abilityCounter"><span>Actions left: <span id="actions2">2</span></span></div>
 				<div class="healthContainer">
-					<div class="healthbar" style="width:100%" id="char2"></div>
+					<div class="healthBar" style="width:100%" id="char2"></div>
 					<div class="health"><span><span id="hp2">35</span>/35</span></div>
 				</div>
 			</div>
@@ -56,29 +56,29 @@
 		<div class="enemies">
 			<div class="enemyCharacter">
 				<div class="charName">Werewolves</div>
-				<div class="wolfPoints"><h4>Points: <span id="points1">0</span></h4></div>
+				<div class="wolfPoints"><p>Kills: <span id="points1">0</span></p></div>
 			</div>
 			<div class="enemyCharacter" id="unit3" onclick="selectCharacter( 3, 0 )">
 				<div class="charName"><h3>Walter</h3></div>
-				<div class="abilityCounter"><span>Actions left: <span id="actions3">3</span></span></div>
+				<div class="abilityCounter"><span>Actions left: <span id="actions3">2</span></span></div>
 				<div class="healthContainer">
-					<div class="healthbar" style="width:100%" id="char3"></div>
+					<div class="healthBar" style="width:100%" id="char3"></div>
 					<div class="health"><span><span id="hp3">35</span>/35</span></div>
 				</div>
 			</div>
 			<div class="enemyCharacter" id="unit4" onclick="selectCharacter( 4, 0 )">
 				<div class="charName"><h3>Mark</h3></div>
-				<div class="abilityCounter"><span>Actions left: <span id="actions4">3</span></span></div>
+				<div class="abilityCounter"><span>Actions left: <span id="actions4">2</span></span></div>
 				<div class="healthContainer">
-					<div class="healthbar" style="width:100%" id="char4"></div>
+					<div class="healthBar" style="width:100%" id="char4"></div>
 					<div class="health"><span><span id="hp4">35</span>/35</span></div>
 				</div>
 			</div>
 			<div class="enemyCharacter" id="unit5" onclick="selectCharacter( 5, 0 )">
 				<div class="charName"><h3>Jimothy</h3></div>
-				<div class="abilityCounter"><span>Actions left: <span id="actions5">3</span></span></div>
+				<div class="abilityCounter"><span>Actions left: <span id="actions5">2</span></span></div>
 				<div class="healthContainer">
-					<div class="healthbar" style="width:100%" id="char5"></div>
+					<div class="healthBar" style="width:100%" id="char5"></div>
 					<div class="health"><span><span id="hp5">35</span>/35</span></div>
 				</div>
 			</div>
@@ -90,7 +90,14 @@
 	<!-- Unit -->
 	<div class="fullWidthContainer">
 		<div class="abilities firestarter" id="abilities">
-			<div class="abilityBox basicRanged" onclick="selectAbility(0)" id="ability0">
+			<div class="abilityBox basicMelee" onclick="selectAbility(0)" id="ability0">
+				<div class="tooltipBox basicMelee">
+					<h4 class="abilityName">Basic Melee Attack</h4>
+					<p class="abilityDescription">Range: 1 space<br>
+												  DMG: 10</p>
+				</div>
+			</div>
+			<div class="abilityBox basicRanged" onclick="selectAbility(1)" id="ability1">
 				<div class="tooltipBox basicRanged">
 					<h4 class="abilityName">Basic Ranged Attack</h4>
 					<p class="abilityDescription">Range: 3 spaces<br>
@@ -98,13 +105,7 @@
 
 				</div>
 			</div>
-			<div class="abilityBox basicMelee" onclick="selectAbility(1)" id="ability1">
-				<div class="tooltipBox basicMelee">
-					<h4 class="abilityName">Basic Melee Attack</h4>
-					<p class="abilityDescription">Range: 1 space<br>
-												  DMG: 10</p>
-				</div>
-			</div>
+			
 		</div>
 	</div>
 
@@ -123,11 +124,18 @@
 			}
 			else
 			{
-				document.getElementById( character ).style.width = percentHp + "%";
-				document.getElementById( health ).innerHTML = ''+hp;
-				var red = ( 1 - ( hp / 35 ) ) * 255;
-				var green = ( hp / 35 ) * 255;
-				document.getElementById( character ).style.backgroundColor = "rgb(" + red + "," + green + ",0)";
+				if( hp == 35 )
+				{
+					setTimeout( function(){
+						document.getElementById( health ).innerHTML = ''+hp;
+					
+						document.getElementById( character ).style.width = percentHp + "%";
+						document.getElementById( health ).innerHTML = ''+hp;
+						var red = ( 1 - ( hp / 35 ) ) * 180;
+						var green = ( hp / 35 ) * 180;
+						document.getElementById( character ).style.backgroundColor = "rgb(" + red + "," + green + ",0)";
+					}, 1000);
+				}
 			}
 			//console.log(document.getElementById( health ).innerHTML)
 		}
@@ -160,8 +168,8 @@
 
 			var percentHp = ( currentHp / 35 ) * 100;
 
-			var red = ( 1 - ( currentHp / 35 ) ) * 255;
-			var green = ( currentHp / 35 ) * 255;
+			var red = ( 1 - ( currentHp / 35 ) ) * 180;
+			var green = ( currentHp / 35 ) * 180;
 
 			document.getElementById( character ).style.width = percentHp + "%";
 			document.getElementById( health ).innerHTML = '' + currentHp;
@@ -170,36 +178,39 @@
 		// if this function is called from dash, send in 1 for dashCall
 		function selectCharacter( i, dashCall ) {
 			selectedChar = i;
-			if( selectedChar == -1 )
+			if( (selectedChar < 3 && document.getElementById( "team" ).innerHTML == "Robots'") ||  selectedChar >= 3 && document.getElementById( "team" ).innerHTML == "Werewolves'")
 			{
-				document.getElementById( "abilities" ).style.display = "none";
-				for( x = 0; x < 8; x++ )
+				if( selectedChar == -1 || document.getElementById( "actions" + i ).innerHTML <= 0 )
 				{
-					document.getElementById( "unit" + x ).style.color = "#fff";
-					document.getElementById( "unit" + x ).style.border = "1px solid #fff";
-				}
-			}
-			else
-			{
-				document.getElementById( "abilities" ).style.display = "table";
-				for( x = 0; x < 8; x++ )
-				{
-					if( selectedChar == x )
-					{
-						document.getElementById( "unit" + x ).style.color = "#f55";
-						document.getElementById( "unit" + x ).style.border = "1px solid #f55";
-					}
-					else
+					document.getElementById( "abilities" ).style.display = "none";
+					for( x = 0; x < 6; x++ )
 					{
 						document.getElementById( "unit" + x ).style.color = "#fff";
 						document.getElementById( "unit" + x ).style.border = "1px solid #fff";
 					}
 				}
-				if( dashCall != 1 ) dash.callFunction( "selectCharacter", i, dashCall );
+				else
+				{
+					document.getElementById( "abilities" ).style.display = "table";
+					for( x = 0; x < 6; x++ )
+					{
+						if( selectedChar == x )
+						{
+							document.getElementById( "unit" + x ).style.color = "#f55";
+							document.getElementById( "unit" + x ).style.border = "1px solid #f55";
+						}
+						else
+						{
+							document.getElementById( "unit" + x ).style.color = "#fff";
+							document.getElementById( "unit" + x ).style.border = "1px solid #fff";
+						}
+					}
+					if( dashCall != 1 ) dash.callFunction( "selectCharacter", i, dashCall );
+				}
 			}
 		}
 
-		function selectAbility( i )
+		function selectAbility( i, dashcall )
 		{
 			console.log( "ability " + i );
 			if( i == 0 )
@@ -217,7 +228,7 @@
 				document.getElementById( "ability0" ).style.border = "1px solid #fff";
 				document.getElementById( "ability1" ).style.border = "1px solid #fff";
 			}
-			dash.callFunction( "selectAbility", i );
+			if( dashcall != 1 ) dash.callFunction( "selectAbility", i );
 		}
 
 		function setTurn( turnCount, team )
@@ -226,17 +237,17 @@
 			if( team == 0 )
 			{
 				document.getElementById( "team" ).innerHTML = "Robots'";
-				for( i = 0; i < 4; i++ )
+				for( i = 0; i < 3; i++ )
 				{
-					setActionCount( 3, i );
+					setActionCount( 2, i );
 				}
 			}
 			else
 			{
 				document.getElementById( "team" ).innerHTML = "Werewolves'"
-				for( i = 4; i < 8; i++ )
+				for( i = 3; i < 6; i++ )
 				{
-					setActionCount( 3, i );
+					setActionCount( 2, i );
 				}
 			}
 		}
