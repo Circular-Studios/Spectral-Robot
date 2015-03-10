@@ -14,6 +14,7 @@ game.zip
 *.lib
 Binaries/libeay32.dll
 Binaries/ssleay32.dll
+RobotGhosts.zip
 
 # Build results
 [Dd]ebug/
