@@ -2,7 +2,16 @@
 
 ![Spectral banner](https://cloud.githubusercontent.com/assets/512416/2869601/e68b30ca-d27b-11e3-8834-66cd12440707.png)
 
+Spectral Robot Task Force is a turn-based strategy game similar to X-COM and Fire Emblem, with robot ghosts fighting supernatural criminals. It features a light-hearted plot that we want to couple with deep, rewarding gameplay. Online multiplayer will extend the fun past the singleplayer experience, and you can even play asynchronously if you want to take your time strategizing.
+
 Created by [Circular Studios](http://circularstudios.com/).
+
+## Features
+
+* [Dash](https://github.com/Circular-Studios/Dash) engine, a publicly-developed engine written in D.
+* Two factions, robots and supernatural criminals.
+* Deathmatch game mode, extensible to further modes.
+* Online multiplayer, currently just live (no asynchronous).
 
 ## Compiling
 
@@ -19,13 +28,3 @@ Install the [Dash CLI](https://github.com/Circular-Studios/Dash-CLI) and run `da
 ## License
 
 Anything under the `Binaries`, `Config`, `Scripts`, and `UI` directories is under the MIT License. All other work is licensed under the [Creative Commons Attribution-NonCommercial 4.0 International License](http://creativecommons.org/licenses/by-nc/4.0/).
-
-#### The MIT License (MIT)
-
-Copyright (c) 2014 Circular Studios
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
