@@ -1,0 +1,6 @@
+---
+Name: Wolf3
+Prefab: NecroWolf
+HP: 35
+Speed: 4
+Abilities: BasicSet

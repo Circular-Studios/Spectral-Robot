@@ -1,25 +1,78 @@
 ---
 Name: "The Only Level"
 Grid: [24, 24]
-FogOfWar: No
-Units:
-    - Name: TechWolf
-      Spawn: [17, 5]
-      Team: Wolf
+GameModes:
+    - Name: "Deathmatch"
+      FogOfWar: False
+      RobotCamera:
+          Position: [300, 200, 550]
+          Rotation: [0, 0, -45]
+      CriminalCamera:
+          Position: [300, 200, 50]
+          Rotation: [180, 0, -45]
+      Units:
+          - Class: Robot1
+            Spawn: [3, 17]
+            Rotation: [0, 180, 0]
+            Team: Robot
 
-    - Name: PyroWolf
-      Spawn: [5, 5]
-      Team: Wolf
+          - Class: Robot2
+            Spawn: [12, 18]
+            Rotation: [0, 180, 0]
+            Team: Robot
 
-    - Name: PyroRobot
-      Spawn: [12, 19]
-      Rotation: !Vector3 0 180 0
-      Team: Robot
+          - Class: Robot3
+            Spawn: [21, 21]
+            Rotation: [0, 180, 0]
+            Team: Robot
 
-    - Name: TechRobot
-      Spawn: [6, 18]
-      Rotation: !Vector3 0 180 0
-      Team: Robot
+          - Class: Wolf1
+            Spawn: [18, 4]
+            Team: Criminal
+
+          - Class: Wolf2
+            Spawn: [12, 6]
+            Team: Criminal
+
+          - Class: Wolf3
+            Spawn: [3, 3]
+            Team: Criminal
+
+    - Name: "CTF"
+      FogOfWar: False
+      RobotCamera:
+          Position: [300, 200, 550]
+          Rotation: [0, 0, -45]
+      CriminalCamera:
+          Position: [300, 200, 50]
+          Rotation: [180, 0, -45]
+      Units:
+          - Class: Wolf1
+            Spawn: [17, 5]
+            Team: Criminal
+
+          - Class: Wolf2
+            Spawn: [16, 5]
+            Team: Criminal
+
+          - Class: Wolf3
+            Spawn: [5, 5]
+            Team: Criminal
+
+          - Class: Robot1
+            Spawn: [12, 19]
+            Rotation: [0, 180, 0]
+            Team: Robot
+
+          - Class: Robot2
+            Spawn: [13, 19]
+            Rotation: [0, 180, 0]
+            Team: Robot
+
+          - Class: Robot3
+            Spawn: [6, 18]
+            Rotation: [0, 180, 0]
+            Team: Robot
 
 Objects:
     - Prefab: Wall_1x4
@@ -28,22 +81,22 @@ Objects:
       TileType: FullyBlocked
 
     - Prefab: Wall_1x4
-      Location: [0, 9, 0, 11]
+      Location: [0, 9, 0, 12]
       TileSize: [1, 4]
       TileType: FullyBlocked
 
     - Prefab: Wall_1x2
-      Location: [0, 3, 0, 7]
+      Location: [0, 3, 0, 8]
       TileSize: [1, 2]
       TileType: FullyBlocked
 
     - Prefab: Wall_1x2
-      Location: [0, 12, 0, 16]
+      Location: [0, 12, 0, 17]
       TileSize: [1, 2]
       TileType: FullyBlocked
 
     - Prefab: Wall_1x4
-      Location: [0, 18, 0, 18]
+      Location: [0, 18, 0, 21]
       TileSize: [1, 4]
       TileType: FullyBlocked
 
@@ -54,11 +107,13 @@ Objects:
 
     - Prefab: Wall_Corner_In
       Location: [23, 0]
-      Rotation: !Vector3 0 180 0
+      Rotation: [ 0, 180, 0 ]
+      TileType: FullyBlocked
 
     - Prefab: Wall_Corner_In
       Location: [23, 23]
-      Rotation: !Vector3 0 90 0
+      Rotation: [ 0, 90, 0 ]
+      TileType: FullyBlocked
 
     - Prefab: Wall_Corner_In
       Location: [0, 23]
@@ -67,96 +122,96 @@ Objects:
     - Prefab: Wall_1x4
       Location: [2, 23, 5, 23]
       TileSize: [4, 1]
-      Rotation: !Vector3 0 90 0
+      Rotation: [ 0, 90, 0 ]
       TileType: FullyBlocked
 
     - Prefab: Wall_1x2
       Location: [5, 23, 8, 23]
       TileSize: [2, 1]
-      Rotation: !Vector3 0 90 0
+      Rotation: [ 0, 90, 0 ]
       TileType: FullyBlocked
 
     - Prefab: Wall_1x4
-      Location: [9, 23, 15, 23]
+      Location: [9, 23, 16, 23]
       TileSize: [4, 1]
-      Rotation: !Vector3 0 90 0
+      Rotation: [ 0, 90, 0 ]
       TileType: FullyBlocked
 
     - Prefab: Wall_1x2
-      Location: [16, 23, 20, 23]
+      Location: [16, 23, 21, 23]
       TileSize: [2, 1]
-      Rotation: !Vector3 0 90 0
+      Rotation: [ 0, 90, 0 ]
       TileType: FullyBlocked
 
     - Prefab: Wall_1x1
       Location: [22, 23]
       TileSize: [1, 1]
-      Rotation: !Vector3 0 90 0
+      Rotation: [ 0, 90, 0 ]
       TileType: FullyBlocked
 
     - Prefab: Wall_1x4
-      Location: [23, 2, 23, 6]
+      Location: [23, 2, 23, 9]
       TileSize: [1, 4]
-      Rotation: !Vector3 0 180 0
+      Rotation: [ 0, 180, 0 ]
       TileType: FullyBlocked
 
     - Prefab: Wall_1x2
-      Location: [23, 9, 23, 13]
+      Location: [23, 9, 23, 14]
       TileSize: [1, 2]
-      Rotation: !Vector3 0 180 0
+      Rotation: [ 0, 180, 0 ]
       TileType: FullyBlocked
 
     - Prefab: Wall_1x4
-      Location: [23, 15, 23, 19]
+      Location: [23, 15, 23, 22]
       TileSize: [1, 4]
-      Rotation: !Vector3 0 180 0
+      Rotation: [ 0, 180, 0 ]
       TileType: FullyBlocked
 
     - Prefab: Wall_1x1
       Location: [23, 22]
       TileSize: [1, 1]
-      Rotation: !Vector3 0 180 0
+      Rotation: [ 0, 180, 0 ]
       TileType: FullyBlocked
 
     - Prefab: Wall_Corner_Out
       Location: [4, 0]
-      Rotation: !Vector3 0 180 0
+      Rotation: [ 0, 180, 0 ]
       TileType: FullyBlocked
 
     - Prefab: Wall_1x1
       Location: [5, 0, 5, 0]
       TileSize: [1, 1]
-      Rotation: !Vector3 0 270 0
+      Rotation: [ 0, 270, 0 ]
       TileType: FullyBlocked
 
     - Prefab: Wall_1x2
-      Location: [6, 0, 8, 0]
+      Location: [6, 0, 9, 0]
       TileSize: [2, 1]
-      Rotation: !Vector3 0 270 0
-      TileType: FullyBlocked  
+      Rotation: [ 0, 270, 0 ]
+      TileType: FullyBlocked
 
     - Prefab: Wall_1x4
       Location: [10, 0, 17, 0]
       TileSize: [4, 1]
-      Rotation: !Vector3 0 270 0
+      Rotation: [ 0, 270, 0 ]
       TileType: FullyBlocked
 
     - Prefab: Wall_1x2
       Location: [17, 0, 20, 0]
       TileSize: [2, 1]
-      Rotation: !Vector3 0 270 0
+      Rotation: [ 0, 270, 0 ]
       TileType: FullyBlocked
 
     - Prefab: Wall_1x1
       Location: [21, 0, 22, 0]
       TileSize: [1, 1]
-      Rotation: !Vector3 0 270 0
-      TileType: FullyBlocked  
+      Rotation: [ 0, 270, 0 ]
+      TileType: FullyBlocked
 
     - Prefab: Bookshelf
       Location: [5, 3, 6, 3]
       TileSize: [2, 1]
-      Rotation: !Vector3 0 90 0
+      Rotation: [ 0, 90, 0 ]
       TileType: FullyBlocked
 
     - Prefab: Bookshelf
@@ -182,7 +237,7 @@ Objects:
     - Prefab: Bookshelf
       Location: [17, 3, 18, 3]
       TileSize: [2, 1]
-      Rotation: !Vector3 0 90 0
+      Rotation: [ 0, 90, 0 ]
       TileType: FullyBlocked
 
     - Prefab: Desk
@@ -198,13 +253,13 @@ Objects:
     - Prefab: Bookshelf
       Location: [5, 21, 6, 21]
       TileSize: [2, 1]
-      Rotation: !Vector3 0 270 0
+      Rotation: [ 0, 270, 0 ]
       TileType: FullyBlocked
 
     - Prefab: Bookshelf
       Location: [17, 21, 18, 21]
       TileSize: [2, 1]
-      Rotation: !Vector3 0 270 0
+      Rotation: [ 0, 270, 0 ]
       TileType: FullyBlocked
 
     - Prefab: Bookshelf

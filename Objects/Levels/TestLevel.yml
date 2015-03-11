@@ -1,20 +1,13 @@
 ---
-Name: "The Only Level"
+Name: "The Testbed"
 Grid: [5, 10]
 FogOfWar: No
 Units:
-    - Name: TechWolf
+    - Class: TechWolf
       Spawn: [1, 1]
-      Team: Wolf
-    - Name: FireRobot
-      Spawn: [4, 0]
-      Team: Robot
+      Team: Criminal
+
 Objects:
-    - Prefab: Table
+    - Prefab: Wall_1x1
       Location: [3, 3]
       TileType: HalfBlocked
-
-    - Prefab: Table
-      Rotation: !Vector3 90 0 0
-      Location: [2, 5, 3, 6]
-      TileType: FullyBlocked

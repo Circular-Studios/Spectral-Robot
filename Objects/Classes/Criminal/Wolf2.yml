@@ -1,0 +1,6 @@
+---
+Name: Wolf2
+Prefab: TechWolf
+HP: 35
+Speed: 4
+Abilities: BasicSet

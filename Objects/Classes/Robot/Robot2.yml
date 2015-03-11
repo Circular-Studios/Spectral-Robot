@@ -1,0 +1,6 @@
+---
+Name: Robot2
+Prefab: TechRobot
+HP: 35
+Speed: 4
+Abilities: BasicSet

@@ -34,10 +34,37 @@ body{
 	/* Take this background out when it goes to game, this is just for display purposes */
 	background-color: transparent;
 	font-family: 'Nova Square', sans-serif;
+	color:#fff;
 	/*
 	background-color:#111;
 	background-image:url('back_grid.png');
 	*/
+}
+
+/***** TOP BOX *****/
+
+.topContainer {
+	width: 100%;
+	top: 0px;
+	left: 0;
+	position: fixed;
+}
+
+.turnCounter {
+	display: table;
+	top: 0px;
+	text-align: center;
+	vertical-align: middle;
+	width: 255px;
+	margin: 0 auto;
+
+	color: #fff;
+
+	background-image:url('back_grid.png');
+	background-color:#111;
+
+	border: 1px solid #ddd;
+	
 }
 
 /***** CHARACTER INFO BOXES *****/
@@ -66,10 +93,6 @@ body{
 	display: block;
 }
 
-.charName {
-	color: #fff;
-}
-
 .healthContainer {
 	height: 30px;
 	width: 100%;
@@ -81,10 +104,10 @@ body{
 }
 
 .healthBar {
-	background-color: #0a0;
+	background-color: #090;
 }
 
-.healthbar, .health {
+.healthBar, .health {
 	height: 100%;
 	width: 100%;
 	position: absolute;
@@ -113,14 +136,25 @@ body{
 	bottom: 0px;
 	
 	height: 100px;
-	width: 500px;
+	width: 255px;
 	margin: 0 auto;
 
-	background-color:#111;
 	background-image:url('back_grid.png');
-	
+	background-color:#111;
+
 	border: 1px solid #ddd;
 	vertical-align: middle;
+}
+
+.abilities:after {
+
+	
+}
+
+.glowey {
+	box-shadow: 0px 0px 15px 15px rgba(0, 0, 0, 1);
+
+	box-shadow: inset 0px 0px 15px 15px rgba(0, 0, 0, 1);
 }
 
 .abilityBox {
@@ -134,7 +168,8 @@ body{
 }
 
 .abilityBox.basicRanged {
-	background-image: url( 'iconset/ranged.png' );
+	/*background-image: url( 'iconset/ranged.png' );*/
+	background-image: url( 'iconset/fireball.png' );
 }
 
 .abilityBox.basicMelee {

@@ -1,0 +1,14 @@
+---
+name: "Melee"
+targetType: EnemyUnit
+targetArea: Single
+range: 1
+damage: 10
+accuracy: 100
+---
+name: "Ranged"
+targetType: EnemyUnit
+targetArea: Single
+range: 4
+damage: 7
+accuracy: 60

@@ -1,0 +1,6 @@
+---
+Name: Robot3
+Prefab: NecroRobot
+HP: 35
+Speed: 4
+Abilities: BasicSet
